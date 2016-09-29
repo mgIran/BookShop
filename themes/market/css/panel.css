@@ -1,0 +1,272 @@
+body{
+    background-color: #fff;
+}
+header
+{
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px #efefef;
+}
+.add-multipliable-input,
+.remove-multipliable-input
+{
+    position: absolute;
+    left: 20px;
+    bottom: 7px;
+}
+.remove-multipliable-input
+{
+    left: 0;
+}
+.multipliable-input-container
+{
+    position: relative;
+}
+.multipliable-input
+{
+    width: 90%;
+    margin-bottom: 15px;
+}
+.table .thead
+{
+    font-weight: bold;
+    padding: 15px 0;
+    overflow: hidden;
+    border-bottom: 1px solid #c0c0c0;
+}
+.table .tr
+{
+    padding: 15px 0;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+.table .tr:nth-child(2n)
+{
+    background-color: #fafafa;
+}
+.desc
+{
+    color: #777;
+    font-size: 12px;
+}
+
+.tab-content{
+    padding: 30px;
+}
+
+.block{
+    display: block;
+}
+.dashboard-container{
+    position: relative;
+}
+.publisher-signup-link{
+    position: absolute;
+    left: 20px;
+    top: 0;
+}
+.publisher-signup-container .steps{
+    display: block;
+    overflow: hidden;
+    clear: both;
+    padding: 0;
+    width: 100%;
+    margin: 50px auto;
+}
+.publisher-signup-container .steps li{
+    position: relative;
+    list-style: none;
+    float: right;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    color: #999;
+}
+.publisher-signup-container .steps li:first-child{
+    border-right: 1px solid #ccc;
+    border-radius: 0 4px 4px 0;
+}
+.publisher-signup-container .steps li:last-child{
+    border-left: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+}
+.publisher-signup-container .steps li .num{
+    background: #999;
+    border-radius: 2px;
+    padding: 5px 8px;
+    color: #fff;
+    font-size: 12px;
+    margin-left: 10px;
+}
+.publisher-signup-container .steps li .arrow{
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: 22px;
+    top: 0;
+}
+.publisher-signup-container .steps li .arrow>div {
+    width: 2px;
+    height: 100%;
+}
+
+.publisher-signup-container .steps li .arrow>div:before {
+    content: " ";
+    display: block;
+    width: 1px;
+    height: 65%;
+    background: #aaa;
+    -webkit-transform: rotate(30deg);
+    -moz-transform: rotate(30deg);
+    -ms-transform: rotate(30deg);
+    transform: rotate(30deg);
+    position: absolute;
+    top: -6px;
+    right: 12px;
+}
+.publisher-signup-container .steps li .arrow>div:after {
+    content: " ";
+    display: block;
+    width: 1px;
+    height: 65%;
+    background: #aaa;
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    -ms-transform: rotate(-30deg);
+    transform: rotate(-30deg);
+    position: absolute;
+    bottom: -6px;
+    right: 12px;
+}
+.publisher-signup-container .steps li.active{
+    color: #77c159;
+}
+.publisher-signup-container .steps li.active .num{
+    background: #77c159;
+}
+.publisher-signup-container .step-content .text{
+    margin-bottom: 30px;
+}
+.update-publisher-form .dropzone.single,
+.information-step .dropzone.single{
+    width: 100%;
+}
+.buy-form h4{
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+.buy-form h4:first-child{
+    margin-top: 0;
+}
+.buy-form .buy-label{
+    width: 70px;
+    display: inline-block;
+}
+.buy-form .buy-value{
+    margin-right: 15px;
+    color: #337ab7;
+    font-weight: bold;
+}
+.bookmarked-app{
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 30px;
+}
+.bookmarked-app a{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index:2;
+}
+.bookmarked-app .info{
+    padding:0;
+}
+.bookmarked-app .image img{
+    max-height: 100%;
+    width: 100%;
+}
+.bookmarked-app .info h5{
+    display: block;
+    position: relative;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#user-details-form{
+    position: relative;
+}
+#user-details-form .controls-row{
+    margin-top: 20px;
+}
+#UserDetails_monthly_settlement{
+    margin-top: 30px;
+}
+#settlement-button{
+    margin-top: 25px;
+}
+#user-details-form .panel-body{
+    padding-bottom: 50px;
+}
+#user-details-form hr{
+    margin-bottom: 50px;
+}
+.settlement-help a{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    line-height: 48px;
+    padding: 0 15px;
+}
+.settlement-help .panel-heading{
+    height: 50px;
+    position: relative;
+}
+#user-details-form .alert-danger{
+    position: absolute;
+    width: 25%;
+    left: 15px;
+    top: 23px;
+}
+#user-details-form h3,
+.settlement-history h3{
+    margin-bottom: 35px;
+}
+.report-sale .app-item:nth-child(n+3){
+    margin-top: 50px;
+}
+.report-sale .app-item input[type="radio"]{
+    float: right;
+    margin-top: 27px;
+    margin-left: 15px;
+}
+.report-sale .app-item img{
+    float: right;
+    max-width: 70px;
+    max-height:70px;
+    height:auto;
+    margin-left: 15px;
+}
+.report-canvas{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.chart-container{
+    margin-top: 50px;
+}
+input[type='radio'],
+input[type='checkbox']{
+    height: auto;
+    display: inline-block;
+    width: auto;
+}
+.reason-collapse{
+    background: #eee;
+    padding:15px;
+    text-align: right;
+    margin-top: 15px;
+}
