@@ -63,7 +63,7 @@ if($advertise) {
                     }
                 ");
                 ?>
-                <?= $this->renderPartial('/books/_vertical_app_item', array('data' => $advertise->app)) ?>
+                <?= $this->renderPartial('/books/_vertical_book_item', array('data' => $advertise->book)) ?>
                 <?
                 if($advertise->cover && file_exists(Yii::getPathOfAlias('webroot').'/uploads/advertisesCover/'.$advertise->cover)) {
                     ?>

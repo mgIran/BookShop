@@ -42,7 +42,7 @@ class UserDetails extends CActiveRecord
 
     public $roleLabels = array(
         'user' => 'کاربر',
-        'publisher' => 'توسعه دهنده'
+        'publisher' => 'ناشر'
     );
 
     public $detailsStatusLabels = array(

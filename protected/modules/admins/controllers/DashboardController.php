@@ -68,14 +68,14 @@ class DashboardController extends Controller
         ));
 
         $criteria=new CDbCriteria();
-        $criteria->with='app';
+        $criteria->with='book';
         $criteria->alias='package';
         $criteria->addCondition('package.status=:packageStatus');
-        $criteria->addCondition('app.title!=""');
+        $criteria->addCondition('book.title!=""');
         $criteria->params=array(
             ':packageStatus'=>'pending',
         );
-        $newestPackages=new CActiveDataProvider('AppPackages', array(
+        $newestPackages=new CActiveDataProvider('BookPackages', array(
             'criteria'=>$criteria,
         ));
 

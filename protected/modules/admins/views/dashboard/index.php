@@ -52,11 +52,11 @@ if(Yii::app()->user->roles == 'admin'):
                                 ),
                             ),
                             'delete'=>array(
-                                'url'=>'CHtml::normalizeUrl(array(\'/manageBooks/\'.$data->platformsID[$data->platform_id].\'/delete/\'.$data->id))'
+                                'url'=>'CHtml::normalizeUrl(array(\'/manageBooks/base/delete/\'.$data->id))'
                             ),
                             'download'=>array(
                                 'label'=>'دانلود',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/android/download/".$data->id)',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/base/download/".$data->id)',
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/download.png',
                             ),
                         ),
@@ -66,10 +66,10 @@ if(Yii::app()->user->roles == 'admin'):
             <?php Yii::app()->clientScript->registerScript('changeConfirm', "
                 $('.change-confirm').on('change', function(){
                     $.ajax({
-                        url:'".$this->createUrl('/manageBooks/android/changeConfirm')."',
+                        url:'".$this->createUrl('/manageBooks/base/changeConfirm')."',
                         type:'POST',
                         dataType:'JSON',
-                        data:{app_id:$(this).data('id'), value:$(this).val()},
+                        data:{book_id:$(this).data('id'), value:$(this).val()},
                         success:function(data){
                             if(data.status){
                                 $.fn.yiiGridView.update('newest-books-grid');
@@ -89,9 +89,9 @@ if(Yii::app()->user->roles == 'admin'):
                 'id'=>'newest-packages-grid',
                 'dataProvider'=>$newestPackages,
                 'columns'=>array(
-                    'app_id'=>array(
-                        'name'=>'app_id',
-                        'value'=>'CHtml::link($data->app->title, Yii::app()->createUrl("/books/".$data->app_id."/".$data->app->title))',
+                    'book_id'=>array(
+                        'name'=>'book_id',
+                        'value'=>'CHtml::link($data->book->title, Yii::app()->createUrl("/books/".$data->book_id."/".$data->book->title))',
                         'type'=>'raw'
                     ),
                     'for'=>array(
@@ -111,11 +111,11 @@ if(Yii::app()->user->roles == 'admin'):
                         'template' => '{delete}{download}',
                         'buttons'=>array(
                             'delete'=>array(
-                                'url'=>'Yii::app()->createUrl("/manageBooks/android/deletePackage/".$data->id)',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/base/deletePackage/".$data->id)',
                             ),
                             'download'=>array(
                                 'label'=>'دانلود',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/android/downloadPackage/".$data->id)',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/base/downloadPackage/".$data->id)',
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/download.png',
                             ),
                         ),
@@ -130,7 +130,7 @@ if(Yii::app()->user->roles == 'admin'):
                         $('input#package-status').val($(this).val());
                     }else{
                         $.ajax({
-                            url:'".$this->createUrl('/manageBooks/android/changePackageStatus')."',
+                            url:'".$this->createUrl('/manageBooks/base/changePackageStatus')."',
                             type:'POST',
                             dataType:'JSON',
                             data:{package_id:$(this).data('id'), value:$(this).val()},
@@ -154,7 +154,7 @@ if(Yii::app()->user->roles == 'admin'):
                     }else{
                         $('.reason-modal-message').removeClass('error').text('در حال ثبت...');
                         $.ajax({
-                            url:'".$this->createUrl('/manageBooks/android/changePackageStatus')."',
+                            url:'".$this->createUrl('/manageBooks/base/changePackageStatus')."',
                             type:'POST',
                             dataType:'JSON',
                             data:{package_id:$('#package-id').val(), value:$('#package-status').val(), reason:$('#reason-text').val()},

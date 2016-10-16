@@ -84,7 +84,7 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/android/admin/')),
+                        array('label' => 'مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/base/admin/')),
                         array('label' => 'تبلیغات', 'url' => Yii::app()->createUrl('/advertises/manage/admin/')),
                         array('label' => 'نظرات', 'url' => Yii::app()->createUrl('/comments/comment/adminBooks')),
                     )

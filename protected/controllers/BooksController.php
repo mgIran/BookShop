@@ -49,33 +49,17 @@ class BooksController extends Controller
         $model->seen = $model->seen + 1;
         $model->save();
         $this->saveInCookie($model->category_id);
-        $this->platform = $model->platform_id;
         // Has bookmarked this books by user
         $bookmarked = false;
         if (!Yii::app()->user->isGuest) {
-            $hasRecord = UserAppBookmark::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'app_id' => $id));
+            $hasRecord = UserBookBookmark::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
             if ($hasRecord)
                 $bookmarked = true;
         }
         // Get similar books
-        $criteria = new CDbCriteria();
+        $criteria = Books::model()->getValidBooks(array($model->category_id));
         $criteria->addCondition('id!=:id');
-        $criteria->addCondition('category_id=:cat_id');
-        $criteria->addCondition('platform_id=:platform_id');
-        $criteria->addCondition('status=:status');
-        $criteria->addCondition('confirm=:confirm');
-        $criteria->addCondition('deleted=:deleted');
-        $criteria->addCondition('(SELECT COUNT(app_images.id) FROM ym_app_images app_images WHERE app_images.app_id=t.id) != 0');
-        $criteria->addCondition('(SELECT COUNT(app_packages.id) FROM ym_app_packages app_packages WHERE app_packages.app_id=t.id) != 0');
-        $criteria->order = 'install DESC, seen DESC';
         $criteria->params[':id'] = $model->id;
-        $criteria->params[':cat_id'] = $model->category_id;
-        $criteria->params[':platform_id'] = $model->platform_id;
-        $criteria->params[':status'] = 'enable';
-        $criteria->params[':confirm'] = 'accepted';
-        $criteria->params[':deleted'] = 0;
-        $criteria->limit = 20;
-        $criteria->order='id DESC';
         $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
         $this->render('view', array(
             'model' => $model,
@@ -85,7 +69,7 @@ class BooksController extends Controller
     }
 
     /**
-     * Buy app
+     * Buy book
      */
     public function actionBuy($id, $title)
     {
@@ -94,7 +78,7 @@ class BooksController extends Controller
 
         $model = $this->loadModel($id);
         $price = $model->hasDiscount()?$model->offPrice:$model->price;
-        $buy = AppBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'app_id' => $id));
+        $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
         if ($buy)
             $this->redirect(array('/books/download/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
 
@@ -108,8 +92,8 @@ class BooksController extends Controller
                 $this->refresh();
             }
 
-            $buy = new AppBuys();
-            $buy->app_id = $model->id;
+            $buy = new BookBuys();
+            $buy->book_id = $model->id;
             $buy->user_id = $user->id;
             if ($buy->save()) {
                 $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
@@ -153,37 +137,23 @@ class BooksController extends Controller
     }
 
     /**
-     * Download app
+     * Download book
      */
     public function actionDownload($id, $title)
     {
         $model = $this->loadModel($id);
-        $platformFolder = '';
-        switch (pathinfo($model->lastPackage->file_name, PATHINFO_EXTENSION)) {
-            case 'apk':
-                $platformFolder = 'android';
-                break;
-
-            case 'ipa':
-                $platformFolder = 'ios';
-                break;
-
-            case 'xap':
-                $platformFolder = 'windowsphone';
-                break;
-        }
         if ($model->price == 0) {
-            $model->install += 1;
-            $model->setScenario('update-install');
+            $model->download += 1;
+            $model->setScenario('update-download');
             $model->save();
-            $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/' . $platformFolder);
+            $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
         } else {
-            $buy = AppBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'app_id' => $id));
+            $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
             if ($buy) {
-                $model->install += 1;
-                $model->setScenario('update-install');
+                $model->download += 1;
+                $model->setScenario('update-download');
                 $model->save();
-                $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/' . $platformFolder);
+                $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
             } else
                 $this->redirect(array('/books/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
         }
@@ -259,28 +229,15 @@ class BooksController extends Controller
     {
         Yii::app()->theme = 'market';
         $this->layout = 'public';
-        $criteria = new CDbCriteria();
-        $criteria->addCondition('confirm=:confirm');
-        $criteria->addCondition('deleted=:deleted');
-        $criteria->addCondition('status=:status');
-        $criteria->addCondition('platform_id=:platform');
+        $criteria = Books::model()->getValidBooks();
         if (isset($_GET['t']) and $_GET['t'] == 1) {
-            $criteria->addCondition('publisher_name=:dev');
+            $criteria->addCondition('publisher_name=:publisher');
             $publisher_id = $title;
         } else {
-            $criteria->addCondition('publisher_id=:dev');
+            $criteria->addCondition('publisher_id=:publisher');
             $publisher_id = $id;
         }
-        $criteria->params = array(
-            ':confirm' => 'accepted',
-            ':deleted' => 0,
-            ':status' => 'enable',
-            ':platform' => $this->platform,
-            ':dev' => $publisher_id,
-        );
-        $criteria->addCondition('(SELECT COUNT(app_images.id) FROM ym_app_images app_images WHERE app_images.app_id=t.id) != 0');
-        $criteria->addCondition('(SELECT COUNT(app_packages.id) FROM ym_app_packages app_packages WHERE app_packages.app_id=t.id) != 0');
-        $criteria->order='id DESC';
+        $criteria->params[':dev'] = $publisher_id;
         $dataProvider = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,
         ));
@@ -301,23 +258,8 @@ class BooksController extends Controller
     {
         Yii::app()->theme = 'market';
         $this->layout = 'public';
-        $criteria = new CDbCriteria();
-        $criteria->addCondition('confirm=:confirm');
-        $criteria->addCondition('deleted=:deleted');
-        $criteria->addCondition('status=:status');
-        $criteria->addCondition('platform_id=:platform');
-        $criteria->addCondition('(SELECT COUNT(app_images.id) FROM ym_app_images app_images WHERE app_images.app_id=t.id) != 0');
-        $criteria->addCondition('(SELECT COUNT(app_packages.id) FROM ym_app_packages app_packages WHERE app_packages.app_id=t.id) != 0');
-        $criteria->params = array(
-            ':confirm' => 'accepted',
-            ':deleted' => 0,
-            ':status' => 'enable',
-            ':platform' => $this->platform,
-        );
-
-        $categories = BookCategories::model()->getCategoryChildes($id);
-        $criteria->addInCondition('category_id', $categories);
-        $criteria->order='id DESC';
+        $categoryIds = BookCategories::model()->getCategoryChildes($id);
+        $criteria = Books::model()->getValidBooks($categoryIds);
         $dataProvider = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,
         ));
@@ -330,15 +272,15 @@ class BooksController extends Controller
     }
 
     /**
-     * Bookmark app
+     * Bookmark book
      */
     public function actionBookmark()
     {
         Yii::app()->getModule('users');
-        $model = UserAppBookmark::model()->find('user_id=:user_id AND app_id=:app_id', array(':user_id' => Yii::app()->user->getId(), ':app_id' => $_POST['appId']));
+        $model = UserBookBookmark::model()->find('user_id=:user_id AND book_id=:book_id', array(':user_id' => Yii::app()->user->getId(), ':book_id' => $_POST['bookId']));
         if (!$model) {
-            $model = new UserAppBookmark();
-            $model->app_id = $_POST['appId'];
+            $model = new UserBookBookmark();
+            $model->book_id = $_POST['bookId'];
             $model->user_id = Yii::app()->user->getId();
             if ($model->save())
                 echo CJSON::encode(array(
@@ -349,7 +291,7 @@ class BooksController extends Controller
                     'status' => false
                 ));
         } else {
-            if (UserAppBookmark::model()->deleteAllByAttributes(array('user_id' => Yii::app()->user->getId(), 'app_id' => $_POST['appId'])))
+            if (UserBookBookmark::model()->deleteAllByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $_POST['bookId'])))
                 echo CJSON::encode(array(
                     'status' => true
                 ));
@@ -388,7 +330,7 @@ class BooksController extends Controller
                 ':start_date' => $startTime,
                 ':end_date' => $endTime,
             );
-            $report = AppBuys::model()->findAll($criteria);
+            $report = BookBuys::model()->findAll($criteria);
             // show daily report
             $daysCount = (JalaliDate::date('m', $_POST['month_altField'], false) <= 6) ? 31 : 30;
             for ($i = 0; $i < $daysCount; $i++) {
@@ -413,7 +355,7 @@ class BooksController extends Controller
                 ':start_date' => $startTime,
                 ':end_date' => $endTime,
             );
-            $report = AppBuys::model()->findAll($criteria);
+            $report = BookBuys::model()->findAll($criteria);
             // show monthly report
             $tempDate = $startTime;
             for ($i = 0; $i < 12; $i++) {
@@ -436,13 +378,13 @@ class BooksController extends Controller
             $criteria = new CDbCriteria();
             $criteria->addCondition('date > :from_date');
             $criteria->addCondition('date < :to_date');
-            $criteria->addCondition('app_id=:app_id');
+            $criteria->addCondition('book_id=:book_id');
             $criteria->params = array(
                 ':from_date' => $_POST['from_date_altField'],
                 ':to_date' => $_POST['to_date_altField'],
-                ':app_id' => $_POST['app_id'],
+                ':book_id' => $_POST['book_id'],
             );
-            $report = AppBuys::model()->findAll($criteria);
+            $report = BookBuys::model()->findAll($criteria);
             if ($_POST['to_date_altField'] - $_POST['from_date_altField'] < (60 * 60 * 24 * 30)) {
                 // show daily report
                 $datesDiff = $_POST['to_date_altField'] - $_POST['from_date_altField'];
@@ -476,10 +418,10 @@ class BooksController extends Controller
             $criteria = new CDbCriteria();
             $criteria->addCondition('date > :from_date');
             $criteria->addCondition('date < :to_date');
-            $criteria->addInCondition('app_id', CHtml::listData(Books::model()->findAllByAttributes(array('publisher_id' => $_POST['publisher'])), 'id', 'id'));
+            $criteria->addInCondition('book_id', CHtml::listData(Books::model()->findAllByAttributes(array('publisher_id' => $_POST['publisher'])), 'id', 'id'));
             $criteria->params[':from_date'] = $_POST['from_date_publisher_altField'];
             $criteria->params[':to_date'] = $_POST['to_date_publisher_altField'];
-            $report = AppBuys::model()->findAll($criteria);
+            $report = BookBuys::model()->findAll($criteria);
             if ($_POST['to_date_publisher_altField'] - $_POST['from_date_publisher_altField'] < (60 * 60 * 24 * 30)) {
                 // show daily report
                 $datesDiff = $_POST['to_date_publisher_altField'] - $_POST['from_date_publisher_altField'];
@@ -546,7 +488,7 @@ class BooksController extends Controller
                 ':start_date' => $startTime,
                 ':end_date' => $endTime,
             );
-            $report = AppBuys::model()->findAll($criteria);
+            $report = BookBuys::model()->findAll($criteria);
             Yii::app()->getModule('setting');
             $commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'));
             $commission = $commission->value;
@@ -557,7 +499,7 @@ class BooksController extends Controller
                 $amount = 0;
                 foreach ($report as $model) {
                     if ($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1))))
-                        $amount = $model->app->price;
+                        $amount = $model->book->price;
                 }
                 $values[] = ($amount * $commission) / 100;
                 $sumIncome += ($amount * $commission) / 100;
@@ -582,8 +524,7 @@ class BooksController extends Controller
         Yii::app()->theme = 'market';
         $this->layout = '//layouts/public';
         $criteria = new CDbCriteria();
-        $criteria->addCondition('platform_id=:platform_id AND status=:status AND confirm=:confirm AND deleted=:deleted AND (SELECT COUNT(app_images.id) FROM ym_app_images app_images WHERE app_images.app_id=t.id) != 0');
-        $criteria->params[':platform_id'] = $this->platform;
+        $criteria->addCondition('status=:status AND confirm=:confirm AND deleted=:deleted AND (SELECT COUNT(book_images.id) FROM ym_book_images book_images WHERE book_images.book_id=t.id) != 0');
         $criteria->params[':status'] = 'enable';
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
@@ -620,24 +561,22 @@ class BooksController extends Controller
         Yii::app()->theme = 'market';
         $this->layout = 'public';
         $criteria = new CDbCriteria();
-        $criteria->with[] = 'app';
-        $criteria->addCondition('app.confirm=:confirm');
-        $criteria->addCondition('app.deleted=:deleted');
-        $criteria->addCondition('app.status=:status');
-        $criteria->addCondition('app.platform_id=:platform');
-        $criteria->addCondition('(SELECT COUNT(app_images.id) FROM ym_app_images app_images WHERE app_images.app_id=app.id) != 0');
-        $criteria->addCondition('(SELECT COUNT(app_packages.id) FROM ym_app_packages app_packages WHERE app_packages.app_id=app.id) != 0');
+        $criteria->with[] = 'book';
+        $criteria->addCondition('book.confirm=:confirm');
+        $criteria->addCondition('book.deleted=:deleted');
+        $criteria->addCondition('book.status=:status');
+        $criteria->addCondition('(SELECT COUNT(book_images.id) FROM ym_book_images book_images WHERE book_images.book_id=book.id) != 0');
+        $criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=book.id) != 0');
         $criteria->addCondition('start_date < :now AND end_date > :now');
-        $criteria->addCondition('(SELECT COUNT(app_packages.id) FROM ym_app_packages app_packages WHERE app_packages.app_id=app.id) != 0');
+        $criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=book.id) != 0');
         $criteria->params = array(
             ':confirm' => 'accepted',
             ':deleted' => 0,
             ':status' => 'enable',
-            ':platform' => $this->platform,
             ':now' => time()
         );
-        $criteria->order='app.id DESC';
-        $dataProvider = new CActiveDataProvider('AppDiscounts', array(
+        $criteria->order='book.id DESC';
+        $dataProvider = new CActiveDataProvider('BookDiscounts', array(
             'criteria' => $criteria,
         ));
 
@@ -648,18 +587,18 @@ class BooksController extends Controller
     }
 
     /**
-     * @param $app_id
+     * @param $book_id
      * @param $rate
      * @throws CException
      * @throws CHttpException
      */
-    public function actionRate($app_id ,$rate)
+    public function actionRate($book_id ,$rate)
     {
-        $model = $this->loadModel($app_id);
+        $model = $this->loadModel($book_id);
         if($model) {
-            $rateModel = new AppRatings();
+            $rateModel = new BookRatings();
             $rateModel->rate = (int)$rate;
-            $rateModel->app_id = $model->id;
+            $rateModel->book_id = $model->id;
             $rateModel->user_id = Yii::app()->user->getId();
             if($rateModel->save()) {
                 $this->beginClip('rate-view');

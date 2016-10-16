@@ -39,13 +39,34 @@ class BookCategories extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('title', 'required'),
 			array('title', 'length', 'max'=>50),
+			array('title' ,'compareWithParent'),
 			array('parent_id', 'length', 'max'=>10),
-            array('path', 'length', 'max'=>500),
+			array('parent_id', 'checkParent'),
+			array('path', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, title, parent_id, parentFilter', 'safe', 'on'=>'search'),
 		);
+	}
+
+
+	public function compareWithParent($attribute ,$params)
+	{
+		if(!empty($this->title) && $this->parent_id){
+			$record = BookCategories::model()->findByAttributes(array('id' => $this->parent_id ,'title' => $this->title ));
+			if($record)
+				$this->addError($attribute ,'عنوان دسته بندی با عنوان والد یکسان است.');
+		}
+	}
+
+	public function checkParent($attribute ,$params)
+	{
+		if(!empty($this->parent_id) && $this->id){
+			if($this->parent_id == $this->id)
+				$this->addError($attribute ,'دسته بندی نمی تواند زیرمجموعه خودش باشد.');
+		}
 	}
 
 	/**
@@ -117,87 +138,109 @@ class BookCategories extends CActiveRecord
 		return parent::model($className);
 	}
 
+	public function sortList()
+	{
+		$parents = $this->findAll( 'parent_id IS NULL order by title' );
+		$list = array();
+		foreach ( $parents as $parent ) {
+			$childes = $this->findAll($this->getCategoryChildes($parent->id ,false, 'criteria'));
+			foreach ( $childes as $child ) {
+				array_push( $list, $child );
+			}
+		}
+		return CHtml::listData( $list, 'id', 'fullTitle' );
+	}
 
-    public function sortList()
-    {
-        $parents = $this->findAll( 'parent_id IS NULL order by title' );
-        $list = array();
-        foreach ( $parents as $parent ) {
-            $childes = $this->findAll($this->getCategoryChildes($parent->id ,false, 'criteria'));
-            foreach ( $childes as $child ) {
-                array_push( $list, $child );
-            }
-        }
-        return CHtml::listData( $list, 'id', 'fullTitle' );
-    }
+	public function adminSortList($excludeId = NULL)
+	{
+		$parents = $this->findAll('parent_id IS NULL order by title');
+		$list = array();
+		foreach ($parents as $parent) {
+			if ($parent->id != $excludeId) {
+				array_push($list, $parent);
+				$childes = $this->findAll($this->getCategoryChildes($parent->id, false, 'criteria'));
+				foreach ($childes as $child) {
+					if ($child->id != $excludeId && $child->parent_id != $excludeId)
+						array_push($list, $child);
+				}
+			}
+		}
+		return CMap::mergeArray( array( '' => '-' ), CHtml::listData( $list, 'id', 'fullTitle' ) );
+	}
 
-    public function adminSortList()
-    {
-        $parents = $this->findAll( 'parent_id IS NULL order by title' );
-        $list = array();
-        foreach ( $parents as $parent ) {
-            array_push( $list, $parent );
-            $childes = $this->getCategoryChildes($parent->id, true, 'criteria');
-            foreach ( $childes as $childe ) {
-                array_push( $list, $childe );
-            }
-        }
-        return CMap::mergeArray( array( '' => '-' ), CHtml::listData( $list, 'id', 'fullTitle' ) );
-    }
+	public function getParents( $id = NULL )
+	{
+		if ( $id )
+			$parents = $this->findAll( 'parent_id = :id order by title', array( ':id' => $id ) );
+		else
+			$parents = $this->findAll( 'parent_id IS NULL order by title' );
+		$list = array();
+		foreach ( $parents as $parent ) {
+			array_push( $list, $parent );
+		}
+		return CHtml::listData( $list, 'id', 'fullTitle' );
+	}
 
-    public function getParents( $id = NULL )
-    {
-        if ( $id )
-            $parents = $this->findAll( 'parent_id = :id order by title', array( ':id' => $id ) );
-        else
-            $parents = $this->findAll( 'parent_id IS NULL order by title' );
-        $list = array();
-        foreach ( $parents as $parent ) {
-            array_push( $list, $parent );
-        }
-        return CHtml::listData( $list, 'id', 'fullTitle' );
-    }
-
-    public function getFullTitle()
-    {
-        $fullTitle = $this->title;
-        $model = $this;
-        while ( $model->parent ) {
-            $model = $model->parent;
-            if($model->parent)
+	public function getFullTitle()
+	{
+		$fullTitle = $this->title;
+		$model = $this;
+		while ( $model->parent ) {
+			$model = $model->parent;
+			if($model->parent)
 				$fullTitle = $model->title . ' - ' . $fullTitle;
 			else
 				$fullTitle = $fullTitle . ' ('.$model->title.')';
-        }
-        return $fullTitle;
-    }
+		}
+		return $fullTitle;
+	}
 
 	public function beforeSave()
 	{
-		if($this->parent_id)
-		{
-			$parent = $this->findByPk($this->parent_id);
-			$this->path = $parent->path?$parent->path.$this->parent_id.'-':$this->parent_id.'-';
-		}else
-			$this->path = null;
-		return parent::beforeSave(); // TODO: Change the autogenerated stub
+		if (empty($this->parent_id))
+			$this->parent_id = NULL;
+		$this->path = null;
+		return parent::beforeSave();
 	}
 
-	public function getCategoryChildes($id = null, $withSelf = true, $returnType='array'){
-		if($id)
+	protected function afterSave()
+	{
+		$this->updatePath($this->id);
+		return true;
+	}
+
+	public function getCategoryChildes($id = null, $withSelf = true, $returnType='array')
+	{
+		if ($id)
 			$this->id = $id;
 		$criteria = new CDbCriteria();
-		$criteria->addCondition('path LIKE :regex1','OR');
-		$criteria->addCondition('path LIKE :regex2','OR');
-		$criteria->params[':regex1'] = $this->id.'-%';
-		$criteria->params[':regex2'] = '%-'.$this->id.'-%';
-		if($withSelf) {
+		$criteria->addCondition('path LIKE :regex1', 'OR');
+		$criteria->addCondition('path LIKE :regex2', 'OR');
+		$criteria->params[':regex1'] = $this->id . '-%';
+		$criteria->params[':regex2'] = '%-' . $this->id . '-%';
+		if ($withSelf) {
 			$criteria->addCondition('id  = :id', 'OR');
 			$criteria->params[':id'] = $this->id;
 		}
-        if($returnType==='array')
-		    return CHtml::listData($this->findAll($criteria),'id','id');
-        elseif($returnType==='criteria')
-            return $criteria;
+		if ($returnType === 'array')
+			return CHtml::listData($this->findAll($criteria), 'id', 'id');
+		elseif ($returnType === 'criteria')
+			return $criteria;
+	}
+
+	/**
+	 * Update Path field when model parent_id is changed
+	 * @param $id
+	 */
+	private function updatePath($id)
+	{
+		/* @var $model BookCategories */
+		$model = BookCategories::model()->findByPk($id);
+		if ($model->parent) {
+			$path = $model->parent->path ? $model->parent->path . $model->parent_id . '-' : $model->parent_id . '-';
+			BookCategories::model()->updateByPk($model->id,array('path' => $path));
+		}
+		foreach ($model->bookCategories as $child)
+			$this->updatePath($child->id);
 	}
 }

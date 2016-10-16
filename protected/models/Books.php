@@ -17,7 +17,6 @@
  * @property string $publisher_name
  * @property integer $seen
  * @property string $download
- * @property string $install
  * @property integer $deleted
  * @property integer $offPrice
  * @property integer $rate
@@ -27,7 +26,6 @@
  * @property BookPackages $lastPackage
  * @property BookBuys[] $bookBuys
  * @property BookImages[] $images
- * @property BookPlatforms $platform
  * @property Users $publisher
  * @property BookCategories $category
  * @property Users[] $bookmarker
@@ -45,11 +43,6 @@ class Books extends CActiveRecord
 	}
 
 	private $_purifier;
-	public $platformsID = array(
-			'1' => 'android',
-			'2' => 'ios',
-			'3' => 'windowsphone',
-	);
 	public $confirmLabels = array(
 			'pending' => 'در حال بررسی',
 			'refused' => 'رد شده',
@@ -77,20 +70,19 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-				array('platform_id', 'required', 'on' => 'insert'),
-				array('title, category_id, price ,platform_id ,icon', 'required', 'on' => 'update'),
-				array('price, size, platform_id', 'numerical'),
-				array('seen, install, deleted', 'numerical', 'integerOnly' => true),
+				array('title, category_id, price ,icon', 'required', 'on' => 'update'),
+				array('price, size', 'numerical'),
+				array('seen, deleted', 'numerical', 'integerOnly' => true),
 				array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
 				array('title, icon, publisher_name', 'length', 'max' => 50),
-				array('publisher_id, category_id, platform_id', 'length', 'max' => 10),
+				array('publisher_id, category_id', 'length', 'max' => 10),
 				array('status', 'length', 'max' => 7),
-				array('download, install', 'length', 'max' => 12),
+				array('download', 'length', 'max' => 12),
 				array('price, size', 'numerical'),
 				array('description, change_log, permissions ,publisher_name ,_purifier', 'safe'),
 				// The following rule is used by search().
 				// @todo Please remove those attributes that should not be searched.
-				array('id, title, publisher_id, category_id, status, price, icon, description, change_log, permissions, size, confirm, platform_id, publisher_name, seen, download, install, deleted ,devFilter', 'safe', 'on' => 'search'),
+				array('id, title, publisher_id, category_id, status, price, icon, description, change_log, permissions, size, confirm, publisher_name, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 				array('description, change_log', 'filter', 'filter' => array($obj = new CHtmlPurifier(), 'purify')),
 		);
 	}
@@ -105,7 +97,6 @@ class Books extends CActiveRecord
 		return array(
 				'bookBuys' => array(self::HAS_MANY, 'BookBuys', 'book_id'),
 				'images' => array(self::HAS_MANY, 'BookImages', 'book_id'),
-				'platform' => array(self::BELONGS_TO, 'BookPlatforms', 'platform_id'),
 				'publisher' => array(self::BELONGS_TO, 'Users', 'publisher_id'),
 				'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
 				'discount' => array(self::BELONGS_TO, 'BookDiscounts', 'id'),
@@ -134,11 +125,9 @@ class Books extends CActiveRecord
 				'permissions' => 'دسترسی ها',
 				'size' => 'حجم',
 				'confirm' => 'وضعیت انتشار',
-				'platform_id' => 'پلتفرم',
 				'publisher_name' => 'تیم توسعه دهنده',
 				'seen' => 'دیده شده',
 				'download' => 'تعداد دریافت',
-				'install' => 'تعداد نصب فعال',
 				'deleted' => 'حذف شده',
 		);
 	}
@@ -166,7 +155,6 @@ class Books extends CActiveRecord
 		$criteria->compare('category_id', $this->category_id);
 		$criteria->compare('t.status', $this->status);
 		$criteria->compare('price', $this->price);
-		$criteria->compare('platform_id', $this->platform_id);
 		$criteria->with = array('publisher', 'publisher.userDetails');
 		$criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
 		$criteria->params[':dev_filter'] = '%'.$this->devFilter.'%';
@@ -215,7 +203,7 @@ class Books extends CActiveRecord
 	public function getBookFileUrl()
 	{
 		if(!empty($this->packages))
-			return Yii::app()->createUrl("/uploads/books/files/".strtolower($this->platformsID[$this->platform_id])."/".$this->lastPackage->file_name);
+			return Yii::app()->createUrl("/uploads/books/files/".$this->lastPackage->file_name);
 		return '';
 	}
 
@@ -227,8 +215,8 @@ class Books extends CActiveRecord
 
 	public function getPublisherName()
 	{
-		if($this->publisher)
-			return $this->publisher->userDetails->nickname;
+		if($this->publisher_id)
+			return $this->publisher->userDetails->nickname?$this->publisher->userDetails->nickname:$this->publisher->userDetails->fa_name;
 		else
 			return $this->publisher_name;
 	}
@@ -297,7 +285,6 @@ class Books extends CActiveRecord
 	 *
 	 * Get criteria for valid books
 	 *
-	 * @param null $platform
 	 * @param array $categoryIds
 	 * @return CDbCriteria
 	 */

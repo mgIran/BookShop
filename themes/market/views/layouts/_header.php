@@ -5,6 +5,7 @@
         <h2><?= $this->pageTitle ?></h2>
         <img class="logo" src="<?= Yii::app()->createAbsoluteUrl('themes/market/images/logo.png'); ?>" alt="HyperApps" >
     </div>
+
     <div class="right-header col-xs-12">
         <div class="search-box col-xs-12">
             <?
@@ -49,14 +50,14 @@
                                 <div class="user-detail">
                                     <span class="name"><?= $this->userDetails->getShowName(); ?></span>
                                     <span class="type"><?= $this->userDetails->roleLabels[Yii::app()->user->roles] ?></span>
-                                    <span class="type">اعتبار : <?= Controller::parseNumbers(number_format($this->userDetails->credit, 0)) ?> تومان</span>
+                                    <span class="type">اعتبار: <?= Controller::parseNumbers(number_format($this->userDetails->credit, 0)) ?> تومان</span>
                                 </div>
                                 <footer>
                                     <a class="btn btn-default" href="<?= Yii::app()->createUrl('/dashboard') ?>">پنل کاربری</a>
                                     <?
                                     if(Yii::app()->user->roles == 'publisher'):
                                     ?>
-                                    <a class="btn btn-default" href="<?= Yii::app()->createUrl('/publishers/panel') ?>">پنل توسعه دهندگان</a>
+                                    <a class="btn btn-default" href="<?= Yii::app()->createUrl('/publishers/panel') ?>">پنل ناشران</a>
                                     <?
                                     endif;
                                     ?>

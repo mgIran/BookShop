@@ -27,11 +27,6 @@ $cs->registerScriptFile($baseUrl.'/js/scripts.js');
 </head>
 <body>
 <div class="container">
-    <div class="logo-box">
-        <a href="<?= Yii::app()->createAbsoluteUrl('//'); ?>">
-        <img class="logo" src="<?= Yii::app()->theme->baseUrl; ?>/images/logo.png" alt="HyperApps" >
-        </a>
-    </div>
     <?= $content; ?>
 </div>
 <div class="mask"></div>

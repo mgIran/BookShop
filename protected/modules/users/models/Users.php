@@ -18,7 +18,7 @@
  * @property string $newPassword
  *
  * The followings are the available model relations:
- * @property AppBuys[] $appBuys
+ * @property BookBuys[] $bookBuys
  * @property Books[] $books
  * @property Books[] $bookmarkedBooks
  * @property UserDetails $userDetails
@@ -98,13 +98,13 @@ class Users extends CActiveRecord
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'appBuys' => array(self::HAS_MANY, 'AppBuys', 'user_id'),
+            'bookBuys' => array(self::HAS_MANY, 'BookBuys', 'user_id'),
             'books' => array(self::HAS_MANY, 'Books', 'publisher_id'),
             'userDetails' => array(self::HAS_ONE, 'UserDetails', 'user_id'),
             'userDevIdRequests' => array(self::HAS_ONE, 'UserDevIdRequests', 'user_id'),
             'transactions' => array(self::HAS_MANY, 'UserTransactions', 'user_id'),
             'role' => array(self::BELONGS_TO, 'UserRoles', 'role_id'),
-            'bookmarkedBooks' => array(self::MANY_MANY, 'Books', 'ym_user_app_bookmark(user_id,app_id)'),
+            'bookmarkedBooks' => array(self::MANY_MANY, 'Books', 'ym_user_book_bookmark(user_id,book_id)'),
         );
     }
 
