@@ -34,7 +34,7 @@
             <?php $this->renderPartial('_package', array(
                 'model'=>$model,
                 'dataProvider'=>$packagesDataProvider,
-                'for'=>(Yii::app()->request->getParam('new')=='1')?'new_app':'old_app'
+                'for'=>(Yii::app()->request->getParam('new')=='1')?'new_book':'old_book'
             ));?>
         </div>
         <div id="info" class="tab-pane fade <?= $step == 2?'in active':''; ?>">

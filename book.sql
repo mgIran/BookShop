@@ -266,7 +266,7 @@ CREATE TABLE `ym_book_packages` (
   `publish_date` varchar(20) DEFAULT NULL COMMENT 'تاریخ انتشار',
   `status` enum('pending','accepted','refused','change_required') DEFAULT 'pending' COMMENT 'وضعیت',
   `reason` text CHARACTER SET utf8 COLLATE utf8_persian_ci COMMENT 'دلیل',
-  `for` enum('new_app','old_app') CHARACTER SET utf8 DEFAULT NULL,
+  `for` enum('new_book','old_book') CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   CONSTRAINT `ym_book_packages_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
