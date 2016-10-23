@@ -56,6 +56,7 @@ $this->breadcrumbs=array(
 					'label'=>Yii::t('commentsModule.msg', 'Approve'),
 					'url'=>'Yii::app()->urlManager->createUrl(CommentsModule::APPROVE_ACTION_ROUTE, array("id"=>$data->comment_id))',
 					'options'=>array('style'=>'margin-right: 5px;'),
+					'visible'=>'$data->status == 0',
 					'click'=>'function(){
 						if(confirm("'.Yii::t('commentsModule.msg', 'Approve this comment?').'"))
 						{
