@@ -60,6 +60,7 @@ class BooksController extends Controller
         $criteria = Books::model()->getValidBooks(array($model->category_id));
         $criteria->addCondition('id!=:id');
         $criteria->params[':id'] = $model->id;
+        $criteria->limit = 4;
         $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
         $this->render('view', array(
             'model' => $model,

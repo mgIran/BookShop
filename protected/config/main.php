@@ -1,6 +1,5 @@
 <?php
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
-Yii::setPathOfAlias('ApkParser', dirname(__FILE__).'/../vendor/ApkParser');
 return array(
     //'onBeginRequest'=>create_function('$event', 'return ob_start("ob_gzhandler");'),
     //'onEndRequest'=>create_function('$event', 'return ob_end_flush();'),
@@ -61,7 +60,8 @@ return array(
 					'registeredOnly'=>true,
 					'useCaptcha'=> false,
 					'premoderate' => true,
-					'allowSubcommenting'=>false,
+					'allowSubcommenting'=>true,
+					'isSuperuser'=>'!Yii::app()->user->isGuest && (Yii::app()->user->type == \'admin\' || Yii::app()->user->roles == "publisher")',
 					'orderComments'=>'DESC',
 					//config for create link to view model page(page with comments)
 					'pageUrl'=>array(
@@ -73,6 +73,7 @@ return array(
 			'userConfig'=>array(
 				'class'=>'Users',
 				'nameProperty'=>'userDetails.fa_name',
+//				'avatarProperty'=>'userDetails.avatar',
 				'emailProperty'=>'email',
 			),
 		)
@@ -106,9 +107,6 @@ return array(
             'appendParams'=>true,
 			'rules'=>array(
 				'<action:(logout|login|register|dashboard)>' => 'users/public/<action>',
-                'android' => 'site/index/platform/android',
-                'ios' => 'site/index/platform/ios',
-                'windowsphone' => 'site/index/platform/windowsphone',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
@@ -166,23 +164,23 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// @todo change webmail of emails
-		'adminEmail'=>'webmaster@hyperbooks.ir',
-        'noReplyEmail' => 'no-reply@hyperbooks.ir',
+		'adminEmail'=>'webmaster@ketabic.ir',
+        'noReplyEmail' => 'no-reply@ketabic.ir',
 		'SMTP' => array(
-            'Host' => 'mail.hyperbooks.ir',
+            'Host' => 'mail.ketabic.ir',
             'Secure' => 'ssl',
             'Port' => '465',
-            'Username' => 'no-reply@hyperbooks.ir',
-            'Password' => 'hyperbooks.ir',
+            'Username' => 'no-reply@ketabic.ir',
+            'Password' => 'ketabic.ir',
         ),
         'mailTheme'=>
-            '<h2 style="margin-bottom:0;box-sizing:border-box;display: block;width: 100%;background-color: #77c159;line-height:60px;color:#fff;font-size: 24px;text-align: right;padding-right: 50px">هایپر اپس<span style="font-size: 14px;color:#f0f0f0"> - مرجع انواع نرم افزار تلفن های هوشمند</span></h2>
+            '<h2 style="margin-bottom:0;box-sizing:border-box;display: block;width: 100%;background-color: #77c159;line-height:60px;color:#fff;font-size: 24px;text-align: right;padding-right: 50px">کتابیک<span style="font-size: 14px;color:#f0f0f0"> - مرجع خرید و فروش و کتابخوانی آنلاین</span></h2>
              <div style="display: inline-block;width: 100%;font-family:tahoma;line-height: 28px;">
                 <div style="direction:rtl;display:block;overflow:hidden;border:1px solid #efefef;text-align: center;padding:15px;">{MessageBody}</div>
              </div>
              <div style="font-size: 8pt;color: #bbb;text-align: right;font-family: tahoma;padding: 15px;">
                 <a href="'.((strpos($_SERVER['SERVER_PROTOCOL'], 'https'))?'https://':'http://').$_SERVER['HTTP_HOST'].'/about">درباره</a> | <a href="'.((strpos($_SERVER['SERVER_PROTOCOL'], 'https'))?'https://':'http://').$_SERVER['HTTP_HOST'].'/help">راهنما</a>
-                <span style="float: left;"> همهٔ حقوق برای هایپر اپس محفوظ است. ©‏ {CurrentYear} </span>
+                <span style="float: left;"> همهٔ حقوق برای کتابیک محفوظ است. ©‏ {CurrentYear} </span>
              </div>',
 	),
 );

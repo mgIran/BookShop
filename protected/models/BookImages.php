@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "ym_book_images".
+ * This is the model class for table "{{book_images}}".
  *
- * The followings are the available columns in table 'ym_book_images':
+ * The followings are the available columns in table '{{book_images}}':
  * @property string $id
  * @property string $book_id
  * @property string $image
@@ -18,7 +18,7 @@ class BookImages extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_book_images';
+		return '{{book_images}}';
 	}
 
 	/**

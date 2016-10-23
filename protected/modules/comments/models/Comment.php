@@ -502,7 +502,12 @@ class Comment extends CActiveRecord
     {
         //if current user is superuser, then automoderate comment and it's new comment
         if($this->isNewRecord === true && $this->evaluateExpression($this->config['isSuperuser']) === true)
-            $this->status = self::STATUS_APPROWED;
+        {
+            if(Yii::app()->user->type == 'publisher' && $this->getOwnerModel()->publisher_id && $this->getOwnerModel()->publisher_id == Yii::app()->user->getId())
+                $this->status = self::STATUS_APPROWED;
+            elseif (Yii::app()->user->type == 'admin')
+                $this->status = self::STATUS_APPROWED;
+        }
         if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
             $this->user_name = 'Admin';
         return parent::beforeSave();

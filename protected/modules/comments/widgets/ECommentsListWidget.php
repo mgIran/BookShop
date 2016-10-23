@@ -43,7 +43,7 @@ class ECommentsListWidget extends ECommentsBaseWidget
                     $this->adminMode = $this->evaluateExpression($this->_config['isSuperuser']);
             }
         }
-        
+
 	public function run()
 	{
             $newComment = $this->createNewComment();

@@ -56,11 +56,11 @@ class CommentController extends Controller
 			) ,
 			array('allow' ,
 				'actions' => array('admin' ,'adminBooks' ,'delete' ,'approve') ,
-				'roles' => array('admin') ,
+				'roles' => array('admin','publisher') ,
 			) ,
 			array('deny' ,  // deny all users
 				'users' => array('*') ,
-			) ,
+			),
 		);
 	}
 

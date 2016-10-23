@@ -168,20 +168,6 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     <span>توضیحات بیشتر</span>
                 </a>
             </section>
-            <div class="app-comments">
-                <div id="rate-wrapper">
-                <?
-                $this->renderPartial('_rating',array(
-                    'model' => $model
-                ));
-                ?>
-                </div>
-                <?
-                $this->widget('comments.widgets.ECommentsListWidget', array(
-                    'model' => $model,
-                ));
-                ?>
-            </div>
             <?php if(!is_null($model->change_log) or $model->change_log!=''):?>
                 <div class="change-log">
                     <h4>آخرین تغییرات</h4>
@@ -201,22 +187,22 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     <span class="ltr" ><?= $model->lastPackage->version ?></span>
                 </div>
             </div>
-            <?php if(!is_null($model->permissions) or $model->permissions!=''):?>
-                <div class="app-details border-none">
+            <div class="app-comments">
+                <div id="rate-wrapper">
                     <?
-                    if($model->permissions):
-                        echo '<h4>دسترسی ها</h4>';
-                        echo '<ul class="list-unstyled">';
-                        $model->permissions = CJSON::decode($model->permissions);
-                        foreach($model->permissions as $permission):
-                            echo "<li>- {$permission}</li>";
-                        endforeach;
-                        echo '</ul>';
-                    endif;
+                    $this->renderPartial('_rating',array(
+                        'model' => $model
+                    ));
                     ?>
                 </div>
-            <?php endif;?>
-
+                <div class="comments">
+                    <?
+                    $this->widget('comments.widgets.ECommentsListWidget', array(
+                        'model' => $model,
+                    ));
+                    ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>

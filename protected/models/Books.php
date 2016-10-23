@@ -1,23 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "ym_books".
+ * This is the model class for table "{{books}}".
  *
- * The followings are the available columns in table 'ym_books':
+ * The followings are the available columns in table '{{books}}':
  * @property string $id
  * @property string $title
- * @property string $publisher_id
- * @property string $category_id
- * @property string $status
- * @property double $price
  * @property string $icon
  * @property string $description
- * @property double $size
- * @property string $confirm
+ * @property integer $number_of_pages
+ * @property string $change_log
+ * @property string $language
+ * @property string $status
+ * @property string $category_id
  * @property string $publisher_name
+ * @property string $publisher_id
+ * @property string $confirm
  * @property integer $seen
  * @property string $download
  * @property integer $deleted
+ * @property integer $size
+ * @property integer $price
  * @property integer $offPrice
  * @property integer $rate
  *
@@ -31,6 +34,7 @@
  * @property Users[] $bookmarker
  * @property BookPackages[] $packages
  * @property BookDiscounts $discount
+ * @property Advertises $bookAdvertises
  */
 class Books extends CActiveRecord
 {
@@ -39,7 +43,7 @@ class Books extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_books';
+		return '{{books}}';
 	}
 
 	private $_purifier;
@@ -70,19 +74,18 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-				array('title, category_id, price ,icon', 'required', 'on' => 'update'),
-				array('price, size', 'numerical'),
-				array('seen, deleted', 'numerical', 'integerOnly' => true),
+				array('title, category_id ,icon', 'required', 'on' => 'update'),
+				array('number_of_pages, seen, deleted', 'numerical', 'integerOnly' => true),
 				array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
 				array('title, icon, publisher_name', 'length', 'max' => 50),
 				array('publisher_id, category_id', 'length', 'max' => 10),
+				array('language', 'length' ,'max'=>20),
 				array('status', 'length', 'max' => 7),
 				array('download', 'length', 'max' => 12),
-				array('price, size', 'numerical'),
-				array('description, change_log, permissions ,publisher_name ,_purifier', 'safe'),
+				array('description, change_log ,publisher_name ,_purifier', 'safe'),
 				// The following rule is used by search().
 				// @todo Please remove those attributes that should not be searched.
-				array('id, title, publisher_id, category_id, status, price, icon, description, change_log, permissions, size, confirm, publisher_name, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
+				array('id, title, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 				array('description, change_log', 'filter', 'filter' => array($obj = new CHtmlPurifier(), 'purify')),
 		);
 	}
@@ -115,20 +118,20 @@ class Books extends CActiveRecord
 		return array(
 				'id' => 'شناسه',
 				'title' => 'عنوان',
+				'icon' => 'آیکون',
+				'description' => 'توضیحات',
+				'number_of_pages' => 'تعداد صفحات',
+				'language' => 'زبان',
 				'publisher_id' => 'توسعه دهنده',
 				'category_id' => 'دسته',
 				'status' => 'وضعیت',
-				'price' => 'قیمت',
-				'icon' => 'آیکون',
-				'description' => 'توضیحات',
 				'change_log' => 'لیست تغییرات',
-				'permissions' => 'دسترسی ها',
-				'size' => 'حجم',
 				'confirm' => 'وضعیت انتشار',
 				'publisher_name' => 'تیم توسعه دهنده',
 				'seen' => 'دیده شده',
 				'download' => 'تعداد دریافت',
 				'deleted' => 'حذف شده',
+				'size' => 'حجم فایل',
 		);
 	}
 
@@ -144,7 +147,7 @@ class Books extends CActiveRecord
 	 * @return CActiveDataProvider the data provider that can return the models
 	 * based on the search/filter conditions.
 	 */
-	public function search($withFree = true)
+	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
@@ -154,13 +157,9 @@ class Books extends CActiveRecord
 		$criteria->compare('t.title', $this->title, true);
 		$criteria->compare('category_id', $this->category_id);
 		$criteria->compare('t.status', $this->status);
-		$criteria->compare('price', $this->price);
 		$criteria->with = array('publisher', 'publisher.userDetails');
 		$criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
 		$criteria->params[':dev_filter'] = '%'.$this->devFilter.'%';
-
-		if(!$withFree)
-			$criteria->addCondition('price <> 0');
 
 		$criteria->addCondition('deleted=0');
 
@@ -183,19 +182,7 @@ class Books extends CActiveRecord
 		return parent::model($className);
 	}
 
-	/**
-	 * Return publisher portion
-	 */
-	public function getPublisherPortion()
-	{
-		Yii::app()->getModule('setting');
-		$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
-		$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
-		$price = $this->price;
-		$tax = ($price * $tax) / 100;
-		$commission = ($price * $commission) / 100;
-		return $price - $tax - $commission;
-	}
+	
 
 	/**
 	 * Return url of book file
@@ -221,13 +208,7 @@ class Books extends CActiveRecord
 			return $this->publisher_name;
 	}
 
-	public function getOffPrice()
-	{
-		if($this->discount)
-			return $this->price - $this->price * $this->discount->percent / 100;
-		else
-			return $this->price;
-	}
+	
 
 	public function hasDiscount()
 	{
@@ -304,5 +285,16 @@ class Books extends CActiveRecord
 		$criteria->order = $order;
 		$criteria->limit = $limit;
 		return $criteria;
+	}
+
+	public function getPrice(){
+		return $this->lastPackage->price;
+	}
+	public function getOffPrice()
+	{
+		if($this->discount)
+			return $this->lastPackage->price - $this->lastPackage->price * $this->discount->percent / 100;
+		else
+			return $this->lastPackage->price ;
 	}
 }

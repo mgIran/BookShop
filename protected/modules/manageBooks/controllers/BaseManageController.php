@@ -442,29 +442,10 @@ class BaseManageController extends Controller
         if(file_exists($uploadDir.'/'.$model->file_name))
             if(unlink($uploadDir.'/'.$model->file_name))
                 if($model->delete())
-                    $this->createLog('بسته ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->app->publisher_id);
+                    $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->app->publisher_id);
 
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-    }
-
-    /**
-     * Return APK file info
-     * @param string $filename file name
-     * @return array of apk file info
-     */
-    public function apkParser($filename)
-    {
-        Yii::import('application.modules.manageBooks.components.ApkParser.*');
-        $apk = new Parser($filename);
-        $manifest = $apk->getManifest();
-
-        return array(
-            'package_name'=>$manifest->getPackageName(),
-            'version'=>$manifest->getVersionName(),
-            'min_sdk_level'=>$manifest->getMinSdkLevel(),
-            'min_sdk_platform'=>$manifest->getMinSdk()->platform,
-        );
     }
 
     /**
@@ -483,27 +464,13 @@ class BaseManageController extends Controller
             $model->create_date = time();
             $model->publish_date = time();
             $model->status='accepted';
-            if ($_POST['platform'] == 'android') {
-                $apkInfo = $this->apkParser($tempDir . DIRECTORY_SEPARATOR . $_POST['Books']['file_name']);
-                $model->version = $apkInfo['version'];
-                $model->package_name = $apkInfo['package_name'];
-                $model->file_name = $apkInfo['version'] . '-' . $apkInfo['package_name'] . '.' . pathinfo($_POST['Books']['file_name'], PATHINFO_EXTENSION);
-            } else {
-                $model->version = $_POST['version'];
-                $model->package_name = $_POST['package_name'];
-                $model->file_name = $_POST['version'] . '-' . $_POST['package_name'] . '.' . pathinfo($_POST['Books']['file_name'], PATHINFO_EXTENSION);
-            }
+            $model->version = $_POST['version'];
+            $model->package_name = $_POST['package_name'];
+            $model->file_name = $_POST['version'] . '-' . $_POST['package_name'] . '.' . pathinfo($_POST['Books']['file_name'], PATHINFO_EXTENSION);
 
             if ($model->save()) {
                 $response = ['status' => true, 'fileName' => CHtml::encode($model->file_name)];
                 rename($tempDir . DIRECTORY_SEPARATOR . $_POST['Books']['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
-                if ($_POST['platform'] == 'android') {
-                    /* @var $book Books */
-                    $book = Books::model()->findByPk($_POST['book_id']);
-                    $book->setScenario('set_permissions');
-                    $book->permissions = CJSON::encode($this->getPermissionsName($apkInfo['permissions']));
-                    $book->save();
-                }
             } else {
                 $response = ['status' => false, 'message' => $model->getError('package_name')];
                 unlink($tempDir . '/' . $_POST['Books']['file_name']);

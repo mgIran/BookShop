@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "ym_book_packages".
+ * This is the model class for table "{{book_packages}}".
  *
- * The followings are the available columns in table 'ym_book_packages':
+ * The followings are the available columns in table '{{book_packages}}':
  * @property string $id
  * @property string $book_id
  * @property string $version
@@ -14,6 +14,9 @@
  * @property string $status
  * @property string $reason
  * @property string $for
+ * @property string $isbn
+ * @property string $price
+ * @property string $printed_price
  *
  * The followings are the available model relations:
  * @property Books $book
@@ -28,8 +31,8 @@ class BookPackages extends CActiveRecord
     );
 
     public $forLabels = array(
-        'new_book'=>'<span class="label label-success">بسته جدید</span>',
-        'old_book'=>'<span class="label label-warning">بسته تغییر داده شده</span>',
+        'new_book'=>'<span class="label label-success">کتاب جدید</span>',
+        'old_book'=>'<span class="label label-warning">کتاب تغییر داده شده</span>',
     );
 
     /**
@@ -37,7 +40,7 @@ class BookPackages extends CActiveRecord
      */
     public function tableName()
     {
-        return 'ym_book_packages';
+        return '{{book_packages}}';
     }
 
     /**
@@ -48,17 +51,16 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('package_name', 'uniquePublisher', 'on' => 'insert, update'),
-            array('book_id', 'length', 'max' => 10),
-            array('version, create_date, publish_date', 'length', 'max' => 20),
-            array('package_name', 'length', 'max' => 100),
-            array('file_name', 'length', 'max' => 255),
-            array('status', 'length', 'max' => 15),
+            array('book_id, price, printed_price', 'length', 'max'=>10),
+            array('version, isbn, create_date, publish_date', 'length', 'max'=>20),
+            array('package_name', 'length', 'max'=>100),
+            array('file_name', 'length', 'max'=>255),
+            array('status', 'length', 'max'=>15),
+            array('for', 'length', 'max'=>8),
             array('reason', 'safe'),
-            array('for', 'length', 'max'=>7),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, book_id, version, package_name, file_name, create_date, publish_date, status, reason, for', 'safe', 'on' => 'search'),
+            array('id, book_id, version, package_name, isbn, file_name, create_date, publish_date, status, reason, for, price, printed_price', 'safe', 'on'=>'search'),
         );
     }
 
@@ -90,6 +92,9 @@ class BookPackages extends CActiveRecord
             'status' => 'وضعیت',
             'reason' => 'دلیل',
             'for' => 'نوع بسته',
+            'isbn' => 'شابک',
+            'price' => 'قیمت',
+            'printed_price' => 'قیمت نسخه چاپی',
         );
     }
 
@@ -116,11 +121,8 @@ class BookPackages extends CActiveRecord
         $criteria->compare('version', $this->version, true);
         $criteria->compare('package_name', $this->package_name, true);
         $criteria->compare('file_name', $this->file_name, true);
-        $criteria->compare('create_date', $this->create_date, true);
-        $criteria->compare('publish_date', $this->publish_date, true);
         $criteria->compare('status', $this->status, true);
-        $criteria->compare('reason',$this->reason,true);
-        $criteria->compare('for',$this->for,true);
+        $criteria->compare('isbn',$this->isbn,true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -138,24 +140,25 @@ class BookPackages extends CActiveRecord
         return parent::model($className);
     }
 
-    /**
-     * Check book be unique
-     * @param string $attribute field name.
-     */
-    public function uniquePublisher($attribute)
+    public function getOffPrice()
     {
-        $models = $this->findAllByAttributes(array('package_name' => $this->$attribute));
-        if (!is_null($models))
-            foreach ($models as $model)
-                if ($model->book->platform_id == $this->book->platform_id)
-                    if ($model->book->publisher_id != Yii::app()->user->getId())
-                        $this->addError($attribute, 'این بسته قبلا توسط کاربر دیگری ثبت شده است.');
-                    else {
-                        if ($model->book_id == $this->book_id) {
-                            if ($model->version == $this->version)
-                                $this->addError($attribute, 'این نسخه قبلا ثبت شده است.');
-                        } else
-                            $this->addError($attribute, 'این بسته قبلا ثبت شده است.');
-                    }
+        if($this->book->discount)
+            return $this->price - $this->price * $this->book->discount->percent / 100;
+        else
+            return $this->price;
+    }
+
+    /**
+     * Return publisher portion
+     */
+    public function getPublisherPortion()
+    {
+        Yii::app()->getModule('setting');
+        $tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+        $commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
+        $price = $this->price;
+        $tax = ($price * $tax) / 100;
+        $commission = ($price * $commission) / 100;
+        return $price - $tax - $commission;
     }
 }
