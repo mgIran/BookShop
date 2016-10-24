@@ -1,7 +1,7 @@
 <?php
 /* @var $this BooksController */
 /* @var $model Books */
-/* @var $imageModel AppImages */
+/* @var $imageModel BookImages */
 /* @var $images [] */
 /* @var $step integer */
 /* @var $packagesDataProvider CActiveDataProvider */

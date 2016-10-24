@@ -245,7 +245,7 @@ class TicketsManageController extends Controller
 
 
 	/**
-	 * Upload app images
+	 * Upload book images
 	 */
 	public function actionUpload()
 	{
@@ -271,7 +271,7 @@ class TicketsManageController extends Controller
 	}
 
 	/**
-	 * Delete app images
+	 * Delete book images
 	 */
 	public function actionDeleteUploaded()
 	{

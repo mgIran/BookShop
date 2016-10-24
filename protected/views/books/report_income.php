@@ -7,15 +7,15 @@
 /* @var $sumCredit integer */
 
 Yii::app()->clientScript->registerCss('booksStyle','
-.report-sale .app-item:nth-child(n+3){
+.report-sale .book-item:nth-child(n+3){
     margin-top: 50px;
 }
-.report-sale .app-item input[type="radio"]{
+.report-sale .book-item input[type="radio"]{
     float: right;
     margin-top: 27px;
     margin-left: 15px;
 }
-.report-sale .app-item img{
+.report-sale .book-item img{
     float: right;
     max-width: 70px;
     max-height:70px;

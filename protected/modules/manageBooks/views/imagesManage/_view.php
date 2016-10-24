@@ -1,6 +1,6 @@
 <?php
 /* @var $this ImagesManageController */
-/* @var $data AppImages */
+/* @var $data BookImages */
 ?>
 
 <div class="view">
@@ -9,8 +9,8 @@
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('app_id')); ?>:</b>
-	<?php echo CHtml::encode($data->app_id); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('book_id')); ?>:</b>
+	<?php echo CHtml::encode($data->book_id); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('image')); ?>:</b>

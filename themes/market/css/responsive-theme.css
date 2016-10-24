@@ -62,10 +62,10 @@
         -o-transform: translateX(-50%);
         transform: translateX(-50%);
     }
-    .app-carousel .owl-item {
+    .book-carousel .owl-item {
         text-align: center;
     }
-    .app-carousel .app-item {
+    .book-carousel .book-item {
         float: none !important;
     }
     .logo-box {
@@ -88,29 +88,29 @@
         height: 60px;
         padding: 0 45px;
     }
-    .app-like{
+    .book-like{
         margin-top: 20px;
         margin-bottom: 20px;
         padding: 0 45px;
     }
-    .app-inner .app-body > .app-details > .detail{
+    .book-inner .book-body > .book-details > .detail{
         padding-left: 35px;
     }
     .content{
         margin-top:110px;
     }
-    .app-inner .pic{
+    .book-inner .pic{
         width: 100%;
         float: none;
     }
-    .app-inner .app-heading {
+    .book-inner .book-heading {
         position: relative;
         right: 0;
     }
-    .app-inner .app-heading > h2{
+    .book-inner .book-heading > h2{
         font-size: 1.5em;
     }
-    .app-inner .app-body{
+    .book-inner .book-body{
         margin-top: 0;
     }
     .header-links{
@@ -137,10 +137,10 @@
     header .mobile-nav.nav > li{
         width: 40px;
     }
-    .content .app-box .app-carousel{
+    .content .book-box .book-carousel{
         text-align: center;
     }
-    .content .app-box .app-carousel .app-item{
+    .content .book-box .book-carousel .book-item{
         float: none;
     }
     .hidden-phone{
@@ -163,10 +163,10 @@
     .main{
         width: 80%;
     }
-    .app{
+    .book{
         width: 65%;
     }
-    .app-like{
+    .book-like{
         width: 35%;
         padding: 0;
         padding-left: 20px;

@@ -49,7 +49,7 @@
 				'deleteUrl' => $this->createUrl('/tickets/manage/deleteUploaded'),
 				'acceptedFiles' => '.jpg, .jpeg, .png, .pdf, .doc, .docx, .zip',
 				'serverFiles' => array(),
-//				'data' => array('app_id'=>$model->id),
+//				'data' => array('book_id'=>$model->id),
 				'onSuccess' => '
                 var responseObj = JSON.parse(res);
                 if(responseObj.state == "ok")

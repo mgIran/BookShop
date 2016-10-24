@@ -23,7 +23,7 @@ if(Yii::app()->user->roles == 'admin'):
 <div class="row">
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="panel-heading">
-            جدیدترین نرم افزار ها
+            جدیدترین کتاب ها
         </div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -177,7 +177,7 @@ if(Yii::app()->user->roles == 'admin'):
 <div class="row">
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="panel-heading">
-            درخواست های تغییر شناسه توسعه دهنده
+            درخواست های تغییر شناسه ناشر
         </div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -210,7 +210,7 @@ if(Yii::app()->user->roles == 'admin'):
     </div>
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="panel-heading">
-            اطلاعات توسعه دهندگان جدید<small>(تایید نشده)</small>
+            اطلاعات ناشران جدید<small>(تایید نشده)</small>
         </div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(

@@ -19,7 +19,7 @@ $this->menu=array(
 	'columns'=>array(
 		'title',
 		array(
-			'header' => 'توسعه دهنده',
+			'header' => 'ناشر',
 			'value' => '$data->publisher_id?$data->publisher->userDetails->publisher_id:$data->publisher_name',
 			'filter' => CHtml::activeTextField($model,'devFilter')
 		),
@@ -34,7 +34,7 @@ $this->menu=array(
 			'filter' => CHtml::activeDropDownList($model,'status',$model->statusLabels,array('prompt' => 'همه'))
 		),
 		array(
-			'name' => 'price',
+			'name' => 'lastPackage.price',
 			'value' => '$data->price != 0?$data->price:"رایگان"'
 		),
 		/*

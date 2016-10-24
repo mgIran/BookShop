@@ -6,7 +6,7 @@
 
 <div class="container publisher-signup-container">
     <div class="col-md-8 col-md-offset-2">
-        <h2 class="text-center">توسعه دهنده شوید</h2>
+        <h2 class="text-center">ناشر شوید</h2>
         <div class="steps-container">
             <ul class="steps">
                 <li class="col-md-4<?php if($step=='agreement'):?> active<?php endif;?>">

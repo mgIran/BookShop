@@ -36,33 +36,22 @@ class ImagesManageController extends Controller
 		);
 	}
 
-	/**
-	 * Upload app images
-	 */
-	public function actionUpload()
-	{
-		$tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-		if (!is_dir($tempDir))
-			mkdir($tempDir);
-		if (isset($_FILES)) {
-			$file = $_FILES['image'];
-			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-			$file['name'] = Controller::generateRandomString(5) . time();
-			while (file_exists($tempDir . DIRECTORY_SEPARATOR . $file['name']. '.' .$ext))
-				$file['name'] = Controller::generateRandomString(5) . time();
-			$file['name'] = $file['name'] . '.' . $ext;
-			if (move_uploaded_file($file['tmp_name'], $tempDir . DIRECTORY_SEPARATOR . CHtml::encode($file['name']))) {
-				$response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-			} else
-				$response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-		} else
-			$response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-		echo CJSON::encode($response);
-		Yii::app()->end();
+
+	public function actions(){
+		return array(
+			'upload' => array(
+				'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+				'attribute' => 'image',
+				'rename' => 'random',
+				'validateOptions' => array(
+					'acceptedTypes' => array('jpg','jpeg','png')
+				)
+			)
+		);
 	}
 
 	/**
-	 * Delete app images
+	 * Delete book images
 	 */
 	public function actionDeleteUploaded()
 	{
@@ -70,7 +59,7 @@ class ImagesManageController extends Controller
 			$fileName = $_POST['fileName'];
 			$uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
 
-			$model = AppImages::model()->findByAttributes(array('image' => $fileName));
+			$model = BookImages::model()->findByAttributes(array('image' => $fileName));
 			$response = null;
 			if (!is_null($model)) {
 				if (@unlink($uploadDir . $fileName)) {

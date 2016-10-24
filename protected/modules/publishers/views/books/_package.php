@@ -12,12 +12,14 @@ Yii::app()->clientScript->registerCss('inline',"
     <a class="btn btn-success" href="#package-modal" data-toggle="modal"><i class="icon icon-plus"></i> ثبت بسته</a>
     <div class="table text-center">
         <div class="thead">
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-8">نام بسته</div>
+            <div class="col-lg-3 col-md-1 col-sm-4 col-xs-8">نام چاپ جدید</div>
             <div class="col-lg-1 col-md-1 col-sm-4 hidden-xs">نسخه</div>
-            <div class="col-lg-2 col-md-2 hidden-sm hidden-xs">حجم</div>
+            <div class="col-lg-1 col-md-2 hidden-sm hidden-xs">حجم</div>
             <div class="col-lg-2 col-md-3 hidden-sm hidden-xs">تاریخ بارگذاری</div>
             <div class="col-lg-2 col-md-3 hidden-sm hidden-xs">تاریخ انتشار</div>
-            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">وضعیت</div>
+            <div class="col-lg-1 col-md-1 hidden-sm hidden-xs">قیمت اینترنتی</div>
+            <div class="col-lg-1 col-md-1 hidden-sm hidden-xs">قیمت چاپی</div>
+            <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4">وضعیت</div>
         </div>
         <div class="tbody">
             <?php $this->widget('zii.widgets.CListView', array(
@@ -57,16 +59,20 @@ Yii::app()->clientScript->registerCss('inline',"
                                         'serverFiles' => array(),
                                         'onSuccess' => '
                                             var responseObj = JSON.parse(res);
-                                            if(responseObj.status)
+                                            if(responseObj.status){
                                                 {serverName} = responseObj.fileName;
-                                            else
+					                            $(".uploader-message").html("");
+                                            }
+                                            else{
                                                 $(".uploader-message").text(responseObj.message).addClass("error");
+                                                this.removeFile(file);
+                                            }
                                         ',
                                     ));?>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <?php echo CHtml::hiddenField('for', $for);?>
-                                            <?php echo CHtml::hiddenField('app_id', $model->id);?>
+                                            <?php echo CHtml::hiddenField('book_id', $model->id);?>
                                             <?php echo CHtml::hiddenField('filesFolder', $model->platform->name);?>
                                             <?php echo CHtml::hiddenField('platform', $model->platform->name);?>
                                             <?php echo CHtml::ajaxSubmitButton('ثبت', $this->createUrl('/publishers/books/savePackage'), array(
@@ -128,7 +134,7 @@ Yii::app()->clientScript->registerCss('inline',"
                                     <div class="row">
                                         <div class="col-md-12">
                                             <?php echo CHtml::hiddenField('for', $for);?>
-                                            <?php echo CHtml::hiddenField('app_id', $model->id);?>
+                                            <?php echo CHtml::hiddenField('book_id', $model->id);?>
                                             <?php echo CHtml::hiddenField('filesFolder', $model->platform->name);?>
                                             <?php echo CHtml::hiddenField('platform', $model->platform->name);?>
                                             <?php echo CHtml::ajaxSubmitButton('ثبت', $this->createUrl('/publishers/books/savePackage'), array(

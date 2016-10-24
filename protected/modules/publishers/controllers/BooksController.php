@@ -59,9 +59,9 @@ class BooksController extends Controller
             if (!$user->publisher_id) {
                 $devIdRequestModel = UserDevIdRequests::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
                 if ($devIdRequestModel)
-                    Yii::app()->user->setFlash('warning', 'درخواست شما برای شناسه توسعه دهنده در انتظار تایید می باشد، لطفا شکیبا باشید.');
+                    Yii::app()->user->setFlash('warning', 'درخواست شما برای شناسه ناشر در انتظار تایید می باشد، لطفا شکیبا باشید.');
                 else
-                    Yii::app()->user->setFlash('failed', 'شناسه توسعه دهنده تنظیم نشده است. برای ثبت برنامه شناسه توسعه دهنده الزامیست.');
+                    Yii::app()->user->setFlash('failed', 'شناسه ناشر تنظیم نشده است. برای ثبت برنامه شناسه ناشر الزامیست.');
                 $this->redirect(array('/publishers/panel/account'));
             }
 
@@ -189,7 +189,7 @@ class BooksController extends Controller
                     break;
                 case 'online-payment':
                     break;
-                case 'in-app-payment':
+                case 'in-book-payment':
                     $model->price = -1;
                     break;
             }
@@ -435,25 +435,6 @@ class BooksController extends Controller
     }
 
     /**
-     * Return APK file info
-     */
-    public function apkParser($filename)
-    {
-        Yii::import('application.modules.manageBooks.components.ApkParser.*');
-        $apk = new Parser($filename);
-        $manifest = $apk->getManifest();
-
-
-        return array(
-            'package_name' => $manifest->getPackageName(),
-            'version' => $manifest->getVersionName(),
-            'min_sdk_level' => $manifest->getMinSdkLevel(),
-            'min_sdk_platform' => $manifest->getMinSdk()->platform,
-            'permissions' => $manifest->getPermissions(),
-        );
-    }
-
-    /**
      * Save book package info
      */
     public function actionSavePackage()
@@ -468,6 +449,8 @@ class BooksController extends Controller
             $model->book_id = $_POST['book_id'];
             $model->create_date = time();
             $model->for = $_POST['for'];
+            $model->price = $_POST['price'];
+            $model->printed_price = $_POST['printed_price'];
             $apkInfo = null;
             if ($_POST['platform'] == 'android') {
                 $apkInfo = $this->apkParser($tempDir . DIRECTORY_SEPARATOR . $_POST['Books']['file_name']);
@@ -565,7 +548,7 @@ class BooksController extends Controller
             'GLOBAL_SEARCH' => 'جستجو سراسری',
             'HARDWARE_TEST' => '',
             'INJECT_EVENTS' => '',
-            'INSTALL_LOCATION_PROVIDER' => 'نصب توسعه دهنده مکان',
+            'INSTALL_LOCATION_PROVIDER' => 'نصب ناشر مکان',
             'INSTALL_PACKAGES' => 'نصب بسته',
             'INSTALL_SHORTCUT' => 'نصب میانبر در Launcher',
             'INTERNAL_SYSTEM_WINDOW' => '',

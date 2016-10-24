@@ -335,7 +335,7 @@ class PanelController extends Controller
         {
             case 'agreement':
                 Yii::import('application.modules.pages.models.*');
-                $data['agreementText']=Pages::model()->find('title=:title', array(':title'=>'قرارداد توسعه دهندگان'));
+                $data['agreementText']=Pages::model()->find('title=:title', array(':title'=>'قرارداد ناشران'));
                 break;
 
             case 'profile':
@@ -349,7 +349,7 @@ class PanelController extends Controller
 
                 if($data['detailsModel']->credit < $minCredit['value'])
                 {
-                    Yii::app()->user->setFlash('min_credit_fail' , 'برای ثبت نام به عنوان توسعه دهنده باید حداقل '.number_format($minCredit['value'], 0).' تومان اعتبار داشته باشید.');
+                    Yii::app()->user->setFlash('min_credit_fail' , 'برای ثبت نام به عنوان ناشر باید حداقل '.number_format($minCredit['value'], 0).' تومان اعتبار داشته باشید.');
                     $this->redirect($this->createUrl('/users/credit/buy'));
                 }
 

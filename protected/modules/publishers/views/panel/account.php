@@ -25,7 +25,7 @@
                 ));?>
             <?php else:?>
                 <div class="col-md-6">
-                    <h1>شناسه توسعه دهنده</h1>
+                    <h1>شناسه ناشر</h1>
                     <?php echo CHtml::label('شناسه شما: ', '');?>
                     <?php echo $detailsModel->publisher_id;?>
                     <p class="desc">این شناسه دیگر قابل تغییر نیست.</p>

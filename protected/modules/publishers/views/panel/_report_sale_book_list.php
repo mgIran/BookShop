@@ -2,8 +2,8 @@
 /* @var $data Books*/
 ?>
 
-<div class="col-md-6 app-item">
-    <?php echo CHtml::radioButton('app_id', false, array(
+<div class="col-md-6 book-item">
+    <?php echo CHtml::radioButton('book_id', false, array(
         'value'=>$data->id,
     ));?>
     <img src="<?php echo Yii::app()->baseUrl.'/uploads/books/icons/'.CHtml::encode($data->icon);?>">

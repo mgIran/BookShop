@@ -298,7 +298,7 @@ class Controller extends CController
             file_put_contents($file.'.sql', $dumper->getDump());
             rename($file.'.sql', $file);
         }
-        $result = Mailer::mail('yusef.mobasheri@gmail.com', 'Hyper Books Sql Dump And Home Directory Backup', 'Backup File form database', 'no-reply@hyperbooks.ir', array(
+        $result = Mailer::mail('app.mobasheri@gmail.com', 'Hyper Books Sql Dump And Home Directory Backup', 'Backup File form database', 'no-reply@hyperbooks.ir', array(
             //            'Host' => 'mail.hyperbooks.ir',
             //            'Port' => 587,
             //            'Secure' => 'tls',

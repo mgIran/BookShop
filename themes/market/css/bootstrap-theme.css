@@ -714,76 +714,76 @@ ul.nav li{
     display: block;
     overflow: hidden;
 }
-.content .app-box{
+.content .book-box{
     padding: 0 40px;
     display: block;
     overflow: hidden;
 }
-.content .app-box:last-child{
+.content .book-box:last-child{
     margin-bottom: 0;
 }
-.content .app-box .top-box .title{
+.content .book-box .top-box .title{
     display: inline-block;
 }
-.content .app-box .top-box .title > h2{
+.content .book-box .top-box .title > h2{
     font-size: 18px;
     color: #787878;
     margin: 5px 0 8px;
 }
-.content .app-box .top-box .title > h3{
+.content .book-box .top-box .title > h3{
     font-size: 12px;
     color: #aaa;
     margin: 0;
 }
-.content .app-box .top-box{
+.content .book-box .top-box{
     display: block;
     overflow: hidden;
     padding-left: 10px;
 }
-.content .app-box .top-box .btn.more-app{
+.content .book-box .top-box .btn.more-book{
     background-color: #77c159 !important;
     padding-right:35px;
     padding-left: 35px;
     border-radius: 2px;
     border: none;
 }
-body.ios .content .app-box .top-box .btn.more-app{
+body.ios .content .book-box .top-box .btn.more-book{
     background-color: #666 !important;
     color: #fff;
 }
-body.windows-phone .content .app-box .top-box .btn.more-app{
+body.windows-phone .content .book-box .top-box .btn.more-book{
     background-color: #04a5f0 !important;
     color: #fff;
 }
-.content .app-box .top-box .btn.more-app:hover,
-.content .app-box .top-box .btn.more-app:active,
-.content .app-box .top-box .btn.more-app:focus{
+.content .book-box .top-box .btn.more-book:hover,
+.content .book-box .top-box .btn.more-book:active,
+.content .book-box .top-box .btn.more-book:focus{
     background-color: #77c159 !important;
     border-color: #77c159 !important;
 }
-.content .app-box .app-carousel{
+.content .book-box .book-carousel{
     display: inline-block;
     width: 100%;
     margin: 20px -5px;
     position: relative;
     min-height: 225px;
 }
-.content .app-box .app-carousel.owl-carousel .owl-stage-outer{
+.content .book-box .book-carousel.owl-carousel .owl-stage-outer{
     padding: 4px;
 }
-.content .app-box .app-carousel.owl-carousel .owl-controls .owl-next,
-.content .app-box .app-carousel.owl-carousel .owl-controls .owl-prev{
+.content .book-box .book-carousel.owl-carousel .owl-controls .owl-next,
+.content .book-box .book-carousel.owl-carousel .owl-controls .owl-prev{
     position: absolute;
     top: 50%;
     margin-top: -6px;
 }
-.content .app-box .app-carousel.owl-carousel .owl-controls .owl-next{
+.content .book-box .book-carousel.owl-carousel .owl-controls .owl-next{
     left: -20px;
 }
-.content .app-box .app-carousel.owl-carousel .owl-controls .owl-prev{
+.content .book-box .book-carousel.owl-carousel .owl-controls .owl-prev{
     right:-20px;
 }
-.content .app-box .app-item {
+.content .book-box .book-item {
     display: inline-block;
     float: right;
     width: 20%;
@@ -791,13 +791,13 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     max-width: 165px;
     padding: 0;
 }
-.content .app-box .app-carousel > .app-item{
+.content .book-box .book-carousel > .book-item{
     margin: 0 5px;
 }
-.content .app-box .owl-carousel .app-item {
+.content .book-box .owl-carousel .book-item {
     width: 100%;
 }
-.content .app-box .app-item .app-item-content{
+.content .book-box .book-item .book-item-content{
     position: relative;
     display: block;
     overflow: hidden;
@@ -811,7 +811,7 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     border-radius: 0px;
     box-shadow: 0 0 2px rgba(0,0,0,0.1);
 }
-.content .app-box .app-item .pic{
+.content .book-box .book-item .pic{
     display: block;
     width: 100%;
     min-height: 160px;
@@ -825,7 +825,7 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     -ms-box-sizing: border-box;
     position: relative;
 }
-.content .app-box .app-item .pic > div{
+.content .book-box .book-item .pic > div{
     display: block;
     width: 100%;
     height: 130px;
@@ -834,7 +834,7 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     position: relative;
     text-align: center;
 }
-.content .app-box .app-item .pic > div img{
+.content .book-box .book-item .pic > div img{
     display: block;
     width: auto;
     max-height: 100%;
@@ -854,13 +854,13 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     -o-box-sizing: border-box;
     -ms-box-sizing: border-box;
 }
-.content .app-box .app-item .detail{
+.content .book-box .book-item .detail{
     padding: 0 5px 10px 5px;
 }
-.content .app-box .app-item.discount .detail{
+.content .book-box .book-item.discount .detail{
     padding: 0 5px 5px 5px;
 }
-.content .app-box .app-item .detail .app-title{
+.content .book-box .book-item .detail .book-title{
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -869,13 +869,13 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.content .app-box .app-item .detail .app-title >a{
+.content .book-box .book-item .detail .book-title >a{
     color: inherit;
 }
-.content .app-box .app-item .detail .app-title .paragraph-end{
+.content .book-box .book-item .detail .book-title .paragraph-end{
     height: 100%;
 }
-.content .app-box .app-item .detail .app-any{
+.content .book-box .book-item .detail .book-any{
     display: block;
     overflow: hidden;
     width: 100%;
@@ -886,15 +886,15 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     -o-box-sizing: border-box;
     -ms-box-sizing: border-box;
 }
-.content .app-box .app-item.discount .detail .app-any{
+.content .book-box .book-item.discount .detail .book-any{
     margin-top: 0;
 }
-.content .app-box .app-item .detail .app-any .app-rate  >a,
-.content .app-box .app-item .detail .app-any .app-price  >a{
+.content .book-box .book-item .detail .book-any .book-rate  >a,
+.content .book-box .book-item .detail .book-any .book-price  >a{
     color: inherit;
 }
-.content .app-box .app-item .detail .app-any .app-rate,
-.content .app-box .app-item .detail .app-any .app-price{
+.content .book-box .book-item .detail .book-any .book-rate,
+.content .book-box .book-item .detail .book-any .book-price{
     display: block;
     overflow: hidden;
     float: right;
@@ -902,23 +902,23 @@ body.windows-phone .content .app-box .top-box .btn.more-app{
     font-size: 12px;
     position: relative;
 }
-.content .app-box .app-item .detail .app-any .app-rate{
+.content .book-box .book-item .detail .book-any .book-rate{
     direction: ltr;
     color: #FFB234;
     cursor: pointer;
     font-size: 11px;
 }
-.content .app-box .app-item.discount .detail .app-any .app-rate{
+.content .book-box .book-item.discount .detail .book-any .book-rate{
     margin-top: 10px;
 }
-.content .app-box .app-item .detail .app-any .app-price{
+.content .book-box .book-item .detail .book-any .book-price{
     color: #77c159;
     font-size: 11px;
 }
-body.ios .content .app-box .app-item .detail .app-any .app-price{
+body.ios .content .book-box .book-item .detail .book-any .book-price{
     color: #666;
 }
-body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
+body.windows-phone .content .book-box .book-item .detail .book-any .book-price{
     color: #04a5f0;
 }
 .content .banner-box{
@@ -974,7 +974,7 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     -o-box-sizing: border-box;
     -ms-box-sizing: border-box;
 }
-.content .banner-box .banner-carousel .banner-item .app-details{
+.content .banner-box .banner-carousel .banner-item .book-details{
     position: absolute;
     top: 15px;
     bottom: 15px;
@@ -990,7 +990,7 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     padding: 15px;
     padding-bottom: 40px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .pic {
+.content .banner-box .banner-carousel .banner-item .book-details .pic {
     margin-top: 5px;
     width: 135px;
     height: 135px;
@@ -999,7 +999,7 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     overflow: hidden;
     float: left;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .pic img{
+.content .banner-box .banner-carousel .banner-item .book-details .pic img{
     display: block;
     width: 100%;
     min-height: 130px;
@@ -1022,12 +1022,12 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content{
     display: block;
     float: right;
     width: 235px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content .title{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content .title{
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -1037,20 +1037,20 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     padding-left: 15px;
     margin-bottom: 10px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content .title  >a{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content .title  >a{
     color: inherit;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content .title > a:hover{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content .title > a:hover{
     text-decoration: underline !important;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content span{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content span{
     font-size: 12px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content .app-desc .paragraph-end{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content .book-desc .paragraph-end{
     height: 16px;
     width: 80px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-content .app-desc{
+.content .banner-box .banner-carousel .banner-item .book-details .book-content .book-desc{
     font-size: 12px;
     margin-top: 10px;
     height: 140px;
@@ -1063,7 +1063,7 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     text-align: justify;
     line-height: 20px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-footer{
+.content .banner-box .banner-carousel .banner-item .book-details .book-footer{
     display: block;
     position: absolute;
     bottom: 0;
@@ -1073,7 +1073,7 @@ body.windows-phone .content .app-box .app-item .detail .app-any .app-price{
     font-size: 12px;
     width: 400px;
 }
-.content .banner-box .banner-carousel .banner-item .app-details .app-footer > span{
+.content .banner-box .banner-carousel .banner-item .book-details .book-footer > span{
     text-align: center;
 }
 
@@ -1163,10 +1163,10 @@ body.ios .footer .nav li.active{
     padding: 0;
     padding-bottom: 60px;
 }
-.app{
+.book{
     padding:0 25px;
 }
-.app-inner{
+.book-inner{
     padding: 25px;
     background-color: #fff;
     box-shadow: 0 0 3px rgba(0,0,0,0.1);
@@ -1175,7 +1175,7 @@ body.ios .footer .nav li.active{
     overflow: hidden;
     position: relative;
 }
-.app-inner .pic{
+.book-inner .pic{
     display: block;
     width: 150px;
     height: 150px;
@@ -1187,7 +1187,7 @@ body.ios .footer .nav li.active{
     float: right;
     border-radius: 2px;
 }
-.app-inner .pic img{
+.book-inner .pic img{
     display: inline-block;
     width: 150px;
     height: 150px;
@@ -1202,7 +1202,7 @@ body.ios .footer .nav li.active{
     transform: translate(-50%, -50%);
 }
 
-.app-inner .app-heading{
+.book-inner .book-heading{
     display: block;
     overflow: hidden;
     position: absolute;
@@ -1211,7 +1211,7 @@ body.ios .footer .nav li.active{
     top: 0;
     color: #787878;
 }
-.app-inner .app-heading > h2{
+.book-inner .book-heading > h2{
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -1222,10 +1222,10 @@ body.ios .footer .nav li.active{
     color: #787878;
     margin-top: 25px;
 }
-.app-inner .app-heading > .row-fluid{
+.book-inner .book-heading > .row-fluid{
 
 }
-.app-inner .app-heading > .row-fluid > span{
+.book-inner .book-heading > .row-fluid > span{
     display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1235,20 +1235,20 @@ body.ios .footer .nav li.active{
     max-width: 30%;
     margin: 0 15px 0 0;
 }
-.app-inner .app-body{
+.book-inner .book-body{
     display: block;
     overflow: hidden;
     margin-top: 190px;
 }
-.app-inner .app-body .images-carousel{
+.book-inner .book-body .images-carousel{
     position: relative;
     width: 100%;
     margin: 50px 0;
 }
-.app-inner .app-body .images-carousel .image-item{
+.book-inner .book-body .images-carousel .image-item{
     height: 318px;
 }
-.app-inner .app-body .images-carousel .image-item img {
+.book-inner .book-body .images-carousel .image-item img {
     position: absolute;
     height: 318px;
     width: auto;
@@ -1260,7 +1260,7 @@ body.ios .footer .nav li.active{
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-.app-inner .app-body > section{
+.book-inner .book-body > section{
     position: relative;
     display: block;
     overflow: hidden;
@@ -1273,59 +1273,59 @@ body.ios .footer .nav li.active{
     transition: all 0.5s linear;
     margin-top: 50px;
 }
-.app-inner .app-body > .app-comments,
-.app-inner .app-body > .change-log{
+.book-inner .book-body > .book-comments,
+.book-inner .book-body > .change-log{
     display: block;
     overflow: hidden;
     border-bottom: 1px solid #dfdfdf;
     padding: 20px 0;
 }
-.app-inner .app-body  h4{
+.book-inner .book-body  h4{
     margin-bottom: 30px;
     font-size: 18px;
     color: #787878;
 }
-.app-inner .app-body .app-description > p{
+.book-inner .book-body .book-description > p{
     color: #444;
     font-weight: 300;
     white-space: pre-line;
     line-height: 32px;
     text-align: justify;
 }
-.app-inner .app-body > .app-details{
+.book-inner .book-body > .book-details{
     display: block;
     overflow: hidden;
     border-bottom: 1px solid #dfdfdf;
     padding: 20px 0;
 }
-.app-inner .app-body > .app-details >h4{
+.book-inner .book-body > .book-details >h4{
     margin: 30px 0;
     font-size: 16px;
     float: none;
     clear: both;
     color: #787878;
 }
-.app-inner .app-body > .app-details > .detail{
+.book-inner .book-body > .book-details > .detail{
     padding-left: 100px;
 }
-.app-inner .app-body > .app-details > .detail > h5{
+.book-inner .book-body > .book-details > .detail > h5{
     font-size: 14px;
     display: inline-block;
     color: #787878;
     float: right;
     margin: 0;
 }
-.app-inner .app-body > .app-details > .detail > span{
+.book-inner .book-body > .book-details > .detail > span{
     font-size: 12px;
     float: left;
     display: inline-block;
     color: #a6a6a6;
 }
-.app-inner .app-body > .app-details > ul > li{
+.book-inner .book-body > .book-details > ul > li{
     color: #7a7a7a;
     font-size: 13px;
 }
-.app-inner .app-body .app-description{
+.book-inner .book-body .book-description{
     display: block;
     overflow: hidden;
     font-size: 14px;
@@ -1333,7 +1333,7 @@ body.ios .footer .nav li.active{
     color: #4d6074;
     margin-bottom: 20px;
 }
-.app-inner .app-body > section .more-text{
+.book-inner .book-body > section .more-text{
     display: none;
     position: absolute;
     bottom: 0;
@@ -1351,28 +1351,28 @@ body.ios .footer .nav li.active{
     background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 }
-body.ios .app-inner .app-body > section .more-text{
+body.ios .book-inner .book-body > section .more-text{
     color: #666;
 }
-body.windows-phone .app-inner .app-body > section .more-text{
+body.windows-phone .book-inner .book-body > section .more-text{
     color: #04a5f0;
 }
-.app-like{
+.book-like{
     padding: 0 25px;
 }
-.app-like .app-box{
+.book-like .book-box{
     padding: 0;
     display: inline-block;
     overflow: visible;
     width: 100%;
 }
-.app-like .app-box .top-box{
+.book-like .book-box .top-box{
     margin-bottom: 30px;
 }
-.app-vertical{
+.book-vertical{
     position: relative;
 }
-.app-vertical .app-details{
+.book-vertical .book-details{
     display: inline-block;
     width: 100%;
     background-color: #fff;
@@ -1383,7 +1383,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     padding-bottom: 40px;
     position: relative;
 }
-.app-vertical .app-details .pic {
+.book-vertical .book-details .pic {
     display: block;
     height: 100px;
     left: 15px;
@@ -1392,7 +1392,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     top: 15px;
     width: 100px;
 }
-.app-vertical .app-details .pic img{
+.book-vertical .book-details .pic img{
     display: block;
     width: 100%;
     min-height: 100px;
@@ -1415,7 +1415,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
 }
-.app-vertical .app-details .app-content{
+.book-vertical .book-details .book-content{
     display: block;
     float: right;
     height: 125px;
@@ -1424,7 +1424,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     position: relative;
     width: 100%;
 }
-.app-vertical .app-details .app-content .title{
+.book-vertical .book-details .book-content .title{
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -1434,17 +1434,17 @@ body.windows-phone .app-inner .app-body > section .more-text{
     padding-left: 10px;
     margin-bottom: 8px;
 }
-.app-vertical .app-details .app-content .title  >a{
+.book-vertical .book-details .book-content .title  >a{
     color: inherit;
 }
-.app-vertical .app-details .app-content span{
+.book-vertical .book-details .book-content span{
     font-size: 12px;
 }
-.app-vertical .app-details .app-content .app-desc .paragraph-end{
+.book-vertical .book-details .book-content .book-desc .paragraph-end{
     height: 16px;
     width: 80px;
 }
-.app-vertical .app-details .app-content .app-desc{
+.book-vertical .book-details .book-content .book-desc{
     font-size: 12px;
     margin-top: 10px;
     height: 50px;
@@ -1457,7 +1457,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     padding-left: 15px;
     text-align: justify;
 }
-.app-vertical .app-details .app-footer{
+.book-vertical .book-details .book-footer{
     display: block;
     position: absolute;
     bottom: 0;
@@ -1467,7 +1467,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     font-size: 12px;
     right: 0;
 }
-.app-vertical .app-details .app-footer > span{
+.book-vertical .book-details .book-footer > span{
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -1480,7 +1480,7 @@ body.windows-phone .app-inner .app-body > section .more-text{
     border: none !important;
 }
 
-#bookmark-app{
+#bookmark-book{
     position: absolute;
     top:0;right: 0;left: 0;bottom: 0;
     z-index: 1;
@@ -1533,12 +1533,12 @@ ul.cat-menu li a
     padding: 10px 40px;
     width: 150px;
 }
-.app-box.suggested-list{
+.book-box.suggested-list{
     background: #e0e0e0;
     padding-top: 80px;
     position: relative;
 }
-.app-box.suggested-list .top-box{
+.book-box.suggested-list .top-box{
     position: absolute;
     top:0;
     left: 0;
@@ -1549,7 +1549,7 @@ ul.cat-menu li a
     padding: 0 30px;
     background: #cbcbcb;
 }
-.app-box.suggested-list .top-box .title > h2{
+.book-box.suggested-list .top-box .title > h2{
     line-height: 70px;
     margin: 0;
 }

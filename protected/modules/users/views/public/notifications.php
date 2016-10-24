@@ -5,7 +5,7 @@
 <div class="container dashboard-container">
     <a class="btn btn-default" href="<?php echo Yii::app()->createUrl('/dashboard')?>">پنل کاربری</a>
     <?php if(Yii::app()->user->roles=='publisher'):?>
-        <a class="btn btn-default" href="<?php echo Yii::app()->createUrl('/publishers/panel')?>">پنل توسعه دهندگان</a>
+        <a class="btn btn-default" href="<?php echo Yii::app()->createUrl('/publishers/panel')?>">پنل ناشران</a>
     <?php endif;?>
     <div class="tab-content card-container">
         <h4>اطلاعیه ها</h4>

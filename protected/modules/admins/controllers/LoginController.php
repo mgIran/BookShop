@@ -59,10 +59,7 @@ class LoginController extends Controller
             if ( $model->validate() && $model->login())
             {
                 Yii::app()->user->setState('attempts-login', 0);
-                if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/' && Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/admins')
-                    $this->redirect(Yii::app()->user->returnUrl);
-                else
-                    $this->redirect(Yii::app()->createUrl('/admins/dashboard'));
+                $this->redirect(Yii::app()->createUrl('/admins/dashboard'));
             }else
             {
                 Yii::app()->user->setState('attempts-login', Yii::app()->user->getState('attempts-login', 0) + 1);

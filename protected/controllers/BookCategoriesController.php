@@ -145,7 +145,7 @@ class BookCategoriesController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='app-categories-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='book-categories-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

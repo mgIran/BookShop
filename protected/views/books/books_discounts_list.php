@@ -5,7 +5,7 @@
 /* @var $pageTitle String */
 ?>
 
-<div class="app-box">
+<div class="book-box">
     <div class="top-box">
         <div class="title pull-right">
             <h2>تخفیفات</h2>
@@ -14,8 +14,8 @@
     <?php $this->widget('zii.widgets.CListView', array(
         'dataProvider'=>$dataProvider,
         'id'=>'newest-programs',
-        'itemView'=>'//site/_app_discount_item',
+        'itemView'=>'//site/_book_discount_item',
         'template'=>'{items}',
-        'itemsCssClass'=>'app-carousel'
+        'itemsCssClass'=>'book-carousel'
     ));?>
 </div>

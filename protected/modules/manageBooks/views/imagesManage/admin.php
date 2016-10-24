@@ -1,25 +1,25 @@
 <?php
 /* @var $this ImagesManageController */
-/* @var $model AppImages */
+/* @var $model BookImages */
 
 $this->breadcrumbs=array(
 	'مدیریت',
 );
 
 $this->menu=array(
-	array('label'=>'افزودن AppImages', 'url'=>array('create')),
+	array('label'=>'افزودن BookImages', 'url'=>array('create')),
 );
 ?>
 
-<h1>مدیریت App Images</h1>
+<h1>مدیریت Book Images</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'app-images-grid',
+	'id'=>'book-images-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'app_id',
+		'book_id',
 		'image',
 		array(
 			'class'=>'CButtonColumn',

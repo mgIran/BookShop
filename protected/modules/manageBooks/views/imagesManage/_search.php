@@ -1,6 +1,6 @@
 <?php
 /* @var $this ImagesManageController */
-/* @var $model AppImages */
+/* @var $model BookImages */
 /* @var $form CActiveForm */
 ?>
 
@@ -17,8 +17,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'app_id'); ?>
-		<?php echo $form->textField($model,'app_id',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->label($model,'book_id'); ?>
+		<?php echo $form->textField($model,'book_id',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
 	<div class="row">

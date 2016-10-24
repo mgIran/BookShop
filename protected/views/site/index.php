@@ -11,34 +11,34 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jqu
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl.carousel.min.js');
 ?>
 
-    <div class="app-box">
+    <div class="book-box">
         <div class="top-box">
             <div class="title pull-right">
                 <h2>جدیدترین برنامه ها</h2>
             </div>
-            <a class="pull-left btn btn-success more-app" href="<?php echo $this->createUrl('/books/programs');?>">بیشتر</a>
+            <a class="pull-left btn btn-success more-book" href="<?php echo $this->createUrl('/books/programs');?>">بیشتر</a>
         </div>
         <?php $this->widget('zii.widgets.CListView', array(
             'dataProvider'=>$newestProgramDataProvider,
             'id'=>'newest-programs',
-            'itemView'=>'_app_item',
+            'itemView'=>'_book_item',
             'template'=>'{items}',
-            'itemsCssClass'=>'app-carousel'
+            'itemsCssClass'=>'book-carousel'
         ));?>
     </div>
-    <div class="app-box">
+    <div class="book-box">
         <div class="top-box">
             <div class="title pull-right">
                 <h2>جدیدترین بازی ها</h2>
             </div>
-            <a class="pull-left btn btn-success more-app" href="<?php echo $this->createUrl('/books/games');?>">بیشتر</a>
+            <a class="pull-left btn btn-success more-book" href="<?php echo $this->createUrl('/books/games');?>">بیشتر</a>
         </div>
         <?php $this->widget('zii.widgets.CListView', array(
             'id'=>'newest-games',
             'dataProvider'=>$newestGameDataProvider,
-            'itemView'=>'_app_item',
+            'itemView'=>'_book_item',
             'template'=>'{items}',
-            'itemsCssClass'=>'app-carousel'
+            'itemsCssClass'=>'book-carousel'
         ));?>
     </div>
 
@@ -77,33 +77,33 @@ if($advertise) {
     <?
 }
 ?>
-<!--    <div class="app-box">-->
+<!--    <div class="book-box">-->
 <!--        <div class="top-box">-->
 <!--            <div class="title pull-right">-->
 <!--                <h2>برترین ها</h2>-->
 <!--            </div>-->
-<!--            <button type="button" class="pull-left btn btn-success more-app" >-->
+<!--            <button type="button" class="pull-left btn btn-success more-book" >-->
 <!--                بیشتر-->
 <!--            </button>-->
 <!--        </div>-->
-<!--        <div class="app-carousel">-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--        <div class="book-carousel">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -114,23 +114,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -141,23 +141,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -168,23 +168,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -195,23 +195,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -224,33 +224,33 @@ if($advertise) {
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-<!--    <div class="app-box">-->
+<!--    <div class="book-box">-->
 <!--        <div class="top-box">-->
 <!--            <div class="title pull-right">-->
 <!--                <h2>پر فروش های هفته</h2>-->
 <!--            </div>-->
-<!--            <button type="button" class="pull-left btn btn-success more-app" >-->
+<!--            <button type="button" class="pull-left btn btn-success more-book" >-->
 <!--                بیشتر-->
 <!--            </button>-->
 <!--        </div>-->
-<!--        <div class="app-carousel">-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--        <div class="book-carousel">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -261,23 +261,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -288,23 +288,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -315,23 +315,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -342,23 +342,23 @@ if($advertise) {
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="app-item">-->
-<!--                <div class="app-item-content">-->
+<!--            <div class="book-item">-->
+<!--                <div class="book-item-content">-->
 <!--                    <div class="pic">-->
 <!--                        <div>-->
 <!--                            <img src="--><?//= Yii::app()->theme->baseUrl; ?><!--/images/login-back.png">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                    <div class="detail">-->
-<!--                        <div class="app-title">-->
+<!--                        <div class="book-title">-->
 <!--                            تی وی پلاستی وی پلاستی وی پلاستی وی پلاس-->
 <!--                            <span class="paragraph-end"></span>-->
 <!--                        </div>-->
-<!--                        <div class="app-any">-->
-<!--                                    <span class="app-price">-->
+<!--                        <div class="book-any">-->
+<!--                                    <span class="book-price">-->
 <!--                                        رایگان-->
 <!--                                    </span>-->
-<!--                                    <span class="app-rate">-->
+<!--                                    <span class="book-rate">-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
 <!--                                        <span class="icon-star"></span>-->
@@ -371,22 +371,22 @@ if($advertise) {
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-    <div class="app-box">
+    <div class="book-box">
         <div class="top-box">
             <div class="title pull-right">
                 <h2>تازه های آموزشی</h2>
             </div>
-            <a class="pull-left btn btn-success more-app" href="<?php echo $this->createUrl('/books/educations');?>">بیشتر</a>
+            <a class="pull-left btn btn-success more-book" href="<?php echo $this->createUrl('/books/educations');?>">بیشتر</a>
         </div>
         <?php $this->widget('zii.widgets.CListView', array(
             'id'=>'newest-educations',
             'dataProvider'=>$newestEducationDataProvider,
-            'itemView'=>'_app_item',
+            'itemView'=>'_book_item',
             'template'=>'{items}',
-            'itemsCssClass'=>'app-carousel'
+            'itemsCssClass'=>'book-carousel'
         ));?>
     </div>
-    <div class="app-box suggested-list">
+    <div class="book-box suggested-list">
         <div class="top-box">
             <div class="title pull-right">
                 <h2>پیشنهاد ما به شما</h2>
@@ -395,14 +395,14 @@ if($advertise) {
         <?php $this->widget('zii.widgets.CListView', array(
             'id'=>'newest-educations',
             'dataProvider'=>$suggestedDataProvider,
-            'itemView'=>'_app_item',
+            'itemView'=>'_book_item',
             'template'=>'{items}',
-            'itemsCssClass'=>'app-carousel'
+            'itemsCssClass'=>'book-carousel'
         ));?>
     </div>
 <?
 Yii::app()->clientScript->registerScript('carousels','
-    var owl = $(".app-carousel");
+    var owl = $(".book-carousel");
     owl.owlCarousel({
         responsive:{
             0:{

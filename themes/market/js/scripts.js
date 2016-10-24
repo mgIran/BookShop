@@ -30,10 +30,10 @@ $(function() {
         return false;
     });
 
-    if ($(".app-description").height() > 230)
-        $(".app-description").next().show();
+    if ($(".book-description").height() > 230)
+        $(".book-description").next().show();
     $body.on('click', '.more-text', function () {
-        var $h = $(".app-description").height();
+        var $h = $(".book-description").height();
         if ($h > 230) {
             $(this).parent().animate({height: $h + 80}, 0).addClass('open');
             $(this).remove();

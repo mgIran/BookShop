@@ -18,7 +18,7 @@
                 <?php else:?>
                     <a href="<?= Yii::app()->createUrl('/publishers/panel/signup/step/agreement'); ?>"></a>
                 <?php endif;?>
-                توسعه دهندگان
+                ناشران
             </li><li>
                 <a href="<?= Yii::app()->createUrl('/site/help');?>"></a>
                 راهنما

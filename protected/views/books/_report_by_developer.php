@@ -5,7 +5,7 @@
 <?php echo CHtml::beginForm();?>
 <div class="row">
     <div class="col-md-3">
-        <?php echo CHtml::label('توسعه دهنده', 'publisher');?>
+        <?php echo CHtml::label('ناشر', 'publisher');?>
     </div>
     <div class="col-md-3">
         <?php echo CHtml::label('از تاریخ', 'from_date');?>

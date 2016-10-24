@@ -5,7 +5,7 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">قرارداد توسعه دهندگان</h3>
+        <h3 class="panel-title">قرارداد ناشران</h3>
     </div>
     <div class="panel-body step-content">
         <div class="container-fluid">

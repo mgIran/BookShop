@@ -51,14 +51,14 @@
             }
             else if($model->price == -1)
             {
-                $r = 'in-app-payment';
+                $r = 'in-book-payment';
                 $p = null;
             }else
             {
                 $r = 'online-payment';
                 $p = $model->price;
             }
-            echo CHtml::radioButtonList('priceType',$r,array('online-payment'=>'پرداخت آنلاین','in-app-payment'=>'پرداخت درون برنامه ای','free'=>'رایگان'),
+            echo CHtml::radioButtonList('priceType',$r,array('online-payment'=>'پرداخت آنلاین','in-book-payment'=>'پرداخت درون برنامه ای','free'=>'رایگان'),
                 array(
                     'class'=>'form-control priceType',
                 )
@@ -75,7 +75,7 @@
                         case \'free\':
                             priceInput.val("").attr("disabled",true).attr("readonly",true);
                             break;
-                        case \'in-app-payment\':
+                        case \'in-book-payment\':
                             priceInput.val("").attr("disabled",true).attr("readonly",true);
                             break;
                         case \'online-payment\':
@@ -96,7 +96,7 @@
                 'readonly' => $model->price>0?false:true
             )); ?>
             <div class="desc portion hidden" style="margin: 15px 0;">
-                <p><b>سهم توسعه دهنده:</b><span id="publisher-portion">0</span> تومان</p>
+                <p><b>سهم ناشر:</b><span id="publisher-portion">0</span> تومان</p>
                 <p><b>سهم <?= Yii::app()->name ?>:</b><span id="market-portion">0</span> تومان</p>
                 <p><b>مالیات:</b><span id="tax-tag">0</span> تومان</p>
             </div>

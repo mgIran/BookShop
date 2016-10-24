@@ -53,7 +53,7 @@
                 if(Yii::app()->user->roles == 'publisher'):
                     ?>
                     <a class="btn btn-default" href="<?= Yii::app()->createUrl('/publishers/panel') ?>">
-                        پنل توسعه دهندگان
+                        پنل ناشران
                     </a>
                     <?
                 endif;

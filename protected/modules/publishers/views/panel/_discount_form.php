@@ -1,6 +1,6 @@
 <?php
 /* @var $this BooksController */
-/* @var $model AppDiscounts */
+/* @var $model BookDiscounts */
 /* @var $books [] */
 /* @var $form CActiveForm */
 ?>
@@ -35,9 +35,9 @@
         ));
         ?>
         <div class="form-group">
-            <?php echo $form->labelEx($model, 'app_id', array('class' => 'control-label')); ?>
-            <?php echo $form->dropDownList($model, 'app_id', $books, array('class' => 'form-control')); ?>
-            <?php echo $form->error($model, 'app_id'); ?>
+            <?php echo $form->labelEx($model, 'book_id', array('class' => 'control-label')); ?>
+            <?php echo $form->dropDownList($model, 'book_id', $books, array('class' => 'form-control')); ?>
+            <?php echo $form->error($model, 'book_id'); ?>
         </div>
 
         <div class="form-group">

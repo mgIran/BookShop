@@ -6,15 +6,15 @@
 /* @var $activeTab string */
 
 Yii::app()->clientScript->registerCss('booksStyle','
-.report-sale .app-item:nth-child(n+3){
+.report-sale .book-item:nth-child(n+3){
     margin-top: 50px;
 }
-.report-sale .app-item input[type="radio"]{
+.report-sale .book-item input[type="radio"]{
     float: right;
     margin-top: 27px;
     margin-left: 15px;
 }
-.report-sale .app-item img{
+.report-sale .book-item img{
     float: right;
     max-width: 70px;
     max-height:70px;
@@ -40,7 +40,7 @@ Yii::app()->clientScript->registerCss('booksStyle','
     <li <?php if($activeTab=='monthly'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#monthly">ماهیانه</a></li>
     <li <?php if($activeTab=='yearly'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#yearly">سالیانه</a></li>
     <li <?php if($activeTab=='by-program'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#by-program">بر اساس برنامه</a></li>
-    <li <?php if($activeTab=='by-publisher'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#by-publisher">بر اساس توسعه دهنده</a></li>
+    <li <?php if($activeTab=='by-publisher'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#by-publisher">بر اساس ناشر</a></li>
 </ul>
 
 <div class="tab-content report-sale">

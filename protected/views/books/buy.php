@@ -22,7 +22,7 @@
                 </div>
                 <?php endif;?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
-                    'id'=>'app-buys-form',
+                    'id'=>'book-buys-form',
                     'enableAjaxValidation'=>false,
                 )); ?>
                     <h4>اطلاعات برنامه</h4>

@@ -14,17 +14,17 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/magni
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
 ?>
 
-<div class="app col-sm-12 col-xs-12">
-    <div class="app-inner">
+<div class="book col-sm-12 col-xs-12">
+    <div class="book-inner">
         <div class="pic">
             <img src="<?= Yii::app()->createUrl('/uploads/books/icons/'.$model->icon);?>" alt="<?= $model->title ?>">
         </div>
-        <div class="app-heading">
+        <div class="book-heading">
             <h2><?= $model->title ?></h2>
             <div class="row-fluid">
                 <span ><a href="<?php echo $this->createUrl('books/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"><?= $model->getPublisherName(); ?></a></span>
                 <span ><a href="<?php echo $this->createUrl('books/'.((strpos($model->category->path,'2-')!==false)?'games':'programs').'/'.$model->category->id.'/'.urlencode($model->category->title));?>"><?= $model->category?$model->category->title:''; ?></a></span>
-                <span class="app-rate">
+                <span class="book-rate">
                     <? ?>
                 </span>
             </div>
@@ -59,7 +59,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                 <?php if(!Yii::app()->user->isGuest):?>
                     <span class="pull-left relative bookmark<?php echo ($bookmarked)?' bookmarked':'';?>">
                         <?= CHtml::ajaxLink('',array('/books/bookmark'),array(
-                            'data' => "js:{appId:$model->id}",
+                            'data' => "js:{bookId:$model->id}",
                             'type' => 'POST',
                             'dataType' => 'JSON',
                             'success' => 'js:function(data){
@@ -80,7 +80,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                                 return false;
                             }'
                         ),array(
-                            'id' =>"bookmark-app"
+                            'id' =>"bookmark-book"
                         )); ?>
                         <svg id="bookmark" class="svg svg-bookmark green"><use xlink:href="<?php echo ($bookmarked)?'#bookmarked':'#add-to-bookmark';?>"></use></svg>
                         <svg id="remove" class="svg svg-bookmark green"><use xlink:href="#remove-bookmark"></use></svg>
@@ -105,7 +105,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                 ?>
             </div>
         </div>
-        <div class="app-body">
+        <div class="book-body">
             <?
             if($model->images) {
             ?>
@@ -148,7 +148,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                         }
                     });
                 ");
-                Yii::app()->clientScript->registerScript('app-images-carousel',"
+                Yii::app()->clientScript->registerScript('book-images-carousel',"
                     $('.images-carousel').owlCarousel({
                         autoWidth:true,
                         margin:10,
@@ -160,7 +160,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
             }
             ?>
             <section>
-                <div class="app-description">
+                <div class="book-description">
                     <h4>توضیحات برنامه</h4>
                     <p><?= strip_tags(nl2br($model->description)); ?></p>
                 </div>
@@ -168,15 +168,15 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     <span>توضیحات بیشتر</span>
                 </a>
             </section>
-            <?php if(!is_null($model->change_log) or $model->change_log!=''):?>
+            <?php if($model->change_log || !empty($model->change_log)):?>
                 <div class="change-log">
                     <h4>آخرین تغییرات</h4>
-                    <div class="app-description">
+                    <div class="book-description">
                         <?= $model->change_log ?>
                     </div>
                 </div>
             <?php endif;?>
-            <div class="app-details">
+            <div class="book-details">
                 <h4>اطلاعات برنامه</h4>
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 detail">
                     <h5>حجم</h5>
@@ -187,7 +187,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     <span class="ltr" ><?= $model->lastPackage->version ?></span>
                 </div>
             </div>
-            <div class="app-comments">
+            <div class="book-comments border-none">
                 <div id="rate-wrapper">
                     <?
                     $this->renderPartial('_rating',array(
@@ -206,18 +206,18 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         </div>
     </div>
 </div>
-    <div class="app-like col-sm-12 col-xs-12">
-        <div class="app-box">
+    <div class="book-like col-sm-12 col-xs-12">
+        <div class="book-box">
             <div class="top-box">
                 <div class="title pull-right">
                     <h2>مشابه</h2>
                 </div>
             </div>
-            <div class="app-vertical">
+            <div class="book-vertical">
                 <?php $this->widget('zii.widgets.CListView', array(
                     'id'=>'similar-books',
                     'dataProvider'=>$similar,
-                    'itemView'=>'_vertical_app_item',
+                    'itemView'=>'_vertical_book_item',
                     'template'=>'{items}',
                 ));?>
             </div>

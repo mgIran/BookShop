@@ -128,7 +128,7 @@ class UserDetails extends CActiveRecord
             'zip_code' => 'کد پستی',
             'address' => 'نشانی دقیق پستی',
             'credit' => 'اعتبار',
-            'publisher_id' => 'شناسه توسعه دهنده',
+            'publisher_id' => 'شناسه ناشر',
             'status' => 'وضعیت کاربر',
             'details_status' => 'وضعیت اطلاعات کاربر',
             'monthly_settlement' => 'تسویه حساب ماهانه',

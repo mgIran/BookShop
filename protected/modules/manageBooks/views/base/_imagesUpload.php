@@ -1,7 +1,7 @@
 <?php /* @var $model Books */?>
 <div class="form">
     <?php $form=$this->beginWidget('CActiveForm', array(
-        'id'=>'app-images-form',
+        'id'=>'book-images-form',
         // Please note: When you enable ajax validation, make sure the corresponding
         // controller action is handling ajax validation correctly.
         // There is a call to performAjaxValidation() commented in generated controller code.
@@ -30,15 +30,16 @@
             'deleteUrl' => $this->createUrl('/manageBooks/imagesManage/deleteUploaded'),
             'acceptedFiles' => 'image/jpeg , image/png',
             'serverFiles' => $images,
-            'data' => array('app_id'=>$model->id),
+            'data' => array('book_id'=>$model->id),
             'onSuccess' => '
                 var responseObj = JSON.parse(res);
-                if(responseObj.state == "ok")
-                {
-                    {serverName} = responseObj.fileName;
-                    $(".submit-image-warning").addClass("hidden");
-                }else if(responseObj.state == "error"){
-                    console.log(responseObj.msg);
+				if(responseObj.status){
+					{serverName} = responseObj.fileName;
+					$(".submit-image-warning").addClass("hidden");
+				}
+				else{
+				    console.log(responseObj.msg);
+                    this.removeFile(file);
                 }
             ',
         ));

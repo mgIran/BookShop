@@ -23,7 +23,7 @@
                 <div class="tbody">
                     <?php $this->widget('zii.widgets.CListView', array(
                         'dataProvider'=>$booksDataProvider,
-                        'itemView'=>'_app_discount_list',
+                        'itemView'=>'_book_discount_list',
                         'template'=>'{items}'
                     ));?>
                 </div>
@@ -39,7 +39,7 @@
                 <h5>افزودن تخیف</h5>
             </div>
             <div class="modal-body">
-                <? $this->renderPartial('_discount_form',array('model' => new AppDiscounts(),'books' => $books)); ?>
+                <? $this->renderPartial('_discount_form',array('model' => new BookDiscounts(),'books' => $books)); ?>
             </div>
         </div>
     </div>

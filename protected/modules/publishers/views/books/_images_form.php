@@ -1,12 +1,12 @@
 <?php
 /* @var $this BooksController */
 /* @var $model Books */
-/* @var $imageModel AppImages */
+/* @var $imageModel BookImages */
 /* @var $images [] */
 /* @var $form CActiveForm */
 ?>
 <?php $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'app-images-form',
+    'id'=>'book-images-form',
     // Please note: When you enable ajax validation, make sure the corresponding
     // controller action is handling ajax validation correctly.
     // There is a call to performAjaxValidation() commented in generated controller code.
@@ -28,7 +28,7 @@
         'name' => 'image',
         'maxFiles' => 10,
         'maxFileSize' => 1, //MB
-        'data'=>array('app_id'=>$model->id),
+        'data'=>array('book_id'=>$model->id),
         'url' => $this->createUrl('/publishers/books/uploadImage'),
         'deleteUrl' => $this->createUrl('/publishers/books/deleteImage'),
         'acceptedFiles' => 'image/jpeg , image/png',

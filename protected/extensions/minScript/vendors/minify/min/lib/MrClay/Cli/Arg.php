@@ -5,7 +5,7 @@ namespace MrClay\Cli;
 use BadMethodCallException;
 
 /**
- * An argument for a CLI app. This specifies the argument, what values it expects and
+ * An argument for a CLI book. This specifies the argument, what values it expects and
  * how it's treated during validation.
  *
  * By default, the argument will be assumed to be an optional letter flag with no value following.

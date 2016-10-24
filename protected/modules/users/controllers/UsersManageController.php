@@ -154,7 +154,7 @@ class UsersManageController extends Controller
 	{
 		$model = UserDetails::model()->findByAttributes(array('user_id' => $id));
 		if($model->details_status != 'accepted')
-			Yii::app()->user->setFlash('failed', 'اطلاعات توسعه دهنده مورد نظر هنوز تایید نشده است.');
+			Yii::app()->user->setFlash('failed', 'اطلاعات ناشر مورد نظر هنوز تایید نشده است.');
 		else {
 			$model->scenario = 'confirmDev';
 			$request = UserDevIdRequests::model()->findByAttributes(array('user_id' => $id));

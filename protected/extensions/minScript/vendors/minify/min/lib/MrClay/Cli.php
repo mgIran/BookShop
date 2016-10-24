@@ -6,14 +6,14 @@ use MrClay\Cli\Arg;
 use InvalidArgumentException;
 
 /**
- * Forms a front controller for a console app, handling and validating arguments (options)
+ * Forms a front controller for a console book, handling and validating arguments (options)
  *
  * Instantiate, add arguments, then call validate(). Afterwards, the user's valid arguments
  * and their values will be available in $cli->values.
  *
  * You may also specify that some arguments be used to provide input/output. By communicating
  * solely through the file pointers provided by openInput()/openOutput(), you can make your
- * app more flexible to end users.
+ * book more flexible to end users.
  *
  * @author Steve Clay <steve@mrclay.org>
  * @license http://www.opensource.org/licenses/mit-license.php  MIT License

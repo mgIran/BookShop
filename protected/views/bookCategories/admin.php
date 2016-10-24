@@ -16,7 +16,7 @@ $this->menu=array(
 <h1>مدیریت دسته بندی ها</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'app-categories-grid',
+	'id'=>'book-categories-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(

@@ -3,11 +3,11 @@
 /* @var $data Books */
 ?>
 
-<div class="app-details">
+<div class="book-details">
     <div class="pic">
         <img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.CHtml::encode($data->icon); ?>">
     </div>
-    <div class="app-content">
+    <div class="book-content">
         <div class="title">
             <a href="<?php echo $this->createUrl('/books/'.CHtml::encode($data->id).'/'.CHtml::encode($data->lastPackage->package_name));?>"><?php echo CHtml::encode($data->title);?></a>
         </div>
@@ -30,18 +30,18 @@
                     ?>
                 <?php endif;?>
             </span>
-            <span class="ltr text-left app-rate col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left" >
+            <span class="ltr text-left book-rate col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left" >
                 <?= Controller::printRateStars($data->rate); ?>
             </span>
         </div>
-        <div class="app-desc">
+        <div class="book-desc">
             <?php
                 echo strip_tags(nl2br($data->description));
             ?>
             <span class="paragraph-end"></span>
         </div>
     </div>
-    <div class="app-footer">
+    <div class="book-footer">
         <span class="col-lg-4 col-md-4 col-sm-4 hidden-xs"><?php echo Controller::parseNumbers(number_format($data->download, 0)).' دانلود';?></span>
         <span class="col-lg-4 col-md-4 col-sm-4 hidden-xs"><?php echo Controller::parseNumbers(round($data->size/1024,1)).' کیلوبایت';?></span>
         <span class="col-lg-4 col-md-4 col-sm-4 hidden-xs green"><?php echo (is_null($data->publisher_id) or empty($data->publisher_id))?CHtml::encode($data->publisher_name):CHtml::encode($data->publisher->userDetails->fa_name);?></span>

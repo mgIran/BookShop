@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 			'header'=>'پلتفرم',
 			'value'=>'$data->books->platform->title',
 			'htmlOptions'=>array('width'=>50),
-			'filter' => CHtml::activeDropDownList($model,'platformFilter',CHtml::listData(AppPlatforms::model()->findAll(),'id','title'),array('prompt'=>'همه'))
+			'filter' => CHtml::activeDropDownList($model,'platformFilter',CHtml::listData(BookPlatforms::model()->findAll(),'id','title'),array('prompt'=>'همه'))
 		),
 		array(
 			'header'=>Yii::t('commentsModule.msg', 'User Name'),

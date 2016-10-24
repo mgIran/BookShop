@@ -24,7 +24,7 @@
             <div class="tbody">
                 <?php $this->widget('zii.widgets.CListView', array(
                     'dataProvider'=>$booksDataProvider,
-                    'itemView'=>'_app_list',
+                    'itemView'=>'_book_list',
                     'template'=>'{items}'
                 ));?>
             </div>

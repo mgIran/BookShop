@@ -7,6 +7,7 @@ class BaseManageController extends Controller
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
+    public $formats = '.doc ,.docx';
 
     public function beforeAction($action)
     {
@@ -70,7 +71,6 @@ class BaseManageController extends Controller
         $icon = array();
 
         $this->performAjaxValidation($model);
-
         if (isset($_POST['Books'])) {
             $model->attributes = $_POST['Books'];
             if (isset($_POST['Books']['icon'])) {
@@ -83,17 +83,6 @@ class BaseManageController extends Controller
                 );
             }
             $model->confirm='accepted';
-            $pt = $_POST['priceType'];
-            switch($pt){
-                case 'free':
-                    $model->price = 0;
-                    break;
-                case 'online-payment':
-                    break;
-                case 'in-app-payment':
-                    $model->price = -1;
-                    break;
-            }
             if ($model->save()) {
                 if ($model->icon) {
                     $thumbnail = new Imager();
@@ -107,7 +96,7 @@ class BaseManageController extends Controller
         }
 
         Yii::app()->getModule('setting');
-        $this->render('manageBooks.views.base.create', array(
+        $this->render('create', array(
             'model' => $model,
             'icon' => $icon,
             'tax'=>SiteSetting::model()->findByAttributes(array('name'=>'tax'))->value,
@@ -177,17 +166,6 @@ class BaseManageController extends Controller
             }
             $model->attributes = $_POST['Books'];
             $model->size = $newFileSize;
-            $pt = $_POST['priceType'];
-            switch($pt){
-                case 'free':
-                    $model->price = 0;
-                    break;
-                case 'online-payment':
-                    break;
-                case 'in-app-payment':
-                    $model->price = -1;
-                    break;
-            }
             if($model->save()) {
                 if($fileFlag) {
                     rename($tmpDIR . $model->file_name, $bookFilesDIR . $model->file_name);
@@ -212,7 +190,7 @@ class BaseManageController extends Controller
         $packageDataProvider=new CActiveDataProvider('BookPackages', array('criteria'=>$criteria));
 
         Yii::app()->getModule('setting');
-        $this->render('manageBooks.views.base.update', array(
+        $this->render('update', array(
             'model' => $model,
             'icon' => $icon,
             'images' => $images,
@@ -247,7 +225,7 @@ class BaseManageController extends Controller
     public function actionIndex()
     {
         $dataProvider = new CActiveDataProvider('Books');
-        $this->render('manageBooks.views.base.index', array(
+        $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
     }
@@ -261,7 +239,7 @@ class BaseManageController extends Controller
         $model->unsetAttributes();
         if (isset($_GET['Books']))
             $model->attributes = $_GET['Books'];
-        $this->render('manageBooks.views.base.admin', array(
+        $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -293,41 +271,36 @@ class BaseManageController extends Controller
         }
     }
 
-    public function actionUpload()
-    {
-        $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
 
-        if (!is_dir($tempDir))
-            mkdir($tempDir);
-        if (isset($_FILES)) {
-            $file = $_FILES['icon'];
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $file['name'] = Controller::generateRandomString(5) . time();
-            while (file_exists($tempDir . DIRECTORY_SEPARATOR . $file['name']. '.' .$ext))
-                $file['name'] = Controller::generateRandomString(5) . time();
-            $file['name'] = $file['name'] . '.' . $ext;
-            if (move_uploaded_file($file['tmp_name'], $tempDir . DIRECTORY_SEPARATOR . CHtml::encode($file['name']))) {
-                $imager = new Imager();
-                $imageInfo = $imager->getImageInfo($tempDir . DIRECTORY_SEPARATOR . $file['name']);
-                if($imageInfo['width'] < 128 or $imageInfo['height'] < 128) {
-                    $response = ['state' => 'error', 'msg' => 'اندازه آیکون نباید کوچکتر از 128x128 پیکسل باشد.'];
-                    unlink($tempDir . DIRECTORY_SEPARATOR . $file['name']);
-                }else
-                    $response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-            }else
-                $response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-        } else
-            $response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-        echo CJSON::encode($response);
-        Yii::app()->end();
+    public function actions(){
+        return array(
+            'upload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'icon',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'dimensions' => array(
+                        'minWidth' => 128,
+                        'minHeight' => 128,
+                    ),
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                )
+            ),
+            'uploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'file_name',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('doc','docx')
+                )
+            )
+        );
     }
 
     public function actionDeleteUpload()
     {
         $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
-
         if (isset($_POST['fileName'])) {
-
+            var_dump(2);exit();
             $fileName = $_POST['fileName'];
 
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
@@ -343,27 +316,6 @@ class BaseManageController extends Controller
                 @unlink($tempDir . $fileName);
                 $response = ['state' => 'ok', 'msg' => 'حذف شد.'];
             }
-            echo CJSON::encode($response);
-            Yii::app()->end();
-        }
-    }
-
-    public function actionUploadFile()
-    {
-        if (isset($_FILES['file_name'])) {
-            $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-            if (!is_dir($tempDir))
-                mkdir($tempDir);
-            if (isset($_FILES)) {
-                $file = $_FILES['file_name'];
-                $file['name'] = str_replace(' ', '_', $file['name']);
-                $file['name'] = time() . '-' . $file['name'];
-                if (move_uploaded_file($file['tmp_name'], $tempDir . DIRECTORY_SEPARATOR . $file['name']))
-                    $response = ['status' => true, 'fileName' => CHtml::encode($file['name'])];
-                else
-                    $response = ['status' => false, 'message' => 'در عملیات آپلود فایل خطایی رخ داده است.'];
-            } else
-                $response = ['status' => false, 'message' => 'فایلی ارسال نشده است.'];
             echo CJSON::encode($response);
             Yii::app()->end();
         }
@@ -424,11 +376,11 @@ class BaseManageController extends Controller
                 $model->reason = $_POST['reason'];
             if ($model->save()) {
                 if ($_POST['value'] == 'accepted')
-                    $this->createLog('بسته ' . $model->package_name . ' توسط مدیر سیستم تایید شد.', $model->app->publisher_id);
+                    $this->createLog('بسته ' . $model->package_name . ' توسط مدیر سیستم تایید شد.', $model->book->publisher_id);
                 elseif ($_POST['value'] == 'refused')
-                    $this->createLog('بسته ' . $model->package_name . ' توسط مدیر سیستم رد شد.', $model->app->publisher_id);
+                    $this->createLog('بسته ' . $model->package_name . ' توسط مدیر سیستم رد شد.', $model->book->publisher_id);
                 elseif ($_POST['value'] == 'change_required')
-                    $this->createLog('بسته ' . $model->package_name . ' نیاز به تغییر دارد.', $model->app->publisher_id);
+                    $this->createLog('بسته ' . $model->package_name . ' نیاز به تغییر دارد.', $model->book->publisher_id);
                 echo CJSON::encode(array('status' => true));
             } else
                 echo CJSON::encode(array('status' => false));
@@ -438,23 +390,23 @@ class BaseManageController extends Controller
     public function actionDeletePackage($id)
     {
         $model=BookPackages::model()->findByPk($id);
-        $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$model->app->platform->name;
+        $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$model->book->platform->name;
         if(file_exists($uploadDir.'/'.$model->file_name))
             if(unlink($uploadDir.'/'.$model->file_name))
                 if($model->delete())
-                    $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->app->publisher_id);
+                    $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
 
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
 
     /**
-     * Save app package info
+     * Save book package info
      */
     public function actionSavePackage()
     {
         if(isset($_POST['book_id'])) {
-            $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/' . $_POST['filesFolder'];
+            $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
             if (!is_dir($uploadDir))
                 mkdir($uploadDir);
@@ -466,6 +418,8 @@ class BaseManageController extends Controller
             $model->status='accepted';
             $model->version = $_POST['version'];
             $model->package_name = $_POST['package_name'];
+            $model->price = $_POST['price'];
+            $model->printed_price = $_POST['printed_price'];
             $model->file_name = $_POST['version'] . '-' . $_POST['package_name'] . '.' . pathinfo($_POST['Books']['file_name'], PATHINFO_EXTENSION);
 
             if ($model->save()) {
@@ -489,7 +443,7 @@ class BaseManageController extends Controller
             $flag = true;
             foreach ($_POST['image'] as $image) {
                 if (file_exists($tempDir . $image)) {
-                    $model = new AppImages();
+                    $model = new BookImages();
                     $model->book_id = (int)$id;
                     $model->image = $image;
                     rename($tempDir . $image, $uploadDir . $image);
@@ -507,7 +461,7 @@ class BaseManageController extends Controller
     }
 
     /**
-     * Download app
+     * Download book
      */
     public function actionDownload($id)
     {
@@ -530,7 +484,7 @@ class BaseManageController extends Controller
     }
 
     /**
-     * Download app package
+     * Download book package
      */
     public function actionDownloadPackage($id)
     {

@@ -4,7 +4,7 @@
 ?>
 
 <div class="container-fluid">
-    <?php if(empty($model->appBuys)):?>
+    <?php if(empty($model->bookBuys)):?>
         نتیجه ای یافت نشد.
     <?php else:?>
         <div class="table text-center">
@@ -14,11 +14,11 @@
                 <div class="td col-lg-4 col-md-4 col-sm-4 hidden-xs">مبلغ</div>
             </div>
             <div class="tbody">
-                <?php foreach($model->appBuys as $buy):?>
+                <?php foreach($model->bookBuys as $buy):?>
                     <div class="tr">
                         <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"><?php echo JalaliDate::date('d F Y - H:i', $buy->date);?></div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"><?php echo CHtml::encode($buy->app->title);?></div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"><?php echo number_format($buy->app->price, 0).' تومان';?></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"><?php echo CHtml::encode($buy->book->title);?></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"><?php echo number_format($buy->book->price, 0).' تومان';?></div>
                     </div>
                 <?php endforeach;?>
             </div>

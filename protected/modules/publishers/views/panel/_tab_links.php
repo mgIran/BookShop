@@ -13,7 +13,7 @@ if(!isset($active))
         <a href="<?php echo $this->createUrl('/publishers/panel/discount');?>">تخفیفات</a>
     </li>
     <li <?= $active == 'account'?'class="active"':'' ?> >
-        <a href="<?php echo $this->createUrl('/publishers/panel/account');?>">حساب توسعه دهنده</a>
+        <a href="<?php echo $this->createUrl('/publishers/panel/account');?>">حساب ناشر</a>
     </li>
     <li <?= $active == 'sales'?'class="active"':'' ?> >
         <a href="<?php echo $this->createUrl('/publishers/panel/sales');?>">گزارش فروش</a>

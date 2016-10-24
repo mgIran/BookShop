@@ -16,7 +16,7 @@
                     <div class="panel-body">
                         <?php $this->widget('zii.widgets.CListView', array(
                             'dataProvider'=>$books,
-                            'itemView'=>'_report_sale_app_list',
+                            'itemView'=>'_report_sale_book_list',
                             'template'=>'{items}'
                         ));?>
                     </div>
@@ -117,7 +117,7 @@
 </div>
 <?php Yii::app()->clientScript->registerScript('submitReport', "
     $('#show-chart').click(function(){
-        if($('input[name=\"app_id\"]:checked').length==0){
+        if($('input[name=\"book_id\"]:checked').length==0){
             alert('لطفا برنامه مورد نظر خود را انتخاب کنید.');
             return false;
         }

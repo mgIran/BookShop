@@ -38,7 +38,7 @@ $this->menu=array(
 				'value'=>$model->userDetails->en_name,
 			),
 			array(
-				'name'=>'شناسه توسعه دهنده',
+				'name'=>'شناسه ناشر',
 				'value'=>$model->userDetails->publisher_id,
 			),
 			array(
@@ -105,7 +105,7 @@ $this->menu=array(
 				'value'=>$model->userDetails->fa_name,
 			),
 			array(
-				'name'=>'شناسه توسعه دهنده',
+				'name'=>'شناسه ناشر',
 				'value'=>$model->userDetails->publisher_id,
 			),
 			array(

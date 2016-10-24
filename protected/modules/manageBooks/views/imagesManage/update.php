@@ -1,6 +1,6 @@
 <?php
 /* @var $this ImagesManageController */
-/* @var $model AppImages */
+/* @var $model BookImages */
 
 $this->breadcrumbs=array(
 	'مدیریت'=>array('admin'),
@@ -14,6 +14,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>ویرایش AppImages <?php echo $model->id; ?></h1>
+<h1>ویرایش BookImages <?php echo $model->id; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>
