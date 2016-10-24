@@ -297,39 +297,18 @@ class BaseManageController extends Controller
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'Books',
                 'attribute' => 'icon',
+                'uploadDir' => 'uploads/books/icons',
+                'storedMode' => 'field'
+            ),
+            'deleteUploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'BookPackages',
+                'attribute' => 'file_name',
+                'uploadDir' => 'uploads/books/files',
+                'storedMode' => 'record'
             )
         );
     }
-
-    public function actionDeleteUpload()
-    {
-        $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
-        if (isset($_POST['fileName'])) {
-            $fileName = $_POST['fileName'];
-
-            $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-
-            $model = Books::model()->findByAttributes(array('icon' => $fileName));
-            if ($model) {
-                if (@unlink($Dir . $model->icon)) {
-                    $model->updateByPk($model->id, array('icon' => null));
-                    $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-                } else
-                    $response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-            } else {
-                @unlink($tempDir . $fileName);
-                $response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-            }
-            echo CJSON::encode($response);
-            Yii::app()->end();
-        }
-    }
-
-    public function actionDeleteUploadFile()
-    {
-        echo CJSON::encode(['state' => 'ok', 'msg' => 'فایل با موفقیت حذف شد.']);
-    }
-
     public function actionChangeConfirm()
     {
         $model=$this->loadModel($_POST['book_id']);

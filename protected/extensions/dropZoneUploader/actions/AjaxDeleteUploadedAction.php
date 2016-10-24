@@ -30,7 +30,7 @@ class AjaxDeleteUploadedAction extends CAction
             throw new CException('{uploadDir} main files folder path is not specified.', 500);
         if (!$this->attribute)
             throw new CException('{attribute} attribute is not specified.', 500);
-        if ($this->modelName && (empty($this->storedMode) || $this->storedMode !== self::STORED_FIELD_MODE || $this->storedMode !==self::STORED_RECORD_MODE))
+        if ($this->modelName && (empty($this->storedMode) || ($this->storedMode !== self::STORED_FIELD_MODE && $this->storedMode !== self::STORED_RECORD_MODE)))
             throw new CException('{storedMode} stored mode in db is not specified. ("field" or "record")', 500);
     }
 
