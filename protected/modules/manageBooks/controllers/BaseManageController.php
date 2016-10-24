@@ -45,6 +45,44 @@ class BaseManageController extends Controller
         );
     }
 
+    public function actions(){
+        return array(
+            'upload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'icon',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'dimensions' => array(
+                        'minWidth' => 512,
+                        'minHeight' => 512,
+                    ),
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                )
+            ),
+            'uploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'file_name',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('doc','docx')
+                )
+            ),
+            'deleteUpload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'Books',
+                'attribute' => 'icon',
+                'uploadDir' => 'uploads/books/icons',
+                'storedMode' => 'field'
+            ),
+            'deleteUploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'BookPackages',
+                'attribute' => 'file_name',
+                'uploadDir' => 'uploads/books/files',
+                'storedMode' => 'record'
+            )
+        );
+    }
+
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -271,44 +309,6 @@ class BaseManageController extends Controller
         }
     }
 
-
-    public function actions(){
-        return array(
-            'upload' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
-                'attribute' => 'icon',
-                'rename' => 'random',
-                'validateOptions' => array(
-                    'dimensions' => array(
-                        'minWidth' => 128,
-                        'minHeight' => 128,
-                    ),
-                    'acceptedTypes' => array('jpg','jpeg','png')
-                )
-            ),
-            'uploadFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
-                'attribute' => 'file_name',
-                'validateOptions' => array(
-                    'acceptedTypes' => array('doc','docx')
-                )
-            ),
-            'deleteUpload' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'Books',
-                'attribute' => 'icon',
-                'uploadDir' => 'uploads/books/icons',
-                'storedMode' => 'field'
-            ),
-            'deleteUploadFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'file_name',
-                'uploadDir' => 'uploads/books/files',
-                'storedMode' => 'record'
-            )
-        );
-    }
     public function actionChangeConfirm()
     {
         $model=$this->loadModel($_POST['book_id']);
