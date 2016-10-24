@@ -126,7 +126,7 @@ class BaseManageController extends Controller
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
         $icon = array();
-        if(file_exists($bookIconsDIR . $model->icon))
+        if($model->icon && file_exists($bookIconsDIR . $model->icon))
             $icon = array(
                 'name' => $model->icon,
                 'src' => $bookIconsUrl . '/' . $model->icon,
@@ -292,6 +292,11 @@ class BaseManageController extends Controller
                 'validateOptions' => array(
                     'acceptedTypes' => array('doc','docx')
                 )
+            ),
+            'deleteUpload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'Books',
+                'attribute' => 'icon',
             )
         );
     }
@@ -300,7 +305,6 @@ class BaseManageController extends Controller
     {
         $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
         if (isset($_POST['fileName'])) {
-            var_dump(2);exit();
             $fileName = $_POST['fileName'];
 
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';

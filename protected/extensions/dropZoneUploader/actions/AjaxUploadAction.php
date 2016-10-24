@@ -27,8 +27,14 @@ class AjaxUploadAction extends CAction
      */
     public $validateOptions = array();
 
+    private function init(){
+        if (!$this->attribute)
+            throw new CException('{attribute} attribute is not specified.', 500);
+    }
+    
     public function run()
     {
+        $this->init();
         if (Yii::app()->request->isAjaxRequest) {
             $validFlag = true;
             $uploadDir = Yii::getPathOfAlias("webroot").$this->uploadDir;
