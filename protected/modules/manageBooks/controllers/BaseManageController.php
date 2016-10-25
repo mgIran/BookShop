@@ -45,6 +45,44 @@ class BaseManageController extends Controller
         );
     }
 
+    public function actions(){
+        return array(
+            'upload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'icon',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'dimensions' => array(
+                        'minWidth' => 512,
+                        'minHeight' => 512,
+                    ),
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                )
+            ),
+            'uploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'file_name',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('doc','docx')
+                )
+            ),
+            'deleteUpload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'Books',
+                'attribute' => 'icon',
+                'uploadDir' => 'uploads/books/icons',
+                'storedMode' => 'field'
+            ),
+            'deleteUploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'BookPackages',
+                'attribute' => 'file_name',
+                'uploadDir' => 'uploads/books/files',
+                'storedMode' => 'record'
+            )
+        );
+    }
+
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -126,7 +164,7 @@ class BaseManageController extends Controller
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
         $icon = array();
-        if(file_exists($bookIconsDIR . $model->icon))
+        if($model->icon && file_exists($bookIconsDIR . $model->icon))
             $icon = array(
                 'name' => $model->icon,
                 'src' => $bookIconsUrl . '/' . $model->icon,
@@ -269,61 +307,6 @@ class BaseManageController extends Controller
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
-    }
-
-
-    public function actions(){
-        return array(
-            'upload' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
-                'attribute' => 'icon',
-                'rename' => 'random',
-                'validateOptions' => array(
-                    'dimensions' => array(
-                        'minWidth' => 128,
-                        'minHeight' => 128,
-                    ),
-                    'acceptedTypes' => array('jpg','jpeg','png')
-                )
-            ),
-            'uploadFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
-                'attribute' => 'file_name',
-                'validateOptions' => array(
-                    'acceptedTypes' => array('doc','docx')
-                )
-            )
-        );
-    }
-
-    public function actionDeleteUpload()
-    {
-        $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
-        if (isset($_POST['fileName'])) {
-            var_dump(2);exit();
-            $fileName = $_POST['fileName'];
-
-            $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-
-            $model = Books::model()->findByAttributes(array('icon' => $fileName));
-            if ($model) {
-                if (@unlink($Dir . $model->icon)) {
-                    $model->updateByPk($model->id, array('icon' => null));
-                    $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-                } else
-                    $response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-            } else {
-                @unlink($tempDir . $fileName);
-                $response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-            }
-            echo CJSON::encode($response);
-            Yii::app()->end();
-        }
-    }
-
-    public function actionDeleteUploadFile()
-    {
-        echo CJSON::encode(['state' => 'ok', 'msg' => 'فایل با موفقیت حذف شد.']);
     }
 
     public function actionChangeConfirm()

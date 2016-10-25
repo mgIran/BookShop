@@ -1,6 +1,8 @@
 <?php
 class AjaxDeleteUploadedAction extends CAction
 {
+    const STORED_FIELD_MODE = 'field';
+    const STORED_RECORD_MODE = 'record';
     /**
      * @var string temp folder Dir
      */
@@ -18,27 +20,45 @@ class AjaxDeleteUploadedAction extends CAction
      * @var string attribute name
      */
     public $attribute;
+    /**
+     * @var string saved in Database mode for this file field|record
+     */
+    public $storedMode;
+
+    private function init(){
+        if (!$this->uploadDir)
+            throw new CException('{uploadDir} main files folder path is not specified.', 500);
+        if (!$this->attribute)
+            throw new CException('{attribute} attribute is not specified.', 500);
+        if ($this->modelName && (empty($this->storedMode) || ($this->storedMode !== self::STORED_FIELD_MODE && $this->storedMode !== self::STORED_RECORD_MODE)))
+            throw new CException('{storedMode} stored mode in db is not specified. ("field" or "record")', 500);
+    }
 
     public function run()
     {
+        $this->init();
         if (Yii::app()->request->isAjaxRequest) {
-            $uploadDir = Yii::getPathOfAlias("webroot") . $this->uploadDir;
-            if(!$this->uploadDir)
-                throw new CException('مسیر پوشه اصلی فایل ها مشخص نشده است.',500);
+            $deleteFlag = false;
+            $uploadDir = Yii::getPathOfAlias("webroot").$this->uploadDir;
             if (isset($_POST['fileName'])) {
                 $fileName = $_POST['fileName'];
-                $tempDir = Yii::getPathOfAlias("webroot") . $this->tempDir;
+                $tempDir = Yii::getPathOfAlias("webroot").$this->tempDir;
                 $ownerModel = call_user_func(array($this->modelName, 'model'));
                 $model = $ownerModel->findByAttributes(array($this->attribute => $fileName));
                 if ($model) {
-                    if (@unlink($uploadDir .DIRECTORY_SEPARATOR. $model->{$this->attribute})) {
-                        $ownerModel->updateByPk($model->id, array($this->attribute => null));
-                        $response = ['status' => 'ok', 'msg' => Yii::app()->controller->implodeErrors($ownerModel)];
+                    if ($this->storedMode === self::STORED_FIELD_MODE)
+                        $deleteFlag = $ownerModel->updateByPk($model->id, array($this->attribute => null))?true:false;
+                    elseif ($this->storedMode === self::STORED_RECORD_MODE)
+                        $deleteFlag = $model->delete()?true:false;
+
+                    if ($deleteFlag) {
+                        @unlink($uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute});
+                        $response = ['status' => true, 'msg' => 'فایل با موفقیت حذف شد.'];
                     } else
-                        $response = ['status' => 'error', 'msg' => 'در حذف فایل مشکل ایجاد شده است'];
+                        $response = ['status' => false, 'msg' => 'در حذف فایل مشکل ایجاد شده است'];
                 } else {
-                    @unlink($tempDir .DIRECTORY_SEPARATOR. $fileName);
-                    $response = ['status' => 'ok', 'msg' => 'فایل با موفقیت حذف شد.'];
+                    @unlink($tempDir.DIRECTORY_SEPARATOR.$fileName);
+                    $response = ['status' => true, 'msg' => 'فایل با موفقیت حذف شد.'];
                 }
             } else
                 $response = ['status' => false, 'message' => 'نام فایل موردنظر ارسال نشده است.'];
