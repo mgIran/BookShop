@@ -523,7 +523,7 @@ class BooksController extends Controller
     public function actionSearch()
     {
         Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        $this->layout = '//layouts/index';
         $criteria = new CDbCriteria();
         $criteria->addCondition('status=:status AND confirm=:confirm AND deleted=:deleted AND (SELECT COUNT(book_images.id) FROM ym_book_images book_images WHERE book_images.book_id=t.id) != 0');
         $criteria->params[':status'] = 'enable';

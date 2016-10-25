@@ -27,8 +27,8 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-        Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/index';
 
         // get newest programs
         $catIds=BookCategories::model()->getCategoryChildes(1);
@@ -104,7 +104,7 @@ class SiteController extends Controller
     public function actionAbout(){
         Yii::import('pages.models.*');
         Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        $this->layout = '//layouts/index';
         $model = Pages::model()->findByPk(1);
         $this->render('//site/pages/page',array('model' => $model));
     }
@@ -112,7 +112,7 @@ class SiteController extends Controller
     public function actionContactUs(){
         Yii::import('pages.models.*');
         Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        $this->layout = '//layouts/index';
         $model = Pages::model()->findByPk(2);
         $this->render('//site/pages/page',array('model' => $model));
     }
@@ -120,7 +120,7 @@ class SiteController extends Controller
     public function actionHelp(){
         Yii::import('pages.models.*');
         Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        $this->layout = '//layouts/index';
         $model = Pages::model()->findByPk(3);
         $this->render('//site/pages/page',array('model' => $model));
     }
@@ -128,7 +128,7 @@ class SiteController extends Controller
     public function actionTerms(){
         Yii::import('pages.models.*');
         Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        $this->layout = '//layouts/index';
         $model = Pages::model()->findByPk(4);
         $this->render('//site/pages/page',array('model' => $model));
     }
@@ -137,7 +137,7 @@ class SiteController extends Controller
     {
         Yii::import('pages.models.*');
         Yii::app()->theme = 'market';
-        $this->layout = '//layouts/public';
+        $this->layout = '//layouts/index';
         $model = Pages::model()->findByPk(5);
         $this->render('//site/pages/page',array('model' => $model));
     }
