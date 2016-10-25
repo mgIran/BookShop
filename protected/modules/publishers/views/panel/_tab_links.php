@@ -7,7 +7,7 @@ if(!isset($active))
 ?>
 <ul class="nav nav-tabs">
     <li <?= $active == 'index'?'class="active"':'' ?> >
-        <a href="<?php echo $this->createUrl('/publishers/panel');?>">برنامه ها</a>
+        <a href="<?php echo $this->createUrl('/publishers/panel');?>">کتاب ها</a>
     </li>
     <li <?= $active == 'discount'?'class="active"':'' ?> >
         <a href="<?php echo $this->createUrl('/publishers/panel/discount');?>">تخفیفات</a>

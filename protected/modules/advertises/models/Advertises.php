@@ -73,7 +73,7 @@ class Advertises extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'book_id' => 'برنامه',
+			'book_id' => 'کتاب',
 			'cover' => 'تصویر کاور',
 			'fade_color' => 'رنگ زمینه',
 			'status' => 'وضعیت',

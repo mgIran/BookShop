@@ -34,17 +34,21 @@
         'acceptedFiles' => 'image/jpeg , image/png',
         'serverFiles' => $images,
         'onSuccess' => '
-                    var responseObj = JSON.parse(res);
-                    if(responseObj.state == "ok")
-                    {
-                        {serverName} = responseObj.fileName;
-                    }else if(responseObj.state == "error"){
-                        console.log(responseObj.msg);
-                    }
-                ',
+            var responseObj = JSON.parse(res);
+            if(responseObj.status){
+                {serverName} = responseObj.fileName;
+                $(".uploader-message").html("");
+            }
+            else{
+                $(".uploader-message").text(responseObj.message).addClass("error");
+                this.removeFile(file);
+            }
+        ',
     ));
     ?>
     <?php echo $form->error($model,'image'); ?>
+
+    <h5 class="uploader-message error pull-right"></h5>
 </div>
 <div class="form-group">
     <div class="input-group buttons">

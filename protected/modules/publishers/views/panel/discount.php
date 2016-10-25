@@ -13,7 +13,7 @@
             <a class="btn btn-success" data-toggle="modal" href="#discount-modal"><i class="icon icon-plus"></i> افزودن تخفیف جدید</a>
             <div class="table text-center">
                 <div class="thead">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-4">عنوان برنامه</div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-4">عنوان کتاب</div>
                     <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs">وضعیت</div>
                     <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">قیمت</div>
                     <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs">درصد</div>

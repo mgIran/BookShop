@@ -3,7 +3,7 @@
 /* @var $model BookCategories */
 
 $this->breadcrumbs=array(
-	'دسته بندی های برنامه',
+	'دسته بندی های کتاب',
 	'افزودن',
 );
 

@@ -37,6 +37,27 @@ class ManageController extends Controller
 		);
 	}
 
+
+	public function actions(){
+		return array(
+			'upload' => array(
+				'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+				'attribute' => 'cover',
+				'rename' => 'random',
+				'validateOptions' => array(
+					'acceptedTypes' => array('jpg','jpeg','png')
+				)
+			),
+			'deleteUpload' => array(
+				'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+				'modelName' => 'Advertises',
+				'attribute' => 'cover',
+				'uploadDir' => 'uploads/advertisesCover',
+				'storedMode' => 'field'
+			)
+		);
+	}
+	
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -181,57 +202,6 @@ class ManageController extends Controller
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
-	}
-
-
-
-	public function actionUpload()
-	{
-		$tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-
-		if (!is_dir($tempDir))
-			mkdir($tempDir);
-		if (isset($_FILES)) {
-			$file = $_FILES['cover'];
-			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-			$file['name'] = Controller::generateRandomString(5) . time();
-			while (file_exists($tempDir . DIRECTORY_SEPARATOR . $file['name']. '.' .$ext))
-				$file['name'] = Controller::generateRandomString(5) . time();
-			$file['name'] = $file['name'] . '.' . $ext;
-			if (move_uploaded_file($file['tmp_name'], $tempDir . DIRECTORY_SEPARATOR . CHtml::encode($file['name']))) {
-				$response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-			}else
-				$response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-		} else
-			$response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-		echo CJSON::encode($response);
-		Yii::app()->end();
-	}
-
-	public function actionDeleteUpload()
-	{
-		$Dir = Yii::getPathOfAlias("webroot") . '/uploads/advertisesCover/';
-
-		if (isset($_POST['fileName'])) {
-
-			$fileName = $_POST['fileName'];
-
-			$tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-
-			$model = Advertises::model()->findByAttributes(array('cover' => $fileName));
-			if ($model) {
-				if (@unlink($Dir . $model->cover)) {
-					$model->updateByPk($model->book_id, array('cover' => null));
-					$response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-				} else
-					$response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-			} else {
-				@unlink($tempDir . $fileName);
-				$response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-			}
-			echo CJSON::encode($response);
-			Yii::app()->end();
-		}
 	}
 }
 

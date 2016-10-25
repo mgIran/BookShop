@@ -1084,6 +1084,7 @@ body.windows-phone .content .book-box .book-item .detail .book-any .book-price{
     margin-bottom: 10px;
     position: absolute;
     bottom: 0;
+    display: none;
 }
 .footer .nav{
     padding-right: 20px;

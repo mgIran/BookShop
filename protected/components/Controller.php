@@ -90,7 +90,7 @@ class Controller extends CController
                     )
                 ),
                 array(
-                    'label' => 'دسته بندی برنامه ها<span class="caret"></span>',
+                    'label' => 'دسته بندی کتاب ها<span class="caret"></span>',
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),

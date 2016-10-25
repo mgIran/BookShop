@@ -61,7 +61,7 @@ class BookDiscounts extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'book_id' => 'برنامه',
+			'book_id' => 'کتاب',
 			'start_date' => 'تاریخ شروع',
 			'end_date' => 'تاریخ پایان',
 			'percent' => 'درصد',

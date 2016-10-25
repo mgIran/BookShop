@@ -93,7 +93,7 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'change_log'); ?>
 		<span class="clearfix"></span>
-		<span class="description">این فیلد برای زمانی است که کتاب در نسخه چاپ جدید تغییراتی داشته باشد، پر کردن آن الزامی نیست.</span>
+		<span class="description">این فیلد برای زمانی است که کتاب در نوبت چاپ جدید تغییراتی داشته باشد، پر کردن آن الزامی نیست.</span>
 		<?php
 		$this->widget('ext.ckeditor.CKEditor',array(
 			'model' => $model,

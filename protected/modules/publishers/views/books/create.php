@@ -4,38 +4,30 @@
 ?>
 
 <div class="container">
-    <h3>افزودن برنامه جدید</h3>
+    <h3>افزودن کتاب جدید</h3>
 
-    <?php if(Yii::app()->user->hasFlash('success')):?>
-        <div class="alert alert-success fade in">
-            <button class="close close-sm" type="button" data-dismiss="alert"><i class="icon-remove"></i></button>
-            <?php echo Yii::app()->user->getFlash('success');?>
-        </div>
-    <?php elseif(Yii::app()->user->hasFlash('failed')):?>
-        <div class="alert alert-danger fade in">
-            <button class="close close-sm" type="button" data-dismiss="alert"><i class="icon-remove"></i></button>
-            <?php echo Yii::app()->user->getFlash('failed');?>
-        </div>
-    <?php endif;?>
+    <?php $this->renderPartial("//layouts/_flashMessage") ?>
 
     <ul class="nav nav-tabs">
         <li class="active">
-            <a data-toggle="tab" href="#platform">پلتفرم</a>
-        </li>
-        <li class="disabled">
-            <a href="#">بسته</a>
+            <a href="#">اطلاعات کتاب</a>
         </li>
         <li class="disabled" >
-            <a href="#">اطلاعات برنامه</a>
+            <a href="#">نوبت های چاپ کتاب</a>
         </li>
         <li class="disabled">
-            <a href="#">تصاویر برنامه</a>
+            <a href="#">تصاویر کتاب</a>
         </li>
     </ul>
 
     <div class="tab-content">
         <div id="platform" class="tab-pane fade in active">
-            <?php $this->renderPartial('_platform', array('model'=>$model)); ?>
+            <?php $this->renderPartial('_form', array(
+                'model'=>$model,
+                'icon'=>$icon,
+                'tax'=>$tax,
+                'commission'=>$commission,
+            )); ?>
         </div>
     </div>
 </div>

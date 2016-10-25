@@ -17,7 +17,7 @@
     <?= $this->renderPartial('//layouts/_flashMessage' ,array('prefix' => 'images-')); ?>
     <div class="row">
         <?php if(empty($model->images)):?>
-            <div class="alert alert-warning submit-image-warning">لطفا تصاویر برنامه را ثبت کنید. برنامه های بدون تصویر نمایش داده نمی شوند.</div>
+            <div class="alert alert-warning submit-image-warning">لطفا تصاویر کتاب را ثبت کنید. کتاب های بدون تصویر نمایش داده نمی شوند.</div>
         <?php endif;?>
         <?= CHtml::label('تصاویر' ,'uploaderImages' ,array('class' => 'control-label')); ?>
         <?php

@@ -10,7 +10,7 @@
         <div class="table text-center">
             <div class="thead">
                 <div class="td col-lg-4 col-md-4 col-sm-4 hidden-xs">زمان</div>
-                <div class="td col-lg-4 col-md-4 col-sm-4 col-xs-12">نام برنامه</div>
+                <div class="td col-lg-4 col-md-4 col-sm-4 col-xs-12">نام کتاب</div>
                 <div class="td col-lg-4 col-md-4 col-sm-4 hidden-xs">مبلغ</div>
             </div>
             <div class="tbody">

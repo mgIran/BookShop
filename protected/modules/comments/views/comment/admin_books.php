@@ -24,7 +24,7 @@ $this->breadcrumbs=array(
 			'htmlOptions'=>array('width'=>80),
 		),
 		array(
-			'header'=>'نام برنامه',
+			'header'=>'نام کتاب',
 			'value'=>'CHtml::link($data->books->title, $data->pageUrl, array("target"=>"_blank"))',
 			'type'=>'raw',
 			'htmlOptions'=>array('width'=>50),

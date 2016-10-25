@@ -84,15 +84,15 @@ class BookPackages extends CActiveRecord
     {
         return array(
             'id' => 'شناسه',
-            'book_id' => 'برنامه',
+            'book_id' => 'کتاب',
             'version' => 'نسخه',
-            'package_name' => 'نام بسته',
+            'package_name' => 'نام نوبت چاپ',
             'file_name' => 'فایل',
             'create_date' => 'تاریخ بارگذاری',
             'publish_date' => 'تاریخ انتشار',
             'status' => 'وضعیت',
             'reason' => 'دلیل',
-            'for' => 'نوع بسته',
+            'for' => 'نوع نوبت چاپ',
             'isbn' => 'شابک',
             'price' => 'قیمت',
             'printed_price' => 'قیمت نسخه چاپی',

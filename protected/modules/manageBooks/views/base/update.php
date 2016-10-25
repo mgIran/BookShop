@@ -19,10 +19,10 @@ if(isset($_GET['step']))
     $step = (int)$_GET['step'];
 ?>
 
-<h1>ویرایش برنامه <?php echo $model->id; ?></h1>
+<h1>ویرایش کتاب <?php echo $model->id; ?></h1>
     <ul class="nav nav-tabs">
         <li class="<?= ($step == 1?'active':''); ?>"><a data-toggle="tab" href="#general">عمومی</a></li>
-        <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 2?'active':''); ?>"><a data-toggle="tab" href="#packages">نسخه های چاپ</a></li>
+        <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 2?'active':''); ?>"><a data-toggle="tab" href="#packages">نوبت های چاپ</a></li>
         <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 3?'active':''); ?>"><a data-toggle="tab" href="#pics">تصاویر</a></li>
     </ul>
 
@@ -34,14 +34,14 @@ if(isset($_GET['step']))
             'commission'=>$commission,
         )); ?>
     </div>
-        <? if(!$model->getIsNewRecord()):?>
-            <div id="packages" class="tab-pane fade <?= ($step == 2?'in active':''); ?>">
-                <?php $this->renderPartial('_package', array('model'=>$model, 'dataProvider'=>$packageDataProvider)); ?>
-            </div>
-        <? endif;?>
-        <? if(!$model->getIsNewRecord()):?>
-            <div id="pics" class="tab-pane fade <?= ($step == 3?'in active':''); ?>">
-                <?php $this->renderPartial('_imagesUpload', array('model'=>$model ,'images' => $images)); ?>
-            </div>
-        <? endif;?>
-    </div>
+    <? if(!$model->getIsNewRecord()):?>
+        <div id="packages" class="tab-pane fade <?= ($step == 2?'in active':''); ?>">
+            <?php $this->renderPartial('_package', array('model'=>$model, 'dataProvider'=>$packageDataProvider)); ?>
+        </div>
+    <? endif;?>
+    <? if(!$model->getIsNewRecord()):?>
+        <div id="pics" class="tab-pane fade <?= ($step == 3?'in active':''); ?>">
+            <?php $this->renderPartial('_imagesUpload', array('model'=>$model ,'images' => $images)); ?>
+        </div>
+    <? endif;?>
+</div>

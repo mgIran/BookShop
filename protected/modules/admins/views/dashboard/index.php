@@ -45,7 +45,7 @@ if(Yii::app()->user->roles == 'admin'):
                         'template' => '{view}{delete}{download}',
                         'buttons'=>array(
                             'view'=>array(
-                                'label'=>'مشاهده برنامه',
+                                'label'=>'مشاهده کتاب',
                                 'url'=>'Yii::app()->createUrl("/books/".$data->id."/".urlencode($data->title))',
                                 'options'=>array(
                                     'target'=>'_blank'
@@ -83,7 +83,7 @@ if(Yii::app()->user->roles == 'admin'):
         </div>
     </div>
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <div class="panel-heading">بسته های جدید</div>
+        <div class="panel-heading">نوبت چاپ های جدید</div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
                 'id'=>'newest-packages-grid',

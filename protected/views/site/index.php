@@ -14,7 +14,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
     <div class="book-box">
         <div class="top-box">
             <div class="title pull-right">
-                <h2>جدیدترین برنامه ها</h2>
+                <h2>جدیدترین کتاب ها</h2>
             </div>
             <a class="pull-left btn btn-success more-book" href="<?php echo $this->createUrl('/books/programs');?>">بیشتر</a>
         </div>

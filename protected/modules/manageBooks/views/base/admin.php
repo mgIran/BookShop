@@ -6,11 +6,11 @@ $this->breadcrumbs=array(
 	'مدیریت',
 );
 $this->menu=array(
-	array('label'=>'افزودن برنامه', 'url'=>Yii::app()->createUrl('/manageBooks/base/create')),
+	array('label'=>'افزودن کتاب', 'url'=>Yii::app()->createUrl('/manageBooks/base/create')),
 );
 ?>
 
-<h1>مدیریت برنامه ها</h1>
+<h1>مدیریت کتاب ها</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'books-grid',

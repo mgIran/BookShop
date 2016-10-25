@@ -20,7 +20,7 @@ Yii::app()->clientScript->registerCss('inline',"
             'acceptedFiles' => $this->formats,
             'serverFiles' => array(),
             'onSuccess' => '
-                 var responseObj = JSON.parse(res);
+                var responseObj = JSON.parse(res);
                 if(responseObj.status){
                     {serverName} = responseObj.fileName;
                     $(".uploader-message").html("");
@@ -37,7 +37,7 @@ Yii::app()->clientScript->registerCss('inline',"
             <?php echo CHtml::textField('version', '', array('class'=>'form-control', 'placeholder'=>'نسخه *'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <?php echo CHtml::textField('package_name', '', array('class'=>'form-control', 'placeholder'=>'نام چاپ جدید *'));?>
+            <?php echo CHtml::textField('package_name', '', array('class'=>'form-control', 'placeholder'=>'نام فایل چاپ *'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت خرید اینترنتی * (تومان)'));?>
@@ -74,6 +74,8 @@ Yii::app()->clientScript->registerCss('inline',"
                     $('.dropzone').removeClass('dz-started');
                     $('#package-info-form #version').val('');
                     $('#package-info-form #package_name').val('');
+                    $('#package-info-form #price').val('');
+                    $('#package-info-form #printed_price').val('');
                 }",
                 'error'=>"js:function(){ $('.uploader-message').text('فایل ارسالی ناقص می باشد.').addClass('error'); }",
             ), array('class'=>'btn btn-success pull-left'));?>
@@ -87,6 +89,16 @@ Yii::app()->clientScript->registerCss('inline',"
     'columns'=>array(
         'version',
         'package_name',
+        array(
+            'name' => 'price',
+            'value' => 'Controller::parseNumbers(number_format($data->price))." تومان"',
+            'filter' => false
+        ),
+        array(
+            'name' => 'printed_price',
+            'value' => 'Controller::parseNumbers(number_format($data->printed_price))." تومان"',
+            'filter' => false
+        ),
         array(
             'class'=>'CButtonColumn',
             'template' => '{delete}',

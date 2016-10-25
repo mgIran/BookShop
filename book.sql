@@ -92,7 +92,7 @@ INSERT INTO `ym_books` VALUES ('51', 'تست', 'qQUKq1477294520.png', '<p>لور
 -- ----------------------------
 DROP TABLE IF EXISTS `ym_book_advertises`;
 CREATE TABLE `ym_book_advertises` (
-  `book_id` int(10) unsigned NOT NULL COMMENT 'برنامه',
+  `book_id` int(10) unsigned NOT NULL COMMENT 'کتاب',
   `cover` varchar(200) COLLATE utf8_persian_ci NOT NULL COMMENT 'تصویر کاور',
   `fade_color` varchar(6) COLLATE utf8_persian_ci DEFAULT '000' COMMENT 'رنگ زمینه',
   `status` tinyint(1) unsigned DEFAULT '0' COMMENT 'وضعیت',
@@ -142,7 +142,7 @@ CREATE TABLE `ym_book_categories` (
 -- ----------------------------
 -- Records of ym_book_categories
 -- ----------------------------
-INSERT INTO `ym_book_categories` VALUES ('1', 'برنامه ها', null, null);
+INSERT INTO `ym_book_categories` VALUES ('1', 'کتاب ها', null, null);
 INSERT INTO `ym_book_categories` VALUES ('2', 'بازی ها', null, null);
 INSERT INTO `ym_book_categories` VALUES ('3', 'آموزش ها', null, null);
 INSERT INTO `ym_book_categories` VALUES ('4', 'آب و هوا', '1', '1-');
@@ -241,9 +241,9 @@ INSERT INTO `ym_book_images` VALUES ('12', '51', 'fw4mp1477295963.png');
 DROP TABLE IF EXISTS `ym_book_packages`;
 CREATE TABLE `ym_book_packages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'شناسه',
-  `book_id` int(10) unsigned DEFAULT NULL COMMENT 'برنامه',
+  `book_id` int(10) unsigned DEFAULT NULL COMMENT 'کتاب',
   `version` varchar(20) DEFAULT NULL COMMENT 'نسخه',
-  `package_name` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT 'نام بسته',
+  `package_name` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT 'نام نوبت چاپ',
   `isbn` varchar(20) DEFAULT NULL COMMENT 'شابک',
   `file_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'فایل',
   `create_date` varchar(20) DEFAULT NULL COMMENT 'تاریخ بارگذاری',
@@ -584,21 +584,21 @@ CREATE TABLE `ym_user_notifications` (
 -- ----------------------------
 INSERT INTO `ym_user_notifications` VALUES ('2', '43', 'اطلاعات شما توسط مدیر سیستم تایید شد.', '1', '1461845059');
 INSERT INTO `ym_user_notifications` VALUES ('3', '43', 'شناسه شما توسط مدیر سیستم تایید شد.', '1', '1461845059');
-INSERT INTO `ym_user_notifications` VALUES ('4', '43', 'برنامه  برنامه لیدکامب - لکنت کودکان تایید شده است.', '1', '1461845059');
-INSERT INTO `ym_user_notifications` VALUES ('6', '43', 'برنامه برنامه آزمایشی تایید شده است.', '1', '1464262310');
-INSERT INTO `ym_user_notifications` VALUES ('7', '43', 'برنامه برنامه آزمایشی تایید شده است.', '1', '1464262422');
-INSERT INTO `ym_user_notifications` VALUES ('8', '43', 'برنامه برنامه آزمایشی تایید شده است.', '1', '1464353232');
-INSERT INTO `ym_user_notifications` VALUES ('9', '43', 'بسته asdfsdf توسط مدیر سیستم حذف شد.', '1', '1464358109');
-INSERT INTO `ym_user_notifications` VALUES ('10', '43', 'بسته ir.tgbs.android.iranappasd توسط مدیر سیستم حذف شد.', '1', '1464358330');
-INSERT INTO `ym_user_notifications` VALUES ('13', '43', 'بسته ir.tgbs.android.iranapp3 توسط مدیر سیستم رد شد.', '1', '1465459197');
-INSERT INTO `ym_user_notifications` VALUES ('14', '43', 'بسته ir.tgbs.android.iranapp2 نیاز به تغییر دارد.', '1', '1465459228');
-INSERT INTO `ym_user_notifications` VALUES ('15', null, 'بسته ir.tgbs.android.iranapp توسط مدیر سیستم حذف شد.', '0', '1467040015');
-INSERT INTO `ym_user_notifications` VALUES ('16', '43', 'بسته ir.tgbs.android.iranapp123 توسط مدیر سیستم تایید شد.', '0', '1469083395');
-INSERT INTO `ym_user_notifications` VALUES ('17', '43', 'برنامه تلگرام نیاز به تغییرات دارد.', '0', '1469083457');
-INSERT INTO `ym_user_notifications` VALUES ('18', '45', 'بسته ir.tgbs.android.iranapp2 توسط مدیر سیستم تایید شد.', '1', '1470122805');
-INSERT INTO `ym_user_notifications` VALUES ('19', '45', 'برنامه موبوگرام رد شده است.', '1', '1470123368');
-INSERT INTO `ym_user_notifications` VALUES ('20', '45', 'برنامه موبوگرام نیاز به تغییرات دارد.', '1', '1470123486');
-INSERT INTO `ym_user_notifications` VALUES ('21', '45', 'برنامه موبوگرام تایید شده است.', '1', '1470123513');
+INSERT INTO `ym_user_notifications` VALUES ('4', '43', 'کتاب  کتاب لیدکامب - لکنت کودکان تایید شده است.', '1', '1461845059');
+INSERT INTO `ym_user_notifications` VALUES ('6', '43', 'کتاب کتاب آزمایشی تایید شده است.', '1', '1464262310');
+INSERT INTO `ym_user_notifications` VALUES ('7', '43', 'کتاب کتاب آزمایشی تایید شده است.', '1', '1464262422');
+INSERT INTO `ym_user_notifications` VALUES ('8', '43', 'کتاب کتاب آزمایشی تایید شده است.', '1', '1464353232');
+INSERT INTO `ym_user_notifications` VALUES ('9', '43', 'نوبت چاپ asdfsdf توسط مدیر سیستم حذف شد.', '1', '1464358109');
+INSERT INTO `ym_user_notifications` VALUES ('10', '43', 'نوبت چاپ ir.tgbs.android.iranappasd توسط مدیر سیستم حذف شد.', '1', '1464358330');
+INSERT INTO `ym_user_notifications` VALUES ('13', '43', 'نوبت چاپ ir.tgbs.android.iranapp3 توسط مدیر سیستم رد شد.', '1', '1465459197');
+INSERT INTO `ym_user_notifications` VALUES ('14', '43', 'نوبت چاپ ir.tgbs.android.iranapp2 نیاز به تغییر دارد.', '1', '1465459228');
+INSERT INTO `ym_user_notifications` VALUES ('15', null, 'نوبت چاپ ir.tgbs.android.iranapp توسط مدیر سیستم حذف شد.', '0', '1467040015');
+INSERT INTO `ym_user_notifications` VALUES ('16', '43', 'نوبت چاپ ir.tgbs.android.iranapp123 توسط مدیر سیستم تایید شد.', '0', '1469083395');
+INSERT INTO `ym_user_notifications` VALUES ('17', '43', 'کتاب تلگرام نیاز به تغییرات دارد.', '0', '1469083457');
+INSERT INTO `ym_user_notifications` VALUES ('18', '45', 'نوبت چاپ ir.tgbs.android.iranapp2 توسط مدیر سیستم تایید شد.', '1', '1470122805');
+INSERT INTO `ym_user_notifications` VALUES ('19', '45', 'کتاب موبوگرام رد شده است.', '1', '1470123368');
+INSERT INTO `ym_user_notifications` VALUES ('20', '45', 'کتاب موبوگرام نیاز به تغییرات دارد.', '1', '1470123486');
+INSERT INTO `ym_user_notifications` VALUES ('21', '45', 'کتاب موبوگرام تایید شده است.', '1', '1470123513');
 
 -- ----------------------------
 -- Table structure for ym_user_roles

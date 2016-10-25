@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "ym_book_categories".
+ * This is the model class for table "{{book_categories}}".
  *
- * The followings are the available columns in table 'ym_book_categories':
+ * The followings are the available columns in table '{{book_categories}}':
  * @property string $id
  * @property string $title
  * @property string $parent_id
@@ -22,7 +22,7 @@ class BookCategories extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_book_categories';
+		return '{{book_categories}}';
 	}
 
 	/**
@@ -116,7 +116,6 @@ class BookCategories extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('title',$this->title,true);
-		$criteria->condition = 't.parent_id IS NOT NULL';
 		$criteria->addSearchCondition('parent.title',$this->parentFilter);
 		$criteria->with = array('parent');
 		return new CActiveDataProvider($this, array(
