@@ -63,7 +63,7 @@ class PanelController extends Controller
                 'insert' => true,
                 'module' => 'users',
                 'modelName' => 'UserDetails',
-                'findAttributes' => array('user_id' => Yii::app()->user->getId()),
+                'findAttributes' => 'array("user_id" => Yii::app()->user->getId())',
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(
@@ -81,7 +81,7 @@ class PanelController extends Controller
                 'insert' => true,
                 'module' => 'users',
                 'modelName' => 'UserDetails',
-                'findAttributes' => array('user_id' => Yii::app()->user->getId()),
+                'findAttributes' => 'array("user_id" => Yii::app()->user->getId())',
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(

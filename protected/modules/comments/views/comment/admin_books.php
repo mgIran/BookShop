@@ -13,12 +13,6 @@ $this->breadcrumbs=array(
 	'filter'=>$model,
 	'columns'=>array(
 		array(
-			'header'=>'پلتفرم',
-			'value'=>'$data->books->platform->title',
-			'htmlOptions'=>array('width'=>50),
-			'filter' => CHtml::activeDropDownList($model,'platformFilter',CHtml::listData(BookPlatforms::model()->findAll(),'id','title'),array('prompt'=>'همه'))
-		),
-		array(
 			'header'=>Yii::t('commentsModule.msg', 'User Name'),
 			'value'=>'$data->userName',
 			'htmlOptions'=>array('width'=>80),

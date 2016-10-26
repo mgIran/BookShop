@@ -30,15 +30,17 @@ $(document).ready(function() {
     }
 
     $('.is-carousel').each(function () {
-        var items = $(this).data('items'),
-            dots = ($(this).data('dots') == 1) ? true : false,
-            nav = ($(this).data('nav') == 1) ? true : false,
-            margin = $(this).data('margin'),
-            responsive = $(this).data('responsive'),
-            loop=($(this).data('loop') == 1) ? true : false,
-            autoPlay=($(this).data('autoplay') == 1) ? true : false,
-            autoPlayHoverPause=($(this).data('autoplay-hover-pause') == 1) ? true : false,
-            mouseDrag=($(this).data('mouse-drag') == 1) ? true : false;
+        var $this = $(this),
+            items = $this.data('items'),
+            nestedItemSelector = $this.data('item-selector'),
+            dots = ($this.data('dots') == 1) ? true : false,
+            nav = ($this.data('nav') == 1) ? true : false,
+            margin = $this.data('margin'),
+            responsive = $this.data('responsive'),
+            loop=($this.data('loop') == 1) ? true : false,
+            autoPlay=($this.data('autoplay') == 1) ? true : false,
+            autoPlayHoverPause=($this.data('autoplay-hover-pause') == 1) ? true : false,
+            mouseDrag=($this.data('mouse-drag') == 1) ? true : false;
 
         if ($(this).hasClass('auto-width')) {
             var carousel=$(this);
@@ -50,6 +52,7 @@ $(document).ready(function() {
                 autoWidth: true,
                 dots: dots,
                 nav: nav,
+                nestedItemSelector: nestedItemSelector,
                 navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
                 rtl: true
             });
@@ -58,6 +61,7 @@ $(document).ready(function() {
                 loop: loop,
                 autoplay: autoPlay,
                 items: items,
+                nestedItemSelector: nestedItemSelector,
                 dots:dots,
                 nav: nav,
                 autoplayHoverPause: autoPlayHoverPause,
@@ -71,6 +75,7 @@ $(document).ready(function() {
                 loop: loop,
                 autoplay: autoPlay,
                 items: items,
+                nestedItemSelector: nestedItemSelector,
                 dots:dots,
                 nav: nav,
                 autoplayHoverPause: autoPlayHoverPause,

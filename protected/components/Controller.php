@@ -40,6 +40,11 @@ class Controller extends CController
         return true;
     }
 
+    public function init(){
+        Yii::app()->clientScript->registerScript('js-requirement','
+            var baseUrl = "'.Yii::app()->getBaseUrl(true).'";
+        ',CClientScript::POS_HEAD);
+    }
     public function beforeRender($view)
     {
         $this->description = Yii::app()->db->createCommand()
@@ -62,11 +67,6 @@ class Controller extends CController
             ->from('ym_site_setting')
             ->where('name = "default_title"')
             ->queryScalar();
-        $this->categories = array(
-            'programs' => BookCategories::model()->findAll('parent_id=1'),
-            'games' => BookCategories::model()->findAll('parent_id=2'),
-            'educations' => BookCategories::model()->findAll('parent_id=3'),
-        );
         return true;
     }
 
@@ -95,8 +95,8 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/bookCategories/admin/')),
-                        array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/bookCategories/create/')),
+                        array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/category/admin/')),
+                        array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/category/create/')),
                     )
                 ),
                 array(

@@ -67,15 +67,20 @@ class AjaxUploadAction extends CAction
 
         if ($this->module)
             Yii::import($this->module.'.models.*');
-        if ($this->insert && !$this->model)
+        if ($this->insert && !$this->modelName)
             throw new CException('{model} model is not specified.', 500);
         if ($this->insert && !$this->storeMode)
             throw new CException('{storeMode} store mode is not specified. ("field" or "record")', 500);
         if ($this->insert && $this->storeMode === self::STORE_FIELD_MODE && !$this->findAttributes)
             throw new CException('{findAttributes} find attributes is not specified.', 500);
-        if ($this->insert && $this->storeMode === self::STORE_FIELD_MODE && !is_array($this->findAttributes))
-            throw new CException('{findAttributes} find attributes must be an array.', 500);
+        // json decode data index of $_POST array
+        if(isset($_POST['data']))
+            $_POST = CJSON::decode($_POST['data']);
 
+        if ($this->insert && $this->storeMode === self::STORE_FIELD_MODE && $this->findAttributes)
+            $this->findAttributes = $this->evaluateExpression($this->findAttributes);
+        if ($this->insert && $this->storeMode === self::STORE_FIELD_MODE && $this->insertAttributes)
+            $this->insertAttributes = $this->evaluateExpression($this->insertAttributes);
     }
 
     public function run()
@@ -148,7 +153,7 @@ class AjaxUploadAction extends CAction
                         $response = ['status' => true, 'fileName' => $filename];
                         if ($this->insert) {
                             // Save into database
-                            if ($this->storeMode === self::STORE_FIELD_MODE)
+                            if ($this->storeMode === self::STORE_RECORD_MODE)
                                 $model = new $this->modelName();
                             if ($this->storeMode === self::STORE_FIELD_MODE) {
                                 $ownerModel = call_user_func(array($this->modelName, 'model'));

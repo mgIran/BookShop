@@ -30,30 +30,20 @@ class SiteController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
 
-        // get newest programs
-        $catIds=BookCategories::model()->getCategoryChildes(1);
-        $newestProgramDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks($catIds)));
-
-        // get newest games
-        $catIds=BookCategories::model()->getCategoryChildes(2);
-        $newestGameDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks($catIds)));
-
-        // get newest educations
-        $catIds=BookCategories::model()->getCategoryChildes(3);
-        $newestEducationDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks($catIds)));
-
+        $categoriesDataProvider =new CActiveDataProvider('BookCategories', array('criteria'=>BookCategories::model()->getValidCategories()));
         // get suggested list
         $visitedCats=CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
         $suggestedDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks($visitedCats)));
+		// latest books
+        $latestBooksDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks(null,'id DESC',10)));
 
         // get advertise
         Yii::import('advertises.models.*');
         $advertise=Advertises::model()->findActive();
 
         $this->render('index', array(
-            'newestProgramDataProvider'=>$newestProgramDataProvider,
-            'newestGameDataProvider'=>$newestGameDataProvider,
-            'newestEducationDataProvider'=>$newestEducationDataProvider,
+            'categoriesDataProvider'=>$categoriesDataProvider,
+            'latestBooksDataProvider'=>$latestBooksDataProvider,
             'suggestedDataProvider'=>$suggestedDataProvider,
             'advertise'=>$advertise,
         ));

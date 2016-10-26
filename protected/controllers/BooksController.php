@@ -259,7 +259,7 @@ class BooksController extends Controller
     {
         Yii::app()->theme = 'market';
         $this->layout = 'public';
-        $categoryIds = BookCategories::model()->getCategoryChildes($id);
+        $categoryIds = BookCategories::model()->getCategoryChilds($id);
         $criteria = Books::model()->getValidBooks($categoryIds);
         $dataProvider = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,

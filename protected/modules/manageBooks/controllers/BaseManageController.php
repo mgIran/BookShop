@@ -105,7 +105,7 @@ class BaseManageController extends Controller
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         if (!is_dir($tmpDIR))
             mkdir($tmpDIR);
-        $tmpUrl = Yii::app()->createAbsoluteUrl('/uploads/temp/');
+        $tmpUrl = Yii::app()->baseUrl.'/uploads/temp/';
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/icons/";
         if (!is_dir($bookIconsDIR))
             mkdir($bookIconsDIR);
