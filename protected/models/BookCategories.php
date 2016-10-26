@@ -28,11 +28,6 @@ class BookCategories extends CActiveRecord
 		return '{{book_categories}}';
 	}
 
-	/**
-	 * public Filter Variables for search
-	 * @property string $parentFilter
-	 */
-	public $parentFilter;
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -54,7 +49,7 @@ class BookCategories extends CActiveRecord
 			array('image, icon, icon_color', 'filter', 'filter'=>'strip_tags'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, parent_id, parentFilter', 'safe', 'on'=>'search'),
+			array('id, title, parent_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -126,8 +121,7 @@ class BookCategories extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('title',$this->title,true);
-		$criteria->addSearchCondition('parent.title',$this->parentFilter);
-		$criteria->with = array('parent');
+		$criteria->compare('parent_id',$this->parent_id);
 		$criteria->order = 't.id DESC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -161,22 +155,22 @@ class BookCategories extends CActiveRecord
 		return CHtml::listData( $list, 'id', 'fullTitle' );
 	}
 
-	public function adminSortList($excludeId = NULL)
-	{
-		$parents = $this->findAll('parent_id IS NULL order by title');
-		$list = array();
-		foreach ($parents as $parent) {
-			if ($parent->id != $excludeId) {
-				array_push($list, $parent);
-				$childs = $this->findAll($this->getCategoryChilds($parent->id, false, 'criteria'));
-				foreach ($childs as $child) {
-					if ($child->id != $excludeId && $child->parent_id != $excludeId)
-						array_push($list, $child);
-				}
-			}
-		}
-		return CMap::mergeArray( array( '' => '-' ), CHtml::listData( $list, 'id', 'fullTitle' ) );
-	}
+	public function adminSortList($excludeId = NULL,$withPrompt = true)
+    {
+        $parents = $this->findAll('parent_id IS NULL order by title');
+        $list = array();
+        foreach ($parents as $parent) {
+            if ($parent->id != $excludeId) {
+                array_push($list, $parent);
+                $childs = $this->findAll($this->getCategoryChilds($parent->id, false, 'criteria'));
+                foreach ($childs as $child) {
+                    if ($child->id != $excludeId && $child->parent_id != $excludeId)
+                        array_push($list, $child);
+                }
+            }
+        }
+        return $withPrompt ? CMap::mergeArray(array('' => '-'), CHtml::listData($list, 'id', 'fullTitle')) : CHtml::listData($list, 'id', 'fullTitle');
+    }
 
 	public function getParents( $id = NULL )
 	{
@@ -260,5 +254,11 @@ class BookCategories extends CActiveRecord
 		$criteria->addCondition('t.icon IS NOT NULL');
 		$criteria->addCondition('t.parent_id IS NULL');
 		return $criteria;
+	}
+
+    public function getBooksCount(){
+		$catIds = $this->getCategoryChilds();
+		$criteria = Books::model()->getValidBooks($catIds);
+		return Books::model()->count($criteria);
 	}
 }

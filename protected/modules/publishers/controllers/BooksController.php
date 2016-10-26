@@ -49,8 +49,8 @@ class BooksController extends Controller
                 'rename' => 'random',
                 'validateOptions' => array(
                     'dimensions' => array(
-                        'minWidth' => 512,
-                        'minHeight' => 512,
+                        'minWidth' => 400,
+                        'minHeight' => 590,
                     ),
                     'acceptedTypes' => array('jpg','jpeg','png')
                 )

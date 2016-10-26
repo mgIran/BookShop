@@ -57,17 +57,29 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'publisher_name'); ?>
-		<?php echo $form->textField($model,'publisher_name',array('size'=>50,'maxlength'=>500)); ?>
+		<?php echo $form->textField($model,'publisher_name',array('size'=>50,'maxlength'=>50)); ?>
 		<?php echo $form->error($model,'publisher_name'); ?>
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'language'); ?>
+		<?php echo $form->textField($model,'language',array('size'=>50,'maxlength'=>20)); ?>
+		<?php echo $form->error($model,'language'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'number_of_pages'); ?>
+		<?php echo $form->textField($model,'number_of_pages',array('size'=>10,'maxlength'=>5)); ?>
+		<?php echo $form->error($model,'number_of_pages'); ?>
+	</div>
+
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'category_id'); ?>
-		<?php echo $form->dropDownList($model,'category_id',BookCategories::model()->sortList());
+		<?php echo $form->dropDownList($model,'category_id',BookCategories::model()->adminSortList(null,false));
         ?>
 		<?php echo $form->error($model,'category_id'); ?>
 	</div>
-
 	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->dropDownList($model,'status',array(

@@ -74,19 +74,20 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-				array('title, category_id ,icon', 'required'),
-				array('number_of_pages, seen, deleted', 'numerical', 'integerOnly' => true),
-				array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
-				array('title, icon, publisher_name', 'length', 'max' => 50),
-				array('publisher_id, category_id', 'length', 'max' => 10),
-				array('language', 'length' ,'max'=>20),
-				array('status', 'length', 'max' => 7),
-				array('download', 'length', 'max' => 12),
-				array('description, change_log ,publisher_name ,_purifier', 'safe'),
-				// The following rule is used by search().
-				// @todo Please remove those attributes that should not be searched.
-				array('id, title, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
-				array('description, change_log', 'filter', 'filter' => array($obj = new CHtmlPurifier(), 'purify')),
+			array('title, category_id ,icon', 'required'),
+			array('number_of_pages, seen, deleted', 'numerical', 'integerOnly' => true),
+			array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
+			array('title, icon, publisher_name', 'length', 'max' => 50),
+			array('number_of_pages', 'length', 'max' => 5),
+			array('publisher_id, category_id', 'length', 'max' => 10),
+			array('language', 'length' ,'max'=>20),
+			array('language', 'filter' ,'filter'=>'strip_tags'),
+			array('status', 'length', 'max' => 7),
+			array('download', 'length', 'max' => 12),
+			array('description, change_log ,publisher_name ,_purifier', 'safe'),
+			// The following rule is used by search().
+			// @todo Please remove those attributes that should not be searched.
+			array('id, title, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -118,10 +119,10 @@ class Books extends CActiveRecord
 		return array(
 				'id' => 'شناسه',
 				'title' => 'عنوان',
-				'icon' => 'آیکون',
+				'icon' => 'تصویر جلد',
 				'description' => 'توضیحات',
 				'number_of_pages' => 'تعداد صفحات',
-				'language' => 'زبان',
+				'language' => 'زبان کتاب',
 				'publisher_id' => 'ناشر',
 				'category_id' => 'دسته',
 				'status' => 'وضعیت',
@@ -269,7 +270,7 @@ class Books extends CActiveRecord
 	 * @param array $categoryIds
 	 * @return CDbCriteria
 	 */
-	public function getValidBooks($categoryIds = array(),$order = 'id DESC',$limit = 20)
+	public function getValidBooks($categoryIds = array(),$order = 'id DESC',$limit = null)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('t.status=:status');
@@ -283,7 +284,8 @@ class Books extends CActiveRecord
 		if($categoryIds)
 			$criteria->addInCondition('category_id', $categoryIds);
 		$criteria->order = $order;
-		$criteria->limit = $limit;
+		if($limit)
+			$criteria->limit = $limit;
 		return $criteria;
 	}
 

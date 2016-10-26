@@ -56,7 +56,7 @@ class TicketsManageController extends Controller
 				'attribute' => 'attachment',
 				'rename' => 'random',
 				'validateOptions' => array(
-					'acceptedTypes' => array('jpg','jpeg','png')
+					'acceptedTypes' => array('jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'zip')
 				),
 			),
 			'deleteUploaded' => array(

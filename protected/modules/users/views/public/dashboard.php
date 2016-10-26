@@ -56,7 +56,7 @@ if(isset($_GET['tab']))
         <div id="bookmarks-tab" class="tab-pane fade <?= ($tab && $tab=="bookmarks-tab"?'in active':'') ?>">
             <?php $this->renderPartial('_bookmarks',array(
                 'model'=>$model,
-            ))?>
+            ));?>
         </div>
     </div>
 </div>

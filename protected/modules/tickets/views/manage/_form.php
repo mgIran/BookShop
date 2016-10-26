@@ -57,17 +57,19 @@
 				//				'data' => array('book_id'=>$model->id),
 				'onSuccess' => '
 					var responseObj = JSON.parse(res);
-					if(responseObj.state == "ok")
-					{
+					if(responseObj.status){
 						{serverName} = responseObj.fileName;
-						$(".submit-image-warning").addClass("hidden");
-					}else if(responseObj.state == "error"){
-						console.log(responseObj.msg);
+						$(".uploader-message").html("");
 					}
-            ',
+					else{
+						$(".uploader-message").html(responseObj.message);
+						this.removeFile(file);
+					}
+            	',
 			));
 			?>
 			<?php echo $form->error($model,'attachment'); ?>
+			<div class="uploader-message error"></div>
 		</div>
 	</div>
 	<div class="form-group buttons">

@@ -23,9 +23,9 @@ $this->menu=array(
 		'title',
 		array(
 			'header' => 'والد',
-			'name' => 'parent.title',
-			//'filter' => CHtml::activeTextField($model,'parentFilter')
-			'filter' => CHtml::activeDropDownList($model,'parentFilter',CHtml::listData(BookCategories::model()->findAll('parent_id IS NULL'),'title','title'))
+			'name' => 'parent_id',
+			'value' => '$data->parent?$data->parent->title:""',
+			'filter' => BookCategories::model()->adminSortList(null,false)
 		),
 		array(
 			'class'=>'CButtonColumn',

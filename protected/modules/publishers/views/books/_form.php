@@ -2,6 +2,7 @@
 /* @var $this BooksController */
 /* @var $model Books */
 /* @var $form CActiveForm */
+/* @var $icon [] */
 /* @var $tax string */
 /* @var $commission string */
 ?>
@@ -25,12 +26,51 @@
         <?= $this->renderPartial('//layouts/_flashMessage'); ?>
 
         <div class="form-group">
+            <?php echo $form->labelEx($model,'icon',array('class'=> 'block')); ?>
+            <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                'id' => 'uploaderIcon',
+                'model' => $model,
+                'name' => 'icon',
+                'maxFiles' => 1,
+                'maxFileSize' => 0.5, //MB
+                'url' => Yii::app()->createUrl('/publishers/books/upload'),
+                'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUpload'),
+                'acceptedFiles' => '.jpg, .jpeg, .png',
+                'serverFiles' => $icon,
+                'onSuccess' => '
+                    var responseObj = JSON.parse(res);
+                    if(responseObj.status){
+                        {serverName} = responseObj.fileName;
+                        $(".uploader-message").html("");
+                    }
+                    else{
+                        $(".uploader-message").html(responseObj.message);
+                        this.removeFile(file);
+                    }
+                ',
+            )); ?>
+            <?php echo $form->error($model,'icon'); ?>
+            <div class="uploader-message error"></div>
+        </div>
+
+        <div class="form-group">
             <?php echo $form->textField($model,'title',array('placeholder'=>$model->getAttributeLabel('title').' *','maxlength'=>50,'class'=>'form-control')); ?>
             <?php echo $form->error($model,'title'); ?>
         </div>
 
         <div class="form-group">
-            <?php echo $form->dropDownList($model,'category_id',BookCategories::model()->sortList(),array('prompt'=>'لطفا دسته مورد نظر را انتخاب کنید *','class'=>'form-control')); ?>
+            <?php echo $form->textField($model,'language',array('placeholder'=>$model->getAttributeLabel('language').' *','maxlength'=>20,'class'=>'form-control')); ?>
+            <?php echo $form->error($model,'language'); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $form->textField($model,'number_of_pages',array('placeholder'=>$model->getAttributeLabel('number_of_pages').' *','maxlength'=>5,'class'=>'form-control')); ?>
+            <?php echo $form->error($model,'number_of_pages'); ?>
+        </div>
+
+
+        <div class="form-group">
+            <?php echo $form->dropDownList($model,'category_id',BookCategories::model()->adminSortList(null,false),array('prompt'=>'لطفا دسته مورد نظر را انتخاب کنید *','class'=>'form-control')); ?>
             <?php echo $form->error($model,'category_id'); ?>
         </div>
 
@@ -66,33 +106,6 @@
             <?php echo $form->error($model,'change_log'); ?>
         </div>
 
-        <div class="form-group col-md-12">
-            <?php echo $form->labelEx($model,'icon',array('class'=> 'block')); ?>
-            <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-                'id' => 'uploaderIcon',
-                'model' => $model,
-                'name' => 'icon',
-                'maxFiles' => 1,
-                'maxFileSize' => 0.5, //MB
-                'url' => Yii::app()->createUrl('/publishers/books/upload'),
-                'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUpload'),
-                'acceptedFiles' => 'image/png',
-                'serverFiles' => $icon,
-                'onSuccess' => '
-                    var responseObj = JSON.parse(res);
-                    if(responseObj.status){
-                        {serverName} = responseObj.fileName;
-                        $(".uploader-message").html("");
-                    }
-                    else{
-                        $(".uploader-message").html(responseObj.message);
-                        this.removeFile(file);
-                    }
-                ',
-            )); ?>
-            <?php echo $form->error($model,'icon'); ?>
-            <div class="uploader-message error"></div>
-        </div>
         <br>
         <div class="input-group buttons" style="clear:both;">
             <?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ذخیره تغییرات',array('class'=>'btn btn-success')); ?>

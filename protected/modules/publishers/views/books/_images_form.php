@@ -40,7 +40,7 @@
                 $(".uploader-message").html("");
             }
             else{
-                $(".uploader-message").text(responseObj.message).addClass("error");
+                $(".uploader-message").html(responseObj.message).addClass("error");
                 this.removeFile(file);
             }
         ',

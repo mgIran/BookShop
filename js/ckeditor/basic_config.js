@@ -16,4 +16,6 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
     config.removeButtons = 'Source,Save,Templates,NewPage,Preview,Print,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Strike,Subscript,Superscript,RemoveFormat,Outdent,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Format,About,Maximize,ShowBlocks,Font,Styles,BGColor';
+
+    config.language = 'fa';
 };

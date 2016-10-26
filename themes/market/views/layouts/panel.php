@@ -34,9 +34,7 @@
     ?>
 </head>
 <body>
-<?= $this->renderPartial('//layouts/_header'); ?>
-<?= $this->renderPartial('//layouts/_svgDef'); ?>
-<?= $this->renderPartial('//layouts/_mobile_header'); ?>
+<?= $this->renderPartial('//layouts/_header');?>
 <div class="col-xs-12">
     <section class="content row">
         <?php echo $content; ?>

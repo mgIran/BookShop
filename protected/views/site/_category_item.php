@@ -7,7 +7,7 @@
         <div class="caption">
             <div class="icon" id="category-icon-<?= $data->id?>" style=""></div>
             <div class="heading"><h4><?= $data->title ?></h4></div>
-            <span class="additional"><?= $data->title ?> کتاب</span>
+            <span class="additional"><?= Controller::parseNumbers($data->getBooksCount()) ?> کتاب</span>
         </div>
     </a>
 </div>
