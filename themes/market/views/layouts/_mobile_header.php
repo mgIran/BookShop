@@ -84,9 +84,9 @@
             <div id="category-collapse-parent">
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="row">
-                        <a data-toggle="collapse" data-parent="#category-collapse-parent" data-target="#m-book-cat" href="#" class="cat-menu-head">برنامه ها</a>
+                        <a data-toggle="collapse" data-parent="#category-collapse-parent" data-target="#m-book-cat" href="#" class="cat-menu-head">کتاب ها</a>
                         <ul class="cat-menu collapse" id="m-book-cat">
-                            <li><a href="<?php echo Yii::app()->createUrl('/books/programs');?>">همه برنامه ها</a></li>
+                            <li><a href="<?php echo Yii::app()->createUrl('/books/programs');?>">همه کتاب ها</a></li>
                             <?php foreach($this->categories['programs'] as $category):?>
                                 <li><a href="<?php echo Yii::app()->createUrl('/books/programs/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                             <?php endforeach;?>

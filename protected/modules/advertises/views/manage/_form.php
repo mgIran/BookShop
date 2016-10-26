@@ -85,6 +85,6 @@ if(!$model->isNewRecord || $books) {
 	<?php $this->endWidget(); ?>
 <?
 }else
-	echo '<h4>برنامه ای برای تبلیغ وجود ندارد.</h4>';
+	echo '<h4>کتاب ای برای تبلیغ وجود ندارد.</h4>';
 ?>
 </div><!-- form -->

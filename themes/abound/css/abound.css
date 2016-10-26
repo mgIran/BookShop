@@ -636,3 +636,6 @@ footer {
 .tt-suggestion p {
     margin: 0;
 }
+.ltr{
+    direction: ltr !important;
+}

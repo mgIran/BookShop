@@ -11,7 +11,7 @@
     <div class="tab-content card-container">
         <div class="tab-pane active report-sale">
             <?php echo CHtml::beginForm();?>
-                <h4>برنامه مورد نظر را انتخاب کنید:</h4>
+                <h4>کتاب مورد نظر را انتخاب کنید:</h4>
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <?php $this->widget('zii.widgets.CListView', array(
@@ -118,7 +118,7 @@
 <?php Yii::app()->clientScript->registerScript('submitReport', "
     $('#show-chart').click(function(){
         if($('input[name=\"book_id\"]:checked').length==0){
-            alert('لطفا برنامه مورد نظر خود را انتخاب کنید.');
+            alert('لطفا کتاب مورد نظر خود را انتخاب کنید.');
             return false;
         }
     });

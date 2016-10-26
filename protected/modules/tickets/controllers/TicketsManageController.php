@@ -46,6 +46,29 @@ class TicketsManageController extends Controller
 		);
 	}
 
+
+
+	public function actions(){
+		return array(
+			'upload' => array(
+				'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+				'uploadDir' => '/uploads/tickets',
+				'attribute' => 'attachment',
+				'rename' => 'random',
+				'validateOptions' => array(
+					'acceptedTypes' => array('jpg','jpeg','png')
+				),
+			),
+			'deleteUploaded' => array(
+				'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+				'modelName' => 'TicketMessages',
+				'attribute' => 'attachment',
+				'uploadDir' => 'uploads/tickets',
+				'storedMode' => 'field'
+			)
+		);
+	}
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -239,62 +262,6 @@ class TicketsManageController extends Controller
 		if(isset($_POST['ajax']) && $_POST['ajax']==='tickets-form')
 		{
 			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
-
-
-	/**
-	 * Upload book images
-	 */
-	public function actionUpload()
-	{
-		$tempDir = Yii::getPathOfAlias("webroot") . '/uploads/tickets';
-		if (!is_dir($tempDir))
-			mkdir($tempDir);
-		if (isset($_FILES)) {
-			$file = $_FILES['attachment'];
-			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-			$file['name'] = str_ireplace(" ",'-',$file['name']);
-			while (file_exists($tempDir . DIRECTORY_SEPARATOR . $file['name'])) {
-				$file['name'] = Controller::generateRandomString(5).time();
-				$file['name'] = $file['name'].'.'.$ext;
-			}
-			if (move_uploaded_file($file['tmp_name'], $tempDir . DIRECTORY_SEPARATOR . CHtml::encode($file['name']))) {
-				$response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-			} else
-				$response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-		} else
-			$response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-		echo CJSON::encode($response);
-		Yii::app()->end();
-	}
-
-	/**
-	 * Delete book images
-	 */
-	public function actionDeleteUploaded()
-	{
-		if (isset($_POST['fileName'])) {
-			$fileName = $_POST['fileName'];
-			$uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/tickets/';
-
-			$model = TicketMessages::model()->findByAttributes(array('attachment' => $fileName));
-			$response = null;
-			if (!is_null($model)) {
-				if (is_file($uploadDir . $fileName) && @unlink($uploadDir . $fileName)) {
-					$response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-					$model->attachment = Null;
-					$model->update();
-				}
-				else
-					$response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-			}elseif (is_file($uploadDir . $fileName))
-			{
-				@unlink($uploadDir . $fileName);
-				$response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-			}
-			echo CJSON::encode($response);
 			Yii::app()->end();
 		}
 	}

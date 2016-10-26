@@ -161,7 +161,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
             ?>
             <section>
                 <div class="book-description">
-                    <h4>توضیحات برنامه</h4>
+                    <h4>توضیحات کتاب</h4>
                     <p><?= strip_tags(nl2br($model->description)); ?></p>
                 </div>
                 <a class="more-text" href="#">
@@ -177,7 +177,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                 </div>
             <?php endif;?>
             <div class="book-details">
-                <h4>اطلاعات برنامه</h4>
+                <h4>اطلاعات کتاب</h4>
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 detail">
                     <h5>حجم</h5>
                     <span class="ltr" ><?= Controller::fileSize($filePath.$model->lastPackage->file_name) ?></span>
@@ -228,7 +228,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <h3>برای دانلود برنامه کد زیر را اسکن کنید</h3>
+                    <h3>برای دانلود کتاب کد زیر را اسکن کنید</h3>
                     <div class="qr-code-container">
                         <?php if($model->price>0):?>
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode(Yii::app()->createAbsoluteUrl('/books/buy/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title))));?>" />

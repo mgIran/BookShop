@@ -48,6 +48,49 @@ class PanelController extends Controller
         );
     }
 
+
+
+    public function actions(){
+        return array(
+            'uploadNationalCardImage' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'uploadDir' => '/uploads/users/national_cards',
+                'attribute' => 'national_card_image',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                ),
+                'insert' => true,
+                'module' => 'users',
+                'modelName' => 'UserDetails',
+                'findAttributes' => 'array("user_id" => Yii::app()->user->getId())',
+                'scenario' => 'upload_photo',
+                'storeMode' => 'field',
+                'afterSaveActions' => array(
+                    'resize' => array('width'=>500,'height'=>500)
+                )
+            ),
+            'uploadRegistrationCertificateImage' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'uploadDir' => '/uploads/users/registration_certificate',
+                'attribute' => 'registration_certificate_image',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                ),
+                'insert' => true,
+                'module' => 'users',
+                'modelName' => 'UserDetails',
+                'findAttributes' => 'array("user_id" => Yii::app()->user->getId())',
+                'scenario' => 'upload_photo',
+                'storeMode' => 'field',
+                'afterSaveActions' => array(
+                    'resize' => array('width'=>500,'height'=>500)
+                )
+            )
+        );
+    }
+    
 	public function actionIndex()
 	{
         Yii::app()->theme='market';
@@ -233,94 +276,6 @@ class PanelController extends Controller
             'nationalCardImage'=>$nationalCardImage,
             'registrationCertificateImage'=>$registrationCertificateImage,
         ));
-    }
-
-    /**
-     * Upload national card image
-     */
-    public function actionUploadNationalCardImage()
-    {
-        $uploadDir = Yii::getPathOfAlias("webroot").'/uploads/users/national_cards/';
-        if (!is_dir(Yii::getPathOfAlias("webroot").'/uploads/users/'))
-            mkdir(Yii::getPathOfAlias("webroot").'/uploads/users/');
-        if (!is_dir($uploadDir))
-            mkdir($uploadDir);
-        if (isset($_FILES)) {
-            Yii::import('application.modules.users.models.*');
-            $model = UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
-
-            $file = $_FILES['national_card_image'];
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $file['name'] = Controller::generateRandomString(5) . time();
-            $file['name'] = $file['name'].'.'.$ext;
-            if(move_uploaded_file($file['tmp_name'], $uploadDir.CHtml::encode($file['name'])))
-            {
-                $response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-
-                // Delete old image
-                if(!empty($model->national_card_image))
-                    @unlink($uploadDir.$model->national_card_image);
-
-                $model->national_card_image=$file['name'];
-                $model->scenario='upload_photo';
-                $model->save();
-
-                // Resize image
-                $imager = new Imager();
-                $imageInfo=$imager->getImageInfo($uploadDir.$model->national_card_image);
-                if($imageInfo['width']>500 || $imageInfo['height']>500)
-                    $imager->resize($uploadDir.$model->national_card_image, $uploadDir.$model->national_card_image, 500, 500);
-            }
-            else
-                $response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-        } else
-            $response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-        echo CJSON::encode($response);
-        Yii::app()->end();
-    }
-
-    /**
-     * Upload registration certificate image
-     */
-    public function actionUploadRegistrationCertificateImage()
-    {
-        $uploadDir = Yii::getPathOfAlias("webroot").'/uploads/users/registration_certificate/';
-        if (!is_dir(Yii::getPathOfAlias("webroot").'/uploads/users/'))
-            mkdir(Yii::getPathOfAlias("webroot").'/uploads/users/');
-        if (!is_dir($uploadDir))
-            mkdir($uploadDir);
-        if (isset($_FILES)) {
-            Yii::import('application.modules.users.models.*');
-            $model = UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
-
-            $file = $_FILES['registration_certificate_image'];
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $file['name'] = Controller::generateRandomString(5) . time();
-            $file['name'] = $file['name'].'.'.$ext;
-            if(move_uploaded_file($file['tmp_name'], $uploadDir.CHtml::encode($file['name'])))
-            {
-                $response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-
-                // Delete old image
-                if(!empty($model->registration_certificate_image))
-                    @unlink($uploadDir.$model->registration_certificate_image);
-
-                $model->registration_certificate_image=$file['name'];
-                $model->scenario='upload_photo';
-                $model->save();
-
-                // Resize image
-                $imager = new Imager();
-                $imageInfo=$imager->getImageInfo($uploadDir.$model->registration_certificate_image);
-                if($imageInfo['width']>500 || $imageInfo['height']>500)
-                    $imager->resize($uploadDir.$model->registration_certificate_image, $uploadDir.$model->registration_certificate_image, 500, 500);
-            }
-            else
-                $response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-        } else
-            $response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-        echo CJSON::encode($response);
-        Yii::app()->end();
     }
 
     /**

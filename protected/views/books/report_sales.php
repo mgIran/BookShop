@@ -39,7 +39,7 @@ Yii::app()->clientScript->registerCss('booksStyle','
 <ul class="nav nav-tabs">
     <li <?php if($activeTab=='monthly'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#monthly">ماهیانه</a></li>
     <li <?php if($activeTab=='yearly'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#yearly">سالیانه</a></li>
-    <li <?php if($activeTab=='by-program'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#by-program">بر اساس برنامه</a></li>
+    <li <?php if($activeTab=='by-program'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#by-program">بر اساس کتاب</a></li>
     <li <?php if($activeTab=='by-publisher'):?>class="active"<?php endif;?>><a data-toggle="tab" href="#by-publisher">بر اساس ناشر</a></li>
 </ul>
 

@@ -101,15 +101,18 @@
                                 'acceptedFiles' => 'image/jpeg , image/png',
                                 'serverFiles' => $nationalCardImage,
                                 'onSuccess' => '
-                            var responseObj = JSON.parse(res);
-                            if(responseObj.state == "ok")
-                            {
-                                {serverName} = responseObj.fileName;
-                            }else if(responseObj.state == "error"){
-                                console.log(responseObj.msg);
-                            }
-                        ',
+                                    var responseObj = JSON.parse(res);
+                                    if(responseObj.status){
+                                        {serverName} = responseObj.fileName;
+                                        $(".uploader-message#national_card_image_error").html("");
+                                    }
+                                    else{
+                                        $(".uploader-message#national_card_image_error").html(responseObj.message);
+                                        this.removeFile(file);
+                                    }
+                                ',
                             ));?>
+                            <div class="uploader-message error" id="national_card_image_error"></div>
                         </div>
 
                         <div class="buttons">
@@ -202,14 +205,17 @@
                                 'serverFiles' => $registrationCertificateImage,
                                 'onSuccess' => '
                                     var responseObj = JSON.parse(res);
-                                    if(responseObj.state == "ok")
-                                    {
+                                    if(responseObj.status){
                                         {serverName} = responseObj.fileName;
-                                    }else if(responseObj.state == "error"){
-                                        console.log(responseObj.msg);
+                                        $(".uploader-message#registration_certificate_image_error").html("");
+                                    }
+                                    else{
+                                        $(".uploader-message#registration_certificate_image_error").html(responseObj.message);
+                                        this.removeFile(file);
                                     }
                                 ',
                             ));?>
+                            <div class="uploader-message error" id="registration_certificate_image_error"></div>
                         </div>
 
                         <div class="buttons">

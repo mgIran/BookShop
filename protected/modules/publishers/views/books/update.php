@@ -8,37 +8,23 @@
 ?>
 
 <div class="container">
-    <h3>ویرایش برنامه <?= $model->title; ?></h3>
+    <h3>ویرایش کتاب <?= $model->title; ?></h3>
     <ul class="nav nav-tabs">
-        <li>
-            <a data-toggle="tab" href="#platform">پلتفرم</a>
-        </li>
         <li <?= !isset($step) || $step == 1 ?'class="active"':''; ?>>
-            <a data-toggle="tab" href="#packages">بسته</a>
+            <a data-toggle="tab" href="#info">اطلاعات کتاب</a>
         </li>
         <li class="<? if($step == 2)echo 'active';elseif($step<2)echo 'disabled';?>">
-            <a data-toggle="<?= ($step == 2)?'tab':''?>" href="#info">اطلاعات برنامه</a>
+            <a data-toggle="<?= ($step == 2)?'tab':''?>" href="#packages">نوبت چاپ</a>
         </li>
         <li class="<? if($step == 3)echo 'active';elseif($step<3)echo 'disabled';?>">
-            <a data-toggle="<?= ($step == 3)?'tab':''?>" href="#images">تصاویر برنامه</a>
+            <a data-toggle="<?= ($step == 3)?'tab':''?>" href="#images">تصاویر کتاب</a>
         </li>
     </ul>
 
     <div class="tab-content">
         <?php $this->renderPartial('//layouts/_flashMessage');?>
-        <div id="platform" class="tab-pane fade">
-            <p>پلتفرم انتخاب شده دیگر قابل ویرایش نمی باشد.</p>
-            <h4>پلتفرم: <small><?php echo $model->platform->platformsLabel[$model->platform->name];?></small></h4>
-        </div>
-        <div id="packages" class="tab-pane fade <?= !isset($step) || $step == 1?'in active':''; ?>">
-            <?php $this->renderPartial('_package', array(
-                'model'=>$model,
-                'dataProvider'=>$packagesDataProvider,
-                'for'=>(Yii::app()->request->getParam('new')=='1')?'new_book':'old_book'
-            ));?>
-        </div>
-        <div id="info" class="tab-pane fade <?= $step == 2?'in active':''; ?>">
-            <?php if($step>=2):?>
+        <div id="info" class="tab-pane fade <?= $step == 1?'in active':''; ?>">
+            <?php if($step>= 1):?>
                 <?php $this->renderPartial('_form', array(
                     'model'=>$model,
                     'icon' => $icon,
@@ -46,6 +32,13 @@
                     'commission'=>$commission,
                 ));?>
             <?php endif;?>
+        </div>
+        <div id="packages" class="tab-pane fade <?= !isset($step) || $step == 2?'in active':''; ?>">
+            <?php $this->renderPartial('_package', array(
+                'model'=>$model,
+                'dataProvider'=>$packagesDataProvider,
+                'for'=>(Yii::app()->request->getParam('new')=='1')?'new_book':'old_book'
+            ));?>
         </div>
         <div id="images" class="tab-pane fade <?= $step == 3?'in active':''; ?>">
             <?php if($step>=3):?>

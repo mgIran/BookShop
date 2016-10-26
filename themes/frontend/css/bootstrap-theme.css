@@ -407,6 +407,8 @@ a:active{
     border-radius: 4px;
     float: right;
     margin-top: -33px;
+    background:no-repeat scroll center;
+    background-size: 40px;
 }
 
 .cat-item .caption h4 {

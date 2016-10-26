@@ -1,18 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "ym_book_categories".
+ * This is the model class for table "{{book_categories}}".
  *
- * The followings are the available columns in table 'ym_book_categories':
+ * The followings are the available columns in table '{{book_categories}}':
  * @property string $id
  * @property string $title
  * @property string $parent_id
  * @property string $path
+ * @property string $image
+ * @property string $icon
+ * @property string $icon_color
  *
  *
  * The followings are the available model relations:
  * @property BookCategories $parent
- * @property BookCategories[] $bookCategories
+ * @property BookCategories[] $childs
  * @property Books[] $books
  */
 class BookCategories extends CActiveRecord
@@ -22,7 +25,7 @@ class BookCategories extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_book_categories';
+		return '{{book_categories}}';
 	}
 
 	/**
@@ -39,12 +42,16 @@ class BookCategories extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title', 'required'),
+			array('title, icon_color', 'required'),
+			array('title', 'unique'),
 			array('title', 'length', 'max'=>50),
 			array('title' ,'compareWithParent'),
 			array('parent_id', 'length', 'max'=>10),
 			array('parent_id', 'checkParent'),
 			array('path', 'length', 'max'=>500),
+			array('image, icon', 'length', 'max'=>500),
+			array('icon_color', 'length', 'max'=>7),
+			array('image, icon, icon_color', 'filter', 'filter'=>'strip_tags'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, title, parent_id, parentFilter', 'safe', 'on'=>'search'),
@@ -78,7 +85,7 @@ class BookCategories extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'parent' => array(self::BELONGS_TO, 'BookCategories', 'parent_id'),
-			'bookCategories' => array(self::HAS_MANY, 'BookCategories', 'parent_id'),
+			'childs' => array(self::HAS_MANY, 'BookCategories', 'parent_id'),
 			'books' => array(self::HAS_MANY, 'Books', 'category_id'),
 		);
 	}
@@ -92,7 +99,10 @@ class BookCategories extends CActiveRecord
 			'id' => 'ID',
 			'title' => 'عنوان',
 			'parent_id' => 'والد',
-            'path' => 'مسیر'
+            'path' => 'مسیر',
+			'icon_color' => 'رنگ زمینه آیکون',
+			'icon' => 'آیکون',
+			'image' => 'تصویر'
 		);
 	}
 
@@ -116,9 +126,9 @@ class BookCategories extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('title',$this->title,true);
-		$criteria->condition = 't.parent_id IS NOT NULL';
 		$criteria->addSearchCondition('parent.title',$this->parentFilter);
 		$criteria->with = array('parent');
+		$criteria->order = 't.id DESC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination' =>array(
@@ -143,8 +153,8 @@ class BookCategories extends CActiveRecord
 		$parents = $this->findAll( 'parent_id IS NULL order by title' );
 		$list = array();
 		foreach ( $parents as $parent ) {
-			$childes = $this->findAll($this->getCategoryChildes($parent->id ,false, 'criteria'));
-			foreach ( $childes as $child ) {
+			$childs = $this->findAll($this->getCategoryChilds($parent->id ,false, 'criteria'));
+			foreach ( $childs as $child ) {
 				array_push( $list, $child );
 			}
 		}
@@ -158,8 +168,8 @@ class BookCategories extends CActiveRecord
 		foreach ($parents as $parent) {
 			if ($parent->id != $excludeId) {
 				array_push($list, $parent);
-				$childes = $this->findAll($this->getCategoryChildes($parent->id, false, 'criteria'));
-				foreach ($childes as $child) {
+				$childs = $this->findAll($this->getCategoryChilds($parent->id, false, 'criteria'));
+				foreach ($childs as $child) {
 					if ($child->id != $excludeId && $child->parent_id != $excludeId)
 						array_push($list, $child);
 				}
@@ -209,7 +219,7 @@ class BookCategories extends CActiveRecord
 		return true;
 	}
 
-	public function getCategoryChildes($id = null, $withSelf = true, $returnType='array')
+	public function getCategoryChilds($id = null, $withSelf = true, $returnType='array')
 	{
 		if ($id)
 			$this->id = $id;
@@ -240,7 +250,15 @@ class BookCategories extends CActiveRecord
 			$path = $model->parent->path ? $model->parent->path . $model->parent_id . '-' : $model->parent_id . '-';
 			BookCategories::model()->updateByPk($model->id,array('path' => $path));
 		}
-		foreach ($model->bookCategories as $child)
+		foreach ($model->childs as $child)
 			$this->updatePath($child->id);
+	}
+
+	public function getValidCategories(){
+		$criteria = new CDbCriteria();
+		$criteria->addCondition('t.image IS NOT NULL');
+		$criteria->addCondition('t.icon IS NOT NULL');
+		$criteria->addCondition('t.parent_id IS NULL');
+		return $criteria;
 	}
 }

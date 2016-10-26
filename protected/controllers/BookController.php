@@ -136,7 +136,7 @@ class BookController extends Controller
                         <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
                         <table style="font-size: 9pt;text-align: right;">
                             <tr>
-                                <td style="font-weight: bold;width: 120px;">عنوان برنامه</td>
+                                <td style="font-weight: bold;width: 120px;">عنوان کتاب</td>
                                 <td>' . CHtml::encode($model->title) . '</td>
                             </tr>
                             <tr>
@@ -148,7 +148,7 @@ class BookController extends Controller
                                 <td>' . JalaliDate::date('d F Y - H:i', $buy->date) . '</td>
                             </tr>
                         </table>';
-                    Mailer::mail($user->email, 'اطلاعات خرید برنامه', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+                    Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
 
                     $this->redirect(array('/books/download/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
                 }
@@ -226,7 +226,7 @@ class BookController extends Controller
     {
         if (is_null($id))
             $id = 1;
-        $this->showCategory($id, $title, 'برنامه ها');
+        $this->showCategory($id, $title, 'کتاب ها');
     }
 
     /**
@@ -274,7 +274,7 @@ class BookController extends Controller
         $this->render('books_list', array(
             'dataProvider' => $dataProvider,
             'title' => $pageTitle->nickname,
-            'pageTitle' => 'برنامه ها'
+            'pageTitle' => 'کتاب ها'
         ));
     }
 
@@ -285,7 +285,7 @@ class BookController extends Controller
     {
         Yii::app()->theme = 'market';
         $this->layout = 'public';
-        $categoryIds = BookCategories::model()->getCategoryChildes($id);
+        $categoryIds = BookCategories::model()->getCategoryChilds($id);
         $criteria = Books::model()->getValidBooks($categoryIds);
         $dataProvider = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,

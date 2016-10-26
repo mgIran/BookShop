@@ -58,8 +58,6 @@ class Comment extends CActiveRecord
      */
     private $_ownerModel = false;
 
-    public $platformFilter;
-
     private $_statuses = array(
         self::STATUS_NOT_APPROWED => 'New',
         self::STATUS_APPROWED => 'Approved',
@@ -104,7 +102,7 @@ class Comment extends CActiveRecord
             array('owner_name, creator_id, creator_name, user_name, user_email, verifyCode', 'checkConfig'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('platformFilter, owner_name, owner_id, comment_id, parent_comment_id, creator_id, user_name, user_email, comment_text, create_time, update_time, status', 'safe', 'on' => 'search'),
+            array('owner_name, owner_id, comment_id, parent_comment_id, creator_id, user_name, user_email, comment_text, create_time, update_time, status', 'safe', 'on' => 'search'),
         );
 
         return $rules;
@@ -221,8 +219,6 @@ class Comment extends CActiveRecord
         if(isset($relations['user']))
             $criteria->with[] = 'user';
         $criteria->addCondition('t.status <> 2');
-        $criteria->with[] = 'books.platform';
-        $criteria->compare('platform.id', $this->platformFilter);
         $criteria->order = 't.status';
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

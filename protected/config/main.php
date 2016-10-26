@@ -113,7 +113,7 @@ return array(
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
                 '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
-                '<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/view',
+                '<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/index',
                 '<module:\w+>/<controller:\w+>/<id:\d+>/<title:\w+>'=>'<module>/<controller>/view',
                 '<controller:\w+>/<id:\d+>'=>'<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
@@ -159,6 +159,9 @@ return array(
     'controllerMap' => array(
         'min' => array(
             'class' =>'ext.minScript.controllers.ExtMinScriptController',
+        ),
+		'category' => array(
+            'class' =>'application.controllers.BookCategoriesController',
         )
     ),
 	// application-level parameters that can be accessed

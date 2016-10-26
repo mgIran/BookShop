@@ -15,10 +15,10 @@ $this->menu=array(
 );
 ?>
 
-<h1>افزودن برنامه جدید</h1>
+<h1>افزودن کتاب جدید</h1>
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#info">عمومی</a></li>
-    <li class="disabled"><a>بسته</a></li>
+    <li class="disabled"><a>نوبت چاپ</a></li>
     <li class="disabled"><a >تصاویر</a></li>
 </ul>
 

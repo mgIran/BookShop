@@ -16,7 +16,7 @@
                 <div class="panel panel-body dropdown-menu cat-menu-container">
                     <div class="col-md-4">
                         <div class="row">
-                            <a href="<?php echo Yii::app()->createUrl('/books/programs');?>" class="cat-menu-head">برنامه ها</a>
+                            <a href="<?php echo Yii::app()->createUrl('/books/programs');?>" class="cat-menu-head">کتاب ها</a>
                             <ul class="cat-menu">
                                 <?php foreach($this->categories['programs'] as $category):?>
                                     <li><a href="<?php echo Yii::app()->createUrl('/books/programs/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>

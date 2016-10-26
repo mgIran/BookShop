@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-10-24 12:23:16
+Date: 2016-10-26 14:07:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -80,12 +80,11 @@ CREATE TABLE `ym_books` (
   KEY `category_id` (`category_id`) USING BTREE,
   CONSTRAINT `ym_books_ibfk_1` FOREIGN KEY (`publisher_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `ym_books_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `ym_book_categories` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_books
 -- ----------------------------
-INSERT INTO `ym_books` VALUES ('51', 'تست', 'qQUKq1477294520.png', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', null, '', null, 'enable', null, '5', 'انتشارات علوی', null, 'accepted', '12', '1', '0');
 
 -- ----------------------------
 -- Table structure for ym_book_advertises
@@ -134,65 +133,21 @@ CREATE TABLE `ym_book_categories` (
   `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `path` varchar(500) DEFAULT NULL,
+  `image` varchar(200) DEFAULT NULL COMMENT 'تصویر',
+  `icon` varchar(200) DEFAULT NULL COMMENT 'آیکون',
+  `icon_color` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`) USING BTREE,
   CONSTRAINT `ym_book_categories_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `ym_book_categories` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_book_categories
 -- ----------------------------
-INSERT INTO `ym_book_categories` VALUES ('1', 'برنامه ها', null, null);
-INSERT INTO `ym_book_categories` VALUES ('2', 'بازی ها', null, null);
-INSERT INTO `ym_book_categories` VALUES ('3', 'آموزش ها', null, null);
-INSERT INTO `ym_book_categories` VALUES ('4', 'آب و هوا', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('5', 'ماجراجویی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('6', 'اخبار و مجلات', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('7', 'ارتباطات', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('8', 'پزشکی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('9', 'استراتژی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('10', 'خانوادگی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('11', 'تفننی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('12', 'مذهبی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('13', 'آموزش', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('14', 'ابزار‌ها', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('15', 'اجتماعی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('16', 'اخبار و مجلات', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('17', 'پزشکی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('18', 'پس‌زمینهٔ زنده', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('19', 'حمل و نقل', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('20', 'خرید', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('21', 'سبک زندگی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('22', 'سرگرمی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('23', 'سلامت و تناسب اندام', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('24', 'سیر و سفر', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('25', 'شخصی‌سازی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('26', 'صوت و موسیقی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('27', 'عکاسی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('28', 'کاربردی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('29', 'کتابخانه و دمو', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('30', 'کتاب‌ها و مراجع', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('31', 'کسب و کار', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('32', 'کمیک', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('33', 'مالی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('34', 'ورزشی', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('35', 'ویجت‌ها', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('36', 'ویدیو و رسانه', '1', '1-');
-INSERT INTO `ym_book_categories` VALUES ('37', 'آموزشی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('38', 'استراتژی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('39', 'تخته‌ای', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('40', 'خانوادگی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('41', 'دانستنی‌ها', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('42', 'رقابتی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('43', 'شبیه‌سازی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('44', 'کلمات', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('45', 'ماجراجویی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('46', 'مسابقه و سرعت', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('47', 'معمایی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('48', 'موسیقایی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('49', 'نقش‌آفرینی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('50', 'ورزشی', '2', '2-');
-INSERT INTO `ym_book_categories` VALUES ('51', 'هیجان‌‌انگیز', '2', '2-');
+INSERT INTO `ym_book_categories` VALUES ('52', 'پزشکی', null, null, 'OexZc1477466535.jpg', 'c2gA51477466537.svg', '#accf3d');
+INSERT INTO `ym_book_categories` VALUES ('53', 'مهندسی', null, null, 'wMjo41477466558.jpg', 'Kd4hS1477466560.svg', '#2e9fc7');
+INSERT INTO `ym_book_categories` VALUES ('54', 'حسابداری', null, null, 'c2gA51477466621.jpg', 'aUw011477477874.svg', '#e96e44');
+INSERT INTO `ym_book_categories` VALUES ('55', 'کشاورزی', null, null, 'DAeop1477466811.jpg', 'Uy1Uw1477466814.svg', '#fbb11a');
 
 -- ----------------------------
 -- Table structure for ym_book_discounts
@@ -222,18 +177,11 @@ CREATE TABLE `ym_book_images` (
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   CONSTRAINT `ym_book_images_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_book_images
 -- ----------------------------
-INSERT INTO `ym_book_images` VALUES ('6', '51', 'KCYre1477295962.jpg');
-INSERT INTO `ym_book_images` VALUES ('7', '51', 'u4Ga61477295962.jpg');
-INSERT INTO `ym_book_images` VALUES ('8', '51', '0PGED1477295962.jpg');
-INSERT INTO `ym_book_images` VALUES ('9', '51', 'QmSgc1477295962.jpg');
-INSERT INTO `ym_book_images` VALUES ('10', '51', 'iZLS51477295962.jpg');
-INSERT INTO `ym_book_images` VALUES ('11', '51', 'IukOg1477295963.jpg');
-INSERT INTO `ym_book_images` VALUES ('12', '51', 'fw4mp1477295963.png');
 
 -- ----------------------------
 -- Table structure for ym_book_packages
@@ -256,7 +204,7 @@ CREATE TABLE `ym_book_packages` (
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   CONSTRAINT `ym_book_packages_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_book_packages
@@ -279,7 +227,6 @@ CREATE TABLE `ym_book_ratings` (
 -- ----------------------------
 -- Records of ym_book_ratings
 -- ----------------------------
-INSERT INTO `ym_book_ratings` VALUES ('45', '51', '4');
 
 -- ----------------------------
 -- Table structure for ym_comments
@@ -304,7 +251,6 @@ CREATE TABLE `ym_comments` (
 -- ----------------------------
 -- Records of ym_comments
 -- ----------------------------
-INSERT INTO `ym_comments` VALUES ('Books', '36', '98', null, '45', null, null, 'asd', '1475916072', null, '1');
 
 -- ----------------------------
 -- Table structure for ym_counter_save
@@ -319,8 +265,8 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '131');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457686');
+INSERT INTO `ym_counter_save` VALUES ('counter', '133');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457688');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '5');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1457598600');
 INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
@@ -338,7 +284,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477296766');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477478204');
 
 -- ----------------------------
 -- Table structure for ym_pages

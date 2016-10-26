@@ -25,8 +25,22 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'icon_color'); ?>
+		<?php
+		$this->widget('ext.SMiniColors.SActiveColorPicker', array(
+			'model' => $model,
+			'attribute' => 'icon_color',
+			'hidden'=>false, // defaults to false - can be set to hide the textarea with the hex
+			'options' => array(), // jQuery plugin options
+			'htmlOptions' => array('class'=>'ltr text-left'), // html attributes
+		));
+		?>
+		<?php echo $form->error($model,'icon_color'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'parent_id'); ?>
-		<?php echo $form->dropDownList($model,'parent_id',$model->getParents()); ?>
+		<?php echo $form->dropDownList($model,'parent_id',BookCategories::model()->adminSortList($model->id)); ?>
 		<?php echo $form->error($model,'parent_id'); ?>
 	</div>
 

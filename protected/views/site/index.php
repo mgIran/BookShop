@@ -1,8 +1,7 @@
 <?
 /* @var $this SiteController */
-/* @var $newestProgramDataProvider CActiveDataProvider */
-/* @var $newestGameDataProvider CActiveDataProvider */
-/* @var $newestEducationDataProvider CActiveDataProvider */
+/* @var $categoriesDataProvider CActiveDataProvider */
+/* @var $latestBooksDataProvider CActiveDataProvider */
 /* @var $suggestedDataProvider CActiveDataProvider */
 /* @var $advertise Advertises */
 
@@ -51,47 +50,16 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             <div class="heading">
                 <h2>دسته بندی ها</h2>
             </div>
-            <div class="is-carousel" data-items="4" data-margin="10" data-dots="1" data-nav="0" data-mouse-drag="1" data-responsive='{"1200":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"650":{"items":"2"},"0":{"items":"1"}}'>
-                <div class="cat-item">
-                    <img src="uploads/categories/images/1.jpg" alt="عنوان دسته بندی">
-                    <div class="caption">
-                        <div class="icon" style="background: #accf3d url('uploads/categories/svg/1.svg') no-repeat center;background-size: 40px;"></div>
-                        <div class="heading"><h4>پزشکی</h4></div>
-                        <span class="additional">110 کتاب</span>
-                    </div>
-                </div>
-                <div class="cat-item">
-                    <img src="uploads/categories/images/2.jpg" alt="عنوان دسته بندی">
-                    <div class="caption">
-                        <div class="icon" style="background: #2e9fc7 url('uploads/categories/svg/2.svg') no-repeat center;background-size: 40px;"></div>
-                        <div class="heading"><h4>مهندسی</h4></div>
-                        <span class="additional">100 کتاب</span>
-                    </div>
-                </div>
-                <div class="cat-item">
-                    <img src="uploads/categories/images/3.jpg" alt="عنوان دسته بندی">
-                    <div class="caption">
-                        <div class="icon" style="background: #e96e44 url('uploads/categories/svg/3.svg') no-repeat center;background-size: 40px;"></div>
-                        <div class="heading"><h4>حسابداری</h4></div>
-                        <span class="additional">80 کتاب</span>
-                    </div>
-                </div>
-                <div class="cat-item">
-                    <img src="uploads/categories/images/4.jpg" alt="عنوان دسته بندی">
-                    <div class="caption">
-                        <div class="icon" style="background: #fbb11a url('uploads/categories/svg/4.svg') no-repeat center;background-size: 40px;"></div>
-                        <div class="heading"><h4>کشاورزی</h4></div>
-                        <span class="additional">41 کتاب</span>
-                    </div>
-                </div>
-                <div class="cat-item">
-                    <img src="uploads/categories/images/1.jpg" alt="عنوان دسته بندی">
-                    <div class="caption">
-                        <div class="icon" style="background: #fbb11a url('uploads/categories/svg/1.svg') no-repeat center;background-size: 40px;"></div>
-                        <div class="heading"><h4>پزشکی</h4></div>
-                        <span class="additional">41 کتاب</span>
-                    </div>
-                </div>
+            <div class="is-carousel" data-items="4" data-item-selector="cat-item" data-margin="10" data-dots="1" data-nav="0" data-mouse-drag="1" data-responsive='{"1200":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"650":{"items":"2"},"0":{"items":"1"}}'>
+                <?php
+                $this->widget('zii.widgets.CListView',array(
+                    'id' => 'categories-list',
+                    'dataProvider' => $categoriesDataProvider,
+                    'itemView' => '_category_item',
+                    'template' => '{items}',
+                    'viewData' => array('itemClass' => 'full')
+                ))
+                ?>
             </div>
         </div>
     </div>
@@ -102,34 +70,15 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                     <h2>پیشنهاد ما</h2>
                 </div>
                 <div class="is-carousel auto-width" data-items='{"1200":"5", "1024":"4", "992":"4", "768":"3", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-nav="1" data-dots="1">
-                    <div class="thumbnail-container">
-                        <div class="thumbnail full">
-                            <div class="thumb">
-                                <a href="#" title="عنوان کتاب">
-                                    <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >
-                                    <div class="thumbnail-overlay"></div>
-                                    <div class="thumbnail-overlay-icon">
-                                        <i class="icon"></i>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="caption">
-                                <div class="cat-icon" style="background: #fbb11a;">
-                                    <a href="#" title="عنوان دسته"><img src="uploads/categories/svg/4.svg"></a>
-                                </div>
-                                <div class="stars">
-                                    <i class="icon"></i>
-                                    <i class="icon"></i>
-                                    <i class="icon"></i>
-                                    <i class="icon"></i>
-                                    <i class="icon off"></i>
-                                </div>
-                                <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
-                                <span class="price">رایگان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                            </div>
-                        </div>
-                    </div>
+                        <?php
+                        $this->widget('zii.widgets.CListView',array(
+                            'id' => 'categories-list',
+                            'dataProvider' => $suggestedDataProvider,
+                            'itemView' => '_book_item',
+                            'template' => '{items}'
+                        ))
+                        ?>
+
                     <div class="thumbnail-container">
                         <div class="thumbnail full">
                             <div class="thumb">

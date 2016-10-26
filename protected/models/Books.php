@@ -74,7 +74,7 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-				array('title, category_id ,icon', 'required', 'on' => 'update'),
+				array('title, category_id ,icon', 'required'),
 				array('number_of_pages, seen, deleted', 'numerical', 'integerOnly' => true),
 				array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
 				array('title, icon, publisher_name', 'length', 'max' => 50),
@@ -289,6 +289,9 @@ class Books extends CActiveRecord
 
 	public function getPrice(){
 		return $this->lastPackage->price;
+	}
+	public function getPrinted_price(){
+		return $this->lastPackage->printed_price;
 	}
 	public function getOffPrice()
 	{
