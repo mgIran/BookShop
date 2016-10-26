@@ -52,7 +52,8 @@ class RolesController extends Controller
 		$this->performAjaxValidation($model);
 
 		if (isset($_POST['AdminRoles'])) {
-			var_dump($_POST['AdminRoles']);
+
+			var_dump(CJSON::decode($_POST['AdminRoles']['permissions']));
 			exit;
 			$model->attributes = $_POST['AdminRoles'];
 			if ($model->save()) {
