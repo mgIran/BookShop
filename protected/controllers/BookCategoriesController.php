@@ -165,7 +165,15 @@ class BookCategoriesController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+        $imageDir = Yii::getPathOfAlias('webroot').'/uploads/bookCategories/images/';
+        $iconDir = Yii::getPathOfAlias('webroot').'/uploads/bookCategories/icons/';
+        if($model->delete()) {
+            if(file_exists($imageDir.$model->image))
+                @unlink($imageDir.$model->image);
+            if(file_exists($iconDir.$model->icon))
+                @unlink($iconDir.$model->icon);
+        }
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -176,7 +184,7 @@ class BookCategoriesController extends Controller
 	 * Lists all models.
 	 */
 	public function actionIndex()
-	{   
+	{
 		$dataProvider=new CActiveDataProvider('BookCategories');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
