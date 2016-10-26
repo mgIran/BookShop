@@ -9,6 +9,27 @@ class BooksController extends Controller
     public $layout = '//layouts/column2';
     public $formats = '.doc ,.docx';
 
+    /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'frontend' => array(
+                'create',
+                'update',
+                'delete',
+                'uploadImage',
+                'deleteImage',
+                'upload',
+                'deleteUpload',
+                'uploadFile',
+                'deleteUploadFile',
+                'images',
+                'savePackage'
+            ),
+        );
+    }
 
     /**
      * @return array action filters

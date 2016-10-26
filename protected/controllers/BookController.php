@@ -1,8 +1,34 @@
 <?php
 
-class BooksController extends Controller
+class BookController extends Controller
 {
     public $layout = '//layouts/inner';
+
+    /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'frontend' => array(
+                'discount',
+                'search',
+                'view',
+                'download',
+                'programs',
+                'games',
+                'educations',
+                'publisher',
+                'buy',
+                'bookmark',
+                'rate'
+            ),
+            'backend' => array(
+                'reportSales',
+                'reportIncome'
+            )
+        );
+    }
 
     /**
      * @return array action filters
@@ -28,11 +54,11 @@ class BooksController extends Controller
                 'roles' => array('admin'),
             ),
             array('allow',
-                'actions' => array('discount','search','view', 'download', 'programs', 'games', 'educations', 'publisher'),
+                'actions' => array('discount', 'search', 'view', 'download', 'programs', 'games', 'educations', 'publisher'),
                 'users' => array('*'),
             ),
             array('allow',
-                'actions' => array('buy', 'bookmark','rate'),
+                'actions' => array('buy', 'bookmark', 'rate'),
                 'users' => array('@'),
             ),
             array('deny',  // deny all users
@@ -78,7 +104,7 @@ class BooksController extends Controller
         $this->layout = 'panel';
 
         $model = $this->loadModel($id);
-        $price = $model->hasDiscount()?$model->offPrice:$model->price;
+        $price = $model->hasDiscount() ? $model->offPrice : $model->price;
         $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
         if ($buy)
             $this->redirect(array('/books/download/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
@@ -530,13 +556,13 @@ class BooksController extends Controller
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
         $criteria->limit = 20;
-        $criteria->order='t.id DESC';
-        if(isset($_GET['term']) && !empty($term = $_GET['term'])) {
+        $criteria->order = 't.id DESC';
+        if (isset($_GET['term']) && !empty($term = $_GET['term'])) {
             $terms = explode(' ', urldecode($term));
             $sql = null;
-            foreach($terms as $key => $term)
-                if($term) {
-                    if(!$sql)
+            foreach ($terms as $key => $term)
+                if ($term) {
+                    if (!$sql)
                         $sql = "(";
                     else
                         $sql .= " OR (";
@@ -576,7 +602,7 @@ class BooksController extends Controller
             ':status' => 'enable',
             ':now' => time()
         );
-        $criteria->order='book.id DESC';
+        $criteria->order = 'book.id DESC';
         $dataProvider = new CActiveDataProvider('BookDiscounts', array(
             'criteria' => $criteria,
         ));
@@ -593,37 +619,38 @@ class BooksController extends Controller
      * @throws CException
      * @throws CHttpException
      */
-    public function actionRate($book_id ,$rate)
+    public function actionRate($book_id, $rate)
     {
         $model = $this->loadModel($book_id);
-        if($model) {
+        if ($model) {
             $rateModel = new BookRatings();
             $rateModel->rate = (int)$rate;
             $rateModel->book_id = $model->id;
             $rateModel->user_id = Yii::app()->user->getId();
-            if($rateModel->save()) {
+            if ($rateModel->save()) {
                 $this->beginClip('rate-view');
                 $this->renderPartial('_rating', array(
                     'model' => $model
                 ));
                 $this->endClip();
-                if(isset($_GET['ajax'])) {
-                    echo CJSON::encode(array('status' => true,'rate'=> $rateModel->rate , 'rate_wrapper' => $this->clips['rate-view']));
+                if (isset($_GET['ajax'])) {
+                    echo CJSON::encode(array('status' => true, 'rate' => $rateModel->rate, 'rate_wrapper' => $this->clips['rate-view']));
                     Yii::app()->end();
                 }
             } else {
-                if(isset($_GET['ajax'])) {
+                if (isset($_GET['ajax'])) {
                     echo CJSON::encode(array('status' => false, 'msg' => 'متاسفانه عملیات با خطا مواجه است! لطفا مجددا سعی فرمایید.'));
                     Yii::app()->end();
                 }
             }
-        }else {
-            if(isset($_GET['ajax'])) {
+        } else {
+            if (isset($_GET['ajax'])) {
                 echo CJSON::encode(array('status' => false, 'msg' => 'مقادیر ارسالی صحیح نیست.'));
                 Yii::app()->end();
             }
         }
     }
+
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.

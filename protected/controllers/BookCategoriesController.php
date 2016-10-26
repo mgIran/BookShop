@@ -9,6 +9,22 @@ class BookCategoriesController extends Controller
 	public $layout='//layouts/column2';
 
 	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'backend' => array(
+                'index',
+                'create',
+                'update',
+                'admin',
+                'delete'
+			)
+		);
+	}
+
+	/**
 	 * @return array action filters
 	 */
 	public function filters()
