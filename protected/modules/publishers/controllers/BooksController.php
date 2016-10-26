@@ -10,6 +10,27 @@ class BooksController extends Controller
     private $filesFolder = null;
     public $formats = null;
 
+    /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'frontend' => array(
+                'create',
+                'update',
+                'delete',
+                'uploadImage',
+                'deleteImage',
+                'upload',
+                'deleteUpload',
+                'uploadFile',
+                'deleteUploadFile',
+                'images',
+                'savePackage'
+            ),
+        );
+    }
 
     /**
      * @return array action filters

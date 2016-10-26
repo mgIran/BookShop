@@ -9,6 +9,24 @@ class AdminsManageController extends Controller
 	public $layout='//layouts/column2';
 
     public $pageTitle = 'مدیریت مدیران سیستم';
+
+	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'backend' => array(
+                'index',
+                'views',
+                'create',
+                'update',
+                'admin',
+                'delete'
+			)
+		);
+	}
+
 	/**
 	 * @return array action filters
 	 */
