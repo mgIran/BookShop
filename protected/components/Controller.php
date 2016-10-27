@@ -346,9 +346,9 @@ class Controller extends CController
      */
     public static function printRateStars($rate)
     {
-        $starFull = '<span class="icon-star active"></span>';
-        $starHalf = '<span class="icon-star-half-empty active"></span>';
-        $starEmpty = '<span class="icon-star-empty"></span>';
+        $starFull = '<i class="icon"></i>';
+        $starHalf = '<i class="icon off"></i>';
+        $starEmpty = '<i class="icon off"></i>';
 
         $rateInteger = floor($rate);
         $rateHalf = ($rate - $rateInteger) >= 0.5 ? true : false;

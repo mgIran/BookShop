@@ -1,32 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "ym_book_platforms".
+ * This is the model class for table "{{class_tags}}".
  *
- * The followings are the available columns in table 'ym_book_platforms':
+ * The followings are the available columns in table '{{class_tags}}':
  * @property string $id
- * @property string $name
  * @property string $title
- * @property string $file_types
  *
  * The followings are the available model relations:
- * @property BookCategories[] $bookCategories
- * @property Books[] $books
+ * @property Classes[] $ymClasses
  */
-class BookPlatforms extends CActiveRecord
+class ClassTags extends CActiveRecord
 {
-	public $platformsLabel=array(
-		'android'=>'Android',
-		'ios'=>'iOS',
-		'windowsphone'=>'Windows Phone',
-	);
-
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'ym_book_platforms';
+		return '{{class_tags}}';
 	}
 
 	/**
@@ -37,12 +28,12 @@ class BookPlatforms extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, file_types', 'required'),
-			array('name, title', 'length', 'max'=>255),
-			array('file_types', 'length', 'max'=>500),
+			array('title','required'),
+			array('title','unique'),
+			array('title', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, file_types, title', 'safe', 'on'=>'search'),
+			array('id, title', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,8 +45,7 @@ class BookPlatforms extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'bookCategories' => array(self::HAS_MANY, 'BookCategories', 'platform_id'),
-			'books' => array(self::HAS_MANY, 'Books', 'platform_id'),
+			'ymClasses' => array(self::MANY_MANY, 'Classes', '{{class_tag_rel}}(tag_id, class_id)'),
 		);
 	}
 
@@ -66,9 +56,7 @@ class BookPlatforms extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-            'title' => 'عنوان',
-			'file_types' => 'فرمت فایل ها',
+			'title' => 'عنوان',
 		);
 	}
 
@@ -91,10 +79,8 @@ class BookPlatforms extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('file_types',$this->file_types,true);
 		$criteria->compare('title',$this->title,true);
-
+		$criteria->order = 'id DESC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -104,14 +90,10 @@ class BookPlatforms extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return BookPlatforms the static model class
+	 * @return ClassTags the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}
-	public function getUpperName()
-	{
-		return ucfirst($this->name);
 	}
 }

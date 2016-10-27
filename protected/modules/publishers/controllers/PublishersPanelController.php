@@ -51,10 +51,6 @@ class PublishersPanelController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('manageSettlement'),
-                'roles'=>array('admin')
-            ),
-            array('allow',
                 'actions'=>array('uploadNationalCardImage', 'uploadRegistrationCertificateImage'),
                 'users'=>array('@'),
             ),

@@ -36,6 +36,7 @@ return array(
         'manageBooks',
 		'tickets',
 		'advertises',
+		'news',
 		'comments'=>array(
 			//you may override default config for all connecting models
 			'defaultModelConfig' => array(
@@ -110,10 +111,11 @@ return array(
 				'<action:(logout|login|register|dashboard)>' => 'users/public/<action>',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
+				'category/<id:\d+>/<title:(.*)>'=>'category/index',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
                 '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
-                '<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/index',
+                '<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/view',
                 '<module:\w+>/<controller:\w+>/<id:\d+>/<title:\w+>'=>'<module>/<controller>/view',
                 '<controller:\w+>/<id:\d+>'=>'<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',

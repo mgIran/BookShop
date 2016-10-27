@@ -9,7 +9,7 @@
     <?php else:?>
         <?php foreach($model->bookmarkedBooks as $book):?>
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 bookmarked-book">
-                <a href="<?php echo $this->createUrl('/books/'.$book->id.'/'.urlencode(CHtml::encode($book->title)));?>"></a>
+                <a href="<?php echo $this->createUrl('/book/'.$book->id.'/'.urlencode(CHtml::encode($book->title)));?>"></a>
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 image">
                     <img src="<?php echo Yii::app()->baseUrl.'/uploads/books/icons/'.CHtml::encode($book->icon);?>">
                 </div>

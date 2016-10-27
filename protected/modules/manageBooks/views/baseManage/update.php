@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'افزودن', 'url'=>Yii::app()->createUrl('/manageBooks/base/create')),
     array('label'=>'مدیریت', 'url'=>Yii::app()->createUrl('/manageBooks/base/admin')),
-    array('label'=>'مشاهده کتاب', 'url'=>Yii::app()->createUrl('/books/'.$model->id.'/'.urlencode($model->title))),
+    array('label'=>'مشاهده کتاب', 'url'=>Yii::app()->createUrl('/book/'.$model->id.'/'.urlencode($model->title))),
 );
 if(isset($_GET['step']))
     $step = (int)$_GET['step'];
@@ -23,7 +23,7 @@ if(isset($_GET['step']))
     <ul class="nav nav-tabs">
         <li class="<?= ($step == 1?'active':''); ?>"><a data-toggle="tab" href="#general">عمومی</a></li>
         <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 2?'active':''); ?>"><a data-toggle="tab" href="#packages">نوبت های چاپ</a></li>
-        <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 3?'active':''); ?>"><a data-toggle="tab" href="#pics">تصاویر</a></li>
+<!--        <li class="--><?//= $model->getIsNewRecord()?'disabled':''; ?><!-- --><?//= ($step == 3?'active':''); ?><!--"><a data-toggle="tab" href="#pics">تصاویر</a></li>-->
     </ul>
 
     <div class="tab-content">
@@ -39,9 +39,9 @@ if(isset($_GET['step']))
             <?php $this->renderPartial('_package', array('model'=>$model, 'dataProvider'=>$packageDataProvider)); ?>
         </div>
     <? endif;?>
-    <? if(!$model->getIsNewRecord()):?>
-        <div id="pics" class="tab-pane fade <?= ($step == 3?'in active':''); ?>">
-            <?php $this->renderPartial('_imagesUpload', array('model'=>$model ,'images' => $images)); ?>
-        </div>
-    <? endif;?>
+<!--    --><?// if(!$model->getIsNewRecord()):?>
+<!--        <div id="pics" class="tab-pane fade --><?//= ($step == 3?'in active':''); ?><!--">-->
+<!--            --><?php //$this->renderPartial('_imagesUpload', array('model'=>$model ,'images' => $images)); ?>
+<!--        </div>-->
+<!--    --><?// endif;?>
 </div>

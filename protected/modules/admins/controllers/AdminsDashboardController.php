@@ -8,9 +8,7 @@ class AdminsDashboardController extends Controller
     public static function actionsType()
     {
         return array(
-            'backend' => array(
-                'index',
-            )
+            'backend' => array('index')
         );
     }
 
@@ -73,7 +71,6 @@ class AdminsDashboardController extends Controller
         $criteria->compare('messages.visit' ,0);
         $criteria->compare('messages.sender','user');
         $tickets['new'] = Tickets::model()->count($criteria);
-
 		$this->render('index', array(
             'newestPackages'=>$newestPackages,
             'newestPrograms'=>$newestPrograms,

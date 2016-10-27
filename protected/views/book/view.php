@@ -22,8 +22,8 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         <div class="book-heading">
             <h2><?= $model->title ?></h2>
             <div class="row-fluid">
-                <span ><a href="<?php echo $this->createUrl('books/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"><?= $model->getPublisherName(); ?></a></span>
-                <span ><a href="<?php echo $this->createUrl('books/'.((strpos($model->category->path,'2-')!==false)?'games':'programs').'/'.$model->category->id.'/'.urlencode($model->category->title));?>"><?= $model->category?$model->category->title:''; ?></a></span>
+                <span ><a href="<?php echo $this->createUrl('book/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"><?= $model->getPublisherName(); ?></a></span>
+                <span ><a href="<?php echo $this->createUrl('book/'.((strpos($model->category->path,'2-')!==false)?'games':'programs').'/'.$model->category->id.'/'.urlencode($model->category->title));?>"><?= $model->category?$model->category->title:''; ?></a></span>
                 <span class="book-rate">
                     <? ?>
                 </span>
@@ -51,9 +51,9 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                 <span class="pull-left">
                     <button class="btn btn-success btn-install hidden-sm hidden-xs" type="button" data-toggle="modal" data-target="#install-modal">نصب</button>
                     <?php if($model->price>0):?>
-                        <a class="btn btn-success btn-install hidden-md hidden-lg" href="<?php echo Yii::app()->createAbsoluteUrl('/books/buy/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title)));?>">نصب</a>
+                        <a class="btn btn-success btn-install hidden-md hidden-lg" href="<?php echo Yii::app()->createAbsoluteUrl('/book/buy/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title)));?>">نصب</a>
                     <?php else:?>
-                        <a class="btn btn-success btn-install hidden-md hidden-lg" href="<?php echo Yii::app()->createAbsoluteUrl('/books/download/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title)));?>">نصب</a>
+                        <a class="btn btn-success btn-install hidden-md hidden-lg" href="<?php echo Yii::app()->createAbsoluteUrl('/book/download/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title)));?>">نصب</a>
                     <?php endif;?>
                 </span>
                 <?php if(!Yii::app()->user->isGuest):?>
@@ -231,15 +231,15 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     <h3>برای دانلود کتاب کد زیر را اسکن کنید</h3>
                     <div class="qr-code-container">
                         <?php if($model->price>0):?>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode(Yii::app()->createAbsoluteUrl('/books/buy/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title))));?>" />
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode(Yii::app()->createAbsoluteUrl('/book/buy/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title))));?>" />
                         <?php else:?>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode(Yii::app()->createAbsoluteUrl('/books/download/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title))));?>" />
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode(Yii::app()->createAbsoluteUrl('/book/download/'.CHtml::encode($model->id).'/'.urlencode(CHtml::encode($model->title))));?>" />
                         <?php endif;?>
                     </div>
                     <?php
                     if($model->price>0) {
                         ?>
-                        <a href="<?php echo $this->createUrl('/books/buy/'.CHtml::encode($model->id).'/'.CHtml::encode($model->title)); ?>"
+                        <a href="<?php echo $this->createUrl('/book/buy/'.CHtml::encode($model->id).'/'.CHtml::encode($model->title)); ?>"
                            class="btn btn-success btn-buy">خرید</a>
                         <?php
                     }else {

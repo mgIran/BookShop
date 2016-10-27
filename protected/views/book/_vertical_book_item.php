@@ -9,12 +9,12 @@
     </div>
     <div class="book-content">
         <div class="title">
-            <a href="<?php echo $this->createUrl('/books/'.CHtml::encode($data->id).'/'.CHtml::encode($data->lastPackage->package_name));?>"><?php echo CHtml::encode($data->title);?></a>
+            <a href="<?php echo $this->createUrl('/book/'.CHtml::encode($data->id).'/'.CHtml::encode($data->lastPackage->package_name));?>"><?php echo CHtml::encode($data->title);?></a>
         </div>
         <div class="title" >
             <span class="text-right green col-lg-6 col-md-6 col-sm-6 col-xs-6" >
                 <?php if($data->price==0):?>
-                    <a href="<?php echo Yii::app()->createUrl('/books/free')?>">رایگان</a>
+                    <a href="<?php echo Yii::app()->createUrl('/book/free')?>">رایگان</a>
                 <?php else:?>
                     <?
                     if($data->hasDiscount()):

@@ -64,10 +64,10 @@ class ManageBooksBaseManageController extends Controller
                 'rename' => 'random',
                 'validateOptions' => array(
                     'dimensions' => array(
-                        'minWidth' => 512,
-                        'minHeight' => 512,
+                        'minWidth' => 400,
+                        'minHeight' => 590,
                     ),
-                    'acceptedTypes' => array('jpg', 'jpeg', 'png')
+                    'acceptedTypes' => array('jpg','jpeg','png')
                 )
             ),
             'uploadFile' => array(
@@ -75,7 +75,7 @@ class ManageBooksBaseManageController extends Controller
                 'attribute' => 'file_name',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('doc', 'docx')
+                    'acceptedTypes' => array('doc','docx')
                 )
             ),
             'deleteUpload' => array(
@@ -410,21 +410,15 @@ class ManageBooksBaseManageController extends Controller
                 mkdir($uploadDir);
 
             $model = new BookPackages();
-            $model->book_id = $_POST['book_id'];
-            $model->create_date = time();
-            $model->publish_date = time();
+            $model->attributes = $_POST;
             $model->status = 'accepted';
-            $model->version = $_POST['version'];
-            $model->package_name = $_POST['package_name'];
-            $model->price = $_POST['price'];
-            $model->printed_price = $_POST['printed_price'];
-            $model->file_name = $_POST['Books']['file_name'];
+            $model->publish_date = time();
             if ($model->save()) {
                 $response = ['status' => true, 'fileName' => $model->file_name];
-                @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['Books']['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
+                @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
             } else {
-                $response = ['status' => false, 'message' => $model->getError('package_name')];
-                @unlink($tempDir . '/' . $_POST['Books']['file_name']);
+                $response = ['status' => false, 'message' => $this->implodeErrors($model)];
+                @unlink($tempDir . '/' . $_POST['file_name']);
             }
 
             echo CJSON::encode($response);

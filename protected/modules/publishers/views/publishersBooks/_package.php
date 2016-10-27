@@ -48,7 +48,6 @@ Yii::app()->clientScript->registerCss('inline',"
                             <?php echo CHtml::beginForm('','post',array('id'=>'package-info-form'));?>
                                 <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
                                     'id' => 'uploaderFile',
-                                    'model' => $model,
                                     'name' => 'file_name',
                                     'maxFileSize' => 1024,
                                     'maxFiles' => false,
@@ -75,6 +74,9 @@ Yii::app()->clientScript->registerCss('inline',"
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <?php echo CHtml::textField('package_name', '', array('class'=>'form-control', 'placeholder'=>'نام نوبت چاپ *'));?>
                                     </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <?php echo CHtml::textField('isbn', '', array('class'=>'form-control', 'placeholder'=>'شابک *'));?>
+                                    </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت خرید اینترنتی * (تومان)'));?>
                                     </div>
@@ -94,7 +96,7 @@ Yii::app()->clientScript->registerCss('inline',"
                                                 if($('#package-info-form #version').val()=='' || $('#package-info-form #package_name').val()==''){
                                                     $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.').addClass('error');
                                                     return false;
-                                                }else if($('input[type=\"hidden\"][name=\"Books[file_name]\"]').length==0){
+                                                }else if($('input[type=\"hidden\"][name=\"file_name\"]').length==0){
                                                     $('.uploader-message').text('لطفا نوبت چاپ جدید را آپلود کنید.').addClass('error');
                                                     return false;
                                                 }else
@@ -105,15 +107,17 @@ Yii::app()->clientScript->registerCss('inline',"
                                                     $.fn.yiiListView.update('packages-list',{});
                                                     $('.uploader-message').text('');
                                                     $('#package-modal').modal('hide');
+                                                    $('.dz-preview').remove();
+                                                    $('.dropzone').removeClass('dz-started');
+                                                    $('#package-info-form #version').val('');
+                                                    $('#package-info-form #package_name').val('');
+                                                    $('#package-info-form #isbn').val('');
+                                                    $('#package-info-form #price').val('');
+                                                    $('#package-info-form #printed_price').val('');
                                                 }
                                                 else
-                                                    $('.uploader-message').text(data.message).addClass('error');
-                                                $('.dz-preview').remove();
-                                                $('.dropzone').removeClass('dz-started');
-                                                $('#package-info-form #version').val('');
-                                                $('#package-info-form #package_name').val('');
+                                                    $('.uploader-message').html(data.message).addClass('error');
                                             }",
-                                            'error'=>"js:function(){ $('.uploader-message').text('فایل ارسالی ناقص می باشد.').addClass('error'); }",
                                         ), array('class'=>'btn btn-success pull-left'));?>
                                         <h5 class="uploader-message error pull-right"></h5>
                                     </div>

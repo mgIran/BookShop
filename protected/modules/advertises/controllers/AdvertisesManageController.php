@@ -43,6 +43,10 @@ class AdvertisesManageController extends Controller
 				'attribute' => 'cover',
 				'rename' => 'random',
 				'validateOptions' => array(
+					'dimensions' => array(
+						'minWidth' => 1920,
+						'minHeight' => 1280,
+					),
 					'acceptedTypes' => array('jpg','jpeg','png')
 				)
 			),

@@ -1,74 +1,78 @@
 <?php
+/* @var $this BooksController */
 /* @var $data Books */
 /* @var $itemClass string */
 ?>
-<div class="thumbnail-container">
-    <div class="thumbnail <?= $itemClass?$itemClass:'' ?>">
+<div class="thumbnail-container <?=$data->hasDiscount()?'discount':'';?>">
+    <div class="thumbnail <?= (isset($itemClass)?$itemClass:''); ?>">
         <div class="thumb">
-            <a href="#" title="عنوان کتاب">
-                <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >
-                <div class="thumbnail-overlay"></div>
-                <div class="thumbnail-overlay-icon">
-                    <i class="icon"></i>
-                </div>
+            <a href="<?= $this->createUrl('/book/'.$data->id.'/'.urlencode($data->title)); ?>" title="<?= CHtml::encode($data->title) ?>">
+                <img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$data->icon ?>" alt="<?= CHtml::encode($data->title) ?>" >
+                <?php
+                if(!isset($itemClass) || (isset($itemClass) && $itemClass != 'small')):
+                ?>
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-overlay-icon">
+                        <i class="icon"></i>
+                    </div>
+                <?php
+                endif;
+                ?>
             </a>
         </div>
         <div class="caption">
-            <div class="cat-icon" style="background: #fbb11a;">
-                <a href="#" title="عنوان دسته"><img src="uploads/categories/svg/4.svg"></a>
-            </div>
+            <a href="<?= $this->createUrl('/category/'.$data->id.'/'.urlencode($data->title)) ?>" title="<?= CHtml::encode($data->category->title) ?>">
+                <div class="cat-icon" id="book-<?=$data->id?>-category-icon-<?= $data->category_id?>"></div>
+            </a>
+            <?php
+            if(isset($itemClass) && $itemClass == 'small'):
+                ?>
+                <div class="heading">
+                    <h4><?= CHtml::encode($data->title) ?></h4>
+                </div>
+            <?php
+            endif;
+            ?>
             <div class="stars">
-                <i class="icon"></i>
-                <i class="icon"></i>
-                <i class="icon"></i>
-                <i class="icon"></i>
-                <i class="icon off"></i>
+                <?= Controller::printRateStars($data->rate); ?>
             </div>
-            <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
-            <span class="price">رایگان</span>
-            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-        </div>
-    </div>
-</div>
-<div class="book-item <?=$data->hasDiscount()?'discount':''?>">
-    <div class="book-item-content">
-        <div class="pic">
-            <div>
-                <a href="<?php echo Yii::app()->createUrl('/books/'.$data->id.'/'.urlencode($data->lastPackage->package_name));?>">
-                    <img src="<?php echo Yii::app()->baseUrl.'/uploads/books/icons/'.CHtml::encode($data->icon);?>">
-                </a>
-            </div>
-        </div>
-        <div class="detail">
-            <div class="book-title">
-                <a href="<?php echo Yii::app()->createUrl('/books/'.$data->id.'/'.urlencode($data->lastPackage->package_name));?>">
-                    <?php echo CHtml::encode($data->title);?>
-                    <span class="paragraph-end"></span>
-                </a>
-            </div>
-            <div class="book-any">
-                <span class="book-price">
-                    <?php if($data->price==0):?>
-                        <a href="<?php echo Yii::app()->createUrl('/books/free')?>">رایگان</a>
-                    <?php else:?>
-                        <?
-                        if($data->hasDiscount()):
-                            ?>
-                            <span class="text-danger text-line-through center-block"><?= Controller::parseNumbers(number_format($data->price, 0)).' تومان'; ?></span>
-                            <span ><?= Controller::parseNumbers(number_format($data->offPrice, 0)).' تومان' ; ?></span>
-                            <?
-                        else:
-                            ?>
-                            <span ><?= $data->price?Controller::parseNumbers(number_format($data->price, 0)).' تومان':'رایگان'; ?></span>
-                            <?
-                        endif;
+            <?php
+            if(!isset($itemClass) || (isset($itemClass) && $itemClass != 'small')):
+                ?>
+            <h4><a href="<?= $this->createUrl('/book/'.$data->id.'/'.urlencode($data->title)) ?>"
+                   title="<?= CHtml::encode($data->title) ?>"><?= CHtml::encode($data->title) ?></a></h4>
+                <?php
+            endif;
+            ?>
+            <span class="price"><?php if($data->price==0):?>
+                <a href="<?php echo Yii::app()->createUrl('/book/free')?>">رایگان</a>
+                <?php else:?>
+                    <?
+                    if($data->hasDiscount()):
                         ?>
+                        <span class="text-danger text-line-through center-block"><?= Controller::parseNumbers(number_format($data->price, 0)).' تومان'; ?></span>
+                        <span ><?= Controller::parseNumbers(number_format($data->offPrice, 0)).' تومان' ; ?></span>
+                        <?
+                    else:
+                        ?>
+                        <span ><?= $data->price?Controller::parseNumbers(number_format($data->price, 0)).' تومان':'رایگان'; ?></span>
+                        <?
+                    endif;
+                    ?>
                     <?php endif;?>
-                </span>
-                <span class="book-rate">
-                    <?= Controller::printRateStars($data->rate); ?>
-                </span>
-            </div>
+            </span>
+            <?php
+            if(!isset($itemClass) || (isset($itemClass) && $itemClass != 'small')):
+                ?>
+                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                <?php
+            endif;
+            ?>
         </div>
     </div>
 </div>
+<?php
+Yii::app()->clientScript->registerCss('book-'.$data->id.'-category-icon-'.$data->category_id,
+    '#book-'.$data->id.'-category-icon-'.$data->category_id.'{background-color:'.$data->category->icon_color.';
+    background-image:url("'.Yii::app()->baseUrl.'/uploads/bookCategories/icons/'.$data->category->icon.'");}');
+?>
