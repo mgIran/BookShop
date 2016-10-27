@@ -52,11 +52,19 @@ class RolesController extends Controller
 		$this->performAjaxValidation($model);
 
 		if (isset($_POST['AdminRoles'])) {
-
-			var_dump(CJSON::decode($_POST['AdminRoles']['permissions']));
-			exit;
+			$permissions=CJSON::decode($_POST['AdminRoles']['permissions']);
+			var_dump($permissions);exit;
 			$model->attributes = $_POST['AdminRoles'];
 			if ($model->save()) {
+
+				foreach($permissions as $module=>$controllers){
+					foreach($controllers as $controller=>$actions){
+						foreach($actions as $action){
+							
+						}
+					}
+				}
+
 				Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
 				$this->refresh();
 			} else
