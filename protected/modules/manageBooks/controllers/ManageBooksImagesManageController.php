@@ -1,6 +1,6 @@
 <?php
 
-class ImagesManageController extends Controller
+class ManageBooksImagesManageController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -9,40 +9,27 @@ class ImagesManageController extends Controller
 	public $layout = '//layouts/column2';
 
 	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl',
-		);
-	}
-
-	/**
 	 * @return array actions type list
 	 */
 	public static function actionsType()
 	{
 		return array(
 			'backend' => array(
-				'upload','deleteUploaded'
+				'upload',
+				'deleteUploaded'
 			)
 		);
 	}
+
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
+	 * @return array action filters
 	 */
-	public function accessRules()
+	public function filters()
 	{
 		return array(
-			array('deny',  // deny all users
-				'users' => array('*'),
-			),
+			'accessAdmin',
 		);
 	}
-
 
 	public function actions(){
 		return array(

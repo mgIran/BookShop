@@ -2,6 +2,10 @@
 
 class AdvertisesModule extends CWebModule
 {
+	public $controllerMap = array(
+		'manage' => 'application.modules.advertises.controllers.AdvertisesManageController',
+	);
+
 	public function init()
 	{
 		// this method is called when the module is being created

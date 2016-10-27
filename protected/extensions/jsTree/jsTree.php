@@ -4,12 +4,10 @@ class jsTree extends CInputWidget
     protected $publishedAssetsPath;
     public $data = NULL;
     public $name = NULL;
-    public $currentPermissions = NULL;
+    public $selected = NULL;
 
     public function init()
     {
-        $this->currentPermissions = json_decode($this->currentPermissions);
-
         Yii::app()->getClientScript()->registerCssFile($this->getAssetsUrl() . '/css/jsTree.min.css');
         Yii::app()->getClientScript()->registerCssFile($this->getAssetsUrl() . '/css/bootstrap-theme.min.css');
         Yii::app()->getClientScript()->registerCssFile($this->getAssetsUrl() . '/css/jsTree.style.css');
@@ -41,24 +39,21 @@ class jsTree extends CInputWidget
     protected function getListItem($module, $controller)
     {
         $temp = '';
-        $modulePermissions = array();
-        if (isset($this->currentPermissions->$module))
-            $modulePermissions = $this->currentPermissions->$module;
 
         $temp .=
-            '<li id="' . $module . '" ' . (in_array($module, $modulePermissions) ? 'data-jstree=\'{"selected":true}\'' : '') . '>
+            '<li id="' . $module . '">
                 <span class="js-tree-title">' . Yii::t('actions', $module) . '</span>
                 <ul>';
 
         foreach ($controller as $controllerID => $actions) {
             $temp .=
-                '<li id="' . $module . '-' . $controllerID . '" ' . (in_array($controllerID, $modulePermissions) ? 'data-jstree=\'{"selected":true}\'' : '') . '>
+                '<li id="' . $module . '-' . $controllerID . '">
                     <span class="js-tree-title">' . Yii::t('actions', $module . ucfirst($controllerID)) . '</span>
                     <ul>';
 
             foreach ($actions as $action)
                 $temp .=
-                    '<li id="' . $module . '-' . $controllerID . '-' . $action . '" ' . (in_array($controllerID, $modulePermissions) ? 'data-jstree=\'{"selected":true}\'' : '') . '>
+                    '<li id="' . $module . '-' . $controllerID . '-' . $action . '" ' . (in_array($module.'-'.$controllerID.'-'.$action, $this->selected) ? 'data-jstree=\'{"selected":true}\'' : '') . '>
                         <span class="js-tree-title">' . Yii::t('actions', $module . ucfirst($controllerID) . ucfirst($action)) . '</span>
                     </li>';
 

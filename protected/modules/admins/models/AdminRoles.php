@@ -1,14 +1,15 @@
 <?php
 
 /**
- * This is the model class for table "ym_admin_roles".
+ * This is the model class for table "{{admin_roles}}".
  *
- * The followings are the available columns in table 'ym_admin_roles':
+ * The followings are the available columns in table '{{admin_roles}}':
  * @property string $id
  * @property string $name
  * @property string $role
  *
  * The followings are the available model relations:
+ * @property AdminRolePermissions[] $adminRolePermissions
  * @property Admins[] $admins
  */
 class AdminRoles extends CActiveRecord
@@ -19,7 +20,7 @@ class AdminRoles extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_admin_roles';
+		return '{{admin_roles}}';
 	}
 
 	/**
@@ -49,6 +50,7 @@ class AdminRoles extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'adminRolePermissions' => array(self::HAS_MANY, 'AdminRolePermissions', 'role_id'),
 			'admins' => array(self::HAS_MANY, 'Admins', 'role_id'),
 		);
 	}

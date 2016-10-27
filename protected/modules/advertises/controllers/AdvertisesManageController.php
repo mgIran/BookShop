@@ -9,23 +9,30 @@ class AdvertisesManageController extends Controller
 	public $layout='//layouts/column2';
 
 	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
 	 * @return array actions type list
 	 */
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('create','update','admin','delete','upload','deleteUpload'),
+			'backend' => array(
+				'create',
+				'update',
+				'admin',
+				'delete',
+				'upload',
+				'deleteUpload'
+			)
+		);
+	}
+
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessAdmin', // perform access control for CRUD operations
+			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -159,14 +166,6 @@ class AdvertisesManageController extends Controller
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$this->actionAdmin();
 	}
 
 	/**

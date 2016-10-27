@@ -1,6 +1,6 @@
 <?php
 
-class RolesController extends Controller
+class AdminsRolesController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -11,31 +11,28 @@ class RolesController extends Controller
 	public $pageTitle = 'مدیریت نقش مدیران';
 
 	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'backend' => array(
+				'create',
+				'update',
+				'admin',
+				'delete'
+			)
+		);
+	}
+
+	/**
 	 * @return array action filters
 	 */
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'accessAdmin', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'views' actions
-				'actions' => array('index', 'create', 'update', 'admin', 'delete'),
-				'roles' => array('superAdmin'),
-			),
-			array('deny',  // deny all users
-				'users' => array('*'),
-			),
 		);
 	}
 
@@ -52,16 +49,17 @@ class RolesController extends Controller
 		$this->performAjaxValidation($model);
 
 		if (isset($_POST['AdminRoles'])) {
-			$permissions=CJSON::decode($_POST['AdminRoles']['permissions']);
-			var_dump($permissions);exit;
 			$model->attributes = $_POST['AdminRoles'];
 			if ($model->save()) {
-
+				$permissions=CJSON::decode($_POST['AdminRoles']['permissions']);
 				foreach($permissions as $module=>$controllers){
 					foreach($controllers as $controller=>$actions){
-						foreach($actions as $action){
-							
-						}
+						$permission=new AdminRolePermissions();
+						$permission->role_id=$model->id;
+						$permission->module_id=$module;
+						$permission->controller_id=$controller;
+						$permission->actions=implode(',',$actions);
+						$permission->save();
 					}
 				}
 
@@ -94,18 +92,37 @@ class RolesController extends Controller
 
 		if (isset($_POST['AdminRoles'])) {
 			$model->attributes = $_POST['AdminRoles'];
-			if ($model->validate()) {
-				if ($model->save())
-					echo json_encode(['result' => 'success', 'msg' => 'اطلاعات با موفقیت ثبت شد.']);
-				else
-					echo json_encode(['result' => 'failed', 'msg' => 'در ثبت اطلاعات خطایی رخ داده است.']);
+			if ($model->save()) {
+				AdminRolePermissions::model()->deleteAll('role_id = :role_id', array(':role_id'=>$id));
+
+				$permissions=CJSON::decode($_POST['AdminRoles']['permissions']);
+				foreach($permissions as $module=>$controllers){
+					foreach($controllers as $controller=>$actions){
+						$permission=new AdminRolePermissions();
+						$permission->role_id=$model->id;
+						$permission->module_id=$module;
+						$permission->controller_id=$controller;
+						$permission->actions=implode(',',$actions);
+						$permission->save();
+					}
+				}
+
+				Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+				$this->refresh();
 			} else
-				echo json_encode(['result' => 'failed', 'msg' => $this->implodeErrors($model)]);
-			Yii::app()->end();
+				Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است.');
+		}
+
+		$model->permissions=array();
+		foreach($model->adminRolePermissions as $permission){
+			$actions=explode(',',$permission->actions);
+			foreach($actions as $action)
+				$model->permissions[]=$permission->module_id.'-'.$permission->controller_id.'-'.$action;
 		}
 
 		$this->render('update', array(
 			'model' => $model,
+			'actions' => $this->getAllActions('backend'),
 		));
 	}
 
@@ -121,14 +138,6 @@ class RolesController extends Controller
 		// if AJAX request (triggered by deletion via admin grid views), we should not redirect the browser
 		if (!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$this->actionAdmin();
 	}
 
 	/**

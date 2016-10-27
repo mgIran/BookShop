@@ -1,6 +1,6 @@
 <?php
 
-class PanelController extends Controller
+class PublishersPanelController extends Controller
 {
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -9,24 +9,36 @@ class PanelController extends Controller
     public $layout='//layouts/panel';
 
     /**
-     * @return array action filters
-     */
-    public function filters()
-    {
-        return array(
-            'accessControl', // perform access control for CRUD operations
-        );
-    }
-
-    /**
      * @return array actions type list
      */
     public static function actionsType()
     {
         return array(
-            'backend' => array(
-                'manageSettlement',
+            'frontend' => array(
+                'uploadNationalCardImage',
+                'uploadRegistrationCertificateImage',
+                'signup',
+                'account',
+                'index',
+                'discount',
+                'settlement',
+                'sales',
+                'documents'
+            ),
+            'backend'=>array(
+                'manageSettlement'
             )
+        );
+    }
+    
+    /**
+     * @return array action filters
+     */
+    public function filters()
+    {
+        return array(
+            'accessAdmin + manageSettlement',
+            'accessControl + uploadNationalCardImage, uploadRegistrationCertificateImage, signup, account, index, discount, settlement, sales, documents', // perform access control for CRUD operations
         );
     }
 

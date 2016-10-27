@@ -1,6 +1,6 @@
 <?php
 
-class BaseManageController extends Controller
+class ManageBooksBaseManageController extends Controller
 {
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -8,24 +8,6 @@ class BaseManageController extends Controller
      */
     public $layout = '//layouts/column2';
     public $formats = '.doc ,.docx';
-
-    public function beforeAction($action)
-    {
-        if(!is_dir(Yii::getPathOfAlias("webroot")."/uploads/books/files/"))
-            mkdir(Yii::getPathOfAlias("webroot")."/uploads/books/files/");
-        return true;
-    }
-
-    /**
-     * @return array action filters
-     */
-    public function filters()
-    {
-        return array(
-            'accessControl', // perform access control for CRUD operations
-            'postOnly + delete', // we only allow deletion via POST request
-        );
-    }
 
     /**
      * @return array actions type list
@@ -55,7 +37,26 @@ class BaseManageController extends Controller
         );
     }
 
-    public function actions(){
+    public function beforeAction($action)
+    {
+        if (!is_dir(Yii::getPathOfAlias("webroot") . "/uploads/books/files/"))
+            mkdir(Yii::getPathOfAlias("webroot") . "/uploads/books/files/");
+        return true;
+    }
+
+    /**
+     * @return array action filters
+     */
+    public function filters()
+    {
+        return array(
+            'accessAdmin', // perform access control for CRUD operations
+            'postOnly + delete', // we only allow deletion via POST request
+        );
+    }
+
+    public function actions()
+    {
         return array(
             'upload' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
@@ -115,7 +116,7 @@ class BaseManageController extends Controller
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         if (!is_dir($tmpDIR))
             mkdir($tmpDIR);
-        $tmpUrl = Yii::app()->baseUrl.'/uploads/temp/';
+        $tmpUrl = Yii::app()->baseUrl . '/uploads/temp/';
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/icons/";
         if (!is_dir($bookIconsDIR))
             mkdir($bookIconsDIR);
@@ -125,7 +126,7 @@ class BaseManageController extends Controller
         $icon = array();
 
         $this->performAjaxValidation($model);
-        if (isset($_POST['Books'])&& file_exists($tmpDIR . $_POST['Books']['icon'])) {
+        if (isset($_POST['Books']) && file_exists($tmpDIR . $_POST['Books']['icon'])) {
             $model->attributes = $_POST['Books'];
             if (isset($_POST['Books']['icon'])) {
                 $file = $_POST['Books']['icon'];
@@ -136,12 +137,12 @@ class BaseManageController extends Controller
                     'serverName' => $file,
                 );
             }
-            $model->confirm='accepted';
+            $model->confirm = 'accepted';
             if ($model->save()) {
                 if ($model->icon) {
                     $thumbnail = new Imager();
                     $thumbnail->createThumbnail($tmpDIR . $model->icon, 150, 150, false, $bookIconsThumbDIR . $model->icon);
-                    @rename($tmpDIR . $model->icon,$bookIconsDIR . $model->icon);
+                    @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
                 }
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect('update/' . $model->id . '/?step=2');
@@ -153,8 +154,8 @@ class BaseManageController extends Controller
         $this->render('create', array(
             'model' => $model,
             'icon' => $icon,
-            'tax'=>SiteSetting::model()->findByAttributes(array('name'=>'tax'))->value,
-            'commission'=>SiteSetting::model()->findByAttributes(array('name'=>'commission'))->value,
+            'tax' => SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value,
+            'commission' => SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value,
         ));
     }
 
@@ -166,7 +167,7 @@ class BaseManageController extends Controller
     public function actionUpdate($id)
     {
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-        if(!is_dir($tmpDIR)) mkdir($tmpDIR);
+        if (!is_dir($tmpDIR)) mkdir($tmpDIR);
         $tmpUrl = Yii::app()->createAbsoluteUrl('/uploads/temp/');
         $bookFilesDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
@@ -180,7 +181,7 @@ class BaseManageController extends Controller
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
         $icon = array();
-        if($model->icon && file_exists($bookIconsDIR . $model->icon))
+        if ($model->icon && file_exists($bookIconsDIR . $model->icon))
             $icon = array(
                 'name' => $model->icon,
                 'src' => $bookIconsUrl . '/' . $model->icon,
@@ -189,20 +190,20 @@ class BaseManageController extends Controller
             );
 
         $images = array();
-        if($model->images)
-            foreach($model->images as $image)
-                if(file_exists($bookImagesDIR . $image->image))
+        if ($model->images)
+            foreach ($model->images as $image)
+                if (file_exists($bookImagesDIR . $image->image))
                     $images[] = array(
                         'name' => $image->image,
                         'src' => $bookImagesUrl . '/' . $image->image,
                         'size' => filesize($bookImagesDIR . $image->image),
                         'serverName' => $image->image,
                     );
-        if(isset($_POST['Books'])) {
+        if (isset($_POST['Books'])) {
             $fileFlag = false;
             $iconFlag = false;
             $newFileSize = $model->size;
-            if(isset($_POST['Books']['file_name']) && !empty($_POST['Books']['file_name']) && $_POST['Books']['file_name'] != $model->file_name) {
+            if (isset($_POST['Books']['file_name']) && !empty($_POST['Books']['file_name']) && $_POST['Books']['file_name'] != $model->file_name) {
                 $file = $_POST['Books']['file_name'];
                 $book = array(
                     'name' => $file,
@@ -213,18 +214,18 @@ class BaseManageController extends Controller
                 $fileFlag = true;
                 $newFileSize = filesize($tmpDIR . $file);
             }
-            if(isset($_POST['Books']['icon']) && !empty($_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon) {
+            if (isset($_POST['Books']['icon']) && !empty($_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon) {
                 $file = $_POST['Books']['icon'];
                 $icon = array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,);
                 $iconFlag = true;
             }
             $model->attributes = $_POST['Books'];
             $model->size = $newFileSize;
-            if($model->save()) {
-                if($fileFlag) {
+            if ($model->save()) {
+                if ($fileFlag) {
                     rename($tmpDIR . $model->file_name, $bookFilesDIR . $model->file_name);
                 }
-                if($iconFlag) {
+                if ($iconFlag) {
                     $thumbnail = new Imager();
                     $thumbnail->createThumbnail($tmpDIR . $model->icon, 150, 150, false, $bookIconsDIR . $model->icon);
                     unlink($tmpDIR . $model->icon);
@@ -236,12 +237,12 @@ class BaseManageController extends Controller
             }
         }
 
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('book_id=:book_id');
-        $criteria->params=array(
-            ':book_id'=>$id,
+        $criteria->params = array(
+            ':book_id' => $id,
         );
-        $packageDataProvider=new CActiveDataProvider('BookPackages', array('criteria'=>$criteria));
+        $packageDataProvider = new CActiveDataProvider('BookPackages', array('criteria' => $criteria));
 
         Yii::app()->getModule('setting');
         $this->render('update', array(
@@ -249,9 +250,9 @@ class BaseManageController extends Controller
             'icon' => $icon,
             'images' => $images,
             'step' => 1,
-            'packageDataProvider'=>$packageDataProvider,
-            'tax'=>SiteSetting::model()->findByAttributes(array('name'=>'tax'))->value,
-            'commission'=>SiteSetting::model()->findByAttributes(array('name'=>'commission'))->value,
+            'packageDataProvider' => $packageDataProvider,
+            'tax' => SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value,
+            'commission' => SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value,
         ));
     }
 
@@ -263,10 +264,10 @@ class BaseManageController extends Controller
     public function actionDelete($id)
     {
         $model = $this->loadModel($id);
-        $model->deleted=1;
+        $model->deleted = 1;
         $model->setScenario('delete');
-        if($model->save())
-            $this->createLog('کتاب '.$model->title.' توسط مدیر سیستم حذف شد.', $model->publisher_id);
+        if ($model->save())
+            $this->createLog('کتاب ' . $model->title . ' توسط مدیر سیستم حذف شد.', $model->publisher_id);
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
@@ -327,39 +328,37 @@ class BaseManageController extends Controller
 
     public function actionChangeConfirm()
     {
-        $model=$this->loadModel($_POST['book_id']);
-        $model->confirm=$_POST['value'];
-        if($model->save()) {
-            if($_POST['value']=='accepted') {
+        $model = $this->loadModel($_POST['book_id']);
+        $model->confirm = $_POST['value'];
+        if ($model->save()) {
+            if ($_POST['value'] == 'accepted') {
                 $package = BookPackages::model()->find(array('condition' => 'book_id=:book_id', 'params' => array(':book_id' => $model->id), 'order' => 'id DESC'));
                 $package->publish_date = time();
-                $package->status='accepted';
+                $package->status = 'accepted';
                 $package->setScenario('publish');
                 $package->save();
             }
-            $message='';
-            switch($_POST['value'])
-            {
+            $message = '';
+            switch ($_POST['value']) {
                 case 'refused':
-                    $message='کتاب '.$model->title.' رد شده است. جهت اطلاع از دلیل تایید نشدن نوبت چاپ جدید به صفحه ویرایش کتاب مراجعه فرمایید.';
+                    $message = 'کتاب ' . $model->title . ' رد شده است. جهت اطلاع از دلیل تایید نشدن نوبت چاپ جدید به صفحه ویرایش کتاب مراجعه فرمایید.';
                     break;
 
                 case 'accepted':
-                    $message='کتاب '.$model->title.' تایید شده است.';
+                    $message = 'کتاب ' . $model->title . ' تایید شده است.';
                     break;
 
                 case 'change_required':
-                    $message='کتاب '.$model->title.' نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.';
+                    $message = 'کتاب ' . $model->title . ' نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.';
                     break;
             }
             $this->createLog($message, $model->publisher_id);
             echo CJSON::encode(array(
                 'status' => true
             ));
-        }
-        else
+        } else
             echo CJSON::encode(array(
-                'status'=>false
+                'status' => false
             ));
     }
 
@@ -388,11 +387,11 @@ class BaseManageController extends Controller
 
     public function actionDeletePackage($id)
     {
-        $model=BookPackages::model()->findByPk($id);
+        $model = BookPackages::model()->findByPk($id);
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if(file_exists($uploadDir.'/'.$model->file_name))
-            if(unlink($uploadDir.'/'.$model->file_name))
-                if($model->delete())
+        if (file_exists($uploadDir . '/' . $model->file_name))
+            if (unlink($uploadDir . '/' . $model->file_name))
+                if ($model->delete())
                     $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
 
         if (!isset($_GET['ajax']))
@@ -404,7 +403,7 @@ class BaseManageController extends Controller
      */
     public function actionSavePackage()
     {
-        if(isset($_POST['book_id'])) {
+        if (isset($_POST['book_id'])) {
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
             if (!is_dir($uploadDir))

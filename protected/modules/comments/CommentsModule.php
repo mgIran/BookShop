@@ -69,6 +69,10 @@ class CommentsModule extends CWebModule
             'moduleObjectName' => 'comment',
             'showEmail' => true
         );
+
+    public $controllerMap = array(
+        'comment' => 'application.modules.comments.controllers.CommentsCommentController',
+    );
     
 	public function init()
 	{

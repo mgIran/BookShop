@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50616
+Source Server         : localhost
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50616
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-10-27 22:12:45
+Date: 2016-10-27 21:58:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,7 +33,7 @@ CREATE TABLE `ym_admins` (
 -- ----------------------------
 -- Records of ym_admins
 -- ----------------------------
-INSERT INTO `ym_admins` VALUES ('1', 'rahbod', '$2a$12$92HG95rnUS5MYLFvDjn2cOU4O4p64mpH9QnxFYzVnk9CjQIPrcTBC', 'gharagozlu.masoud@gmial.com', '1');
+INSERT INTO `ym_admins` VALUES ('1', 'rahbod', '$2a$12$92HG95rnUS5MYLFvDjn2cOU4O4p64mpH9QnxFYzVnk9CjQIPrcTBC', 'gharagozlu.masoud@gmial.com', '2');
 
 -- ----------------------------
 -- Table structure for ym_admin_roles
@@ -44,7 +44,7 @@ CREATE TABLE `ym_admin_roles` (
   `name` varchar(100) NOT NULL COMMENT 'عنوان نقش',
   `role` varchar(255) NOT NULL COMMENT 'نقش',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_admin_roles
@@ -66,15 +66,23 @@ CREATE TABLE `ym_admin_role_permissions` (
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `ym_admin_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `ym_admin_roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_admin_role_permissions
 -- ----------------------------
-INSERT INTO `ym_admin_role_permissions` VALUES ('5', '2', 'base', 'BookCategoriesController', 'index,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('6', '2', 'base', 'BookController', 'reportSales,reportIncome');
-INSERT INTO `ym_admin_role_permissions` VALUES ('7', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('8', '2', 'admins', 'DashboardController', 'index');
+INSERT INTO `ym_admin_role_permissions` VALUES ('46', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
+INSERT INTO `ym_admin_role_permissions` VALUES ('47', '2', 'base', 'BookController', 'reportSales,reportIncome');
+INSERT INTO `ym_admin_role_permissions` VALUES ('48', '2', 'admins', 'AdminsDashboardController', 'index');
+INSERT INTO `ym_admin_role_permissions` VALUES ('49', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('50', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('51', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
+INSERT INTO `ym_admin_role_permissions` VALUES ('52', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_admin_role_permissions` VALUES ('53', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,uploadFile,deleteUploadFile,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,downloadPackage');
+INSERT INTO `ym_admin_role_permissions` VALUES ('54', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
+INSERT INTO `ym_admin_role_permissions` VALUES ('55', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('56', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('57', '2', 'publishers', 'PublishersPanelController', 'manageSettlement');
 
 -- ----------------------------
 -- Table structure for ym_books
@@ -103,7 +111,6 @@ CREATE TABLE `ym_books` (
   CONSTRAINT `ym_books_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `ym_book_categories` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `ym_books_ibfk_1` FOREIGN KEY (`publisher_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of ym_books
 -- ----------------------------
@@ -127,7 +134,6 @@ CREATE TABLE `ym_book_advertises` (
 -- ----------------------------
 -- Records of ym_book_advertises
 -- ----------------------------
-INSERT INTO `ym_book_advertises` VALUES ('52', 'DhGew1477578842.jpg', '1', '1477578845');
 
 -- ----------------------------
 -- Table structure for ym_book_buys
@@ -374,7 +380,8 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477593369');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477559159');
+
 
 -- ----------------------------
 -- Table structure for ym_news

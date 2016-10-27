@@ -35,7 +35,7 @@ Yii::app()->clientScript->registerScript('resetForm','document.getElementById("a
         <?php $this->widget('application.extensions.jsTree.jsTree', array(
             'name' => 'AdminRoles[permissions]',
             'data' => $actions,
-            'currentPermissions' => $model->permissions
+            'selected' => $model->permissions
         )); ?>
         <?php echo $form->error($model,'permissions'); ?>
     </div>

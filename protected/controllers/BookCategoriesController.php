@@ -15,11 +15,14 @@ class BookCategoriesController extends Controller
 	{
 		return array(
 			'backend' => array(
-                'index',
-                'create',
-                'update',
-                'admin',
-                'delete'
+				'create',
+				'update',
+				'admin',
+				'delete',
+				'upload',
+				'deleteUpload',
+				'uploadIcon',
+				'deleteUploadIcon'
 			)
 		);
 	}
@@ -30,30 +33,8 @@ class BookCategoriesController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('create','update','admin','delete' , 'upload', 'deleteUpload', 'uploadIcon', 'deleteUploadIcon'),
-				'roles'=>array('admin'),
-			),
-			array('allow',
-                'actions' => array('index'),
-				'users'=>array('*'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
+			'accessAdmin + create, update, admin, delete, upload, deleteUpload, uploadIcon, deleteUploadIcon',
+			'postOnly + delete',
 		);
 	}
 
@@ -194,17 +175,6 @@ class BookCategoriesController extends Controller
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('BookCategories');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
 	}
 
 	/**
