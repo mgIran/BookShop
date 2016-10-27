@@ -35,6 +35,7 @@
  * @property BookPackages[] $packages
  * @property BookDiscounts $discount
  * @property Advertises $bookAdvertises
+ * @property BookPersons $persons
  */
 class Books extends CActiveRecord
 {
@@ -108,8 +109,16 @@ class Books extends CActiveRecord
 				'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 				'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 				'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
+				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
+				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
 		);
 	}
+
+//	public function getSortPersons(){
+//		$criteria = new CDbCriteria();
+//		$criteria->order = 'roles.order';
+//		var_dump($this->persons($criteria));exit;
+//	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -276,7 +285,6 @@ class Books extends CActiveRecord
 		$criteria->addCondition('t.status=:status');
 		$criteria->addCondition('confirm=:confirm');
 		$criteria->addCondition('deleted=:deleted');
-		$criteria->addCondition('(SELECT COUNT(book_images.id) FROM ym_book_images book_images WHERE book_images.book_id=t.id) != 0');
 		$criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
 		$criteria->params[':status'] = 'enable';
 		$criteria->params[':confirm'] = 'accepted';

@@ -30,7 +30,7 @@
 			'maxFileSize' => 0.5, //MB
 			'url' => Yii::app()->createUrl('/manageBooks/base/upload'),
 			'deleteUrl' => Yii::app()->createUrl('/manageBooks/base/deleteUpload'),
-			'acceptedFiles' => 'image/png',
+			'acceptedFiles' => '.jpg, .jpeg, .png',
 			'serverFiles' => $icon,
 			'onSuccess' => '
 				var responseObj = JSON.parse(res);

@@ -15,7 +15,7 @@
             <?php echo CHtml::encode($data->statusLabels[$data->status]);?>
         </span>
         <?php if($data->status=='refused' or $data->status=='change_required'):?>
-            <a class="btn btn-info btn-xs" style="margin-right: 5px;" data-toggle="collapse" data-parent="#packages-list" href="#reason-<?php echo $data->id?>">دلیل</a>
+            <a class="btn btn-info btn-xs" style="margin-right: 5px;margin-top: 5px;" data-toggle="collapse" data-parent="#packages-list" href="#reason-<?php echo $data->id?>">دلیل</a>
         <?php endif;?>
     </div>
     <?php if($data->status=='refused' or $data->status=='change_required'):?>

@@ -49,22 +49,25 @@ class SiteController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
 
-        $categoriesDataProvider =new CActiveDataProvider('BookCategories', array('criteria'=>BookCategories::model()->getValidCategories()));
+        $categoriesDataProvider = new CActiveDataProvider('BookCategories' ,array('criteria' => BookCategories::model()->getValidCategories()));
         // get suggested list
-        $visitedCats=CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
-        $suggestedDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks($visitedCats)));
-		// latest books
-        $latestBooksDataProvider=new CActiveDataProvider('Books', array('criteria'=>Books::model()->getValidBooks(null,'id DESC',10)));
+        $visitedCats = CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
+        $suggestedDataProvider = new CActiveDataProvider('Books' ,array('criteria' => Books::model()->getValidBooks($visitedCats)));
+        // latest books
+        $latestBooksDataProvider = new CActiveDataProvider('Books' ,array('criteria' => Books::model()->getValidBooks(null ,'id DESC' ,10)));
+        // most purchase books
+        $mostPurchaseBooksDataProvider = new CActiveDataProvider('Books' ,array('criteria' => Books::model()->getValidBooks(null ,'download DESC' ,10)));
 
         // get advertise
         Yii::import('advertises.models.*');
-        $advertise=Advertises::model()->findActive();
+        $advertises = new CActiveDataProvider('Advertises' ,array('criteria' => Advertises::model()->getActiveAdvertises()));
 
-        $this->render('index', array(
-            'categoriesDataProvider'=>$categoriesDataProvider,
-            'latestBooksDataProvider'=>$latestBooksDataProvider,
-            'suggestedDataProvider'=>$suggestedDataProvider,
-            'advertise'=>$advertise,
+        $this->render('index' ,array(
+            'categoriesDataProvider' => $categoriesDataProvider ,
+            'latestBooksDataProvider' => $latestBooksDataProvider ,
+            'mostPurchaseBooksDataProvider' => $mostPurchaseBooksDataProvider ,
+            'suggestedDataProvider' => $suggestedDataProvider ,
+            'advertises' => $advertises ,
         ));
     }
 

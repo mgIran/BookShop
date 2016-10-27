@@ -86,9 +86,9 @@
                     <div class="row">
                         <a data-toggle="collapse" data-parent="#category-collapse-parent" data-target="#m-book-cat" href="#" class="cat-menu-head">کتاب ها</a>
                         <ul class="cat-menu collapse" id="m-book-cat">
-                            <li><a href="<?php echo Yii::app()->createUrl('/books/programs');?>">همه کتاب ها</a></li>
+                            <li><a href="<?php echo Yii::app()->createUrl('/book/programs');?>">همه کتاب ها</a></li>
                             <?php foreach($this->categories['programs'] as $category):?>
-                                <li><a href="<?php echo Yii::app()->createUrl('/books/programs/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
+                                <li><a href="<?php echo Yii::app()->createUrl('/book/programs/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                             <?php endforeach;?>
                         </ul>
                     </div>
@@ -97,9 +97,9 @@
                     <div class="row">
                         <a data-toggle="collapse" data-target="#m-games-cat" data-parent="#category-collapse-parent" href="#" class="cat-menu-head">بازی ها</a>
                         <ul class="cat-menu collapse" id="m-games-cat">
-                            <li><a href="<?php echo Yii::app()->createUrl('/books/games');?>">همه بازی ها</a></li>
+                            <li><a href="<?php echo Yii::app()->createUrl('/book/games');?>">همه بازی ها</a></li>
                             <?php foreach($this->categories['games'] as $category):?>
-                                <li><a href="<?php echo Yii::app()->createUrl('/books/games/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
+                                <li><a href="<?php echo Yii::app()->createUrl('/book/games/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                             <?php endforeach;?>
                         </ul>
                     </div>
@@ -108,9 +108,9 @@
                     <div class="row">
                         <a data-toggle="collapse" data-target="#m-edu-cat" data-parent="#category-collapse-parent" href="#" class="cat-menu-head">آموزش ها</a>
                         <ul class="cat-menu collapse" id="m-edu-cat">
-                            <li><a href="<?php echo Yii::app()->createUrl('/books/educations');?>">همه آموزش ها</a></li>
+                            <li><a href="<?php echo Yii::app()->createUrl('/book/educations');?>">همه آموزش ها</a></li>
                             <?php foreach($this->categories['educations'] as $category):?>
-                                <li><a href="<?php echo Yii::app()->createUrl('/books/educations/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
+                                <li><a href="<?php echo Yii::app()->createUrl('/book/educations/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                             <?php endforeach;?>
                         </ul>
                     </div>
@@ -118,7 +118,7 @@
             </div>
         </div>
         <li><a href="<?= Yii::app()->user->hasState('platformName')?Yii::app()->baseUrl.'/'.Yii::app()->user->getState('platformName'):Yii::app()->createAbsoluteUrl('//') ?>">خانه</a></li>
-        <li><a href="<?= $this->createUrl('/books/discount') ?>">تخفیفات</a></li>
+        <li><a href="<?= $this->createUrl('/book/discount') ?>">تخفیفات</a></li>
         <li>
             <a href="<?php echo $this->createUrl('/site/underConstruction');?>">
                 <span class="icon-download-alt"></span>

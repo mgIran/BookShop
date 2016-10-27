@@ -156,3 +156,6 @@ label{
     width: 90%;
     margin-bottom: 15px;
 }
+[class*="col-"]{
+    display: inline-block !important;
+}

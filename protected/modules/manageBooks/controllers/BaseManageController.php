@@ -28,20 +28,30 @@ class BaseManageController extends Controller
     }
 
     /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
+     * @return array actions type list
      */
-    public function accessRules()
+    public static function actionsType()
     {
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'upload', 'deleteUpload', 'uploadFile', 'deleteUploadFile', 'changeConfirm', 'changePackageStatus', 'deletePackage', 'savePackage', 'images', 'download', 'downloadPackage'),
-                'roles' => array('admin'),
-            ),
-            array('deny',  // deny all users
-                'users' => array('*'),
-            ),
+            'backend' => array(
+                'index',
+                'view',
+                'create',
+                'update',
+                'admin',
+                'delete',
+                'upload',
+                'deleteUpload',
+                'uploadFile',
+                'deleteUploadFile',
+                'changeConfirm',
+                'changePackageStatus',
+                'deletePackage',
+                'savePackage',
+                'images',
+                'download',
+                'downloadPackage'
+            )
         );
     }
 
@@ -53,8 +63,8 @@ class BaseManageController extends Controller
                 'rename' => 'random',
                 'validateOptions' => array(
                     'dimensions' => array(
-                        'minWidth' => 512,
-                        'minHeight' => 512,
+                        'minWidth' => 400,
+                        'minHeight' => 590,
                     ),
                     'acceptedTypes' => array('jpg','jpeg','png')
                 )
@@ -401,21 +411,15 @@ class BaseManageController extends Controller
                 mkdir($uploadDir);
 
             $model = new BookPackages();
-            $model->book_id = $_POST['book_id'];
-            $model->create_date = time();
+            $model->attributes = $_POST;
+            $model->status = 'accepted';
             $model->publish_date = time();
-            $model->status='accepted';
-            $model->version = $_POST['version'];
-            $model->package_name = $_POST['package_name'];
-            $model->price = $_POST['price'];
-            $model->printed_price = $_POST['printed_price'];
-            $model->file_name = $_POST['Books']['file_name'];
             if ($model->save()) {
                 $response = ['status' => true, 'fileName' => $model->file_name];
-                @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['Books']['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
+                @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
             } else {
-                $response = ['status' => false, 'message' => $model->getError('package_name')];
-                @unlink($tempDir . '/' . $_POST['Books']['file_name']);
+                $response = ['status' => false, 'message' => $this->implodeErrors($model)];
+                @unlink($tempDir . '/' . $_POST['file_name']);
             }
 
             echo CJSON::encode($response);

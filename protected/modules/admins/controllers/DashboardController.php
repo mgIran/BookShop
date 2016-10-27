@@ -8,9 +8,7 @@ class DashboardController extends Controller
     public static function actionsType()
     {
         return array(
-            'backend' => array(
-                'index',
-            )
+            'backend' => array('index')
         );
     }
 
@@ -96,7 +94,6 @@ class DashboardController extends Controller
         $criteria->compare('messages.visit' ,0);
         $criteria->compare('messages.sender','user');
         $tickets['new'] = Tickets::model()->count($criteria);
-
 		$this->render('index', array(
             'newestPackages'=>$newestPackages,
             'newestPrograms'=>$newestPrograms,

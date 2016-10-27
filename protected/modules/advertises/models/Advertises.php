@@ -6,7 +6,6 @@
  * The followings are the available columns in table '{{advertises}}':
  * @property string $book_id
  * @property string $cover
- * @property string $fade_color
  * @property integer $status
  * @property string $create_date
  *
@@ -46,11 +45,10 @@ class Advertises extends CActiveRecord
 			array('book_id', 'length', 'max'=>10),
 			array('create_date', 'default', 'value'=>time()),
 			array('cover', 'length', 'max'=>200),
-			array('fade_color', 'length', 'max'=>6),
 			array('create_date', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('bookFilter, book_id, cover, fade_color, status, create_date', 'safe', 'on'=>'search'),
+			array('bookFilter, book_id, cover, status, create_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,7 +73,6 @@ class Advertises extends CActiveRecord
 		return array(
 			'book_id' => 'کتاب',
 			'cover' => 'تصویر کاور',
-			'fade_color' => 'رنگ زمینه',
 			'status' => 'وضعیت',
 			'create_date' => 'تاریخ ایجاد',
 		);
@@ -119,12 +116,11 @@ class Advertises extends CActiveRecord
 		return parent::model($className);
 	}
 
-	public static function findActive()
+	public function getActiveAdvertises()
 	{
 		$criteria=new CDbCriteria;
 		$criteria->addCondition('status = 1');
 		$criteria->order = 'create_date DESC';
-		$criteria->limit = 1;
-		return Advertises::model()->find($criteria);
+		return $criteria;
 	}
 }

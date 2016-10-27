@@ -338,6 +338,8 @@ class BooksController extends Controller
     {
         $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
+        if(!is_dir($uploadDir))
+            mkdir($uploadDir);
         if (isset($_POST['BookImages']['image'])) {
             $flag = true;
             foreach ($_POST['BookImages']['image'] as $image) {
@@ -372,21 +374,13 @@ class BooksController extends Controller
                 mkdir($uploadDir);
 
             $model = new BookPackages();
-            $model->book_id = $_POST['book_id'];
-            $model->create_date = time();
-            $model->for = $_POST['for'];
-            $model->price = $_POST['price'];
-            $model->printed_price = $_POST['printed_price'];
-            $model->version = $_POST['version'];
-            $model->package_name = $_POST['package_name'];
-            $model->file_name = $_POST['Books']['file_name'];
-
+            $model->attributes = $_POST;
             if ($model->save()) {
                 $response = ['status' => true, 'fileName' => CHtml::encode($model->file_name)];
-                rename($tempDir . DIRECTORY_SEPARATOR . $_POST['Books']['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
+                rename($tempDir . DIRECTORY_SEPARATOR . $_POST['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
             } else {
-                $response = ['status' => false, 'message' => $model->getError('package_name')];
-                @unlink($tempDir . '/' . $_POST['Books']['file_name']);
+                $response = ['status' => false, 'message' => $this->implodeErrors($model)];
+                @unlink($tempDir . '/' . $_POST['file_name']);
             }
 
             echo CJSON::encode($response);

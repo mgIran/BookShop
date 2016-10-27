@@ -19,6 +19,17 @@ class ImagesManageController extends Controller
 	}
 
 	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'backend' => array(
+				'upload','deleteUploaded'
+			)
+		);
+	}
+	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
@@ -26,10 +37,6 @@ class ImagesManageController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions' => array('upload','deleteUploaded'),
-				'roles' => array('admin','publisher'),
-			),
 			array('deny',  // deny all users
 				'users' => array('*'),
 			),

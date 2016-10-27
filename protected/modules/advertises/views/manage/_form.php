@@ -42,34 +42,30 @@ if(!$model->isNewRecord || $books) {
 		<?php echo $form->labelEx($model, 'cover'); ?>
 		<?php
 		$this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-				'id' => 'uploaderAd',
-				'model' => $model,
-				'name' => 'cover',
-				'maxFiles' => 1,
-				'maxFileSize' => 0.4, //MB
-				'url' => Yii::app()->createUrl('/advertises/manage/upload'),
-				'deleteUrl' => Yii::app()->createUrl('/advertises/manage/deleteUpload'),
-				'acceptedFiles' => 'image/png',
-				'serverFiles' => $cover,
-				'onSuccess' => '
-                var responseObj = JSON.parse(res);
-                if(responseObj.state == "ok")
-                {
-                    {serverName} = responseObj.fileName;
-                }else if(responseObj.state == "error"){
-                    alert(responseObj.msg);
+			'id' => 'uploaderAd',
+			'model' => $model,
+			'name' => 'cover',
+			'maxFiles' => 1,
+			'maxFileSize' => 0.3, //MB
+			'url' => Yii::app()->createUrl('/advertises/manage/upload'),
+			'deleteUrl' => Yii::app()->createUrl('/advertises/manage/deleteUpload'),
+			'acceptedFiles' => '.jpg, .jpeg, .png',
+			'serverFiles' => $cover,
+			'onSuccess' => '
+				var responseObj = JSON.parse(res);
+				if(responseObj.status){
+					{serverName} = responseObj.fileName;
+					$(".uploader-message").html("");
+				}
+				else{
+					$(".uploader-message").html(responseObj.message);
                     this.removeFile(file);
                 }
             ',
 		));
 		?>
 		<?php echo $form->error($model, 'cover'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model, 'fade_color'); ?>
-		<?php echo $form->textField($model, 'fade_color', array('size' => 6, 'maxlength' => 6)); ?>
-		<?php echo $form->error($model, 'fade_color'); ?>
+		<div class="uploader-message error"></div>
 	</div>
 
 	<div class="row">
@@ -79,7 +75,7 @@ if(!$model->isNewRecord || $books) {
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',array('class'=>'btn btn-success')); ?>
 	</div>
 
 	<?php $this->endWidget(); ?>

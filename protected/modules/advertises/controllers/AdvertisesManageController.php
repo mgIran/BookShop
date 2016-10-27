@@ -1,6 +1,6 @@
 <?php
 
-class ManageController extends Controller
+class AdvertisesManageController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -20,23 +20,14 @@ class ManageController extends Controller
 	}
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
+	 * @return array actions type list
 	 */
-	public function accessRules()
+	public static function actionsType()
 	{
 		return array(
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin','delete','upload','deleteUpload'),
-				'roles'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
+			'backend' => array('create','update','admin','delete','upload','deleteUpload'),
 		);
 	}
-
 
 	public function actions(){
 		return array(
@@ -45,6 +36,10 @@ class ManageController extends Controller
 				'attribute' => 'cover',
 				'rename' => 'random',
 				'validateOptions' => array(
+					'dimensions' => array(
+						'minWidth' => 1920,
+						'minHeight' => 1280,
+					),
 					'acceptedTypes' => array('jpg','jpeg','png')
 				)
 			),

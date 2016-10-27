@@ -7,7 +7,7 @@ class PanelController extends Controller
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout='//layouts/panel';
-    
+
     /**
      * @return array action filters
      */
@@ -19,6 +19,18 @@ class PanelController extends Controller
     }
 
     /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'backend' => array(
+                'manageSettlement',
+            )
+        );
+    }
+
+    /**
      * Specifies the access control rules.
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
@@ -26,10 +38,6 @@ class PanelController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',
-                'actions'=>array('manageSettlement'),
-                'roles'=>array('admin')
-            ),
             array('allow',
                 'actions'=>array('uploadNationalCardImage', 'uploadRegistrationCertificateImage'),
                 'users'=>array('@'),

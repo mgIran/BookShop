@@ -14,6 +14,9 @@ class AdvertisesModule extends CWebModule
 		));
 	}
 
+	public $controllerMap = array(
+		'manage' => 'advertises.controllers.AdvertisesManageController'
+	);
 	public function beforeControllerAction($controller, $action)
 	{
 		if(parent::beforeControllerAction($controller, $action))

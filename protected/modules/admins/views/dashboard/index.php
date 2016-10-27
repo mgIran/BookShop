@@ -46,7 +46,7 @@ if(Yii::app()->user->roles == 'superAdmin'):
                         'buttons'=>array(
                             'view'=>array(
                                 'label'=>'مشاهده کتاب',
-                                'url'=>'Yii::app()->createUrl("/books/".$data->id."/".urlencode($data->title))',
+                                'url'=>'Yii::app()->createUrl("/book/".$data->id."/".urlencode($data->title))',
                                 'options'=>array(
                                     'target'=>'_blank'
                                 ),
@@ -91,7 +91,7 @@ if(Yii::app()->user->roles == 'superAdmin'):
                 'columns'=>array(
                     'book_id'=>array(
                         'name'=>'book_id',
-                        'value'=>'CHtml::link($data->book->title, Yii::app()->createUrl("/books/".$data->book_id."/".$data->book->title))',
+                        'value'=>'CHtml::link($data->book->title, Yii::app()->createUrl("/book/".$data->book_id."/".$data->book->title))',
                         'type'=>'raw'
                     ),
                     'for'=>array(

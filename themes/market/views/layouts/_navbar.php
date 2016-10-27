@@ -16,30 +16,30 @@
                 <div class="panel panel-body dropdown-menu cat-menu-container">
                     <div class="col-md-4">
                         <div class="row">
-                            <a href="<?php echo Yii::app()->createUrl('/books/programs');?>" class="cat-menu-head">کتاب ها</a>
+                            <a href="<?php echo Yii::app()->createUrl('/book/programs');?>" class="cat-menu-head">کتاب ها</a>
                             <ul class="cat-menu">
                                 <?php foreach($this->categories['programs'] as $category):?>
-                                    <li><a href="<?php echo Yii::app()->createUrl('/books/programs/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
+                                    <li><a href="<?php echo Yii::app()->createUrl('/book/programs/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                                 <?php endforeach;?>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <a href="<?php echo Yii::app()->createUrl('/books/games');?>" class="cat-menu-head">بازی ها</a>
+                            <a href="<?php echo Yii::app()->createUrl('/book/games');?>" class="cat-menu-head">بازی ها</a>
                             <ul class="cat-menu">
                                 <?php foreach($this->categories['games'] as $category):?>
-                                    <li><a href="<?php echo Yii::app()->createUrl('/books/games/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
+                                    <li><a href="<?php echo Yii::app()->createUrl('/book/games/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                                 <?php endforeach;?>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <a href="<?php echo Yii::app()->createUrl('/books/educations');?>" class="cat-menu-head">آموزش ها</a>
+                            <a href="<?php echo Yii::app()->createUrl('/book/educations');?>" class="cat-menu-head">آموزش ها</a>
                             <ul class="cat-menu">
                                 <?php foreach($this->categories['educations'] as $category):?>
-                                    <li><a href="<?php echo Yii::app()->createUrl('/books/educations/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
+                                    <li><a href="<?php echo Yii::app()->createUrl('/book/educations/'.$category->id.'/'.urlencode($category->title));?>"><?php echo $category->title;?></a></li>
                                 <?php endforeach;?>
                             </ul>
                         </div>
@@ -50,7 +50,7 @@
                 <a>|</a>
             </li>
             <li><a href="<?= Yii::app()->user->hasState('platformName')?Yii::app()->baseUrl.'/'.Yii::app()->user->getState('platformName'):Yii::app()->createAbsoluteUrl('//') ?>">خانه</a></li>
-            <li><a href="<?= $this->createUrl('/books/discount') ?>">تخفیفات</a></li>
+            <li><a href="<?= $this->createUrl('/book/discount') ?>">تخفیفات</a></li>
         </ul>
     </div>
 </nav>

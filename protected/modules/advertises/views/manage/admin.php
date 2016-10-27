@@ -38,7 +38,7 @@ $this->menu=array(
 			'class'=>'CButtonColumn',
 			'buttons' => array(
 				'view' => array(
-					'url' => 'Yii::app()->createUrl("/books/{$data->book_id}/".urlencode($data->book->lastPackage->package_name))'
+					'url' => 'Yii::app()->createUrl("/book/{$data->book_id}/".urlencode($data->book->lastPackage->package_name))'
 				)
 			)
 		),

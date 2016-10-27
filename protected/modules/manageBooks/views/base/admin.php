@@ -57,7 +57,7 @@ $this->menu=array(
                     'url' => 'Yii::app()->createUrl("/manageBooks/base/delete", array("id"=>$data->id))'
                 ),
                 'view' => array(
-					'url'=>'Yii::app()->createUrl("/books/".$data->id."/".urlencode($data->title))',
+					'url'=>'Yii::app()->createUrl("/book/".$data->id."/".urlencode($data->title))',
 					'options'=>array(
 						'target'=>'_blank'
 					),

@@ -7,17 +7,20 @@ $(document).ready(function() {
     });
 
     if ($('.slider').length != 0) {
+        var $this = $('.slider'),
+            nestedItemSelector = $this.data('item-selector');
         $('.slider').owlCarousel({
             items: 1,
             dots: false,
             nav: true,
+            nestedItemSelector: "slider-item",
             navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
             autoplay: true,
             autoplayTimeout: 8000,
             autoplayHoverPause: true,
             rtl: true,
             autoHeight: true,
-            loop: true
+            // loop: true
         });
 
         $('.slider-overlay-nav').click(function () {

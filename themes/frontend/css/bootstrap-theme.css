@@ -352,6 +352,8 @@ a:active{
 
 .categories {
     padding: 50px 0;
+    height: 352px;
+    overflow: hidden;
 }
 
 .cat-item {
@@ -543,6 +545,8 @@ a:active{
     position: relative;
     z-index: 2;
     float: right;
+    background:no-repeat scroll center;
+    background-size: 40px;
 }
 
 .thumbnail.full .cat-icon img,

@@ -51,18 +51,53 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('book_id, price, printed_price, file_name', 'required'),
+            array('book_id, package_name, version, isbn, price, printed_price, file_name', 'required'),
             array('book_id, price, printed_price', 'length', 'max'=>10),
             array('version, isbn, create_date, publish_date', 'length', 'max'=>20),
+            array('version, price, printed_price', 'numerical', 'integerOnly'=>true),
+            array('isbn, create_date, publish_date, reason', 'filter', 'filter'=>'strip_tags'),
             array('package_name', 'length', 'max'=>100),
             array('file_name', 'length', 'max'=>255),
             array('status', 'length', 'max'=>15),
             array('for', 'length', 'max'=>8),
-            array('reason', 'safe'),
+            array('create_date', 'default', 'value'=>time()),
+            array('isbn', 'isbnChecker'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('id, book_id, version, package_name, isbn, file_name, create_date, publish_date, status, reason, for, price, printed_price', 'safe', 'on'=>'search'),
         );
+    }
+
+    public function isbnChecker($attribute ,$params)
+    {
+        $isbn = str_ireplace('-','',$this->$attribute);
+        if(strlen($isbn) !== 10 && strlen($isbn) !== 13)
+                $this->addError($attribute ,'طول رشته شابک اشتباه است.');
+        $numbers = str_split($isbn);
+        $sum = 0;
+        if(strlen($isbn) === 13)
+        {
+            foreach($numbers as $key => $number)
+            {
+                $z = 1;
+                if($key % 2)
+                    $z = 3;
+                $sum += $number * $z;
+            }
+            if($sum%10 !== 0)
+                $this->addError($attribute ,'شابک نامعتبر است.');
+        }
+        elseif(strlen($isbn) === 10)
+        {
+            $z = 10;
+            foreach($numbers as $key => $number)
+            {
+                $sum += $number * $z;
+                $z--;
+            }
+            if($sum%11 !== 0)
+                $this->addError($attribute ,'شابک نامعتبر است.');
+        }
     }
 
     /**

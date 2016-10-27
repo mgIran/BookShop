@@ -19,7 +19,7 @@ $this->menu=array(
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#info">عمومی</a></li>
     <li class="disabled"><a>نوبت چاپ</a></li>
-    <li class="disabled"><a >تصاویر</a></li>
+<!--    <li class="disabled"><a >تصاویر</a></li>-->
 </ul>
 
 <div class="tab-content">

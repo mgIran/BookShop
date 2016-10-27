@@ -31,7 +31,7 @@ Yii::app()->clientScript->registerScript('rate-init'.time(),'
     function RateAjax($rate){
         '.($hasUser?'
             $.ajax({
-                url: "'.$this->createUrl('/books/rate').'",
+                url: "'.$this->createUrl('/book/rate').'",
                 data:{ajax:true,book_id:'.$model->id.',rate:$rate},
                 dataType:"JSON",
                 success : function(data){
