@@ -454,4 +454,36 @@ class Controller extends CController
                 throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
     }
+
+    /**
+     * Check admin permissions
+     *
+     * @param CFilterChain $filterChain
+     * @throws CHttpException if the current user is guest or current user does not have access
+     */
+    public function filterAccessUser($filterChain)
+    {
+        if (Yii::app()->user->isGuest)
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+
+        Yii::app()->getModule('users');
+
+        $moduleID = is_null($filterChain->controller->module) ? 'base' : $filterChain->controller->module->name;
+        $controllerID = (($moduleID == 'base') ? '' : ucfirst($moduleID)) . ucfirst($filterChain->controller->id) . 'Controller';
+        $actionID = $filterChain->action->id;
+        $roleID = UserRoles::model()->findByAttributes(array('role' => Yii::app()->user->roles))->id;
+        $permissions = UserRolePermissions::model()->find('module_id = :modID AND controller_id = :conID AND role_id = :rolID', array(
+            ':modID' => $moduleID,
+            ':conID' => $controllerID,
+            ':rolID' => $roleID
+        ));
+        if ($permissions) {
+            $actions = explode(',', $permissions->actions);
+            if (in_array($actionID, $actions))
+                $filterChain->run();
+            else
+                throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        } else
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+    }
 }
