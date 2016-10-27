@@ -15,18 +15,18 @@ class PublishersPanelController extends Controller
     {
         return array(
             'frontend' => array(
-                'uploadNationalCardImage',
-                'uploadRegistrationCertificateImage',
-                'signup',
                 'account',
                 'index',
                 'discount',
                 'settlement',
                 'sales',
-                'documents'
+                'documents',
+                'signup',
             ),
             'backend'=>array(
-                'manageSettlement'
+                'manageSettlement',
+                'uploadNationalCardImage',
+                'uploadRegistrationCertificateImage'
             )
         );
     }
@@ -37,38 +37,9 @@ class PublishersPanelController extends Controller
     public function filters()
     {
         return array(
-            'accessAdmin + manageSettlement',
-            'accessControl + uploadNationalCardImage, uploadRegistrationCertificateImage, signup, account, index, discount, settlement, sales, documents', // perform access control for CRUD operations
+            'checkAccess',
         );
     }
-
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        return array(
-            array('allow',
-                'actions'=>array('uploadNationalCardImage', 'uploadRegistrationCertificateImage'),
-                'users'=>array('@'),
-            ),
-            array('allow',
-                'actions'=>array('signup'),
-                'roles'=>array('user'),
-            ),
-            array('allow',
-                'actions'=>array('account','index', 'discount','settlement','sales','documents'),
-                'roles'=>array('publisher'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
-    }
-
-
 
     public function actions(){
         return array(

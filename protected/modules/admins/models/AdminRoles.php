@@ -14,7 +14,7 @@
  */
 class AdminRoles extends CActiveRecord
 {
-	public $permissions;
+	public $permissions=array();
 	/**
 	 * @return string the associated database table name
 	 */

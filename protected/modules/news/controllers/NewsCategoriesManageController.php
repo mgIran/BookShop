@@ -9,12 +9,31 @@ class NewsCategoriesManageController extends Controller
 	public $layout='//layouts/column2';
 
 	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'frontend'=>array(
+				'index',
+				'view'
+			),
+			'backend' => array(
+				'create',
+				'update',
+				'admin',
+				'delete'
+			)
+		);
+	}
+
+	/**
 	 * @return array action filters
 	 */
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'checkAccess + create, update, admin, delete', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}

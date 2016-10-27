@@ -16,8 +16,8 @@ class TicketsModule extends CWebModule
 
 	public $controllerMap = array(
 		'manage' => 'tickets.controllers.TicketsManageController',
-		'messages' => 'tickets.controllers.TicketMessagesController',
-		'departments' => 'tickets.controllers.TicketDepartmentsController',
+		'messages' => 'tickets.controllers.TicketsMessagesController',
+		'departments' => 'tickets.controllers.TicketsDepartmentsController',
 	);
 
 	public function beforeControllerAction($controller, $action)

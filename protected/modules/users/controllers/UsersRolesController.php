@@ -1,6 +1,6 @@
 <?php
 
-class AdminsRolesController extends Controller
+class UsersRolesController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -31,7 +31,7 @@ class AdminsRolesController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess', // perform access control for CRUD operations
+			'checkAccess',
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -43,18 +43,18 @@ class AdminsRolesController extends Controller
 	public function actionCreate()
 	{
 		$this->pageTitle = 'افزودن نقش جدید';
-		$model = new AdminRoles('create');
+		$model = new UserRoles('create');
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
-		if (isset($_POST['AdminRoles'])) {
-			$model->attributes = $_POST['AdminRoles'];
+		if (isset($_POST['UserRoles'])) {
+			$model->attributes = $_POST['UserRoles'];
 			if ($model->save()) {
-				$permissions=CJSON::decode($_POST['AdminRoles']['permissions']);
+				$permissions=CJSON::decode($_POST['UserRoles']['permissions']);
 				foreach($permissions as $module=>$controllers){
 					foreach($controllers as $controller=>$actions){
-						$permission=new AdminRolePermissions();
+						$permission=new UserRolePermissions();
 						$permission->role_id=$model->id;
 						$permission->module_id=$module;
 						$permission->controller_id=$controller;
@@ -71,7 +71,7 @@ class AdminsRolesController extends Controller
 
 		$this->render('create', array(
 			'model' => $model,
-			'actions' => $this->getAllActions('backend'),
+			'actions' => $this->getAllActions(),
 		));
 	}
 
@@ -90,15 +90,15 @@ class AdminsRolesController extends Controller
 
 		$this->performAjaxValidation($model);
 
-		if (isset($_POST['AdminRoles'])) {
-			$model->attributes = $_POST['AdminRoles'];
+		if (isset($_POST['UserRoles'])) {
+			$model->attributes = $_POST['UserRoles'];
 			if ($model->save()) {
-				AdminRolePermissions::model()->deleteAll('role_id = :role_id', array(':role_id'=>$id));
+				UserRolePermissions::model()->deleteAll('role_id = :role_id', array(':role_id'=>$id));
 
-				$permissions=CJSON::decode($_POST['AdminRoles']['permissions']);
+				$permissions=CJSON::decode($_POST['UserRoles']['permissions']);
 				foreach($permissions as $module=>$controllers){
 					foreach($controllers as $controller=>$actions){
-						$permission=new AdminRolePermissions();
+						$permission=new UserRolePermissions();
 						$permission->role_id=$model->id;
 						$permission->module_id=$module;
 						$permission->controller_id=$controller;
@@ -114,15 +114,22 @@ class AdminsRolesController extends Controller
 		}
 
 		$model->permissions=array();
-		foreach($model->adminRolePermissions as $permission){
+		foreach($model->userRolePermissions as $permission){
 			$actions=explode(',',$permission->actions);
 			foreach($actions as $action)
 				$model->permissions[]=$permission->module_id.'-'.$permission->controller_id.'-'.$action;
 		}
 
+		$allActions=$this->getAllActions('backend');
+		var_dump($allActions);
+		var_dump(array_search('index',$allActions));exit;
+//		foreach($allActions as $module=>$controllers){
+//			if(in_array())
+//		}
+
 		$this->render('update', array(
 			'model' => $model,
-			'actions' => $this->getAllActions('backend'),
+			'actions' => $this->getAllActions(),
 		));
 	}
 
@@ -145,7 +152,7 @@ class AdminsRolesController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model = new AdminRoles('search');
+		$model = new UserRoles('search');
 		$model->unsetAttributes();  // clear any default values
 		if (isset($_GET['AdminsRoles']))
 			$model->attributes = $_GET['AdminsRoles'];
@@ -164,10 +171,7 @@ class AdminsRolesController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		if ($id == 1)
-			throw new CHttpException(403, 'شما اجازه دسترسی به این صفحه را ندارید.');
-
-		$model = AdminRoles::model()->findByPk($id);
+		$model = UserRoles::model()->findByPk($id);
 		if ($model === null)
 			throw new CHttpException(404, 'The requested page does not exist.');
 		return $model;

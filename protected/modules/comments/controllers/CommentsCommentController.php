@@ -42,8 +42,7 @@ class CommentsCommentController extends Controller
     public function filters()
     {
         return array(
-            'accessAdmin + admin, adminBooks, delete, approve',
-            'accessControl + captcha, postComment',
+            'checkAccess + admin, adminBooks, delete, approve',
             'ajaxOnly + PostComment, Delete, Approve',
         );
     }
@@ -57,24 +56,6 @@ class CommentsCommentController extends Controller
             'captcha' => array(
                 'class' => 'CCaptchaAction',
                 'backColor' => 0xFFFFFF,
-            ),
-        );
-    }
-
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        return array(
-            array('allow',
-                'actions' => array('postComment', 'captcha'),
-                'users' => array('*'),
-            ),
-            array('deny',  // deny all users
-                'users' => array('*'),
             ),
         );
     }

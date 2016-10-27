@@ -9,10 +9,12 @@
  * @property string $role
  *
  * The followings are the available model relations:
+ * @property UserRolePermissions[] $userRolePermissions
  * @property Users[] $users
  */
 class UserRoles extends CActiveRecord
 {
+	public $permissions=array();
 	/**
 	 * @return string the associated database table name
 	 */
@@ -29,7 +31,7 @@ class UserRoles extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, role', 'required'),
+			array('name, role, permissions', 'required'),
 			array('name', 'length', 'max'=>100),
 			array('role', 'length', 'max'=>255),
 			// The following rule is used by search().
@@ -46,6 +48,7 @@ class UserRoles extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'userRolePermissions' => array(self::HAS_MANY, 'UserRolePermissions', 'role_id'),
 			'users' => array(self::HAS_MANY, 'Users', 'role_id'),
 		);
 	}
@@ -57,8 +60,9 @@ class UserRoles extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'role' => 'Role',
+			'name' => 'عنوان نقش',
+			'role' => 'نقش',
+			'permissions' => 'سطح دسترسی',
 		);
 	}
 

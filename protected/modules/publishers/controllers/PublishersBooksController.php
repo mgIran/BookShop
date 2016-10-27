@@ -37,30 +37,9 @@ class PublishersBooksController extends Controller
     public function filters()
     {
         return array(
-            'accessControl', // perform access control for CRUD operations
+            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadFile, images, savePackage', // perform access control for CRUD operations
         );
     }
-
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        return array(
-            array(
-                'allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'delete', 'uploadImage', 'deleteImage', 'upload', 'deleteUpload', 'uploadFile', 'deleteUploadFile', 'images', 'savePackage'),
-                'roles' => array('publisher'),
-            ),
-            array(
-                'deny',  // deny all users
-                'users' => array('*'),
-            ),
-        );
-    }
-
 
     public function actions(){
         return array(

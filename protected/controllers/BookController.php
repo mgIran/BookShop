@@ -36,8 +36,7 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'accessControl + discount, search, view, download, programs, games, educations, publisher, buy, bookmark, rate', // perform access control for CRUD operations
-            'accessAdmin + reportSales, reportIncome',
+            'checkAccess + reportSales, reportIncome, buy, bookmark, rate',
             'postOnly + bookmark',
         );
     }
