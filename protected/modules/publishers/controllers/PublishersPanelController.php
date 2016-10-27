@@ -1,12 +1,35 @@
 <?php
 
-class PanelController extends Controller
+class PublishersPanelController extends Controller
 {
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout='//layouts/panel';
+
+    /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'frontend' => array(
+                'uploadNationalCardImage',
+                'uploadRegistrationCertificateImage',
+                'signup',
+                'account',
+                'index',
+                'discount',
+                'settlement',
+                'sales',
+                'documents'
+            ),
+            'backend'=>array(
+                'manageSettlement'
+            )
+        );
+    }
     
     /**
      * @return array action filters
@@ -14,7 +37,8 @@ class PanelController extends Controller
     public function filters()
     {
         return array(
-            'accessControl', // perform access control for CRUD operations
+            'accessAdmin + manageSettlement',
+            'accessControl + uploadNationalCardImage, uploadRegistrationCertificateImage, signup, account, index, discount, settlement, sales, documents', // perform access control for CRUD operations
         );
     }
 

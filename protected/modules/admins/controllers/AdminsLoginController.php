@@ -1,7 +1,48 @@
 <?php
 
-class LoginController extends Controller
+class AdminsLoginController extends Controller
 {
+    /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'frontend' => array(
+                'index',
+                'logout'
+            )
+        );
+    }
+
+    /**
+     * @return array action filters
+     */
+    public function filters()
+    {
+        return array(
+            'accessControl + logout',
+        );
+    }
+
+    /**
+     * Specifies the access control rules.
+     * This method is used by the 'accessControl' filter.
+     * @return array access control rules
+     */
+    public function accessRules()
+    {
+        return array(
+            array('allow',
+                'actions' => array('logout'),
+                'users' => array('@'),
+            ),
+            array('deny',  // deny all users
+                'users' => array('*'),
+            ),
+        );
+    }
+
     /**
      * Declares class-based actions.
      */
@@ -13,21 +54,6 @@ class LoginController extends Controller
                 'backColor' => 0xFFFFFF ,
             ),
         );
-    }
-
-
-    /**
-     * This is the action to handle external exceptions.
-     */
-    public function actionError()
-    {
-        if($error=Yii::app()->errorHandler->error)
-        {
-            if(Yii::app()->request->isAjaxRequest)
-                echo $error['message'];
-            else
-                $this->render('error', $error);
-        }
     }
 
     /**

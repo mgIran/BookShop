@@ -1,6 +1,6 @@
 <?php
 
-class DashboardController extends Controller
+class AdminsDashboardController extends Controller
 {
     /**
      * @return array actions type list
@@ -20,30 +20,7 @@ class DashboardController extends Controller
     public function filters()
     {
         return array(
-            'accessControl', // perform access control for CRUD operations
-        );
-    }
-
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        $adminRoles = AdminRoles::model()->findAll(array(
-            'select' => 'role'
-        ));
-        $adminRoles = CHtml::listData($adminRoles,'role','role');
-        return array(
-            array('allow',  // allow all users to perform 'index' and 'views' actions
-                'actions'=>array('index'),
-                'roles' => $adminRoles,
-            ),
-            array('deny',  // deny all users
-                'actions'=>array('index'),
-                'users'=>array('*'),
-            ),
+            'accessAdmin', // perform access control for CRUD operations
         );
     }
 

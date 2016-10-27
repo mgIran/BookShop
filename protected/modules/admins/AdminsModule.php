@@ -2,6 +2,12 @@
 
 class AdminsModule extends CWebModule
 {
+	public $controllerMap = array(
+		'manage' => 'application.modules.admins.controllers.AdminsManageController',
+		'dashboard' => 'application.modules.admins.controllers.AdminsDashboardController',
+		'roles' => 'application.modules.admins.controllers.AdminsRolesController',
+	);
+
 	public function init()
     {
         $this->defaultController = 'dashboard';
@@ -13,10 +19,6 @@ class AdminsModule extends CWebModule
         // this method is called when the module is being created
         // you may place code here to customize the module or the application
     }
-
-    public $controllerMap = array(
-        'manage' => 'application.modules.admins.controllers.AdminsManageController',
-    );
 
 	public function beforeControllerAction($controller, $action)
 	{

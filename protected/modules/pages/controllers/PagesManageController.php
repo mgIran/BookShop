@@ -13,6 +13,25 @@ class PagesManageController extends Controller
     public $categoryName = null;
     public $categoryMultiple = 1;
 
+	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'frontend'=>array(
+				'view'
+			),
+			'backend' => array(
+				'index',
+				'create',
+				'update',
+				'admin',
+				'delete'
+			)
+		);
+	}
+
     public function beforeAction($action)
     {
         if($action->id != 'update'){
@@ -37,30 +56,8 @@ class PagesManageController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'accessAdmin', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','create','update','admin','delete'),
-                'roles'=>array('admin'),
-			),
-            array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('view'),
-                'users'=>array('*'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 

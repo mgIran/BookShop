@@ -15,8 +15,8 @@ class PublishersModule extends CWebModule
 	}
 
     public $controllerMap = array(
-        'panel' => 'publishers.controllers.PanelController',
-        'books' => 'publishers.controllers.BooksController',
+        'panel' => 'publishers.controllers.PublishersPanelController',
+        'books' => 'publishers.controllers.PublishersBooksController',
     );
 
 	public function beforeControllerAction($controller, $action)

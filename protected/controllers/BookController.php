@@ -36,7 +36,8 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'accessControl', // perform access control for CRUD operations
+            'accessControl + discount, search, view, download, programs, games, educations, publisher, buy, bookmark, rate', // perform access control for CRUD operations
+            'accessAdmin + reportSales, reportIncome',
             'postOnly + bookmark',
         );
     }
@@ -49,10 +50,6 @@ class BookController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',
-                'actions' => array('reportSales', 'reportIncome'),
-                'roles' => array('admin'),
-            ),
             array('allow',
                 'actions' => array('discount', 'search', 'view', 'download', 'programs', 'games', 'educations', 'publisher'),
                 'users' => array('*'),

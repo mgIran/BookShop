@@ -40,11 +40,13 @@ class Controller extends CController
         return true;
     }
 
-    public function init(){
-        Yii::app()->clientScript->registerScript('js-requirement','
-            var baseUrl = "'.Yii::app()->getBaseUrl(true).'";
-        ',CClientScript::POS_HEAD);
+    public function init()
+    {
+        Yii::app()->clientScript->registerScript('js-requirement', '
+            var baseUrl = "' . Yii::app()->getBaseUrl(true) . '";
+        ', CClientScript::POS_HEAD);
     }
+
     public function beforeRender($view)
     {
         $this->description = Yii::app()->db->createCommand()
@@ -72,7 +74,7 @@ class Controller extends CController
 
     public static function createAdminMenu()
     {
-        if (Yii::app()->user->roles === 'superAdmin')
+        //if (Yii::app()->user->roles === 'superAdmin')
             return array(
                 array(
                     'label' => 'پیشخوان',
@@ -84,7 +86,7 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/base/admin/')),
+                        array('label' => 'مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/baseManage/admin/')),
                         array('label' => 'تبلیغات', 'url' => Yii::app()->createUrl('/advertises/manage/admin/')),
                         array('label' => 'نظرات', 'url' => Yii::app()->createUrl('/comments/comment/adminBooks')),
                     )
@@ -106,8 +108,8 @@ class Controller extends CController
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
                         array('label' => 'تسویه حساب', 'url' => Yii::app()->createUrl('/publishers/panel/manageSettlement')),
-                        array('label' => 'گزارش فروش', 'url' => Yii::app()->createUrl('/books/reportSales')),
-                        array('label' => 'گزارش درآمد', 'url' => Yii::app()->createUrl('/books/reportIncome')),
+                        array('label' => 'گزارش فروش', 'url' => Yii::app()->createUrl('/book/reportSales')),
+                        array('label' => 'گزارش درآمد', 'url' => Yii::app()->createUrl('/book/reportIncome')),
                     )
                 ),
                 array(
@@ -163,7 +165,7 @@ class Controller extends CController
                     'visible' => !Yii::app()->user->isGuest
                 ),
             );
-        elseif (Yii::app()->user->roles === 'supporter')
+        /*elseif (Yii::app()->user->roles === 'supporter')
             return array(
                 array(
                     'label' => 'پیشخوان',
@@ -185,7 +187,7 @@ class Controller extends CController
                 ),
             );
         else
-            return array();
+            return array();*/
     }
 
     /**
@@ -390,7 +392,7 @@ class Controller extends CController
         if (!is_null($module))
             $controllersAddress = 'application.modules.' . $module . '.controllers';
         else
-            $module='base';
+            $module = 'base';
 
         $classes = array();
         foreach (glob(Yii::getPathOfAlias($controllersAddress) . "/*Controller.php") as $controller) {
@@ -408,11 +410,48 @@ class Controller extends CController
                     foreach ($temp as $key => $value)
                         if ($key == $type)
                             $array = $value;
-                    if(!empty($array))
+                    if (!empty($array))
                         $classes[$module][$class] = $array;
                 }
             }
         }
         return $classes;
+    }
+
+    /**
+     * Check admin permissions
+     *
+     * @param CFilterChain $filterChain
+     * @throws CHttpException if the current user is guest or current user does not have access
+     */
+    public function filterAccessAdmin($filterChain)
+    {
+        if (Yii::app()->user->isGuest)
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+
+        Yii::app()->getModule('admins');
+
+        $moduleID = is_null($filterChain->controller->module) ? 'base' : $filterChain->controller->module->name;
+        $controllerID = (($moduleID == 'base') ? '' : ucfirst($moduleID)) . ucfirst($filterChain->controller->id) . 'Controller';
+        $actionID = $filterChain->action->id;
+        $role = Yii::app()->user->roles;
+        if ($role == 'superAdmin')
+            $filterChain->run();
+        else {
+            $roleID = AdminRoles::model()->findByAttributes(array('role' => $role))->id;
+            $permissions = AdminRolePermissions::model()->find('module_id = :modID AND controller_id = :conID AND role_id = :rolID', array(
+                ':modID' => $moduleID,
+                ':conID' => $controllerID,
+                ':rolID' => $roleID
+            ));
+            if ($permissions) {
+                $actions = explode(',', $permissions->actions);
+                if (in_array($actionID, $actions))
+                    $filterChain->run();
+                else
+                    throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+            } else
+                throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /* @var $this RolesController */
 /* @var $model AdminRoles */
+/* @var $actions array */
 
 $this->breadcrumbs=array(
     'پیشخوان'=> array('/admins'),
@@ -17,4 +18,4 @@ $this->menu=array(
 
 <h1>ویرایش نقش <?php echo $model->name; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model,'actions'=>$actions)); ?>

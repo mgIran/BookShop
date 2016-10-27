@@ -16,7 +16,8 @@ class ManageBooksModule extends CWebModule
 	}
 
 	public $controllerMap = array(
-		'base' => 'manageBooks.controllers.BaseManageController'
+		'baseManage' => 'manageBooks.controllers.ManageBooksBaseManageController',
+		'imagesManage' => 'manageBooks.controllers.ManageBooksImagesManageController',
 	);
 	
 	public function beforeControllerAction($controller, $action)
