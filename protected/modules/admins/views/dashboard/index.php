@@ -52,11 +52,11 @@ if(Yii::app()->user->roles == 'superAdmin'):
                                 ),
                             ),
                             'delete'=>array(
-                                'url'=>'CHtml::normalizeUrl(array(\'/manageBooks/base/delete/\'.$data->id))'
+                                'url'=>'CHtml::normalizeUrl(array(\'/manageBooks/baseManage/delete/\'.$data->id))'
                             ),
                             'download'=>array(
                                 'label'=>'دانلود',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/base/download/".$data->id)',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/download/".$data->id)',
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/download.png',
                             ),
                         ),
@@ -64,9 +64,9 @@ if(Yii::app()->user->roles == 'superAdmin'):
                 ),
             ));?>
             <?php Yii::app()->clientScript->registerScript('changeConfirm', "
-                $('.change-confirm').on('change', function(){
+                $('body').on('change','.change-confirm', function(){
                     $.ajax({
-                        url:'".$this->createUrl('/manageBooks/base/changeConfirm')."',
+                        url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
                         type:'POST',
                         dataType:'JSON',
                         data:{book_id:$(this).data('id'), value:$(this).val()},
@@ -111,11 +111,11 @@ if(Yii::app()->user->roles == 'superAdmin'):
                         'template' => '{delete}{download}',
                         'buttons'=>array(
                             'delete'=>array(
-                                'url'=>'Yii::app()->createUrl("/manageBooks/base/deletePackage/".$data->id)',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/deletePackage/".$data->id)',
                             ),
                             'download'=>array(
                                 'label'=>'دانلود',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/base/downloadPackage/".$data->id)',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id)',
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/download.png',
                             ),
                         ),
@@ -130,7 +130,7 @@ if(Yii::app()->user->roles == 'superAdmin'):
                         $('input#package-status').val($(this).val());
                     }else{
                         $.ajax({
-                            url:'".$this->createUrl('/manageBooks/base/changePackageStatus')."',
+                            url:'".$this->createUrl('/manageBooks/baseManage/changePackageStatus')."',
                             type:'POST',
                             dataType:'JSON',
                             data:{package_id:$(this).data('id'), value:$(this).val()},
@@ -154,7 +154,7 @@ if(Yii::app()->user->roles == 'superAdmin'):
                     }else{
                         $('.reason-modal-message').removeClass('error').text('در حال ثبت...');
                         $.ajax({
-                            url:'".$this->createUrl('/manageBooks/base/changePackageStatus')."',
+                            url:'".$this->createUrl('/manageBooks/baseManage/changePackageStatus')."',
                             type:'POST',
                             dataType:'JSON',
                             data:{package_id:$('#package-id').val(), value:$('#package-status').val(), reason:$('#reason-text').val()},

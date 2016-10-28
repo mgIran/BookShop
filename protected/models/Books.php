@@ -16,6 +16,7 @@
  * @property string $publisher_name
  * @property string $publisher_id
  * @property string $confirm
+ * @property string $confirm_date
  * @property integer $seen
  * @property string $download
  * @property integer $deleted
@@ -78,19 +79,19 @@ class Books extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('title, category_id ,icon', 'required'),
-			array('number_of_pages, seen, deleted', 'numerical', 'integerOnly' => true),
+			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
 			array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
-			array('language', 'length' ,'max'=>20),
+			array('language, confirm_date', 'length' ,'max'=>20),
 			array('language', 'filter' ,'filter'=>'strip_tags'),
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
 			array('description, change_log ,publisher_name ,_purifier', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
+			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -160,6 +161,7 @@ class Books extends CActiveRecord
 				'status' => 'وضعیت',
 				'change_log' => 'لیست تغییرات',
 				'confirm' => 'وضعیت انتشار',
+				'confirm_date' => 'تاریخ انتشار',
 				'publisher_name' => 'عنوان ناشر',
 				'seen' => 'دیده شده',
 				'download' => 'تعداد دریافت',
@@ -296,14 +298,15 @@ class Books extends CActiveRecord
 		return $result ? $result->rate : false;
 	}
 
-	/**
-	 *
-	 * Get criteria for valid books
-	 *
-	 * @param array $categoryIds
-	 * @return CDbCriteria
-	 */
-	public function getValidBooks($categoryIds = array(),$order = 'id DESC',$limit = null)
+    /**
+     * Get criteria for valid books
+     *
+     * @param array $categoryIds
+     * @param string $order
+     * @param string $limit
+     * @return CDbCriteria
+     */
+	public function getValidBooks($categoryIds = array(),$order = 'confirm_date DESC',$limit = null)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('t.status=:status');

@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1></a>
+            <a class="navbar-brand" href="<?= Yii::app()->baseUrl ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1></a>
         </div>
 
         <div class="collapse navbar-collapse" id="mobile-menu">

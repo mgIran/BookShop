@@ -219,36 +219,6 @@ class BookController extends Controller
     /**
      * Show programs list
      */
-    public function actionPrograms($id = null, $title = null)
-    {
-        if (is_null($id))
-            $id = 1;
-        $this->showCategory($id, $title, 'کتاب ها');
-    }
-
-    /**
-     * Show games list
-     */
-    public function actionGames($id = null, $title = null)
-    {
-        if (is_null($id))
-            $id = 2;
-        $this->showCategory($id, $title, 'بازی ها');
-    }
-
-    /**
-     * Show educations list
-     */
-    public function actionEducations($id = null, $title = null)
-    {
-        if (is_null($id))
-            $id = 3;
-        $this->showCategory($id, $title, 'آموزش ها');
-    }
-
-    /**
-     * Show programs list
-     */
     public function actionPublisher($title, $id = null)
     {
         Yii::app()->theme = 'market';
@@ -278,9 +248,7 @@ class BookController extends Controller
     public function actionIndex(){
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
-        $model=$this->loadModel($id);
-        $catIds = $model->getCategoryChilds();
-        $criteria = Books::model()->getValidBooks($catIds);
+        $criteria = Books::model()->getValidBooks();
         $dataProvider = new CActiveDataProvider("Books",array(
             'criteria' => $criteria,
             'pagination' => array('pageSize' => 8)
