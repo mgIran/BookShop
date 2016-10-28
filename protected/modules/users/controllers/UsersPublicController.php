@@ -79,8 +79,8 @@ class UsersPublicController extends Controller
      */
     public function actionLogin()
     {
-        Yii::app()->theme = 'market';
-        $this->layout = '//layouts/backgroundImage';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/login';
         if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
             $this->redirect($this->createAbsoluteUrl('//'));
 
@@ -115,7 +115,7 @@ class UsersPublicController extends Controller
      */
     public function actionDashboard()
     {
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $model=Users::model()->findByPk(Yii::app()->user->getId());
         $this->render('dashboard', array(

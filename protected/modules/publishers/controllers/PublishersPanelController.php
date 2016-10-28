@@ -84,7 +84,7 @@ class PublishersPanelController extends Controller
     
 	public function actionIndex()
 	{
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         $criteria=new CDbCriteria();
         $criteria->addCondition('publisher_id = :user_id');
         $criteria->addCondition('deleted = 0');
