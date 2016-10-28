@@ -26,6 +26,7 @@
  * @property string $registration_number
  * @property string $registration_certificate_image
  * @property integer $score
+ * @property string $avatar
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -41,7 +42,7 @@ class UserDetails extends CActiveRecord
     }
 
     public $roleLabels = array(
-        'user' => 'کاربر',
+        'user' => 'کاربر عادی',
         'publisher' => 'ناشر'
     );
 
@@ -77,7 +78,7 @@ class UserDetails extends CActiveRecord
             array('national_code, zip_code', 'length', 'min' => 10),
             array('phone', 'length', 'min' => 8),
             array('fa_name, en_name, national_card_image, company_name, registration_number, registration_certificate_image', 'length', 'max' => 50),
-            array('fa_web_url, en_web_url', 'length', 'max' => 255),
+            array('fa_web_url, en_web_url, avatar', 'length', 'max' => 255),
             array('phone', 'length', 'max' => 11),
             array('publisher_id, nickname', 'length', 'max' => 20, 'min' => 5),
             array('address', 'length', 'max' => 1000),
@@ -88,7 +89,7 @@ class UserDetails extends CActiveRecord
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score', 'safe', 'on' => 'search'),
+            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar', 'safe', 'on' => 'search'),
         );
     }
 
@@ -140,6 +141,7 @@ class UserDetails extends CActiveRecord
             'registration_number' => 'شماره ثبت',
             'registration_certificate_image' => 'تصویر گواهی ثبت شرکت',
             'score' => 'امتیاز',
+            'avatar' => 'آواتار',
         );
     }
 
@@ -183,6 +185,7 @@ class UserDetails extends CActiveRecord
         $criteria->compare('registration_number', $this->registration_number, true);
         $criteria->compare('registration_certificate_image', $this->registration_certificate_image, true);
         $criteria->compare('score',$this->score);
+        $criteria->compare('avatar',$this->avatar,true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

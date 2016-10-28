@@ -8,8 +8,7 @@
 
     <div class="right-header col-xs-12">
         <div class="search-box col-xs-12">
-            <?
-            $form = $this->beginWidget('CActiveForm',array(
+            <?php $form = $this->beginWidget('CActiveForm',array(
                 'id' => 'header-serach-form',
                 'action' => array('/books/search'),
                 'method' => 'get',
