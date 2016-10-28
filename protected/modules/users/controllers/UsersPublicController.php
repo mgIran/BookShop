@@ -12,7 +12,12 @@ class UsersPublicController extends Controller
                 'dashboard',
                 'logout',
                 'setting',
-                'notifications'
+                'notifications',
+                'register',
+                'login',
+                'verify',
+                'forgetPassword',
+                'changePassword'
             )
         );
     }

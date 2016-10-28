@@ -69,9 +69,24 @@ class UsersRolesController extends Controller
 				Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است.');
 		}
 
+		$backendActions=$this->getAllActions('backend');
+		$frontendActions=$this->getAllActions('frontend');
+		foreach($frontendActions as $module=>$controllers) {
+            if (!key_exists($module, $backendActions))
+                $backendActions[$module] = array();
+            foreach ($controllers as $controller => $actions) {
+                if (!key_exists($controller, $backendActions[$module]))
+                    $backendActions[$module][$controller] = array();
+                foreach ($actions as $action) {
+                    if (!in_array($action, $backendActions[$module][$controller]))
+                        array_push($backendActions[$module][$controller], $action);
+                }
+            }
+        }
+
 		$this->render('create', array(
 			'model' => $model,
-			'actions' => $this->getAllActions(),
+			'actions' => $backendActions,
 		));
 	}
 
@@ -120,16 +135,24 @@ class UsersRolesController extends Controller
 				$model->permissions[]=$permission->module_id.'-'.$permission->controller_id.'-'.$action;
 		}
 
-		$allActions=$this->getAllActions('backend');
-		var_dump($allActions);
-		var_dump(array_search('index',$allActions));exit;
-//		foreach($allActions as $module=>$controllers){
-//			if(in_array())
-//		}
+        $backendActions=$this->getAllActions('backend');
+        $frontendActions=$this->getAllActions('frontend');
+        foreach($frontendActions as $module=>$controllers) {
+            if (!key_exists($module, $backendActions))
+                $backendActions[$module] = array();
+            foreach ($controllers as $controller => $actions) {
+                if (!key_exists($controller, $backendActions[$module]))
+                    $backendActions[$module][$controller] = array();
+                foreach ($actions as $action) {
+                    if (!in_array($action, $backendActions[$module][$controller]))
+                        array_push($backendActions[$module][$controller], $action);
+                }
+            }
+        }
 
 		$this->render('update', array(
 			'model' => $model,
-			'actions' => $this->getAllActions(),
+			'actions' => $backendActions,
 		));
 	}
 
