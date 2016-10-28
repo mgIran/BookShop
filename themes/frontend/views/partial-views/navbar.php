@@ -11,14 +11,18 @@
         </div>
 
         <div class="collapse navbar-collapse" id="mobile-menu">
-            <form class="navbar-form navbar-center">
+            <?php
+            echo CHtml::beginForm(array('/book/search'),'get',array('class'=>'navbar-form navbar-center'))
+            ?>
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="جستجو کنید...">
+                    <?php echo CHtml::textField('term',isset($_GET['term'])?CHtml::encode($_GET['term']):'',array('class'=>'form-control','placeholder'=>'جستجو کنید...')) ?>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"></button>
+                        <?php echo CHtml::submitButton('',array('name'=>'','class'=>'btn btn-default')) ?>
                     </span>
                 </div>
-            </form>
+            <?php
+            echo CHtml::endForm();
+            ?>
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="#categories-modal" data-toggle="modal">موضوعات</a></li>
                 <li><a href="#">ثبت نام</a></li>

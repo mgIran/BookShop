@@ -316,6 +316,9 @@
     .thumbnail-list .thumbnail-container{
         width: 25%;
     }
+    .book-list .thumbnail-list .thumbnail-container{
+        width: 33.333%;
+    }
     .thumbnail-list .thumbnail-container:nth-child(n+9){
         display: none;
     }
@@ -336,6 +339,10 @@
 @media (min-width: 1200px){
     .thumbnail-list .thumbnail-container{
         width: 20%;
+    }
+
+    .book-list .thumbnail-list .thumbnail-container{
+        width: 25%;
     }
     .slider-item .slider-overlay {
         right: calc((100% - 1140px) / 2);

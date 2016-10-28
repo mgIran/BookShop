@@ -3,7 +3,7 @@
 class AdvertisesModule extends CWebModule
 {
 	public $controllerMap = array(
-		'manage' => 'application.modules.advertises.controllers.AdvertisesManageController',
+		'manage' => 'advertises.controllers.AdvertisesManageController',
 	);
 
 	public function init()
@@ -18,9 +18,6 @@ class AdvertisesModule extends CWebModule
 		));
 	}
 
-	public $controllerMap = array(
-		'manage' => 'advertises.controllers.AdvertisesManageController'
-	);
 	public function beforeControllerAction($controller, $action)
 	{
 		if(parent::beforeControllerAction($controller, $action))

@@ -67,7 +67,8 @@ class BookController extends Controller
     public function actionView($id)
     {
         Yii::import('users.models.*');
-        Yii::app()->theme = "market";
+        Yii::app()->theme = "frontend";
+        $this->layout = "//layouts/index";
         $model = $this->loadModel($id);
         $model->seen = $model->seen + 1;
         $model->save();
@@ -83,8 +84,8 @@ class BookController extends Controller
         $criteria = Books::model()->getValidBooks(array($model->category_id));
         $criteria->addCondition('id!=:id');
         $criteria->params[':id'] = $model->id;
-        $criteria->limit = 4;
-        $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
+        $criteria->limit = 3;
+        $similar = new CActiveDataProvider('Books', array('criteria' => $criteria,'pagination' => array('pageSize'=>3)));
         $this->render('view', array(
             'model' => $model,
             'similar' => $similar,
@@ -275,23 +276,18 @@ class BookController extends Controller
         ));
     }
 
-    /**
-     * Show books list of category
-     */
-    public function showCategory($id, $title, $pageTitle)
-    {
-        Yii::app()->theme = 'market';
-        $this->layout = 'public';
-        $categoryIds = BookCategories::model()->getCategoryChilds($id);
-        $criteria = Books::model()->getValidBooks($categoryIds);
-        $dataProvider = new CActiveDataProvider('Books', array(
+    public function actionIndex(){
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/index';
+        $model=$this->loadModel($id);
+        $catIds = $model->getCategoryChilds();
+        $criteria = Books::model()->getValidBooks($catIds);
+        $dataProvider = new CActiveDataProvider("Books",array(
             'criteria' => $criteria,
+            'pagination' => array('pageSize' => 8)
         ));
-
-        $this->render('books_list', array(
-            'dataProvider' => $dataProvider,
-            'title' => (!is_null($title)) ? $title : null,
-            'pageTitle' => $pageTitle
+        $this->render('index',array(
+            'dataProvider' => $dataProvider
         ));
     }
 
@@ -545,14 +541,13 @@ class BookController extends Controller
      */
     public function actionSearch()
     {
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $criteria = new CDbCriteria();
-        $criteria->addCondition('status=:status AND confirm=:confirm AND deleted=:deleted AND (SELECT COUNT(book_images.id) FROM ym_book_images book_images WHERE book_images.book_id=t.id) != 0');
+        $criteria->addCondition('status=:status AND confirm=:confirm AND deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
         $criteria->params[':status'] = 'enable';
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
-        $criteria->limit = 20;
         $criteria->order = 't.id DESC';
         if (isset($_GET['term']) && !empty($term = $_GET['term'])) {
             $terms = explode(' ', urldecode($term));

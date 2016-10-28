@@ -21,6 +21,8 @@
  * @property integer $deleted
  * @property integer $size
  * @property integer $price
+ * @property integer $printed_price
+ * @property integer $off_printed_price
  * @property integer $offPrice
  * @property integer $rate
  *
@@ -36,6 +38,7 @@
  * @property BookDiscounts $discount
  * @property Advertises $bookAdvertises
  * @property BookPersons $persons
+ * @property Comment[] $comments
  */
 class Books extends CActiveRecord
 {
@@ -58,7 +61,6 @@ class Books extends CActiveRecord
 			'enable' => 'فعال',
 			'disable' => 'غیر فعال'
 	);
-	public $lastPackage;
 
 	/**
 	 * @var string publisher name filter
@@ -104,8 +106,13 @@ class Books extends CActiveRecord
 				'images' => array(self::HAS_MANY, 'BookImages', 'book_id'),
 				'publisher' => array(self::BELONGS_TO, 'Users', 'publisher_id'),
 				'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
-				'discount' => array(self::BELONGS_TO, 'BookDiscounts', 'id'),
+				'discount' => array(self::HAS_ONE, 'BookDiscounts', 'book_id',
+                    'condition' => 'discount.start_date < :time AND discount.end_date > :time',
+                    'params'=>array(':time' => time()),
+                    'order'=>'id DESC'
+                ),
 				'bookmarker' => array(self::MANY_MANY, 'Users', 'ym_user_book_bookmark(book_id,user_id)'),
+				'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id' ,'on' => 'status = "accepted"','order'=>'publish_date DESC'),
 				'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 				'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 				'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
@@ -119,6 +126,22 @@ class Books extends CActiveRecord
 //		$criteria->order = 'roles.order';
 //		var_dump($this->persons($criteria));exit;
 //	}
+
+
+	public function getComments(){
+		$criteria = new CDbCriteria();
+        $criteria->addCondition('owner_name = :model AND owner_id = :id');
+        $criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+        return Comment::model()->findAll($criteria);
+	}
+
+    public function getCountComments(){
+        Yii::app()->getModule('comments');
+		$criteria = new CDbCriteria();
+        $criteria->addCondition('owner_name = :model AND owner_id = :id');
+        $criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+        return Comment::model()->count($criteria);
+	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -192,7 +215,7 @@ class Books extends CActiveRecord
 		return parent::model($className);
 	}
 
-	
+
 
 	/**
 	 * Return url of book file
@@ -204,12 +227,6 @@ class Books extends CActiveRecord
 		return '';
 	}
 
-	public function afterFind()
-	{
-		if(!empty($this->packages))
-			$this->lastPackage = $this->packages[count($this->packages) - 1];
-	}
-
 	public function getPublisherName()
 	{
 		if($this->publisher_id)
@@ -218,7 +235,7 @@ class Books extends CActiveRecord
 			return $this->publisher_name;
 	}
 
-	
+
 
 	public function hasDiscount()
 	{
@@ -261,6 +278,13 @@ class Books extends CActiveRecord
 		$criteria->compare('book_id', $this->id);
 		$criteria->select = array('rate', 'avg(rate) as avgRate');
 		return BookRatings::model()->find($criteria)->avgRate;
+	}
+
+	public function getCountRate()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->compare('book_id', $this->id);
+		return BookRatings::model()->count($criteria);
 	}
 
 	public function userRated($user_id)
@@ -309,5 +333,12 @@ class Books extends CActiveRecord
 			return $this->lastPackage->price - $this->lastPackage->price * $this->discount->percent / 100;
 		else
 			return $this->lastPackage->price ;
+	}
+	public function getOff_printed_price()
+	{
+		if($this->discount)
+			return $this->lastPackage->printed_price - $this->lastPackage->printed_price * $this->discount->percent / 100;
+		else
+			return $this->lastPackage->printed_price;
 	}
 }

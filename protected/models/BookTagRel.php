@@ -1,28 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "{{book_discounts}}".
+ * This is the model class for table "{{book_tag_rel}}".
  *
- * The followings are the available columns in table '{{book_discounts}}':
- * @property string $id
+ * The followings are the available columns in table '{{book_tag_rel}}':
  * @property string $book_id
- * @property string $start_date
- * @property string $end_date
- * @property string $percent
- * @property string $offPrice
- * @property string $off_printed_price
- *
- * The followings are the available model relations:
- * @property Books $book
+ * @property string $tag_id
+ * @property integer $for_seo
  */
-class BookDiscounts extends CActiveRecord
+class BookTagRel extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return '{{book_discounts}}';
+		return '{{book_tag_rel}}';
 	}
 
 	/**
@@ -33,15 +26,12 @@ class BookDiscounts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('book_id,percent', 'required'),
-			array('id, book_id', 'length', 'max'=>11),
-			array('start_date, end_date', 'length', 'max'=>20),
-			array('start_date','compare' ,'operator' => '>=','compareValue' => time()-60*60 ,'message' => 'تاریخ شروع کمتر از حال حاضر است.'),
-			array('end_date','compare' ,'operator' => '>','compareAttribute' => 'start_date','message' => 'تاریخ پایان باید از تاریخ شروع بیشتر باشد.'),
-			array('percent', 'length', 'max'=>2),
+			array('book_id, tag_id', 'required'),
+			array('for_seo', 'numerical', 'integerOnly'=>true),
+			array('book_id, tag_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id ,book_id, start_date, end_date, percent', 'safe', 'on'=>'search'),
+			array('book_id, tag_id, for_seo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,7 +43,6 @@ class BookDiscounts extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'book' => array(self::BELONGS_TO, 'Books', 'book_id'),
 		);
 	}
 
@@ -63,10 +52,9 @@ class BookDiscounts extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'book_id' => 'کتاب',
-			'start_date' => 'تاریخ شروع',
-			'end_date' => 'تاریخ پایان',
-			'percent' => 'درصد',
+			'book_id' => 'Book',
+			'tag_id' => 'Tag',
+			'for_seo' => 'For Seo',
 		);
 	}
 
@@ -89,9 +77,8 @@ class BookDiscounts extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('book_id',$this->book_id,true);
-		$criteria->compare('start_date',$this->start_date,true);
-		$criteria->compare('end_date',$this->end_date,true);
-		$criteria->compare('percent',$this->percent,true);
+		$criteria->compare('tag_id',$this->tag_id,true);
+		$criteria->compare('for_seo',$this->for_seo);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -102,18 +89,10 @@ class BookDiscounts extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return BookDiscounts the static model class
+	 * @return BookTagRel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-
-	public function getOffPrice(){
-		return $this->book->lastPackage->price - $this->book->lastPackage->price * $this->percent /100;
-	}
-	public function getOff_printed_price(){
-		return $this->book->lastPackage->printed_price - $this->book->lastPackage->printed_price * $this->percent /100;
-	}
 }
-

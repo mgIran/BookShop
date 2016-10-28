@@ -261,4 +261,8 @@ class BookCategories extends CActiveRecord
 		$criteria = Books::model()->getValidBooks($catIds);
 		return Books::model()->count($criteria);
 	}
+	
+	public function getPublishersCount(){
+		return 1;
+	}
 }

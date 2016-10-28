@@ -388,7 +388,7 @@
             var trigger = get_trigger(callback),
                 el;
 
-            el = $(opts.container).find(opts.item).last();
+            el = $(opts.container);
             el.after(trigger);
             trigger.fadeIn();
         }

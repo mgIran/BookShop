@@ -1,21 +1,55 @@
 <?php
 /* @var $this BooksController */
 /* @var $dataProvider CActiveDataProvider */
-/* @var $title String */
-/* @var $pageTitle String */
 ?>
-
-<div class="book-box">
-    <div class="top-box">
-        <div class="title pull-right">
-            <h2>عبارت مورد نظر: <?= $_GET['term'] ?></h2>
+<div class="page">
+    <div class="page-heading">
+        <div class="container">
+            <h1>جتسجوی عبارت "<?= CHtml::encode($_GET['term']) ?>"</h1>
+            <div class="page-info">
+                <span>نتایج یافت شده<a><?= $dataProvider->totalItemCount ?> نتیجه</a></span>
+            </div>
         </div>
     </div>
-    <?php $this->widget('zii.widgets.CListView', array(
-        'dataProvider'=>$dataProvider,
-        'id'=>'search',
-        'itemView'=>'//site/_book_item',
-        'template'=>'{items}',
-        'itemsCssClass'=>'book-carousel'
-    ));?>
+    <div class="container page-content book-list">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="thumbnail-list">
+                        <?php
+                        $this->widget('zii.widgets.CListView', array(
+                            'id' => 'book-list',
+                            'dataProvider' => $dataProvider,
+                            'itemView' => '/site/_book_item',
+                            'template' => '{items} {pager}',
+                            'viewData' => array('itemClass' => 'simple'),
+                            'ajaxUpdate' => true,
+                            'pager' => array(
+                                'class' => 'ext.infiniteScroll.IasPager',
+                                'rowSelector'=>'.thumbnail-container',
+                                'listViewId' => 'book-list',
+                                'header' => '',
+                                'loaderText'=>'در حال دریافت ...',
+                                'options' => array('history' => true, 'triggerPageTreshold' => 2, 'trigger'=>'بارگذاری بیشتر ...'),
+                            ),
+                            'afterAjaxUpdate'=>"function(id, data) {
+								$.ias({
+									'history': true,
+									'triggerPageTreshold': 2,
+									'trigger': 'بارگذاری بیشتر ...',
+									'container': '#book-list',
+									'item': '.thumbnail-container',
+									'pagination': '#book-list .pager',
+									'next': '#book-list .next:not(.disabled):not(.hidden) a',
+									'loader': 'در حال دریافت ...'
+								});
+							}",
+                        ));
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php $this->renderPartial('//partial-views/inner-sidebar') ?>
+        </div>
+    </div>
 </div>

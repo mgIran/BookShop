@@ -69,6 +69,7 @@ class Controller extends CController
             ->from('ym_site_setting')
             ->where('name = "default_title"')
             ->queryScalar();
+        $this->categories = BookCategories::model()->findAll('parent_id IS NULL');
         return true;
     }
 
@@ -230,16 +231,16 @@ class Controller extends CController
         if (file_exists($file)) {
             $size = filesize($file);
             if ($size < 1024)
-                return $size . ' Byte';
+                return $size . ' بایت';
             elseif ($size < 1024 * 1024) {
                 $size = (float)$size / 1024;
-                return number_format($size, 1) . ' KB';
+                return number_format($size, 1) . ' کیلوبایت';
             } elseif ($size < 1024 * 1024 * 1024) {
                 $size = (float)$size / (1024 * 1024);
-                return number_format($size, 1) . ' MB';
+                return number_format($size, 1) . ' مگابایت';
             } else {
                 $size = (float)$size / (1024 * 1024 * 1024);
-                return number_format($size, 1) . ' MB';
+                return number_format($size, 1) . ' مگابایت';
             }
         }
         return 0;
