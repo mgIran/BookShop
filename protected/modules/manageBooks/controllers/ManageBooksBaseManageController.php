@@ -330,6 +330,7 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = $this->loadModel($_POST['book_id']);
         $model->confirm = $_POST['value'];
+        $model->confirm_date = time();
         if ($model->save()) {
             if ($_POST['value'] == 'accepted') {
                 $package = BookPackages::model()->find(array('condition' => 'book_id=:book_id', 'params' => array(':book_id' => $model->id), 'order' => 'id DESC'));

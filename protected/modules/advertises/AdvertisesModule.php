@@ -3,7 +3,7 @@
 class AdvertisesModule extends CWebModule
 {
 	public $controllerMap = array(
-		'manage' => 'advertises.controllers.AdvertisesManageController'
+		'manage' => 'advertises.controllers.AdvertisesManageController',
 	);
 
 	public function init()

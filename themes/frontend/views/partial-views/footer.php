@@ -12,11 +12,11 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <ul class="statistics">
-                    <li>افراد آنلاین<span>2</span></li>
-                    <li>بازدید امروز<span>24</span></li>
-                    <li>بازدید دیروز<span>123</span></li>
-                    <li>پر بازدیدترین روز<span>519</span></li>
-                    <li>کل بازدیدها<span>12.012</span></li>
+                    <li>افراد آنلاین<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getOnline())) ?></span></li>
+                    <li>بازدید امروز<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getToday())) ?></span></li>
+                    <li>بازدید دیروز<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getYesterday())) ?></span></li>
+                    <li>پر بازدیدترین روز<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getMaximal())) ?></span></li>
+                    <li>کل بازدیدها<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getTotal())) ?></span></li>
                 </ul>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">

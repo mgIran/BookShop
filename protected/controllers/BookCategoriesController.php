@@ -14,6 +14,9 @@ class BookCategoriesController extends Controller
 	public static function actionsType()
 	{
 		return array(
+			'frontend' => array(
+				'index',
+			),
 			'backend' => array(
 				'create',
 				'update',
@@ -85,6 +88,28 @@ class BookCategoriesController extends Controller
                 'storedMode' => 'field'
             )
 		);
+	}
+
+	/**
+	 * index of books in category id
+	 * @param $id
+	 * @throws CHttpException
+	 */
+	public function actionIndex($id)
+	{
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/index';
+		$model=$this->loadModel($id);
+		$catIds = $model->getCategoryChilds();
+		$criteria = Books::model()->getValidBooks($catIds);
+		$dataProvider = new CActiveDataProvider("Books",array(
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => 8)
+		));
+		$this->render('index',array(
+			'model'=>$model,
+			'dataProvider'=>$dataProvider
+		));
 	}
 
 	/**

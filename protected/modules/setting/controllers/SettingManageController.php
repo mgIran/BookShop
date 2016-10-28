@@ -16,7 +16,8 @@ class SettingManageController extends Controller
 	{
 		return array(
 			'backend' => array(
-				'changeSetting'
+				'changeSetting',
+                'social_links'
 			)
 		);
 	}
@@ -55,6 +56,32 @@ class SettingManageController extends Controller
         }
         $model = SiteSetting::model()->findAll();
         $this->render('_general',array(
+            'model'=>$model
+        ));
+    }
+
+    /**
+	 * Change site setting
+	 */
+    public function actionSocialLinks(){
+        $model = SiteSetting::model()->findByAttributes(array('name'=>'social_links'));
+        if(isset($_POST['SiteSetting'])){
+            foreach($_POST['SiteSetting']['social_links'] as $key => $link)
+            {
+                if($link == '')
+                    unset($_POST['SiteSetting']['social_links'][$key]);
+                elseif (!preg_match("~^(?:f|ht)tps?://~i",$link))
+                    $_POST['SiteSetting']['social_links'][$key] = 'http://'.$_POST['SiteSetting']['social_links'][$key];
+            }
+            if($_POST['SiteSetting']['social_links'])
+                $social_links = CJSON::encode($_POST['SiteSetting']['social_links']);
+            else
+                $social_links = null;
+            SiteSetting::model()->updateByPk($model->id,array('value'=>$social_links));
+            Yii::app()->user->setFlash('success' , 'اطلاعات با موفقیت ثبت شد.');
+            $this->refresh();
+        }
+        $this->render('_social_links',array(
             'model'=>$model
         ));
     }

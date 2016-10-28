@@ -31,10 +31,14 @@
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/parallax.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.script.js', CClientScript::POS_END);
+    $cs->registerScript('scroll-mode', '
+    if($(window).scrollTop() > 85)
+            $(".navbar.navbar-default").addClass(\'scroll-mode\');
+    ', CClientScript::POS_READY);
     ?>
 </head>
-<body>
-
+<body class="overflow-hidden">
+<?php $this->renderPartial('//partial-views/_page_loading');?>
 <?php $this->renderPartial('//partial-views/navbar');?>
 <?php echo $content;?>
 <?php $this->renderPartial('//partial-views/footer');?>

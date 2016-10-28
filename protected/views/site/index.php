@@ -13,14 +13,11 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
 <?php
 if($advertises->totalItemCount):
     ?>
-    <div class="slider" data-item-selector="slider-item">
+    <div class="slider">
         <?php
-        $this->widget('zii.widgets.CListView',array(
-            'id' => 'advertises-list',
-            'dataProvider' => $advertises,
-            'itemView' => '_advertise_item',
-            'template' => '{items}'
-        ))
+        foreach($advertises->getData() as $advertise):
+            $this->renderPartial('_advertise_item',array('data'=>$advertise));
+        endforeach;
         ?>
     </div>
 <?
@@ -88,7 +85,7 @@ if($latestBooksDataProvider->totalItemCount):
                 ));
                 ?>
             </div>
-            <a href="#" class="more"><i class="icon"></i>کتابهای بیشتر</a>
+            <a href="<?= $this->createUrl('/book/index') ?>" class="more"><i class="icon"></i>کتابهای بیشتر</a>
         </div>
     </div>
 <?php

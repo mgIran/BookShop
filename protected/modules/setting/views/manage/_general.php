@@ -29,27 +29,30 @@
         </div>
     <?php endif;?>
 
-    <? foreach($model as $field){?>
-        <?php if($field->name=='buy_credit_options'):?>
-            <div class="row">
+    <? foreach($model as $field){
+        if($field->name != 'social_links'):?>
+            <?php if($field->name == 'buy_credit_options'): ?>
                 <div class="row">
-                    <?php echo CHtml::label($field->title,'',array('class'=>'col-lg-3 control-label')); ?>
-                    <p style="clear: both;padding-right: 15px;color: #aaa">گزینه اول به عنوان انتخاب پیش فرض در نظر گرفته میشود</p>
-                    <ul id="credit-options"></ul>
-                    <?php echo CHtml::textField("SiteSetting[$field->name]", (!empty($field->value))?implode(',',CJSON::decode($field->value)):''); ?>
-                    <?php echo $form->error($field,'name'); ?>
+                    <div class="row">
+                        <?php echo CHtml::label($field->title ,'' ,array('class' => 'col-lg-3 control-label')); ?>
+                        <p style="clear: both;padding-right: 15px;color: #aaa">گزینه اول به عنوان انتخاب پیش فرض در نظر
+                            گرفته میشود</p>
+                        <ul id="credit-options"></ul>
+                        <?php echo CHtml::textField("SiteSetting[$field->name]" ,(!empty($field->value)) ? implode(',' ,CJSON::decode($field->value)) : ''); ?>
+                        <?php echo $form->error($field ,'name'); ?>
+                    </div>
                 </div>
-            </div>
-        <?php else:?>
-            <div class="row">
+            <?php else: ?>
                 <div class="row">
-                    <?php echo CHtml::label($field->title,'',array('class'=>'col-lg-3 control-label')); ?>
-                    <?php echo CHtml::textarea("SiteSetting[$field->name]",$field->value,array('size'=>60,'class'=>'col-lg-9 form-control')); ?>
-                    <?php echo $form->error($field,'name'); ?>
+                    <div class="row">
+                        <?php echo CHtml::label($field->title ,'' ,array('class' => 'col-lg-3 control-label')); ?>
+                        <?php echo CHtml::textarea("SiteSetting[$field->name]" ,$field->value ,array('size' => 60 ,'class' => 'col-lg-9 form-control')); ?>
+                        <?php echo $form->error($field ,'name'); ?>
+                    </div>
                 </div>
-            </div>
-        <?php endif;?>
-    <?
+            <?php endif; ?>
+            <?
+        endif;
     }
     ?>
     <div class="row buttons">

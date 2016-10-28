@@ -16,11 +16,14 @@
  * @property string $publisher_name
  * @property string $publisher_id
  * @property string $confirm
+ * @property string $confirm_date
  * @property integer $seen
  * @property string $download
  * @property integer $deleted
  * @property integer $size
  * @property integer $price
+ * @property integer $printed_price
+ * @property integer $off_printed_price
  * @property integer $offPrice
  * @property integer $rate
  *
@@ -36,6 +39,7 @@
  * @property BookDiscounts $discount
  * @property Advertises $bookAdvertises
  * @property BookPersons $persons
+ * @property Comment[] $comments
  */
 class Books extends CActiveRecord
 {
@@ -58,7 +62,6 @@ class Books extends CActiveRecord
 			'enable' => 'فعال',
 			'disable' => 'غیر فعال'
 	);
-	public $lastPackage;
 
 	/**
 	 * @var string publisher name filter
@@ -76,19 +79,19 @@ class Books extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('title, category_id ,icon', 'required'),
-			array('number_of_pages, seen, deleted', 'numerical', 'integerOnly' => true),
+			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
 			array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
-			array('language', 'length' ,'max'=>20),
+			array('language, confirm_date', 'length' ,'max'=>20),
 			array('language', 'filter' ,'filter'=>'strip_tags'),
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
 			array('description, change_log ,publisher_name ,_purifier', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
+			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -104,8 +107,13 @@ class Books extends CActiveRecord
 				'images' => array(self::HAS_MANY, 'BookImages', 'book_id'),
 				'publisher' => array(self::BELONGS_TO, 'Users', 'publisher_id'),
 				'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
-				'discount' => array(self::BELONGS_TO, 'BookDiscounts', 'id'),
+				'discount' => array(self::HAS_ONE, 'BookDiscounts', 'book_id',
+                    'condition' => 'discount.start_date < :time AND discount.end_date > :time',
+                    'params'=>array(':time' => time()),
+                    'order'=>'id DESC'
+                ),
 				'bookmarker' => array(self::MANY_MANY, 'Users', 'ym_user_book_bookmark(book_id,user_id)'),
+				'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id' ,'on' => 'status = "accepted"','order'=>'publish_date DESC'),
 				'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 				'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 				'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
@@ -119,6 +127,22 @@ class Books extends CActiveRecord
 //		$criteria->order = 'roles.order';
 //		var_dump($this->persons($criteria));exit;
 //	}
+
+
+	public function getComments(){
+		$criteria = new CDbCriteria();
+        $criteria->addCondition('owner_name = :model AND owner_id = :id');
+        $criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+        return Comment::model()->findAll($criteria);
+	}
+
+    public function getCountComments(){
+        Yii::app()->getModule('comments');
+		$criteria = new CDbCriteria();
+        $criteria->addCondition('owner_name = :model AND owner_id = :id');
+        $criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+        return Comment::model()->count($criteria);
+	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -137,6 +161,7 @@ class Books extends CActiveRecord
 				'status' => 'وضعیت',
 				'change_log' => 'لیست تغییرات',
 				'confirm' => 'وضعیت انتشار',
+				'confirm_date' => 'تاریخ انتشار',
 				'publisher_name' => 'عنوان ناشر',
 				'seen' => 'دیده شده',
 				'download' => 'تعداد دریافت',
@@ -192,7 +217,7 @@ class Books extends CActiveRecord
 		return parent::model($className);
 	}
 
-	
+
 
 	/**
 	 * Return url of book file
@@ -204,12 +229,6 @@ class Books extends CActiveRecord
 		return '';
 	}
 
-	public function afterFind()
-	{
-		if(!empty($this->packages))
-			$this->lastPackage = $this->packages[count($this->packages) - 1];
-	}
-
 	public function getPublisherName()
 	{
 		if($this->publisher_id)
@@ -218,7 +237,7 @@ class Books extends CActiveRecord
 			return $this->publisher_name;
 	}
 
-	
+
 
 	public function hasDiscount()
 	{
@@ -263,6 +282,13 @@ class Books extends CActiveRecord
 		return BookRatings::model()->find($criteria)->avgRate;
 	}
 
+	public function getCountRate()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->compare('book_id', $this->id);
+		return BookRatings::model()->count($criteria);
+	}
+
 	public function userRated($user_id)
 	{
 		$criteria = new CDbCriteria;
@@ -272,14 +298,15 @@ class Books extends CActiveRecord
 		return $result ? $result->rate : false;
 	}
 
-	/**
-	 *
-	 * Get criteria for valid books
-	 *
-	 * @param array $categoryIds
-	 * @return CDbCriteria
-	 */
-	public function getValidBooks($categoryIds = array(),$order = 'id DESC',$limit = null)
+    /**
+     * Get criteria for valid books
+     *
+     * @param array $categoryIds
+     * @param string $order
+     * @param string $limit
+     * @return CDbCriteria
+     */
+	public function getValidBooks($categoryIds = array(),$order = 'confirm_date DESC',$limit = null)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('t.status=:status');
@@ -309,5 +336,12 @@ class Books extends CActiveRecord
 			return $this->lastPackage->price - $this->lastPackage->price * $this->discount->percent / 100;
 		else
 			return $this->lastPackage->price ;
+	}
+	public function getOff_printed_price()
+	{
+		if($this->discount)
+			return $this->lastPackage->printed_price - $this->lastPackage->printed_price * $this->discount->percent / 100;
+		else
+			return $this->lastPackage->printed_price;
 	}
 }

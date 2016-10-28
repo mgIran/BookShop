@@ -75,7 +75,7 @@ if(!$model->isNewRecord || $books) {
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',array('class'=>'btn btn-success')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ویرایش',array('class'=>'btn btn-success')); ?>
 	</div>
 
 	<?php $this->endWidget(); ?>
