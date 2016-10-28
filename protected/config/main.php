@@ -112,6 +112,7 @@ return array(
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',
+				'category/<action:\w+>'=>'bookCategories/<action>',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
                 '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',

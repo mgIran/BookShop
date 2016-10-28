@@ -3,9 +3,10 @@
 class AdminsModule extends CWebModule
 {
 	public $controllerMap = array(
-		'manage' => 'application.modules.admins.controllers.AdminsManageController',
-		'dashboard' => 'application.modules.admins.controllers.AdminsDashboardController',
-		'roles' => 'application.modules.admins.controllers.AdminsRolesController',
+		'manage' => 'admins.controllers.AdminsManageController',
+		'dashboard' => 'admins.controllers.AdminsDashboardController',
+		'roles' => 'admins.controllers.AdminsRolesController',
+		'login' => 'admins.controllers.AdminsLoginController',
 	);
 
 	public function init()

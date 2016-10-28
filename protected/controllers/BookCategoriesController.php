@@ -36,7 +36,7 @@ class BookCategoriesController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessAdmin + create, update, admin, delete, upload, deleteUpload, uploadIcon, deleteUploadIcon',
+			'checkAccess + create, update, admin, delete, upload, deleteUpload, uploadIcon, deleteUploadIcon',
 			'postOnly + delete',
 		);
 	}

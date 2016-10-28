@@ -51,7 +51,6 @@ CREATE TABLE `ym_admin_roles` (
 -- ----------------------------
 INSERT INTO `ym_admin_roles` VALUES ('1', 'Super Admin', 'superAdmin');
 INSERT INTO `ym_admin_roles` VALUES ('2', 'مدیریت', 'admin');
-INSERT INTO `ym_admin_roles` VALUES ('4', 'نویسنده', 'author');
 
 -- ----------------------------
 -- Table structure for ym_admin_role_permissions
@@ -66,23 +65,32 @@ CREATE TABLE `ym_admin_role_permissions` (
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `ym_admin_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `ym_admin_roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_admin_role_permissions
 -- ----------------------------
-INSERT INTO `ym_admin_role_permissions` VALUES ('46', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
-INSERT INTO `ym_admin_role_permissions` VALUES ('47', '2', 'base', 'BookController', 'reportSales,reportIncome');
-INSERT INTO `ym_admin_role_permissions` VALUES ('48', '2', 'admins', 'AdminsDashboardController', 'index');
-INSERT INTO `ym_admin_role_permissions` VALUES ('49', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('50', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('51', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
-INSERT INTO `ym_admin_role_permissions` VALUES ('52', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
-INSERT INTO `ym_admin_role_permissions` VALUES ('53', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,uploadFile,deleteUploadFile,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,downloadPackage');
-INSERT INTO `ym_admin_role_permissions` VALUES ('54', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
-INSERT INTO `ym_admin_role_permissions` VALUES ('55', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('56', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('57', '2', 'publishers', 'PublishersPanelController', 'manageSettlement');
+INSERT INTO `ym_admin_role_permissions` VALUES ('71', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
+INSERT INTO `ym_admin_role_permissions` VALUES ('72', '2', 'base', 'BookController', 'reportSales,reportIncome');
+INSERT INTO `ym_admin_role_permissions` VALUES ('73', '2', 'base', 'TagsManageController', 'index,create,update,admin,delete,list');
+INSERT INTO `ym_admin_role_permissions` VALUES ('74', '2', 'admins', 'AdminsDashboardController', 'index');
+INSERT INTO `ym_admin_role_permissions` VALUES ('75', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('76', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('77', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
+INSERT INTO `ym_admin_role_permissions` VALUES ('78', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_admin_role_permissions` VALUES ('79', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,uploadFile,deleteUploadFile,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,downloadPackage');
+INSERT INTO `ym_admin_role_permissions` VALUES ('80', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
+INSERT INTO `ym_admin_role_permissions` VALUES ('81', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('82', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('83', '2', 'publishers', 'PublishersPanelController', 'manageSettlement,uploadNationalCardImage,uploadRegistrationCertificateImage');
+INSERT INTO `ym_admin_role_permissions` VALUES ('84', '2', 'setting', 'SettingManageController', 'changeSetting');
+INSERT INTO `ym_admin_role_permissions` VALUES ('85', '2', 'news', 'NewsCategoriesManageController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('86', '2', 'news', 'NewsManageController', 'create,update,admin,delete,upload,deleteUpload,order');
+INSERT INTO `ym_admin_role_permissions` VALUES ('87', '2', 'tickets', 'TicketsDepartmentsController', 'admin,create,update,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('88', '2', 'tickets', 'TicketsManageController', 'delete,pendingTicket,openTicket,admin,index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_admin_role_permissions` VALUES ('89', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_admin_role_permissions` VALUES ('90', '2', 'users', 'UsersManageController', 'index,view,create,update,admin,delete,confirmDevID,deleteDevID,confirmPublisher,refusePublisher');
+INSERT INTO `ym_admin_role_permissions` VALUES ('91', '2', 'users', 'UsersRolesController', 'create,update,admin,delete');
 
 -- ----------------------------
 -- Table structure for ym_books
@@ -775,6 +783,41 @@ CREATE TABLE `ym_user_roles` (
 -- ----------------------------
 INSERT INTO `ym_user_roles` VALUES ('1', 'کاربر معمولی', 'user');
 INSERT INTO `ym_user_roles` VALUES ('2', 'ناشر', 'publisher');
+
+-- ----------------------------
+-- Table structure for ym_user_role_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `ym_user_role_permissions`;
+CREATE TABLE `ym_user_role_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'شناسه',
+  `role_id` int(10) unsigned DEFAULT NULL COMMENT 'نقش',
+  `module_id` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'ماژول',
+  `controller_id` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'کنترلر',
+  `actions` text CHARACTER SET utf8 COMMENT 'اکشن ها',
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `ym_user_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `ym_user_roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- ----------------------------
+-- Records of ym_user_role_permissions
+-- ----------------------------
+INSERT INTO `ym_user_role_permissions` VALUES ('1', '2', 'base', 'BookController', 'buy,bookmark,rate');
+INSERT INTO `ym_user_role_permissions` VALUES ('2', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_user_role_permissions` VALUES ('3', '2', 'publishers', 'PublishersBooksController', 'create,update,delete,uploadImage,deleteImage,upload,deleteUpload,uploadFile,deleteUploadFile,images,savePackage');
+INSERT INTO `ym_user_role_permissions` VALUES ('4', '2', 'publishers', 'PublishersPanelController', 'uploadRegistrationCertificateImage,uploadNationalCardImage,account,index,discount,settlement,sales,documents');
+INSERT INTO `ym_user_role_permissions` VALUES ('5', '2', 'tickets', 'TicketsDepartmentsController', 'create,update');
+INSERT INTO `ym_user_role_permissions` VALUES ('6', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_user_role_permissions` VALUES ('7', '2', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_user_role_permissions` VALUES ('8', '2', 'users', 'UsersCreditController', 'buy,bill,verify');
+INSERT INTO `ym_user_role_permissions` VALUES ('9', '2', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications');
+INSERT INTO `ym_user_role_permissions` VALUES ('10', '1', 'base', 'BookController', 'rate,bookmark,buy');
+INSERT INTO `ym_user_role_permissions` VALUES ('11', '1', 'publishers', 'PublishersPanelController', 'signup,uploadNationalCardImage,uploadRegistrationCertificateImage');
+INSERT INTO `ym_user_role_permissions` VALUES ('12', '1', 'tickets', 'TicketsDepartmentsController', 'create,update');
+INSERT INTO `ym_user_role_permissions` VALUES ('13', '1', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_user_role_permissions` VALUES ('14', '1', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_user_role_permissions` VALUES ('15', '1', 'users', 'UsersCreditController', 'buy,bill,verify');
+INSERT INTO `ym_user_role_permissions` VALUES ('16', '1', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications');
 
 -- ----------------------------
 -- Table structure for ym_user_settlement

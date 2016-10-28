@@ -128,7 +128,7 @@ class Controller extends CController
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"), 'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'نقش مدیران', 'url' => Yii::app()->createUrl('/admins/roles')),
+                        array('label' => 'نقش مدیران', 'url' => Yii::app()->createUrl('/admins/roles/admin')),
                         array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/admins/manage')),
                         array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/admins/manage/create')),
                     )
@@ -152,7 +152,7 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/siteSettingManage/changeSetting')),
+                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
                     )
                 ),
                 array(
@@ -368,7 +368,7 @@ class Controller extends CController
         return $html;
     }
 
-    public function getAllActions($type)
+    public function getAllActions($type = 'all')
     {
         $controllers = array();
         $temp = $this->getActions($type);
@@ -420,31 +420,42 @@ class Controller extends CController
     }
 
     /**
-     * Check admin permissions
+     * Check user permissions
      *
      * @param CFilterChain $filterChain
      * @throws CHttpException if the current user is guest or current user does not have access
      */
-    public function filterAccessAdmin($filterChain)
+    public function filterCheckAccess($filterChain)
     {
         if (Yii::app()->user->isGuest)
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-
-        Yii::app()->getModule('admins');
 
         $moduleID = is_null($filterChain->controller->module) ? 'base' : $filterChain->controller->module->name;
         $controllerID = (($moduleID == 'base') ? '' : ucfirst($moduleID)) . ucfirst($filterChain->controller->id) . 'Controller';
         $actionID = $filterChain->action->id;
         $role = Yii::app()->user->roles;
+        $userType = Yii::app()->user->type;
         if ($role == 'superAdmin')
             $filterChain->run();
         else {
-            $roleID = AdminRoles::model()->findByAttributes(array('role' => $role))->id;
-            $permissions = AdminRolePermissions::model()->find('module_id = :modID AND controller_id = :conID AND role_id = :rolID', array(
-                ':modID' => $moduleID,
-                ':conID' => $controllerID,
-                ':rolID' => $roleID
-            ));
+            if ($userType == 'admin') {
+                Yii::app()->getModule('admins');
+                $roleID = AdminRoles::model()->findByAttributes(array('role' => $role))->id;
+                $permissions = AdminRolePermissions::model()->find('module_id = :modID AND controller_id = :conID AND role_id = :rolID', array(
+                    ':modID' => $moduleID,
+                    ':conID' => $controllerID,
+                    ':rolID' => $roleID
+                ));
+            } else {
+                Yii::app()->getModule('users');
+                $roleID = UserRoles::model()->findByAttributes(array('role' => $role))->id;
+                $permissions = UserRolePermissions::model()->find('module_id = :modID AND controller_id = :conID AND role_id = :rolID', array(
+                    ':modID' => $moduleID,
+                    ':conID' => $controllerID,
+                    ':rolID' => $roleID
+                ));
+            }
+
             if ($permissions) {
                 $actions = explode(',', $permissions->actions);
                 if (in_array($actionID, $actions))

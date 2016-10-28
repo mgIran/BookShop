@@ -27,7 +27,7 @@ class ManageBooksImagesManageController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessAdmin',
+			'checkAccess',
 		);
 	}
 

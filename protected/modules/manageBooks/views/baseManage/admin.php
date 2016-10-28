@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 	'مدیریت',
 );
 $this->menu=array(
-	array('label'=>'افزودن کتاب', 'url'=>Yii::app()->createUrl('/manageBooks/base/create')),
+	array('label'=>'افزودن کتاب', 'url'=>Yii::app()->createUrl('/manageBooks/baseManage/create')),
 );
 ?>
 
@@ -51,10 +51,10 @@ $this->menu=array(
 			'class'=>'CButtonColumn',
             'buttons' => array(
                 'update' => array(
-                    'url' => 'Yii::app()->createUrl("/manageBooks/base/update", array("id"=>$data->id))'
+                    'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/update", array("id"=>$data->id))'
                 ),
                 'delete' => array(
-                    'url' => 'Yii::app()->createUrl("/manageBooks/base/delete", array("id"=>$data->id))'
+                    'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/delete", array("id"=>$data->id))'
                 ),
                 'view' => array(
 					'url'=>'Yii::app()->createUrl("/book/".$data->id."/".urlencode($data->title))',

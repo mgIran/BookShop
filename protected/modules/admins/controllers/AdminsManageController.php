@@ -33,7 +33,7 @@ class AdminsManageController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessAdmin + index,views,create,update,admin,delete', // perform access control for CRUD operations
+			'checkAccess',
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}

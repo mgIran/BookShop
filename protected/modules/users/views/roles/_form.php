@@ -1,6 +1,6 @@
 <?php
-/* @var $this AdminsRolesController */
-/* @var $model AdminRoles */
+/* @var $this UsersRolesController */
+/* @var $model UserRoles */
 /* @var $form CActiveForm */
 /* @var $actions array */
 Yii::app()->clientScript->registerScript('resetForm','document.getElementById("admin-roles-form").reset();');
@@ -33,7 +33,7 @@ Yii::app()->clientScript->registerScript('resetForm','document.getElementById("a
 	<div class="row form-group">
         <?php echo $form->labelEx($model,'permissions',array('class'=>'col-lg-2 control-label')); ?>
         <?php $this->widget('application.extensions.jsTree.jsTree', array(
-            'name' => 'AdminRoles[permissions]',
+            'name' => 'UserRoles[permissions]',
             'data' => $actions,
             'selected' => $model->permissions
         )); ?>

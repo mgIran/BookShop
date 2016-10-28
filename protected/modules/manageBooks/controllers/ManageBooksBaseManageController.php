@@ -50,7 +50,7 @@ class ManageBooksBaseManageController extends Controller
     public function filters()
     {
         return array(
-            'accessAdmin', // perform access control for CRUD operations
+            'checkAccess', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
         );
     }

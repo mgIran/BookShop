@@ -31,11 +31,11 @@
 		<?php echo $form->error($model,'password'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'roles'); ?>
-		<?php echo $form->textField($model,'roles',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'roles'); ?>
-	</div>
+<!--	<div class="row">-->
+<!--		--><?php //echo $form->labelEx($model,'roles'); ?>
+<!--		--><?php //echo $form->textField($model,'roles',array('size'=>60,'maxlength'=>100)); ?>
+<!--		--><?php //echo $form->error($model,'roles'); ?>
+<!--	</div>-->
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

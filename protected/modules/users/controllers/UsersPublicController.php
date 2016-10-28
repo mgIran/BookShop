@@ -1,36 +1,34 @@
 <?php
 
-class PublicController extends Controller
+class UsersPublicController extends Controller
 {
+    /**
+     * @return array actions type list
+     */
+    public static function actionsType()
+    {
+        return array(
+            'frontend'=>array(
+                'dashboard',
+                'logout',
+                'setting',
+                'notifications',
+                'register',
+                'login',
+                'verify',
+                'forgetPassword',
+                'changePassword'
+            )
+        );
+    }
+
     /**
      * @return array action filters
      */
     public function filters()
     {
         return array(
-            'accessControl', // perform access control for CRUD operations
-        );
-    }
-
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        return array(
-            array('allow',  // allow all users to perform 'index' and 'views' actions
-                'actions'=>array('dashboard','logout','setting','notifications'),
-                'users' => array('@'),
-            ),
-            array('allow',  // allow all users to perform 'index' and 'views' actions
-                'actions'=>array('register','login','verify','forgetPassword','changePassword'),
-                'users' => array('*'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
+            'checkAccess + dashboard, logout, setting, notifications',
         );
     }
 

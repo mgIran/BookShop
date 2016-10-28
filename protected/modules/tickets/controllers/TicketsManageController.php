@@ -9,12 +9,35 @@ class TicketsManageController extends Controller
 	public $layout='//layouts/panel';
 
 	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'backend'=>array(
+				'delete',
+				'pendingTicket',
+				'openTicket',
+				'admin',
+				'index',
+				'view',
+				'create',
+				'update',
+				'closeTicket',
+				'upload',
+				'deleteUploaded',
+				'send'
+			)
+		);
+	}
+
+	/**
 	 * @return array action filters
 	 */
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'checkAccess',
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -24,29 +47,6 @@ class TicketsManageController extends Controller
 		Yii::app()->theme = 'market';
 		return parent::beforeAction($action);
 	}
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('delete','pendingTicket','openTicket','admin'),
-				'roles'=>array('admin','supporter'),
-			),
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create','update','closeTicket','upload' ,'deleteUploaded','send'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
-
 
 	public function actions(){
 		return array(

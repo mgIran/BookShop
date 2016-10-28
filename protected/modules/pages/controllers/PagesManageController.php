@@ -32,6 +32,17 @@ class PagesManageController extends Controller
 		);
 	}
 
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'checkAccess + index, create, update, admin, delete', // perform access control for CRUD operations
+			'postOnly + delete', // we only allow deletion via POST request
+		);
+	}
+
     public function beforeAction($action)
     {
         if($action->id != 'update'){
@@ -49,17 +60,6 @@ class PagesManageController extends Controller
         }
         return parent::beforeAction($action);
     }
-
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessAdmin', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
 
 	/**
 	 * Displays a particular model.

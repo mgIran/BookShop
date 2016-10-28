@@ -2,6 +2,10 @@
 
 class SettingModule extends CWebModule
 {
+	public $controllerMap = array(
+		'manage' => 'setting.controllers.SettingManageController',
+	);
+
 	public function init()
 	{
 		// this method is called when the module is being created
@@ -13,7 +17,6 @@ class SettingModule extends CWebModule
 			'setting.components.*',
 		));
 	}
-
 
 	public function beforeControllerAction($controller, $action)
 	{

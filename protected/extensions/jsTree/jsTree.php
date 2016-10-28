@@ -4,7 +4,7 @@ class jsTree extends CInputWidget
     protected $publishedAssetsPath;
     public $data = NULL;
     public $name = NULL;
-    public $selected = NULL;
+    public $selected = array();
 
     public function init()
     {

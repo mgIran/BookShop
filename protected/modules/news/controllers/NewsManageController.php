@@ -9,35 +9,36 @@ class NewsManageController extends Controller
 	public $layout='//layouts/column2';
 
 	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'frontend'=>array(
+				'index',
+				'tag',
+				'view'
+			),
+			'backend' => array(
+				'create',
+				'update',
+				'admin',
+				'delete',
+				'upload',
+				'deleteUpload',
+				'order'
+			)
+		);
+	}
+
+	/**
 	 * @return array action filters
 	 */
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'checkAccess + create, update, admin, delete, upload, deleteUpload, order', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('create','update','admin','delete', 'upload', 'deleteUpload','order'),
-				'users'=>array('admin'),
-			),
-			array('allow',
-				'actions'=>array('index','tag','view'),
-				'users'=>array('*'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 
