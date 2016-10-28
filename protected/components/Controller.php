@@ -152,7 +152,8 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
+                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changesetting')),
+                        array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/sociallinks')),
                     )
                 ),
                 array(

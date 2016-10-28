@@ -617,6 +617,11 @@ a:active{
     display: block;
 }
 
+.thumbnail .price span{
+    display: inline-block;
+    margin-left: 5px;
+}
+
 .thumbnail .btn-add-to-library {
     display: block;
     border-top: 1px solid rgba(51, 51, 51, 0.05);

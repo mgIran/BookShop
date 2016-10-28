@@ -211,4 +211,12 @@ class Users extends CActiveRecord
             'criteria' => $criteria,
         ));
     }
+
+    public function getUsersCount($role_id = null)
+    {
+        $criteria = new CDbCriteria();
+        if($role_id)
+            $criteria->compare('role_id',$role_id);
+        return $this->count($criteria);
+    }
 }

@@ -253,7 +253,7 @@ class BookController extends Controller
             'criteria' => $criteria,
             'pagination' => array('pageSize' => 8)
         ));
-        $this->render('index',array(
+        $this->render('books_list',array(
             'dataProvider' => $dataProvider
         ));
     }
