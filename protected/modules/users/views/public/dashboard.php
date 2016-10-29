@@ -95,7 +95,7 @@
         <?php $this->widget('zii.widgets.CListView',array(
             'id' => 'suggested-list',
             'dataProvider' => $suggestedDataProvider,
-            'itemView' => '_book_item',
+            'itemView' => '//site/_book_item',
             'template' => '{items}',
             'viewData' => array('itemClass' => 'simple')
         )); ?>

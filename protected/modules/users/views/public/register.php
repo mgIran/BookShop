@@ -1,3 +1,7 @@
+<?php
+/* @var $model Users */
+/* @var $form CActiveForm */
+?>
 <div class="login-form signup">
 
     <?php if(Yii::app()->user->hasFlash('success')):?>
@@ -10,9 +14,7 @@
         </div>
     <?php endif;?>
 
-    <h1>ثبت نام</h1>
-    <?php
-    $form=$this->beginWidget('CActiveForm', array(
+    <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'register-form',
         'enableAjaxValidation'=>true,
         'enableClientValidation'=>true,
@@ -28,18 +30,18 @@
             }",
         ),
     )); ?>
-    <div class="row">
-        <?php echo $form->textField($model,'email',array('class'=>'transition focus-left','placeholder'=>'پست الکترونیکی')); ?>
+    <div class="form-row">
+        <?php echo $form->textField($model,'email',array('class'=>'form-control','placeholder'=>'پست الکترونیکی')); ?>
         <?php echo $form->error($model,'email'); ?>
         <span class="transition icon-envelope"></span>
     </div>
-    <div class="row">
-        <?php echo $form->passwordField($model,'password',array('class'=>'transition','placeholder'=>'کلمه عبور')); ?>
+    <div class="form-row">
+        <?php echo $form->passwordField($model,'password',array('class'=>'form-control','placeholder'=>'کلمه عبور')); ?>
         <?php echo $form->error($model,'password'); ?>
         <span class="transition icon-key"></span>
     </div>
-    <div class="row">
-        <input class="transition" type="submit" value="ثبت نام">
+    <div class="form-row">
+        <input class="btn btn-danger" type="submit" value="ثبت نام">
     </div>
     <?php $this->endWidget(); ?>
 
