@@ -34,7 +34,7 @@
 <body class="login-page">
 
 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-lg-offset-4 col-md-offset-4 col-sm-offset-4 col-xs-offset-0 login-box">
-    <a class="login-logo" href="#"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1></a>
+    <a class="login-logo" href="<?php echo Yii::app()->createUrl('/site');?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1></a>
     <h4 class="welcome-text">خوش آمدید<small> ، لطفا وارد شوید</small></h4>
     <?php echo $content;?>
     <div class="copyright">© 2016 BookShop</div>

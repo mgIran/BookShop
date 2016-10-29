@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50616
+Source Server         : localhost
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50616
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-10-29 00:57:13
+Date: 2016-10-29 09:11:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -412,7 +412,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477689730');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477719554');
 
 -- ----------------------------
 -- Table structure for ym_news
@@ -702,6 +702,7 @@ CREATE TABLE `ym_user_details` (
   `registration_number` varchar(50) COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'شماره ثبت',
   `registration_certificate_image` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT 'تصویر گواهی ثبت شرکت',
   `score` int(10) unsigned DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'آواتار',
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `ym_user_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
@@ -710,9 +711,9 @@ CREATE TABLE `ym_user_details` (
 -- ----------------------------
 -- Records of ym_user_details
 -- ----------------------------
-INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1760', 'masouud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '0');
-INSERT INTO `ym_user_details` VALUES ('44', 'مسعود قراگوزلو', null, '', null, null, null, '38888888', '3718958691', 'قم - همونجا', '2000', null, 'pending', '0', null, 'وای ام', 'legal', 'ceo', 'وب ایران', '134644535', 'OPxRK1466844466.jpg', '0');
-INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '4951000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '1');
+INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1760', 'masouud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '0', null);
+INSERT INTO `ym_user_details` VALUES ('44', 'مسعود قراگوزلو', null, '', null, null, null, '38888888', '3718958691', 'قم - همونجا', '2000', null, 'pending', '0', null, 'وای ام', 'legal', 'ceo', 'وب ایران', '134644535', 'OPxRK1466844466.jpg', '0', null);
+INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '4951000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '1', null);
 
 -- ----------------------------
 -- Table structure for ym_user_dev_id_requests
@@ -793,6 +794,41 @@ CREATE TABLE `ym_user_roles` (
 -- ----------------------------
 INSERT INTO `ym_user_roles` VALUES ('1', 'کاربر معمولی', 'user');
 INSERT INTO `ym_user_roles` VALUES ('2', 'ناشر', 'publisher');
+
+-- ----------------------------
+-- Table structure for ym_user_role_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `ym_user_role_permissions`;
+CREATE TABLE `ym_user_role_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'شناسه',
+  `role_id` int(10) unsigned DEFAULT NULL COMMENT 'نقش',
+  `module_id` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'ماژول',
+  `controller_id` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'کنترلر',
+  `actions` text CHARACTER SET utf8 COMMENT 'اکشن ها',
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `ym_user_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `ym_user_roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- ----------------------------
+-- Records of ym_user_role_permissions
+-- ----------------------------
+INSERT INTO `ym_user_role_permissions` VALUES ('1', '2', 'base', 'BookController', 'buy,bookmark,rate');
+INSERT INTO `ym_user_role_permissions` VALUES ('2', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_user_role_permissions` VALUES ('3', '2', 'publishers', 'PublishersBooksController', 'create,update,delete,uploadImage,deleteImage,upload,deleteUpload,uploadFile,deleteUploadFile,images,savePackage');
+INSERT INTO `ym_user_role_permissions` VALUES ('4', '2', 'publishers', 'PublishersPanelController', 'uploadRegistrationCertificateImage,uploadNationalCardImage,account,index,discount,settlement,sales,documents');
+INSERT INTO `ym_user_role_permissions` VALUES ('5', '2', 'tickets', 'TicketsDepartmentsController', 'create,update');
+INSERT INTO `ym_user_role_permissions` VALUES ('6', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_user_role_permissions` VALUES ('7', '2', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_user_role_permissions` VALUES ('8', '2', 'users', 'UsersCreditController', 'buy,bill,verify');
+INSERT INTO `ym_user_role_permissions` VALUES ('9', '2', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications');
+INSERT INTO `ym_user_role_permissions` VALUES ('10', '1', 'base', 'BookController', 'rate,bookmark,buy');
+INSERT INTO `ym_user_role_permissions` VALUES ('11', '1', 'publishers', 'PublishersPanelController', 'signup,uploadNationalCardImage,uploadRegistrationCertificateImage');
+INSERT INTO `ym_user_role_permissions` VALUES ('12', '1', 'tickets', 'TicketsDepartmentsController', 'create,update');
+INSERT INTO `ym_user_role_permissions` VALUES ('13', '1', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_user_role_permissions` VALUES ('14', '1', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_user_role_permissions` VALUES ('15', '1', 'users', 'UsersCreditController', 'buy,bill,verify');
+INSERT INTO `ym_user_role_permissions` VALUES ('16', '1', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications');
 
 -- ----------------------------
 -- Table structure for ym_user_settlement

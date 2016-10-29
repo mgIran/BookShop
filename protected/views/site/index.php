@@ -40,9 +40,7 @@ endif;
             </div>
         </div>
     </div>
-<?php
-if($suggestedDataProvider->totalItemCount):
-?>
+<?php if($suggestedDataProvider->totalItemCount):?>
     <div class="offers paralax">
         <div class="container">
             <div class="content">

@@ -61,7 +61,7 @@
             </div>
         <?php $this->endWidget(); ?>
         <ul class="nav navbar-nav navbar-left">
-            <li><a href="#"><i class="messages-icon"></i></a></li>
+            <li><a href="<?= $this->createUrl('/tickets/manage/');?>"><i class="messages-icon"></i></a></li>
             <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
         </ul>
     </div>
@@ -70,7 +70,7 @@
     <div class="sidebar">
         <div class="profile">
             <div class="profile-image">
-                <img src="<?php echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->baseUrl.'/uploads/users/'.Yii::app()->user->avatar;?>" alt="نام کاربر">
+                <img src="<?php echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->baseUrl.'/uploads/users/'.Yii::app()->user->avatar;?>" alt="<?= $this->userDetails->getShowName(); ?>">
                 <div class="profile-badges">
                     <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>" class="profile-badges-left"><i class="bookmark-icon"></i><span><?php echo Controller::parseNumbers(number_format(count($this->userDetails->user->bookmarkedBooks), 0, '.', '.'));?></span>نشان شده</a>
                     <a href="<?php echo Yii::app()->createUrl('/users/credit/buy');?>" class="profile-badges-right"><i class="credit-icon"></i><span><?php echo Controller::parseNumbers(number_format($this->userDetails->credit, 0, '.', '.'));?></span>تومان</a>
@@ -82,11 +82,20 @@
             </div>
         </div>
         <div class="list-group">
+            <h5>پنل کاربری</h5>
             <a href="<?php echo Yii::app()->createUrl('users/public/dashboard');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/dashboard')?' active':'';?>"><i class="dashboard-icon"></i>داشبورد</a>
             <a href="<?php echo Yii::app()->createUrl('users/public/library');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/library')?' active':'';?>"><i class="my-library-icon"></i>کتابخانه من</a>
             <a href="<?php echo Yii::app()->createUrl('users/public/transactions');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/transactions')?' active':'';?>"><i class="transaction-icon"></i>تراکنش ها</a>
             <a href="<?php echo Yii::app()->createUrl('users/public/downloaded');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/downloaded')?' active':'';?>"><i class="downloaded-icon"></i>دانلود شده ها</a>
             <a href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i>پشتیبانی<span class="badge">3</span></a>
+        </div>
+        <div class="list-group">
+            <h5>پنل ناشرین</h5>
+            <a href="<?php echo Yii::app()->createUrl('publishers/panel');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel')?' active':'';?>"><i class="my-library-icon"></i>کتاب ها</a>
+            <a href="<?php echo Yii::app()->createUrl('publishers/panel/discount');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/discount')?' active':'';?>"><i class="discount-icon"></i>تخفیفات</a>
+            <a href="<?php echo Yii::app()->createUrl('publishers/panel/account');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/account')?' active':'';?>"><i class="user-icon"></i>پروفایل ناشر</a>
+            <a href="<?php echo Yii::app()->createUrl('publishers/panel/sales');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/sales')?' active':'';?>"><i class="chart-icon"></i>گزارش فروش</a>
+            <a href="<?php echo Yii::app()->createUrl('publishers/panel/settlement');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/settlement')?' active':'';?>"><i class="support-icon"></i>تسویه حساب</a>
         </div>
     </div>
     <div class="content">
