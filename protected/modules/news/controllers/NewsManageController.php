@@ -48,6 +48,22 @@ class NewsManageController extends Controller
 			'order' => array(
 				'class' => 'ext.yiiSortableModel.actions.AjaxSortingAction',
 			),
+            'upload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'image',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                )
+            ),
+            'deleteUpload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'News',
+                'attribute' => 'image',
+                'uploadDir' => '/uploads/news',
+                'thumbSizes' => array('200x200'),
+                'storedMode' => 'field'
+            ),
 		);
 	}
 	/**
@@ -56,8 +72,8 @@ class NewsManageController extends Controller
 	 */
 	public function actionView($id)
 	{
-		Yii::app()->theme = 'front-end';
-		$this->layout = '//layouts/inner';
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/index';
 		$model = $this->loadModel($id);
 		$this->keywords = $model->getKeywords();
 		$this->description = mb_substr(strip_tags($model->summary),0,160,'UTF-8');
@@ -71,7 +87,8 @@ class NewsManageController extends Controller
 		$criteria->params = array(':id' => $id);
 		$criteria->limit = 4;
 		$latestNewsProvider = new CActiveDataProvider("News",array(
-			'criteria' => $criteria
+			'criteria' => $criteria,
+            'pagination' => array('pageSize' => 4)
 		));
 		$this->render('view',array(
 			'model'=>$model,
@@ -85,11 +102,11 @@ class NewsManageController extends Controller
 	 */
 	public function actionTag($id)
 	{
-		Yii::app()->theme = 'front-end';
-		$this->layout = '//layouts/inner';
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/index';
 
 		$model = Tags::model()->findByPk($id);
-		$this->keywords = 'آوای شهیر,برچسب اخبار '.$model->title.',برچسب '.$model->title.','.$model->title;
+		$this->keywords = 'کتابیک,برچسب اخبار '.$model->title.',برچسب '.$model->title.','.$model->title;
 		$this->pageTitle = 'برچسب '.$model->title;
 
 		// get latest news
@@ -98,7 +115,8 @@ class NewsManageController extends Controller
 		$criteria->compare('tagsRel.tag_id',$model->id);
 		$criteria->with[] = 'tagsRel';
 		$dataProvider = new CActiveDataProvider("News",array(
-			'criteria' => $criteria
+			'criteria' => $criteria,
+            'pagination' => array('pageSize' => 8)
 		));
 		$this->render('tags',array(
 			'model' => $model,
@@ -121,6 +139,8 @@ class NewsManageController extends Controller
 		$imageDIR = Yii::getPathOfAlias("webroot") . "/uploads/news/";
 		if (!is_dir($imageDIR))
 			mkdir($imageDIR);
+		if (!is_dir($imageDIR.'200x200'))
+			mkdir($imageDIR.'200x200');
 
 		$image = array();
 		if(isset($_POST['News']))
@@ -247,8 +267,8 @@ class NewsManageController extends Controller
 	 */
 	public function actionIndex()
 	{
-		Yii::app()->theme = 'front-end';
-		$this->layout = '//layouts/inner';
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/index';
 		$criteria = News::model()->getValidNews();
 		$dataProvider=new CActiveDataProvider('News',array(
 			'criteria' => $criteria,
@@ -298,57 +318,6 @@ class NewsManageController extends Controller
 		if(isset($_POST['ajax']) && $_POST['ajax']==='news-form')
 		{
 			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
-
-
-	public function actionUpload()
-	{
-		$tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-
-		if (!is_dir($tempDir))
-			mkdir($tempDir);
-		if (isset($_FILES)) {
-			$file = $_FILES['image'];
-			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-			$file['name'] = Controller::generateRandomString(5) . time();
-			while (file_exists($tempDir . DIRECTORY_SEPARATOR . $file['name'].'.'.$ext))
-				$file['name'] = Controller::generateRandomString(5) . time();
-			$file['name'] = $file['name'] . '.' . $ext;
-			if (move_uploaded_file($file['tmp_name'], $tempDir . DIRECTORY_SEPARATOR . CHtml::encode($file['name'])))
-				$response = ['state' => 'ok', 'fileName' => CHtml::encode($file['name'])];
-			else
-				$response = ['state' => 'error', 'msg' => 'فایل آپلود نشد.'];
-		} else
-			$response = ['state' => 'error', 'msg' => 'فایلی ارسال نشده است.'];
-		echo CJSON::encode($response);
-		Yii::app()->end();
-	}
-	
-	public function actionDeleteUpload()
-	{
-		$Dir = Yii::getPathOfAlias("webroot") . '/uploads/news/';
-
-		if (isset($_POST['fileName'])) {
-
-			$fileName = $_POST['fileName'];
-
-			$tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-
-			$model = News::model()->findByAttributes(array('image' => $fileName));
-			if ($model) {
-				if (@unlink($Dir . $model->image)) {
-					@unlink($Dir .'200x200/'. $model->image);
-					$model->updateByPk($model->id,array('image'=>null));
-					$response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-				} else
-					$response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-			} else {
-				@unlink($tempDir . $fileName);
-				$response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-			}
-			echo CJSON::encode($response);
 			Yii::app()->end();
 		}
 	}

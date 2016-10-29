@@ -63,7 +63,7 @@ class TicketsManageController extends Controller
 				'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
 				'modelName' => 'TicketMessages',
 				'attribute' => 'attachment',
-				'uploadDir' => 'uploads/tickets',
+				'uploadDir' => '/uploads/tickets',
 				'storedMode' => 'field'
 			)
 		);

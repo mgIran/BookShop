@@ -12,7 +12,6 @@ class NewsModule extends CWebModule
 			'news.messages.*',
 			'news.models.*',
 			'news.components.*',
-			'courses.models.Tags',
 		));
 	}
 

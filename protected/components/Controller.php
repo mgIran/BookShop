@@ -31,6 +31,8 @@ class Controller extends CController
     public $categories;
     public $userDetails;
     public $userNotifications;
+    public $aboutFooter;
+    public $siteAppUrls = array();
 
     public function beforeAction($action)
     {
@@ -67,6 +69,11 @@ class Controller extends CController
             ->where('name = "default_title"')
             ->queryScalar();
         $this->categories = BookCategories::model()->findAll('parent_id IS NULL');
+        Yii::import('pages.models.*');
+        $this->aboutFooter = Pages::model()->findByPk(2)->summary;
+        Yii::import('setting.models.*');
+        $this->siteAppUrls['android'] = SiteSetting::model()->findByAttributes(array('name' => 'android_app_url'))->value;
+        $this->siteAppUrls['windows'] = SiteSetting::model()->findByAttributes(array('name' => 'windows_app_url'))->value;
         return true;
     }
 
@@ -99,6 +106,18 @@ class Controller extends CController
                         array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/category/create/')),
                     )
                 ),
+                array(
+                    'label' => 'اخبار<span class="caret"></span>' ,
+                    'url' => '#' ,
+                    'itemOptions' => array('class' => 'dropdown' ,'tabindex' => "-1") ,
+                    'linkOptions' => array('class' => 'dropdown-toggle' ,'data-toggle' => "dropdown") ,
+                    'items' => array(
+                        array('label' => 'مدیریت' ,'url' => Yii::app()->createUrl('/news/manage/admin/')) ,
+                        array('label' => ' افزودن خبر' ,'url' => Yii::app()->createUrl('/news/manage/create/')) ,
+                        array('label' => 'مدیریت دسته بندی ها' ,'url' => Yii::app()->createUrl('/news/category/admin/')) ,
+                        array('label' => 'کلمات کلیدی' ,'url' => Yii::app()->createUrl('/courses/tags/admin/'))
+                    )
+                ) ,
                 array(
                     'label' => 'امور مالی<span class="caret"></span>',
                     'url' => '#',

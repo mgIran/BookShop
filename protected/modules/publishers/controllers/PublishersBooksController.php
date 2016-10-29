@@ -75,21 +75,21 @@ class PublishersBooksController extends Controller
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'Books',
                 'attribute' => 'icon',
-                'uploadDir' => 'uploads/books/icons',
+                'uploadDir' => '/uploads/books/icons',
                 'storedMode' => 'field'
             ),
             'deleteUploadFile' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'BookPackages',
                 'attribute' => 'file_name',
-                'uploadDir' => 'uploads/books/files',
+                'uploadDir' => '/uploads/books/files',
                 'storedMode' => 'record'
             ),
             'deleteImage' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'BookImages',
                 'attribute' => 'image',
-                'uploadDir' => 'uploads/books/images',
+                'uploadDir' => '/uploads/books/images',
                 'storedMode' => 'record'
             )
         );
@@ -125,9 +125,6 @@ class PublishersBooksController extends Controller
             $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
             if (!is_dir($bookIconsDIR))
                 mkdir($bookIconsDIR);
-            $bookIconsThumbDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/150x150/';
-            if (!is_dir($bookIconsThumbDIR))
-                mkdir($bookIconsThumbDIR);
             $tmpUrl = Yii::app()->baseUrl.'/uploads/temp/';
 
             Yii::app()->theme = 'market';
@@ -149,11 +146,8 @@ class PublishersBooksController extends Controller
                 $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
                 $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
                 if ($model->save()) {
-                    if ($iconFlag) {
-                        $thumbnail = new Imager();
-                        $thumbnail->createThumbnail($tmpDIR . $model->icon, 150, 150, false, $bookIconsThumbDIR . $model->icon);
+                    if ($iconFlag)
                         @rename($tmpDIR . $model->icon,$bookIconsDIR . $model->icon);
-                    }
                     Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد. لطفا مراحل بعدی را نیز انجام دهید.');
                     $this->redirect(array('/publishers/books/update/' . $model->id.'?step=2'));
                 } else {
@@ -198,7 +192,6 @@ class PublishersBooksController extends Controller
             mkdir($bookFilesDIR);
         $bookIconsUrl = Yii::app()->createAbsoluteUrl('/uploads/books/icons');
         $bookImagesUrl = Yii::app()->createAbsoluteUrl('/uploads/books/images');
-        $bookFilesUrl = Yii::app()->createAbsoluteUrl("/uploads/books/files/");
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -246,11 +239,8 @@ class PublishersBooksController extends Controller
             $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
             if ($model->save()) {
-                if ($iconFlag) {
-                    $thumbnail = new Imager();
-                    $thumbnail->createThumbnail($tmpDIR . $model->icon, 150, 150, false, $bookIconsDIR . $model->icon);
+                if ($iconFlag)
                     @rename($tmpDIR . $model->icon,$bookIconsDIR . $model->icon);
-                }
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
                 $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
             } else {

@@ -19,28 +19,15 @@ $this->menu=array(
 <? $this->renderPartial('//layouts/_flashMessage'); ?>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-//<?php $this->widget('ext.yiiSortableModel.widgets.SortableCGridView', array(
-//	'orderField' => 'order',
-//	'idField' => 'id',
-//	'orderUrl' => 'order',
 	'id'=>'news-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-//		array(
-//			'name' => 'image',
-//			'value' => 'CHtml::image(Yii::app()->baseUrl."/uploads/news/".$data->image,$data->title,array("style"=>"height:80px;width:auto"))',
-//			'filter' => false
-//		),
 		'title',
-		'title_en',
-//		'summary',
 		array(
 			'name' => 'category_id',
 			'value' => '$data->category->fullTitle',
-			'filter' => CHtml::activeDropDownList($model,'category_id',
-				CHtml::listData(NewsCategories::model()->findAll(),'id','fullTitle'),array('prompt'=>'همه'))
+			'filter' => CHtml::listData(NewsCategories::model()->findAll(),'id','fullTitle')
 		),
 		array(
 			'name' => 'status',

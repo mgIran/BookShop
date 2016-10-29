@@ -62,10 +62,14 @@ class BookController extends Controller
         $criteria->params[':id'] = $model->id;
         $criteria->limit = 10;
         $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
+
+        Yii::import('pages.models.*');
+        $about = Pages::model()->findByPk(3);
         $this->render('view', array(
             'model' => $model,
             'similar' => $similar,
             'bookmarked' => $bookmarked,
+            'about' => $about
         ));
     }
 

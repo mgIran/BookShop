@@ -274,14 +274,14 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     ?>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 sidebar">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 sidebar-col">
                 <div class="boxed">
                     <div class="heading">
                         <h4>درباره بوک شاپ</h4>
                     </div>
-                    <div class="text-justify">
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چـاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآن چـنان کـه لازم اسـت و بـرای شرایط فعلی تکنولوژی مورد نیاز و کاربـردهای متـنوع با هـدف بهـبود ابـزارهـای کاربردی می باشد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.
-                    </div>
+                    <div class="text-justify"><?php
+                        echo strip_tags($about->summary);
+                        ?></div>
                 </div>
                 <div class="boxed">
                     <div class="heading">

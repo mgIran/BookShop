@@ -82,14 +82,14 @@ class ManageBooksBaseManageController extends Controller
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'Books',
                 'attribute' => 'icon',
-                'uploadDir' => 'uploads/books/icons',
+                'uploadDir' => '/uploads/books/icons',
                 'storedMode' => 'field'
             ),
             'deleteUploadFile' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'BookPackages',
                 'attribute' => 'file_name',
-                'uploadDir' => 'uploads/books/files',
+                'uploadDir' => '/uploads/books/files',
                 'storedMode' => 'record'
             )
         );
@@ -120,9 +120,6 @@ class ManageBooksBaseManageController extends Controller
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/icons/";
         if (!is_dir($bookIconsDIR))
             mkdir($bookIconsDIR);
-        $bookIconsThumbDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/150x150/';
-        if (!is_dir($bookIconsThumbDIR))
-            mkdir($bookIconsThumbDIR);
         $icon = array();
 
         $this->performAjaxValidation($model);
@@ -141,11 +138,8 @@ class ManageBooksBaseManageController extends Controller
             $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
             if ($model->save()) {
-                if ($model->icon) {
-                    $thumbnail = new Imager();
-                    $thumbnail->createThumbnail($tmpDIR . $model->icon, 150, 150, false, $bookIconsThumbDIR . $model->icon);
+                if ($model->icon)
                     @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
-                }
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect('update/' . $model->id . '/?step=2');
             } else
@@ -171,10 +165,8 @@ class ManageBooksBaseManageController extends Controller
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         if (!is_dir($tmpDIR)) mkdir($tmpDIR);
         $tmpUrl = Yii::app()->createAbsoluteUrl('/uploads/temp/');
-        $bookFilesDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
         $bookImagesDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
-        $bookFilesUrl = Yii::app()->createAbsoluteUrl("/uploads/books/files");
         $bookIconsUrl = Yii::app()->createAbsoluteUrl('/uploads/books/icons');
         $bookImagesUrl = Yii::app()->createAbsoluteUrl('/uploads/books/images');
 
@@ -208,20 +200,8 @@ class ManageBooksBaseManageController extends Controller
             array_push($model->formSeoTags,$tag->title);
 
         if (isset($_POST['Books'])) {
-            $fileFlag = false;
             $iconFlag = false;
             $newFileSize = $model->size;
-            if (isset($_POST['Books']['file_name']) && !empty($_POST['Books']['file_name']) && $_POST['Books']['file_name'] != $model->file_name) {
-                $file = $_POST['Books']['file_name'];
-                $book = array(
-                    'name' => $file,
-                    'src' => $tmpUrl . '/' . $file,
-                    'size' => filesize($tmpDIR . $file),
-                    'serverName' => $file,
-                );
-                $fileFlag = true;
-                $newFileSize = filesize($tmpDIR . $file);
-            }
             if (isset($_POST['Books']['icon']) && !empty($_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon) {
                 $file = $_POST['Books']['icon'];
                 $icon = array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,);
@@ -232,14 +212,8 @@ class ManageBooksBaseManageController extends Controller
             $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
             if ($model->save()) {
-                if ($fileFlag) {
-                    rename($tmpDIR . $model->file_name, $bookFilesDIR . $model->file_name);
-                }
-                if ($iconFlag) {
-                    $thumbnail = new Imager();
-                    $thumbnail->createThumbnail($tmpDIR . $model->icon, 150, 150, false, $bookIconsDIR . $model->icon);
-                    unlink($tmpDIR . $model->icon);
-                }
+                if ($iconFlag)
+                    rename($tmpDIR . $model->icon ,$bookIconsDIR . $model->icon);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
                 $this->refresh();
             } else {
@@ -464,48 +438,23 @@ class ManageBooksBaseManageController extends Controller
 
     /**
      * Download book
+     * @param $id
+     * @throws CHttpException
      */
     public function actionDownload($id)
     {
         $model = $this->loadModel($id);
-        $platformFolder = '';
-        switch (pathinfo($model->lastPackage->file_name, PATHINFO_EXTENSION)) {
-            case 'apk':
-                $platformFolder = 'android';
-                break;
-
-            case 'ipa':
-                $platformFolder = 'ios';
-                break;
-
-            case 'xap':
-                $platformFolder = 'windowsphone';
-                break;
-        }
-        $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/' . $platformFolder);
+        $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/');
     }
 
     /**
      * Download book package
+     * @param $id
      */
     public function actionDownloadPackage($id)
     {
         $model = BookPackages::model()->findByPk($id);
-        $platformFolder = '';
-        switch (pathinfo($model->file_name, PATHINFO_EXTENSION)) {
-            case 'apk':
-                $platformFolder = 'android';
-                break;
-
-            case 'ipa':
-                $platformFolder = 'ios';
-                break;
-
-            case 'xap':
-                $platformFolder = 'windowsphone';
-                break;
-        }
-        $this->download($model->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/' . $platformFolder);
+        $this->download($model->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/');
     }
 
     protected function download($fileName, $filePath)
@@ -527,6 +476,9 @@ class ManageBooksBaseManageController extends Controller
                 break;
 
             case 'ipa':
+                $mimeType = 'application/octet-stream';
+                break;
+            default:
                 $mimeType = 'application/octet-stream';
                 break;
         }

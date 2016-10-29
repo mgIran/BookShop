@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50617
+Source Server         : local
+Source Server Version : 50616
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50617
+Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2016-10-29 09:11:38
+Date: 2016-10-30 00:04:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -397,8 +397,8 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '136');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457691');
+INSERT INTO `ym_counter_save` VALUES ('counter', '137');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457692');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '5');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1457598600');
 INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
@@ -416,7 +416,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477719554');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1477773221');
 
 -- ----------------------------
 -- Table structure for ym_news
@@ -437,23 +437,12 @@ CREATE TABLE `ym_news` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `ym_news_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `ym_news_categories` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_news
 -- ----------------------------
-INSERT INTO `ym_news` VALUES ('1', 'رایتینگ تافل آی بی تی گروه 3', '', '<p>این کلاس روزهای شنبه 5 تا 8 برگزار می شود و از تاریخ 15 آبان 1395 شروع و تا 25 دی 1395 ادامه خواهد داشت. </p>\n', 'sbw401477226890.jpg', '51', '1477216651', '1477216651', 'publish', '5', null);
-INSERT INTO `ym_news` VALUES ('2', 'نمره تافل آی بی تی آقای کیارش قیاسی سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای کیارش قیاسی. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'a5LoV1477506305.jpg', '13', '1477506747', '1477506747', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('3', 'نمره تافل آی بی تی آقای پیمان قاسمی سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای پیمان قاسمی. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'N59QB1477507063.jpg', '8', '1477507178', '1477507178', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('4', 'نمره تافل آی بی تی آقای سیامک سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای رامین. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'bniE31477509487.jpg', '4', '1477509571', '1477509571', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('5', 'نمره تافل آی بی تی آقای رامین سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای رامین. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'D7D6O1477509712.jpg', '5', '1477509826', '1477509826', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('6', 'نمره تافل آی بی تی آقای بنا سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای بنا. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'BtYFh1477510283.jpg', '3', '1477510342', '1477510342', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('7', 'نمره تافل آی بی تی آقای علی ... سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای علی .... تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'zMlI61477510485.jpg', '6', '1477510577', '1477510577', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('8', 'نمره تافل آی بی تی آقای صالح ... سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای صالح ... . تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'NQfDZ1477510711.jpg', '2', '1477510823', '1477510823', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('9', 'نمره تافل آی بی تی آقای مینا جمشیدی سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: خانم مینا جمشیدی. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'AE9jo1477512244.jpg', '6', '1477511118', '1477511118', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('10', 'نمره تافل آی بی تی آقای امیر غلامی سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای امیر غلامی. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', '4GM461477511313.jpg', '8', '1477511383', '1477511383', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('11', 'نمره تافل آی بی تی آقای شایان ظریفیان سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: آقای شایان ظریفیان. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', 'RZsPh1477511563.jpg', '6', '1477511664', '1477511664', 'publish', '7', null);
-INSERT INTO `ym_news` VALUES ('12', 'نمره تافل آی بی تی خانم ... آریا فر سال 2016', '', '<p><span dir=\"rtl\">نمره یکی از دانشجویان موسسه آوای شهیر: خانم ... آریافر. تبریک فراوان. ایشالا منتظر موفقیت های بیشتر ایشان هستیم</span>.</p>\n', '5AsxR1477512088.jpg', '12', '1477512199', '1477512199', 'publish', '6', null);
+INSERT INTO `ym_news` VALUES ('14', 'من دریاچه ارومیه هستم', 'لورم ایپسوم', '<p>لورم ایپسوم</p>\r\n', '8skPt1477773185.jpg', '0', '1477772334', '1477772334', 'publish', '6', null);
 
 -- ----------------------------
 -- Table structure for ym_news_categories
@@ -493,6 +482,7 @@ CREATE TABLE `ym_news_tag_rel` (
 -- ----------------------------
 -- Records of ym_news_tag_rel
 -- ----------------------------
+INSERT INTO `ym_news_tag_rel` VALUES ('630', '14');
 
 -- ----------------------------
 -- Table structure for ym_pages
@@ -506,18 +496,17 @@ CREATE TABLE `ym_pages` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`) USING BTREE,
   CONSTRAINT `ym_pages_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `ym_page_categories` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_pages
 -- ----------------------------
 INSERT INTO `ym_pages` VALUES ('1', 'درباره ما', 'متن صفحه درباره ما', '1');
-INSERT INTO `ym_pages` VALUES ('2', 'تماس با ما', 'متن صفحه تماس با ما', '1');
-INSERT INTO `ym_pages` VALUES ('3', 'راهنما', 'متن صفحه راهنما', '1');
-INSERT INTO `ym_pages` VALUES ('4', 'شرایط استفاده از خدمات', 'متن صفحه شرایط استفاده از خدمات', '1');
-INSERT INTO `ym_pages` VALUES ('5', 'حریم شخصی', 'متن صفحه حریم شخصی', '1');
-INSERT INTO `ym_pages` VALUES ('6', 'متن راهنمای تسویه حساب', 'متن راهنما', '1');
-INSERT INTO `ym_pages` VALUES ('7', 'قرارداد توسعه دهندگان', 'متن قرارداد', '1');
+INSERT INTO `ym_pages` VALUES ('2', 'درباره ما - بخش فوتر', 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چـاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآن چـنان کـه لازم اسـت و بـرای شرایط فعلی تکنولوژی مورد نیاز و کاربـردهای متـنوع با هـدف بهـبود ابـزارهـای کاربردی می باشد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.', '1');
+INSERT INTO `ym_pages` VALUES ('3', 'درباره ما - بخش نمایش کتاب', 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چـاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآن چـنان کـه لازم اسـت و بـرای شرایط فعلی تکنولوژی مورد نیاز و کاربـردهای متـنوع با هـدف بهـبود ابـزارهـای کاربردی می باشد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.', '1');
+INSERT INTO `ym_pages` VALUES ('6', 'راهنما', 'متن راهنما', '1');
+INSERT INTO `ym_pages` VALUES ('7', 'قرارداد ناشران', 'متن قرارداد', '1');
+INSERT INTO `ym_pages` VALUES ('8', 'تماس با ما', 'متن تماس با ما', null);
 
 -- ----------------------------
 -- Table structure for ym_page_categories
@@ -546,7 +535,7 @@ CREATE TABLE `ym_site_setting` (
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL,
   `value` text CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_site_setting
@@ -560,6 +549,8 @@ INSERT INTO `ym_site_setting` VALUES ('6', 'min_credit', 'حداقل اعتبا�
 INSERT INTO `ym_site_setting` VALUES ('7', 'tax', 'میزان مالیات (درصد)', '9');
 INSERT INTO `ym_site_setting` VALUES ('8', 'commission', 'حق کمیسیون (درصد)', '15');
 INSERT INTO `ym_site_setting` VALUES ('9', 'social_links', 'شبکه های اجتماعی', '{\"facebook\":\"http:\\/\\/facebook.com\",\"twitter\":\"http:\\/\\/twitter.com\"}');
+INSERT INTO `ym_site_setting` VALUES ('10', 'android_app_url', 'آدرس دانلود نرم افزار اندروید سایت', 'http://');
+INSERT INTO `ym_site_setting` VALUES ('11', 'windows_app_url', 'آدرس دانلود نرم افزار ویندوز سایت', 'http://');
 
 -- ----------------------------
 -- Table structure for ym_tags
@@ -569,13 +560,14 @@ CREATE TABLE `ym_tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'عنوان',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=630 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=631 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_tags
 -- ----------------------------
 INSERT INTO `ym_tags` VALUES ('628', 'نمایشی');
 INSERT INTO `ym_tags` VALUES ('629', 'سئو');
+INSERT INTO `ym_tags` VALUES ('630', 'خبر کامین');
 
 -- ----------------------------
 -- Table structure for ym_tickets
