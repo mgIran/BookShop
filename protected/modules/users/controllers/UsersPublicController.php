@@ -37,8 +37,8 @@ class UsersPublicController extends Controller
      */
     public function actionRegister()
     {
-        Yii::app()->theme = 'market';
-        $this->layout = '//layouts/backgroundImage';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/login';
         Yii::import('users.models.*');
         $model = new Users('create');
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'register-form') {

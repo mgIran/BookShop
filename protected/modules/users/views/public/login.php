@@ -1,3 +1,8 @@
+<?php
+/* @var $model Users */
+/* @var $form CActiveForm */
+?>
+<h4 class="welcome-text">خوش آمدید<small> ، لطفا وارد شوید</small></h4>
 <div class="login-form">
 
     <?php $form=$this->beginWidget('CActiveForm', array(

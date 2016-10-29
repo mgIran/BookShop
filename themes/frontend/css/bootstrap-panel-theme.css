@@ -421,7 +421,7 @@ a:active{
 }
 .table{
     color: #1c4759;
-    margin-bottom: 0;
+    margin-top: 20px;
 }
 .table thead{
     background: #dee7ed;
@@ -445,6 +445,9 @@ a:active{
 }
 .tables{
     margin-bottom: 80px;
+}
+.tables .table{
+    margin: 0;
 }
 .thumbnail-container {
     width: 212px;
@@ -506,6 +509,13 @@ a:active{
 .thumbnail.small .cat-icon img {
     max-width: 45px;
     max-height: 45px;
+}
+.thumbnail .price span{
+    display: inline-block;
+    margin-left: 5px;
+}
+.text-line-through {
+    text-decoration: line-through !important;
 }
 .stars{
     overflow: hidden;
@@ -848,6 +858,7 @@ a:active{
     padding: 15px;
     border:none;
     margin-bottom: 1px;
+    z-index:1;
     -webkit-transition: all 0.4s ease 0s;
     -moz-transition: all 0.4s ease 0s;
     -ms-transition: all 0.4s ease 0s;
@@ -938,6 +949,15 @@ a:active{
     vertical-align: middle;
     margin-left: 15px;
 }
+.payment-icon{
+    background: url("../svg/payment.svg") no-repeat center;
+    background-size: 15px;
+    width: 15px;
+    height:15px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+}
 .sidebar .list-group:first-child{
     margin-top: 50px;
 }
@@ -1006,13 +1026,10 @@ a:active{
     margin-bottom: 10px;
     box-shadow: none;
 }
-.login-form .btn-success{
+.btn-success{
     background: #82b440;
-    width:100%;
     border-radius: 0;
     padding: 15px;
-    margin-top: 20px;
-    margin-bottom: 25px;
     border:none;
     -webkit-transition: all 0.4s ease 0s;
     -moz-transition: all 0.4s ease 0s;
@@ -1020,10 +1037,32 @@ a:active{
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
-.login-form .btn-success:hover,
-.login-form .btn-success:focus,
-.login-form .btn-success:active{
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active{
     background: #96c459;
+}
+.btn-danger{
+    background: #e74e40;
+    border-radius: 0;
+    padding: 15px;
+    border:none;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active{
+    background: #ec7064;
+}
+.login-form .btn-success,
+.login-form .btn-danger{
+    width:100%;
+    margin-top: 20px;
+    margin-bottom: 25px;
 }
 .login-form a{
     color: #fff;

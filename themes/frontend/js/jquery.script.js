@@ -137,6 +137,13 @@ $(document).ready(function() {
     });
 });
 
+$(window).load(function(){
+    if($('.sidebar').length != 0){
+        var height=($('body').height() < $(window).height())?$(window).height():$('body').height();
+        $('.sidebar').height(height-140);
+    }
+});
+
 function setCarouselItemsWidth(carousel, items, margin) {
     var objKeys = Object.keys(items),
         itemsCount,
