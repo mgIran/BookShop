@@ -40,6 +40,8 @@
  * @property Advertises $bookAdvertises
  * @property BookPersons $persons
  * @property Comment[] $comments
+ * @property Tags[] $showTags
+ * @property Tags[] $seoTags
  */
 class Books extends CActiveRecord
 {
@@ -68,6 +70,8 @@ class Books extends CActiveRecord
 	 */
 	public $devFilter;
 
+	public $formTags = [];
+	public $formSeoTags = [];
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -80,7 +84,7 @@ class Books extends CActiveRecord
 		return array(
 			array('title, category_id ,icon', 'required'),
 			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
-			array('description, change_log', 'filter', 'filter' => array($this->_purifier, 'purify')),
+			array('description, change_log ,formTags ,formSeoTags', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
@@ -117,6 +121,8 @@ class Books extends CActiveRecord
 				'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 				'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 				'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
+				'showTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 0'),
+				'seoTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 1'),
 				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
 				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
 		);
@@ -129,44 +135,31 @@ class Books extends CActiveRecord
 //	}
 
 
-	public function getComments(){
-		$criteria = new CDbCriteria();
-        $criteria->addCondition('owner_name = :model AND owner_id = :id');
-        $criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
-        return Comment::model()->findAll($criteria);
-	}
-
-    public function getCountComments(){
-        Yii::app()->getModule('comments');
-		$criteria = new CDbCriteria();
-        $criteria->addCondition('owner_name = :model AND owner_id = :id');
-        $criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
-        return Comment::model()->count($criteria);
-	}
-
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
 	{
 		return array(
-				'id' => 'شناسه',
-				'title' => 'عنوان',
-				'icon' => 'تصویر جلد',
-				'description' => 'توضیحات',
-				'number_of_pages' => 'تعداد صفحات',
-				'language' => 'زبان کتاب',
-				'publisher_id' => 'ناشر',
-				'category_id' => 'دسته',
-				'status' => 'وضعیت',
-				'change_log' => 'لیست تغییرات',
-				'confirm' => 'وضعیت انتشار',
-				'confirm_date' => 'تاریخ انتشار',
-				'publisher_name' => 'عنوان ناشر',
-				'seen' => 'دیده شده',
-				'download' => 'تعداد دریافت',
-				'deleted' => 'حذف شده',
-				'size' => 'حجم فایل',
+            'id' => 'شناسه',
+            'title' => 'عنوان',
+            'icon' => 'تصویر جلد',
+            'description' => 'توضیحات',
+            'number_of_pages' => 'تعداد صفحات',
+            'language' => 'زبان کتاب',
+            'publisher_id' => 'ناشر',
+            'category_id' => 'دسته',
+            'status' => 'وضعیت',
+            'change_log' => 'لیست تغییرات',
+            'confirm' => 'وضعیت انتشار',
+            'confirm_date' => 'تاریخ انتشار',
+            'publisher_name' => 'عنوان ناشر',
+            'seen' => 'دیده شده',
+            'download' => 'تعداد دریافت',
+            'deleted' => 'حذف شده',
+            'size' => 'حجم فایل',
+            'formTags' => 'برچسب های نمایشی',
+            'formSeoTags' => 'برچسب های سئو',
 		);
 	}
 
@@ -217,7 +210,54 @@ class Books extends CActiveRecord
 		return parent::model($className);
 	}
 
-
+	protected function afterSave()
+	{
+		if($this->formTags && !empty($this->formTags)) {
+			if(!$this->IsNewRecord)
+				BookTagRel::model()->deleteAll('for_seo = 0 AND book_id='.$this->id);
+			foreach($this->formTags as $tag) {
+				$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
+				if($tagModel) {
+					$tag_rel = new BookTagRel('not_seo');
+					$tag_rel->book_id = $this->id;
+					$tag_rel->tag_id = $tagModel->id;
+					$tag_rel->save();
+				} else {
+					$tagModel = new Tags;
+					$tagModel->title = $tag;
+					if($tagModel->save()) {
+						$tag_rel = new BookTagRel('not_seo');
+						$tag_rel->book_id = $this->id;
+						$tag_rel->tag_id = $tagModel->id;
+						$tag_rel->save();
+					}
+				}
+			}
+		}
+		if($this->formSeoTags && !empty($this->formSeoTags)) {
+			if(!$this->IsNewRecord)
+                BookTagRel::model()->deleteAll('for_seo = 1 AND book_id='.$this->id);
+			foreach($this->formSeoTags as $tag) {
+				$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
+				if($tagModel) {
+					$tag_rel = new BookTagRel('for_seo');
+					$tag_rel->book_id = $this->id;
+					$tag_rel->tag_id = $tagModel->id;
+					$tag_rel->save();
+				} else {
+					$tagModel = new Tags;
+					$tagModel->title = $tag;
+					if($tagModel->save()) {
+						$tag_rel = new BookTagRel('for_seo');
+						$tag_rel->book_id = $this->id;
+						$tag_rel->tag_id = $tagModel->id;
+						$tag_rel->save();
+					}
+				}
+			}
+		}
+		parent::afterSave();
+	}
 
 	/**
 	 * Return url of book file
@@ -343,5 +383,20 @@ class Books extends CActiveRecord
 			return $this->lastPackage->printed_price - $this->lastPackage->printed_price * $this->discount->percent / 100;
 		else
 			return $this->lastPackage->printed_price;
+	}
+
+	public function getComments(){
+		$criteria = new CDbCriteria();
+		$criteria->addCondition('owner_name = :model AND owner_id = :id');
+		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+		return Comment::model()->findAll($criteria);
+	}
+
+	public function getCountComments(){
+		Yii::app()->getModule('comments');
+		$criteria = new CDbCriteria();
+		$criteria->addCondition('owner_name = :model AND owner_id = :id');
+		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+		return Comment::model()->count($criteria);
 	}
 }

@@ -6,7 +6,7 @@
     {
         if($this->registeredOnly === false || Yii::app()->user->isGuest === false)
         {
-            Yii::app()->controller->renderPartial('//layouts/_loading');
+            Yii::app()->controller->renderPartial('//partial-views/_loading');
             echo "<div class='comment-form collapse' id=\"addCommentDialog-{$this->id}\">";
             echo '<h4>'.Yii::t($this->_config['translationCategory'], 'Send '.ucfirst($this->_config['moduleObjectName'])).'</h4>';
             $this->widget('comments.widgets.ECommentsFormWidget', array(

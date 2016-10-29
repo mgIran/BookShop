@@ -106,6 +106,34 @@
             <?php echo $form->error($model,'change_log'); ?>
         </div>
 
+        <div class="form-group">
+            <?php echo $form->labelEx($model,'formTags'); ?>
+            <?php
+            $this->widget("ext.tagIt.tagIt",array(
+                'model' => $model,
+                'attribute' => 'formTags',
+                'suggestType' => 'json',
+                'suggestUrl' => Yii::app()->createUrl('/tags/list'),
+                'data' => $model->formTags
+            ));
+            ?>
+            <?php echo $form->error($model,'formTags'); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $form->labelEx($model,'formSeoTags'); ?>
+            <?php
+            $this->widget("ext.tagIt.tagIt",array(
+                'model' => $model,
+                'attribute' => 'formSeoTags',
+                'suggestType' => 'json',
+                'suggestUrl' => Yii::app()->createUrl('/tags/list'),
+                'data' => $model->formSeoTags
+            ));
+            ?>
+            <?php echo $form->error($model,'formSeoTags'); ?>
+        </div>
+
         <br>
         <div class="input-group buttons" style="clear:both;">
             <?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ذخیره تغییرات',array('class'=>'btn btn-success')); ?>

@@ -35,6 +35,7 @@ class BookTagRel extends CActiveRecord
 		);
 	}
 
+
 	/**
 	 * @return array relational rules.
 	 */
@@ -94,5 +95,14 @@ class BookTagRel extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	protected function beforeSave()
+	{
+		if ($this->scenario == 'for_seo')
+			$this->for_seo = 1;
+		if ($this->scenario == 'not_seo')
+			$this->for_seo = 0;
+		return parent::beforeSave();
 	}
 }

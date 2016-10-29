@@ -46,7 +46,7 @@
                                 'data-parent' => '#comment-' . $comment->comment_id
                             ));
                             echo "<div class='comment-form comment-form-outer collapse' id='reply-" . $comment->comment_id . "'>";
-                            Yii::app()->controller->renderPartial('//layouts/_loading');
+                            Yii::app()->controller->renderPartial('//partial-views/_loading');
                             $this->widget('comments.widgets.ECommentsFormWidget' ,array(
                                 'model' => $this->model ,
                             ));

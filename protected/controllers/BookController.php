@@ -40,29 +40,7 @@ class BookController extends Controller
             'postOnly + bookmark',
         );
     }
-
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        return array(
-            array('allow',
-                'actions' => array('discount', 'search', 'view', 'download', 'programs', 'games', 'educations', 'publisher'),
-                'users' => array('*'),
-            ),
-            array('allow',
-                'actions' => array('buy', 'bookmark', 'rate'),
-                'users' => array('@'),
-            ),
-            array('deny',  // deny all users
-                'users' => array('*'),
-            ),
-        );
-    }
-
+    
     public function actionView($id)
     {
         Yii::import('users.models.*');
