@@ -1,23 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "{{class_tags}}".
+ * This is the model class for table "{{tags}}".
  *
- * The followings are the available columns in table '{{class_tags}}':
+ * The followings are the available columns in table '{{tags}}':
  * @property string $id
  * @property string $title
  *
- * The followings are the available model relations:
- * @property Classes[] $ymClasses
  */
-class ClassTags extends CActiveRecord
+class Tags extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return '{{class_tags}}';
+		return '{{tags}}';
 	}
 
 	/**
@@ -30,6 +28,7 @@ class ClassTags extends CActiveRecord
 		return array(
 			array('title','required'),
 			array('title','unique'),
+			array('title', 'filter', 'filter' => 'strip_tags'),
 			array('title', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -45,7 +44,6 @@ class ClassTags extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ymClasses' => array(self::MANY_MANY, 'Classes', '{{class_tag_rel}}(tag_id, class_id)'),
 		);
 	}
 
@@ -90,7 +88,7 @@ class ClassTags extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ClassTags the static model class
+	 * @return Tags the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

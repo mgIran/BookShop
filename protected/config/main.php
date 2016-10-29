@@ -67,7 +67,7 @@ return array(
 					'orderComments'=>'DESC',
 					//config for create link to view model page(page with comments)
 					'pageUrl'=>array(
-						'route'=>'books/view/',
+						'route'=>'book/view/',
 						'data'=>array('id'=>'id')
 					),
 				),

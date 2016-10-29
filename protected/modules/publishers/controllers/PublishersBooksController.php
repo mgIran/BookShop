@@ -146,6 +146,8 @@ class PublishersBooksController extends Controller
                 $model->attributes = $_POST['Books'];
                 $model->publisher_id = $user->user_id;
                 $model->confirm = 'pending';
+                $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
+                $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
                 if ($model->save()) {
                     if ($iconFlag) {
                         $thumbnail = new Imager();
@@ -220,6 +222,11 @@ class PublishersBooksController extends Controller
                         'serverName' => $image->image,
                     );
 
+        foreach($model->showTags as $tag)
+            array_push($model->formTags,$tag->title);
+        foreach($model->seoTags as $tag)
+            array_push($model->formSeoTags,$tag->title);
+
         if (isset($_POST['packages-submit'])) {
             if (empty($model->packages))
                 Yii::app()->user->setFlash('failed', 'نوبت چاپ ای تعریف نشده است.');
@@ -236,6 +243,8 @@ class PublishersBooksController extends Controller
             }
             $model->attributes = $_POST['Books'];
             $model->confirm = 'pending';
+            $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
             if ($model->save()) {
                 if ($iconFlag) {
                     $thumbnail = new Imager();

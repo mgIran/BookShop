@@ -14,8 +14,8 @@ Yii::app()->clientScript->registerCss('inline',"
             'name' => 'file_name',
             'maxFileSize' => 1024,
             'maxFiles' => false,
-            'url' => Yii::app()->createUrl('/manageBooks/base/uploadFile'),
-            'deleteUrl' => Yii::app()->createUrl('/manageBooks/base/deleteUploadFile'),
+            'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadFile'),
+            'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadFile'),
             'acceptedFiles' => $this->formats,
             'serverFiles' => array(),
             'onSuccess' => '
@@ -51,7 +51,7 @@ Yii::app()->clientScript->registerCss('inline',"
     <div class="row">
         <div class="col-md-12">
             <?php echo CHtml::hiddenField('book_id', $model->id);?>
-            <?php echo CHtml::ajaxSubmitButton('ثبت', $this->createUrl('/manageBooks/base/savePackage'), array(
+            <?php echo CHtml::ajaxSubmitButton('ثبت', $this->createUrl('/manageBooks/baseManage/savePackage'), array(
                 'type'=>'POST',
                 'dataType'=>'JSON',
                 'data'=>'js:$("#package-info-form").serialize()',
@@ -106,7 +106,7 @@ Yii::app()->clientScript->registerCss('inline',"
             'template' => '{delete}',
             'buttons'=>array(
                 'delete'=>array(
-                    'url'=>'Yii::app()->createUrl("/manageBooks/base/deletePackage/".$data->id)',
+                    'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/deletePackage/".$data->id)',
                 ),
             ),
         ),

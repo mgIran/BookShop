@@ -1,13 +1,13 @@
 <?php
 
-class TagsManageController extends Controller
+class TagsController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
+	
 	/**
 	 * @return array actions type list
 	 */
@@ -15,12 +15,7 @@ class TagsManageController extends Controller
 	{
 		return array(
 			'backend' => array(
-				'index',
-				'create',
-				'update',
-				'admin',
-				'delete',
-				'list'
+				'index','create','update','admin','delete','list'
 			)
 		);
 	}
@@ -31,8 +26,7 @@ class TagsManageController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess',
-			'postOnly + delete', // we only allow deletion via POST request
+			'checkAccess + index, create, update, admin, delete, list',
 		);
 	}
 
@@ -42,14 +36,14 @@ class TagsManageController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new ClassTags;
+		$model=new Tags;
 
 		// Uncomment the following line if AJAX validation is needed
 		//$this->performAjaxValidation($model);
 
-		if(isset($_POST['ClassTags']))
+		if(isset($_POST['Tags']))
 		{
-			$model->attributes=$_POST['ClassTags'];
+			$model->attributes=$_POST['Tags'];
 			if($model->save())
 			{
 				if(isset($_GET['ajax-request']))
@@ -87,9 +81,9 @@ class TagsManageController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ClassTags']))
+		if(isset($_POST['Tags']))
 		{
-			$model->attributes=$_POST['ClassTags'];
+			$model->attributes=$_POST['Tags'];
 			if($model->save())
 			{
 				Yii::app()->user->setFlash('success' ,'<span class="icon-check"></span>&nbsp;&nbsp;اطلاعات با موفقیت ذخیره شد.');
@@ -130,10 +124,10 @@ class TagsManageController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new ClassTags('search');
+		$model=new Tags('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ClassTags']))
-			$model->attributes=$_GET['ClassTags'];
+		if(isset($_GET['Tags']))
+			$model->attributes=$_GET['Tags'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -144,12 +138,12 @@ class TagsManageController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return ClassTags the loaded model
+	 * @return Tags the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=ClassTags::model()->findByPk($id);
+		$model=Tags::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -157,7 +151,7 @@ class TagsManageController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param ClassTags $model the model to be validated
+	 * @param Tags $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
@@ -177,7 +171,7 @@ class TagsManageController extends Controller
 			$criteria->condition = 'title REGEXP :title';
 			$criteria->params = array(':title'=>$term);
 			$criteria->addNotInCondition('title',$currentTags);
-			$data = ClassTags::model()->findAll($criteria);
+			$data = Tags::model()->findAll($criteria);
 			$temp = array();
 			foreach($data as $k=>$value)
 			{

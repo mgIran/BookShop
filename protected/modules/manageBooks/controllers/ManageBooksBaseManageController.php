@@ -138,6 +138,8 @@ class ManageBooksBaseManageController extends Controller
                 );
             }
             $model->confirm = 'accepted';
+            $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
             if ($model->save()) {
                 if ($model->icon) {
                     $thumbnail = new Imager();
@@ -199,6 +201,12 @@ class ManageBooksBaseManageController extends Controller
                         'size' => filesize($bookImagesDIR . $image->image),
                         'serverName' => $image->image,
                     );
+
+        foreach($model->showTags as $tag)
+            array_push($model->formTags,$tag->title);
+        foreach($model->seoTags as $tag)
+            array_push($model->formSeoTags,$tag->title);
+
         if (isset($_POST['Books'])) {
             $fileFlag = false;
             $iconFlag = false;
@@ -221,6 +229,8 @@ class ManageBooksBaseManageController extends Controller
             }
             $model->attributes = $_POST['Books'];
             $model->size = $newFileSize;
+            $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
             if ($model->save()) {
                 if ($fileFlag) {
                     rename($tmpDIR . $model->file_name, $bookFilesDIR . $model->file_name);

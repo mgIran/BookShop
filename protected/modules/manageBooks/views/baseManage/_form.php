@@ -28,8 +28,8 @@
 			'name' => 'icon',
 			'maxFiles' => 1,
 			'maxFileSize' => 0.5, //MB
-			'url' => Yii::app()->createUrl('/manageBooks/base/upload'),
-			'deleteUrl' => Yii::app()->createUrl('/manageBooks/base/deleteUpload'),
+			'url' => Yii::app()->createUrl('/manageBooks/baseManage/upload'),
+			'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUpload'),
 			'acceptedFiles' => '.jpg, .jpeg, .png',
 			'serverFiles' => $icon,
 			'onSuccess' => '
@@ -115,6 +115,34 @@
 		<?php echo $form->error($model,'change_log'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'formTags'); ?>
+		<?php
+		$this->widget("ext.tagIt.tagIt",array(
+			'model' => $model,
+			'attribute' => 'formTags',
+			'suggestType' => 'json',
+			'suggestUrl' => Yii::app()->createUrl('/tags/list'),
+			'data' => $model->formTags
+		));
+		?>
+		<?php echo $form->error($model,'formTags'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'formSeoTags'); ?>
+		<?php
+		$this->widget("ext.tagIt.tagIt",array(
+			'model' => $model,
+			'attribute' => 'formSeoTags',
+			'suggestType' => 'json',
+			'suggestUrl' => Yii::app()->createUrl('/tags/list'),
+			'data' => $model->formSeoTags
+		));
+		?>
+		<?php echo $form->error($model,'formSeoTags'); ?>
+	</div>
+	
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'افزودن' : 'ویرایش' ,array('class' => 'btn btn-success')); ?>
 	</div>

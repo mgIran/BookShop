@@ -6,7 +6,7 @@
 ?>
 
 <div class="container-fluid" id="books-discount-form-parent">
-    <? $this->renderPartial('//layouts/_loading'); ?>
+    <? $this->renderPartial('//partial-views/_loading'); ?>
     <div class="form">
         <?
         if($books){
