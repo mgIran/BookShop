@@ -5,10 +5,14 @@
 <div class="page">
     <div class="page-heading">
         <div class="container">
-            <h1>تازه ترین کتاب ها</h1>
+            <h1><?php if(isset($title))
+                    echo $title;
+                else
+                    echo 'تازه ترین کتاب ها';
+                ?></h1>
             <div class="page-info">
                 <span>کتاب ها<a><?= $dataProvider->totalItemCount ?> عنوان کتاب</a></span>
-                <span>ناشران<a><?= Users::model()->getUsersCount(2) ?> ناشر</a></span>
+<!--                <span>ناشران<a>--><?//= Users::model()->getUsersCount(2) ?><!-- ناشر</a></span>-->
             </div>
         </div>
     </div>

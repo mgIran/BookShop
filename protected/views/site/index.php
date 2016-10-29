@@ -115,450 +115,450 @@ if($mostPurchaseBooksDataProvider->totalItemCount):
 <?php
 endif;
 ?>
-    <div class="tabs">
-        <div class="container">
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                <ul class="nav nav-pills nav-stacked row">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#row-1">برترین ها</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#row-2">محبوب ترین ها</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#row-3">رایگان ها</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 tabs-container">
-                <div class="tab-content">
-                    <div id="row-1" class="tab-pane fade in active">
-                        <div class="is-carousel auto-width" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12439.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12957.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/914.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
-                                        <span class="price">4.000 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12206.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
-                                        <span class="price">1.500 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="row-2" class="tab-pane fade">
-                        <div class="is-carousel auto-width" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12206.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
-                                        <span class="price">1.500 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12957.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12439.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/914.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
-                                        <span class="price">4.000 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="row-3" class="tab-pane fade">
-                        <div class="is-carousel auto-width" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12439.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12957.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
-                                        <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/914.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
-                                        <span class="price">4.000 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="thumbnail-container">
-                                <div class="thumbnail simple">
-                                    <div class="thumb">
-                                        <a href="#" title="عنوان کتاب">
-                                            <img src="uploads/books/images/12206.jpg" alt="نام کتاب" >
-                                            <div class="thumbnail-overlay"></div>
-                                            <div class="thumbnail-overlay-icon">
-                                                <i class="icon"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="caption">
-                                        <div class="stars">
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon"></i>
-                                            <i class="icon off"></i>
-                                        </div>
-                                        <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
-                                        <span class="price">1.500 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="news">
-        <div class="container">
-            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-                <div class="is-carousel" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="1" data-items="1" data-mouseDrag="0">
-                    <div class="news-item">
-                        <div class="thumb"><img src="uploads/news/logo.svg"></div>
-                        <div class="text">
-                            <h2><a href="#">رونمایی از کتاب سیستان وکوروش بزرگ در زاهدان</a></h2>
-                            <div class="info">
-                                <span class="date">15 شهریور 1395 - 10:20</span>
-                            </div>
-                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>
-                        </div>
-                    </div>
-                    <div class="news-item">
-                        <div class="thumb"><img src="uploads/news/logo.svg"></div>
-                        <div class="text">
-                            <h2><a href="#">کتاب chemical thermodynamics منتشر شد</a></h2>
-                            <div class="info">
-                                <span class="date">15 شهریور 1395 - 10:20</span>
-                            </div>
-                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>
-                        </div>
-                    </div>
-                    <div class="news-item">
-                        <div class="thumb"><img src="uploads/news/logo.svg"></div>
-                        <div class="text">
-                            <h2><a href="#">کتاب chemical منتشر شد</a></h2>
-                            <div class="info">
-                                <span class="date">15 شهریور 1395 - 10:20</span>
-                            </div>
-                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 controls">
-                <i class="arrow-icon next"></i>
-                <i class="arrow-icon prev"></i>
-            </div>
-        </div>
-    </div>
+<!--    <div class="tabs">-->
+<!--        <div class="container">-->
+<!--            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">-->
+<!--                <ul class="nav nav-pills nav-stacked row">-->
+<!--                    <li role="presentation" class="active"><a data-toggle="tab" href="#row-1">برترین ها</a></li>-->
+<!--                    <li role="presentation"><a data-toggle="tab" href="#row-2">محبوب ترین ها</a></li>-->
+<!--                    <li role="presentation"><a data-toggle="tab" href="#row-3">رایگان ها</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 tabs-container">-->
+<!--                <div class="tab-content">-->
+<!--                    <div id="row-1" class="tab-pane fade in active">-->
+<!--                        <div class="is-carousel auto-width" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12439.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12957.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/914.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>-->
+<!--                                        <span class="price">4.000 تومان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12206.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>-->
+<!--                                        <span class="price">1.500 تومان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div id="row-2" class="tab-pane fade">-->
+<!--                        <div class="is-carousel auto-width" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12206.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>-->
+<!--                                        <span class="price">1.500 تومان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12957.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12439.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/914.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>-->
+<!--                                        <span class="price">4.000 تومان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div id="row-3" class="tab-pane fade">-->
+<!--                        <div class="is-carousel auto-width" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/10561.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12439.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12957.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>-->
+<!--                                        <span class="price">رایگان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/914.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>-->
+<!--                                        <span class="price">4.000 تومان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="thumbnail-container">-->
+<!--                                <div class="thumbnail simple">-->
+<!--                                    <div class="thumb">-->
+<!--                                        <a href="#" title="عنوان کتاب">-->
+<!--                                            <img src="uploads/books/images/12206.jpg" alt="نام کتاب" >-->
+<!--                                            <div class="thumbnail-overlay"></div>-->
+<!--                                            <div class="thumbnail-overlay-icon">-->
+<!--                                                <i class="icon"></i>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="caption">-->
+<!--                                        <div class="stars">-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon"></i>-->
+<!--                                            <i class="icon off"></i>-->
+<!--                                        </div>-->
+<!--                                        <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>-->
+<!--                                        <span class="price">1.500 تومان</span>-->
+<!--                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="news">-->
+<!--        <div class="container">-->
+<!--            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">-->
+<!--                <div class="is-carousel" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="1" data-items="1" data-mouseDrag="0">-->
+<!--                    <div class="news-item">-->
+<!--                        <div class="thumb"><img src="uploads/news/logo.svg"></div>-->
+<!--                        <div class="text">-->
+<!--                            <h2><a href="#">رونمایی از کتاب سیستان وکوروش بزرگ در زاهدان</a></h2>-->
+<!--                            <div class="info">-->
+<!--                                <span class="date">15 شهریور 1395 - 10:20</span>-->
+<!--                            </div>-->
+<!--                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="news-item">-->
+<!--                        <div class="thumb"><img src="uploads/news/logo.svg"></div>-->
+<!--                        <div class="text">-->
+<!--                            <h2><a href="#">کتاب chemical thermodynamics منتشر شد</a></h2>-->
+<!--                            <div class="info">-->
+<!--                                <span class="date">15 شهریور 1395 - 10:20</span>-->
+<!--                            </div>-->
+<!--                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="news-item">-->
+<!--                        <div class="thumb"><img src="uploads/news/logo.svg"></div>-->
+<!--                        <div class="text">-->
+<!--                            <h2><a href="#">کتاب chemical منتشر شد</a></h2>-->
+<!--                            <div class="info">-->
+<!--                                <span class="date">15 شهریور 1395 - 10:20</span>-->
+<!--                            </div>-->
+<!--                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 controls">-->
+<!--                <i class="arrow-icon next"></i>-->
+<!--                <i class="arrow-icon prev"></i>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
 

@@ -596,7 +596,7 @@ a:active{
 }
 
 .thumbnail .caption h4 a {
-    color: #343434;
+    color: #fff;
     font-size: 15px;
     display: block;
     text-overflow: ellipsis;
@@ -2080,7 +2080,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .book-tabs .tab-content > .tab-pane{
     background: #fff;
-    padding: 20px;
+    padding: 50px;
 }
 .book-view .book-tabs .tab-content > .tab-pane#summary{
     color: #666;
@@ -2350,7 +2350,7 @@ input[type="checkbox"] + label:hover::before {
     bottom: 0;
     display: block;
     z-index: 100001;
-    background-color: rgba(0,0,0,0.9);
+    background-color: rgba(0,0,0,0.95);
     text-align: center;
 }
 .page-loading .logo{
@@ -2432,3 +2432,34 @@ input[type="checkbox"] + label:hover::before {
     }
 }
 /*****************************************************/
+
+.svg{
+    display: inline-block;
+    background-size: cover !important;
+    margin-left: 5px !important;
+}
+
+.svg-bookmark{
+    width: 15px;
+    height: 20px;
+    float: right;
+    margin:0;
+}
+.relative{
+    position: relative !important;
+}
+#bookmark-book {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+.ltr{
+    direction: ltr !important;
+}
+.gray{
+    color: #555 !important;
+    fill: #555 !important;
+}

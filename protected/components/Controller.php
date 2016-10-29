@@ -45,10 +45,7 @@ class Controller extends CController
         Yii::app()->clientScript->registerScript('js-requirement', '
             var baseUrl = "' . Yii::app()->getBaseUrl(true) . '";
         ', CClientScript::POS_HEAD);
-    }
 
-    public function beforeRender($view)
-    {
         $this->description = Yii::app()->db->createCommand()
             ->select('value')
             ->from('ym_site_setting')

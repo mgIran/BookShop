@@ -15,9 +15,6 @@ class BookController extends Controller
                 'search',
                 'view',
                 'download',
-                'programs',
-                'games',
-                'educations',
                 'publisher',
                 'buy',
                 'bookmark',
@@ -40,13 +37,15 @@ class BookController extends Controller
             'postOnly + bookmark',
         );
     }
-    
+
     public function actionView($id)
     {
         Yii::import('users.models.*');
         Yii::app()->theme = "frontend";
         $this->layout = "//layouts/index";
         $model = $this->loadModel($id);
+        $this->keywords = $model->getKeywords();
+        $this->description = mb_substr(strip_tags($model->description) ,0 ,160,'utf-8');
         $model->seen = $model->seen + 1;
         $model->save();
         $this->saveInCookie($model->category_id);
@@ -61,8 +60,8 @@ class BookController extends Controller
         $criteria = Books::model()->getValidBooks(array($model->category_id));
         $criteria->addCondition('id!=:id');
         $criteria->params[':id'] = $model->id;
-        $criteria->limit = 3;
-        $similar = new CActiveDataProvider('Books', array('criteria' => $criteria,'pagination' => array('pageSize'=>3)));
+        $criteria->limit = 10;
+        $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
         $this->render('view', array(
             'model' => $model,
             'similar' => $similar,
@@ -199,8 +198,8 @@ class BookController extends Controller
      */
     public function actionPublisher($title, $id = null)
     {
-        Yii::app()->theme = 'market';
-        $this->layout = 'public';
+        Yii::app()->theme = 'frontend';
+        $this->layout = 'index';
         $criteria = Books::model()->getValidBooks();
         if (isset($_GET['t']) and $_GET['t'] == 1) {
             $criteria->addCondition('publisher_name=:publisher');
@@ -209,16 +208,22 @@ class BookController extends Controller
             $criteria->addCondition('publisher_id=:publisher');
             $publisher_id = $id;
         }
-        $criteria->params[':dev'] = $publisher_id;
+        $criteria->params[':publisher'] = $publisher_id;
         $dataProvider = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,
+            'pagination' => array('pageSize' => 8)
         ));
 
-        $pageTitle = UserDetails::model()->findByAttributes(array('user_id' => $id));
-
+        if($id)
+        {
+            $user = UserDetails::model()->findByAttributes(array('user_id' => $id));
+            $pageTitle = 'کتاب های '.($user->publisher_id?$user->publisher_id:$user->fa_name);
+        }
+        else
+            $pageTitle = $title;
         $this->render('books_list', array(
             'dataProvider' => $dataProvider,
-            'title' => $pageTitle->nickname,
+            'title' => $pageTitle,
             'pageTitle' => 'کتاب ها'
         ));
     }
