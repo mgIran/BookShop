@@ -109,7 +109,7 @@ return array(
             'showScriptName'=>false,
             'appendParams'=>true,
 			'rules'=>array(
-				'<action:(logout|login|register|dashboard)>' => 'users/public/<action>',
+				'<action:(logout|login|register|dashboard|googleLogin)>' => 'users/public/<action>',
 				'/help'=>'site/help',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',

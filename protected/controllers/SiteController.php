@@ -36,10 +36,9 @@ class SiteController extends Controller
             // They can be accessed via: index.php?r=site/page&views=FileName
             'page' => array(
                 'class' => 'CViewAction',
-            ),
+            )
         );
     }
-
     /**
      * This is the default 'index' action that is invoked
      * when an action is not explicitly requested by users.

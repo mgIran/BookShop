@@ -201,7 +201,7 @@ class Users extends CActiveRecord
         return true;
     }
 
-    public function getDeveloers()
+    public function getPublishers()
     {
         $criteria = new CDbCriteria;
 
