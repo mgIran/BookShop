@@ -2,8 +2,8 @@
 /* @var $model Users */
 /* @var $form CActiveForm */
 ?>
+<h4 class="welcome-text">کاربر گرامی<small> ، لطفا فرم زیر را پر کنید.</small></h4>
 <div class="login-form signup">
-
     <?php if(Yii::app()->user->hasFlash('success')):?>
         <div class="alert alert-success fade in">
             <?php echo Yii::app()->user->getFlash('success');?>

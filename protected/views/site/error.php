@@ -2,30 +2,30 @@
 /* @var $this SiteController */
 /* @var $error array */
 ?>
+<div class="page-error">
+    <div class="code"><?php echo $code; ?></div>
+    <div class="title"><?php echo CHtml::encode($message);?></div>
 
-<!-----start-wrap--------->
-<div class="wrap">
-    <!-----start-content--------->
-    <div class="content">
-        <!-----start-logo--------->
-        <div class="logo">
-            <h1><?php echo $code; ?></h1>
-            <span><img src="<?php echo Yii::app()->theme->baseUrl.'/images/signal.png';?>"/><?php echo CHtml::encode($message);?></span>
-        </div>
-        <!-----end-logo--------->
-        <!-----start-search-bar-section--------->
-        <div class="buttom">
-            <div class="seach_bar">
-                <p>شما می توانید به <span><a href="<?php echo $this->createAbsoluteUrl('//');?>">صفحه اصلی</a></span> بازگردید یا از همین جا جستجو کنید</p>
-                <!-----start-sear-box--------->
-                <div class="search_box">
-                    <form>
-                        <input type="text" placeholder="جستجو کنید..." ><input type="submit" value="">
-                    </form>
-                </div>
+    <div class="buttons">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="<?php echo $this->createUrl('/site');?>" class="btn btn-danger btn-block">صفحه اصلی <i class="arrow-icon right"></i></a>
+            </div>
+            <div class="col-md-6">
+                <button onclick="history.back();" class="btn btn-info btn-block"><i class="arrow-icon left"></i> بازگشت</button>
             </div>
         </div>
-        <!-----end-sear-bar--------->
     </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <div class="ltr">
+            <?php $this->renderPartial('//partial-views/_copyright');?>
+        </div>
+        <div>
+            <a href="<?php echo $this->createUrl('/')?>">راهنما</a> / <a href="#">تماس با ما</a>
+        </div>
+    </div>
+    <!-- ./Copyright -->
+
 </div>
-<!---------end-wrap---------->

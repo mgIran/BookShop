@@ -1,3 +1,4 @@
+<h4 class="welcome-text">بازیابی کلمه عبور<small> ، لطفا پست الکترونیکی خود را وارد کنید.</small></h4>
 <div class="login-form">
 
     <?php echo CHtml::beginForm(Yii::app()->createUrl('/users/public/forgetPassword'), 'post', array(
@@ -6,13 +7,10 @@
 
     <div class="alert alert-success hidden" id="message"></div>
 
-    <h1>تغییر کلمه عبور</h1>
-
-    <div class="row">
-        <?php echo CHtml::textField('email', '',array('class'=>'transition focus-left','placeholder'=>'پست الکترونیکی')); ?>
-        <span class="transition icon-envelope"></span>
+    <div class="form-row">
+        <?php echo CHtml::textField('email', '',array('class'=>'form-control','placeholder'=>'پست الکترونیکی')); ?>
     </div>
-    <div class="row">
+    <div class="form-row">
         <?php echo CHtml::ajaxSubmitButton('ارسال', Yii::app()->createUrl('/users/public/forgetPassword'), array(
             'type'=>'POST',
             'dataType'=>'JSON',
@@ -28,7 +26,7 @@
                     $('#message').removeClass('alert-danger').addClass('alert-success').text(data.message).removeClass('hidden');
                 $('.loading-container').fadeOut();
             }"
-        ), array('class'=>'transition'));?>
+        ), array('class'=>'btn btn-info'));?>
     </div>
     <?php CHtml::endForm(); ?>
 

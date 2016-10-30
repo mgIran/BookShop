@@ -215,8 +215,8 @@ class UsersPublicController extends Controller
      */
     public function actionForgetPassword()
     {
-        Yii::app()->theme = 'market';
-        $this->layout = '//layouts/backgroundImage';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/login';
         if (!Yii::app()->user->isGuest and Yii::app()->user->type != 'admin')
             $this->redirect($this->createAbsoluteUrl('//'));
         else if (!Yii::app()->user->isGuest and Yii::app()->user->type == 'admin')

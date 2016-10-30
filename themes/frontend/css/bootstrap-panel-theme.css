@@ -1028,8 +1028,8 @@ a:active{
 }
 .btn-success{
     background: #82b440;
-    border-radius: 0;
-    padding: 15px;
+    min-width: 120px;
+    padding: 10px 15px;
     border:none;
     -webkit-transition: all 0.4s ease 0s;
     -moz-transition: all 0.4s ease 0s;
@@ -1044,9 +1044,9 @@ a:active{
 }
 .btn-danger{
     background: #e74e40;
-    border-radius: 0;
-    padding: 15px;
+    padding: 10px 15px;
     border:none;
+    min-width: 120px;
     -webkit-transition: all 0.4s ease 0s;
     -moz-transition: all 0.4s ease 0s;
     -ms-transition: all 0.4s ease 0s;
@@ -1058,11 +1058,56 @@ a:active{
 .btn-danger:active{
     background: #ec7064;
 }
+.btn-info{
+    background: #364760;
+    min-width: 120px;
+    padding: 10px 15px;
+    border:none;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active{
+    background: #3f5370;
+}
+.btn-default{
+    background: #fafafa;
+    padding: 10px 15px;
+    border-color:#e7ebf1;
+    color: #333;
+    min-width: 120px;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active{
+    background: #f5f5f5;
+    border-color: #e3e6ec;
+}
 .login-form .btn-success,
-.login-form .btn-danger{
+.login-form .btn-danger,
+.login-form .btn-info{
     width:100%;
+    padding: 15px;
+    border-radius: 0;
     margin-top: 20px;
     margin-bottom: 25px;
+}
+.login-form .btn-info{
+    background: #3b5998;
+}
+.login-form .btn-info:hover,
+.login-form .btn-info:focus,
+.login-form .btn-info:active{
+    background: #4264aa;
 }
 .login-form a{
     color: #fff;
@@ -1088,4 +1133,100 @@ a:active{
     color: #6382a9;
     padding: 15px 15px 10px;
     margin: 0;
+}
+.login-form .alert-success{
+    background: #96c459;
+    border-color: #96c459;
+    color: #fff;
+}
+.login-form .alert-danger{
+    background: #e74e40;
+    border-color: #e74e40;
+    color: #fff;
+}
+.white-form{
+    margin: 0 -30px;
+    background: #fff;
+    padding: 30px;
+}
+.description{
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 35px;
+}
+.white-form h3,
+.form h3{
+    margin-top: 0;
+}
+.white-form .buttons{
+    margin-top: 20px;
+}
+.alert{
+    line-height: 26px;
+}
+.page-error{
+    width: 25%;
+    margin: 100px auto;
+}
+.page-error .code{
+    color: #364760;
+    font-size: 160px;
+    text-align: center;
+    line-height: 140px;
+    width: 100%;
+}
+.page-error .title{
+    color: #555;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+.page-error .col-md-6{
+    padding: 0 5px;
+}
+.page-error .row{
+    margin: 0 -5px;
+}
+.page-error .arrow-icon {
+    background: url("../svg/arrow-white.svg") no-repeat center;
+    background-size: 10px;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    margin-top: -5px;
+}
+.page-error .arrow-icon.left {
+    left: 15px;
+    right: auto;
+}
+.page-error .arrow-icon.right {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.page-error .btn{
+    position: relative;
+    padding: 13px 15px;
+}
+.page-error .buttons{
+    margin-bottom: 50px;
+}
+.page-error .copyright{
+    border-top: 1px solid #e7ebf1;
+    color: #999;
+    font-size: 11px;
+    line-height: 20px;
+    padding:25px 20px;
+}
+.page-error .copyright div{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.ltr{
+    direction: ltr;
 }

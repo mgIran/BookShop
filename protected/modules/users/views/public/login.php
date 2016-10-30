@@ -2,8 +2,17 @@
 /* @var $model Users */
 /* @var $form CActiveForm */
 ?>
-<h4 class="welcome-text">خوش آمدید<small> ، لطفا وارد شوید</small></h4>
+<h4 class="welcome-text">خوش آمدید<small> ، لطفا وارد شوید.</small></h4>
 <div class="login-form">
+    <?php if(Yii::app()->user->hasFlash('success')):?>
+        <div class="alert alert-success fade in">
+            <?php echo Yii::app()->user->getFlash('success');?>
+        </div>
+    <?php elseif(Yii::app()->user->hasFlash('failed')):?>
+        <div class="alert alert-danger fade in">
+            <?php echo Yii::app()->user->getFlash('failed');?>
+        </div>
+    <?php endif;?>
 
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'login-form',
@@ -32,15 +41,6 @@
     <div class="alert alert-danger<?php if(!$model->hasErrors()):?> hidden<?php endif;?>" id="validate-message">
         <?php echo $form->error($model,'authenticate_field'); ?>
     </div>
-    <?php if(Yii::app()->user->hasFlash('success')):?>
-        <div class="alert alert-success fade in">
-            <?php echo Yii::app()->user->getFlash('success');?>
-        </div>
-    <?php elseif(Yii::app()->user->hasFlash('failed')):?>
-        <div class="alert alert-danger fade in">
-            <?php echo Yii::app()->user->getFlash('failed');?>
-        </div>
-    <?php endif;?>
 
     <div class="form-row">
         <?php echo $form->textField($model,'email',array('class'=>'form-control','placeholder'=>'پست الکترونیکی')); ?>
