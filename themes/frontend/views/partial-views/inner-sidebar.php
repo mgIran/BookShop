@@ -1,4 +1,4 @@
-<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 sidebar">
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 sidebar-col">
     <div class="boxed">
         <div class="heading">
             <h4>دسته بندی ها</h4>
@@ -20,7 +20,7 @@
         </div>
         <div class="sidebar-book-list">
             <div class="thumbnail-container">
-                <div class="thumbnail sidebar">
+                <div class="thumbnail smallest">
                     <div class="thumb">
                         <a href="#" title="عنوان کتاب">
                             <img src="../../uploads/books/icons/JNSLy1477560156.jpg" alt="نام کتاب" >
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="thumbnail-container">
-                <div class="thumbnail sidebar">
+                <div class="thumbnail smallest">
                     <div class="thumb">
                         <a href="#" title="عنوان کتاب">
                             <img src="../../uploads/books/icons/gvXUa1477582174.jpg" alt="نام کتاب" >
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="thumbnail-container">
-                <div class="thumbnail sidebar">
+                <div class="thumbnail smallest">
                     <div class="thumb">
                         <a href="#" title="عنوان کتاب">
                             <img src="../../uploads/books/icons/wD8Oc1477588685.jpg" alt="نام کتاب" >
@@ -99,7 +99,7 @@
         </div>
         <div class="sidebar-book-list">
             <div class="thumbnail-container">
-                <div class="thumbnail sidebar">
+                <div class="thumbnail smallest">
                     <div class="thumb">
                         <a href="#" title="عنوان کتاب">
                             <img src="../../uploads/books/icons/gvXUa1477582174.jpg" alt="نام کتاب" >
@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div class="thumbnail-container">
-                <div class="thumbnail sidebar">
+                <div class="thumbnail smallest">
                     <div class="thumb">
                         <a href="#" title="عنوان کتاب">
                             <img src="../../uploads/books/icons/wD8Oc1477588685.jpg" alt="نام کتاب" >
@@ -147,7 +147,7 @@
                 </div>
             </div>
             <div class="thumbnail-container">
-                <div class="thumbnail sidebar">
+                <div class="thumbnail smallest">
                     <div class="thumb">
                         <a href="#" title="عنوان کتاب">
                             <img src="../../uploads/books/icons/JNSLy1477560156.jpg" alt="نام کتاب" >

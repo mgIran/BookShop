@@ -213,47 +213,51 @@ class Books extends CActiveRecord
 	protected function afterSave()
 	{
 		if($this->formTags && !empty($this->formTags)) {
-			if(!$this->IsNewRecord)
-				BookTagRel::model()->deleteAll('for_seo = 0 AND book_id='.$this->id);
-			foreach($this->formTags as $tag) {
-				$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
-				if($tagModel) {
-					$tag_rel = new BookTagRel('not_seo');
-					$tag_rel->book_id = $this->id;
-					$tag_rel->tag_id = $tagModel->id;
-					$tag_rel->save();
-				} else {
-					$tagModel = new Tags;
-					$tagModel->title = $tag;
-					if($tagModel->save()) {
-						$tag_rel = new BookTagRel('not_seo');
-						$tag_rel->book_id = $this->id;
-						$tag_rel->tag_id = $tagModel->id;
-						$tag_rel->save();
-					}
-				}
-			}
-		}
+            if (!$this->IsNewRecord)
+                BookTagRel::model()->deleteAll('for_seo = 0 AND book_id='.$this->id);
+            foreach ($this->formTags as $tag) {
+                if (!empty($tag)) {
+                    $tagModel = Tags::model()->findByAttributes(array('title' => $tag));
+                    if ($tagModel) {
+                        $tag_rel = new BookTagRel('not_seo');
+                        $tag_rel->book_id = $this->id;
+                        $tag_rel->tag_id = $tagModel->id;
+                        $tag_rel->save();
+                    } else {
+                        $tagModel = new Tags;
+                        $tagModel->title = $tag;
+                        if ($tagModel->save()) {
+                            $tag_rel = new BookTagRel('not_seo');
+                            $tag_rel->book_id = $this->id;
+                            $tag_rel->tag_id = $tagModel->id;
+                            $tag_rel->save();
+                        }
+                    }
+                }
+            }
+        }
 		if($this->formSeoTags && !empty($this->formSeoTags)) {
 			if(!$this->IsNewRecord)
                 BookTagRel::model()->deleteAll('for_seo = 1 AND book_id='.$this->id);
 			foreach($this->formSeoTags as $tag) {
-				$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
-				if($tagModel) {
-					$tag_rel = new BookTagRel('for_seo');
-					$tag_rel->book_id = $this->id;
-					$tag_rel->tag_id = $tagModel->id;
-					$tag_rel->save();
-				} else {
-					$tagModel = new Tags;
-					$tagModel->title = $tag;
-					if($tagModel->save()) {
-						$tag_rel = new BookTagRel('for_seo');
-						$tag_rel->book_id = $this->id;
-						$tag_rel->tag_id = $tagModel->id;
-						$tag_rel->save();
-					}
-				}
+                if(!empty($tag)) {
+                    $tagModel = Tags::model()->findByAttributes(array('title' => $tag));
+                    if ($tagModel) {
+                        $tag_rel = new BookTagRel('for_seo');
+                        $tag_rel->book_id = $this->id;
+                        $tag_rel->tag_id = $tagModel->id;
+                        $tag_rel->save();
+                    } else {
+                        $tagModel = new Tags;
+                        $tagModel->title = $tag;
+                        if ($tagModel->save()) {
+                            $tag_rel = new BookTagRel('for_seo');
+                            $tag_rel->book_id = $this->id;
+                            $tag_rel->tag_id = $tagModel->id;
+                            $tag_rel->save();
+                        }
+                    }
+                }
 			}
 		}
 		parent::afterSave();
@@ -399,4 +403,14 @@ class Books extends CActiveRecord
 		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
 		return Comment::model()->count($criteria);
 	}
+
+
+    public function getKeywords()
+    {
+        if($this->seoTags) {
+            $tags = CHtml::listData($this->seoTags, 'title', 'title');
+            return implode(',', $tags);
+        }
+        return false;
+    }
 }

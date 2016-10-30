@@ -64,7 +64,7 @@ class BookCategoriesController extends Controller
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'Books',
                 'attribute' => 'icon',
-                'uploadDir' => 'uploads/books/icons',
+                'uploadDir' => '/uploads/books/icons',
                 'storedMode' => 'field'
             ),
 			'uploadIcon' => array(
@@ -84,7 +84,7 @@ class BookCategoriesController extends Controller
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'BookCategories',
                 'attribute' => 'icon',
-                'uploadDir' => 'uploads/bookCategories/icons',
+                'uploadDir' => '/uploads/bookCategories/icons',
                 'storedMode' => 'field'
             )
 		);

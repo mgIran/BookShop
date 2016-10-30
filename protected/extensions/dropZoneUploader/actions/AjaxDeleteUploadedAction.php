@@ -13,6 +13,11 @@ class AjaxDeleteUploadedAction extends CAction
     public $uploadDir;
 
     /**
+     * @var array thumbnail sizes array
+     */
+    public $thumbSizes = array();
+
+    /**
      * @var string model class name
      */
     public $modelName;
@@ -50,9 +55,12 @@ class AjaxDeleteUploadedAction extends CAction
                         $deleteFlag = $ownerModel->updateByPk($model->id, array($this->attribute => null))?true:false;
                     elseif ($this->storedMode === self::STORED_RECORD_MODE)
                         $deleteFlag = $model->delete()?true:false;
-
                     if ($deleteFlag) {
-                        @unlink($uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute});
+                        @unlink($uploadDir.DIRECTORY_SEPARATOR.$fileName);
+                        if($this->thumbSizes)
+                            foreach($this->thumbSizes as $size)
+                                if(is_dir($uploadDir.DIRECTORY_SEPARATOR.$size) && file_exists($uploadDir.DIRECTORY_SEPARATOR.$size.DIRECTORY_SEPARATOR.$fileName))
+                                    @unlink($uploadDir.DIRECTORY_SEPARATOR.$size.DIRECTORY_SEPARATOR.$fileName);
                         $response = ['status' => true, 'msg' => 'فایل با موفقیت حذف شد.'];
                     } else
                         $response = ['status' => false, 'msg' => 'در حذف فایل مشکل ایجاد شده است'];

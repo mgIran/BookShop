@@ -54,7 +54,7 @@ class AdvertisesManageController extends Controller
 				'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
 				'modelName' => 'Advertises',
 				'attribute' => 'cover',
-				'uploadDir' => 'uploads/advertisesCover',
+				'uploadDir' => '/uploads/advertisesCover',
 				'storedMode' => 'field'
 			)
 		);

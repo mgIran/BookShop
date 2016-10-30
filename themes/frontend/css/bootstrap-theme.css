@@ -596,7 +596,7 @@ a:active{
 }
 
 .thumbnail .caption h4 a {
-    color: #343434;
+    color: #fff;
     font-size: 15px;
     display: block;
     text-overflow: ellipsis;
@@ -1962,26 +1962,26 @@ input[type="checkbox"] + label:hover::before {
 .book-view .small-info p{
     margin-bottom: 3px;
 }
-.sidebar .boxed{
+.sidebar-col .boxed{
     background: #fff;
     padding: 20px;
     margin-bottom: 30px;
 }
-.sidebar .heading h4{
+.sidebar-col .heading h4{
     font-size: 18px;
     font-weight: 500;
 }
-.sidebar .categories{
+.sidebar-col .categories{
     padding: 0;
     list-style: none;
 }
-.sidebar .categories li:last-child{
+.sidebar-col .categories li:last-child{
     border-bottom: none;
 }
-.sidebar .categories li{
+.sidebar-col .categories li{
     border-bottom: 1px solid rgba(0,0,0,0.15);
 }
-.sidebar .categories a::before{
+.sidebar-col .categories a::before{
     position: absolute;
     content: '';
     right: 3px;
@@ -2001,7 +2001,7 @@ input[type="checkbox"] + label:hover::before {
     -o-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
 }
-.sidebar .categories a{
+.sidebar-col .categories a{
     color: #343434;
     padding: 15px 20px 15px 0;
     display: block;
@@ -2012,22 +2012,22 @@ input[type="checkbox"] + label:hover::before {
     -o-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
 }
-.sidebar .categories li.active a,
-.sidebar .categories a:hover,
-.sidebar .categories a:focus,
-.sidebar .categories a:active{
+.sidebar-col .categories li.active a,
+.sidebar-col .categories a:hover,
+.sidebar-col .categories a:focus,
+.sidebar-col .categories a:active{
     color: #c8385e;
 }
-.sidebar .categories li.active a::before,
-.sidebar .categories a:hover::before,
-.sidebar .categories a:focus::before,
-.sidebar .categories a:active::before{
+.sidebar-col .categories li.active a::before,
+.sidebar-col .categories a:hover::before,
+.sidebar-col .categories a:focus::before,
+.sidebar-col .categories a:active::before{
     border-color: #c8385e;
 }
-.sidebar .text-justify{
+.sidebar-col .text-justify{
     line-height:28px;
 }
-.sidebar .tags a{
+.sidebar-col .tags a{
     color: #343434;
     border:1px solid rgba(0,0,0,0.15);
     padding: 8px 10px;
@@ -2040,9 +2040,9 @@ input[type="checkbox"] + label:hover::before {
     -o-transition: all 0.2s ease 0s;
     transition: all 0.2s ease 0s;
 }
-.sidebar .tags a:hover,
-.sidebar .tags a:focus,
-.sidebar .tags a:active{
+.sidebar-col .tags a:hover,
+.sidebar-col .tags a:focus,
+.sidebar-col .tags a:active{
     background: #222;
     color: #fff;
     border-color: #222;
@@ -2080,7 +2080,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .book-tabs .tab-content > .tab-pane{
     background: #fff;
-    padding: 20px;
+    padding: 50px;
 }
 .book-view .book-tabs .tab-content > .tab-pane#summary{
     color: #666;
@@ -2242,10 +2242,10 @@ input[type="checkbox"] + label:hover::before {
 .sidebar-book-list .thumbnail-container:last-of-type{
     margin: 0;
 }
-.thumbnail.sidebar{
+.thumbnail.smallest{
     position: relative;
 }
-.thumbnail.sidebar .thumb{
+.thumbnail.smallest .thumb{
     width: 70px;
     height: 100px;
     display: inline-block;
@@ -2254,20 +2254,20 @@ input[type="checkbox"] + label:hover::before {
     top: 0;
     z-index: 1;
 }
-.thumbnail.sidebar .caption{
+.thumbnail.smallest .caption{
     padding-right: 80px;
     padding-left: 0;
 }
-.thumbnail.sidebar .caption h4{
+.thumbnail.smallest .caption h4{
     margin-top: 0;
 }
-.thumbnail.sidebar .caption h4 a{
+.thumbnail.smallest .caption h4 a{
     font-size: 14px;
 }
-.thumbnail.sidebar .caption::before{
+.thumbnail.smallest .caption::before{
     display: none;
 }
-.thumbnail.sidebar .stars .icon {
+.thumbnail.smallest .stars .icon {
     background: rgba(0, 0, 0, 0) url("../svg/star.svg") no-repeat scroll center center / 16px auto;
     float: right;
     height: 16px;
@@ -2276,7 +2276,7 @@ input[type="checkbox"] + label:hover::before {
 }
 
 
-.thumbnail.sidebar:hover .thumb .thumbnail-overlay {
+.thumbnail.smallest:hover .thumb .thumbnail-overlay {
     opacity: .5;
     -webkit-transform: rotateX(0deg);
     -moz-transform: rotateX(0deg);
@@ -2285,7 +2285,7 @@ input[type="checkbox"] + label:hover::before {
     transform: rotateX(0deg);
 }
 
-.thumbnail.sidebar:hover .thumb .thumbnail-overlay-icon {
+.thumbnail.smallest:hover .thumb .thumbnail-overlay-icon {
     opacity: 1;
     -webkit-transform: translateY(0px) scale(1);
     -moz-transform: translateY(0px) scale(1);
@@ -2294,13 +2294,13 @@ input[type="checkbox"] + label:hover::before {
     transform: translateY(0px) scale(1);
 }
 
-.thumbnail.sidebar .thumbnail-overlay-icon .icon {
+.thumbnail.smallest .thumbnail-overlay-icon .icon {
     background-size: 10px;
     width: 10px;
     height: 10px;
 }
 
-.thumbnail.sidebar .thumbnail-overlay-icon .icon::before {
+.thumbnail.smallest .thumbnail-overlay-icon .icon::before {
     width: 20px;
     height: 20px;
     top: -5px;
@@ -2350,7 +2350,7 @@ input[type="checkbox"] + label:hover::before {
     bottom: 0;
     display: block;
     z-index: 100001;
-    background-color: rgba(0,0,0,0.9);
+    background-color: rgba(0,0,0,0.95);
     text-align: center;
 }
 .page-loading .logo{
@@ -2432,3 +2432,34 @@ input[type="checkbox"] + label:hover::before {
     }
 }
 /*****************************************************/
+
+.svg{
+    display: inline-block;
+    background-size: cover !important;
+    margin-left: 5px !important;
+}
+
+.svg-bookmark{
+    width: 15px;
+    height: 20px;
+    float: right;
+    margin:0;
+}
+.relative{
+    position: relative !important;
+}
+#bookmark-book {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+.ltr{
+    direction: ltr !important;
+}
+.gray{
+    color: #555 !important;
+    fill: #555 !important;
+}

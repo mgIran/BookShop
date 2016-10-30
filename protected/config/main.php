@@ -76,6 +76,7 @@ return array(
 				'class'=>'Users',
 				'nameProperty'=>'userDetails.fa_name',
 //				'avatarProperty'=>'userDetails.avatar',
+//				'avatarFolderPath'=>'userDetails.avatar',
 				'emailProperty'=>'email',
 			),
 		)
@@ -109,6 +110,7 @@ return array(
             'appendParams'=>true,
 			'rules'=>array(
 				'<action:(logout|login|register|dashboard)>' => 'users/public/<action>',
+				'/help'=>'site/help',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',

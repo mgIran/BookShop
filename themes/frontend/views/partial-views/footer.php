@@ -6,7 +6,9 @@
                     <div class="title">
                         <img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo.svg';?>" alt="<?php echo Yii::app()->name;?>">
                         <h1>بوک شاپ<small>نزدیکترین کتابفروشی شهر</small></h1>
-                        <div class="text">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چـاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآن چـنان کـه لازم اسـت و بـرای شرایط فعلی تکنولوژی مورد نیاز و کاربـردهای متـنوع با هـدف بهـبود ابـزارهـای کاربردی می باشد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</div>
+                        <div class="text"><?php
+                            echo nl2br(strip_tags($this->aboutFooter));
+                            ?></div>
                     </div>
                 </div>
             </div>
@@ -21,16 +23,16 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="buttons">
-                    <a href="#"><i class="windows-icon"></i>نسخه ویندوز</a>
-                    <a href="#"><i class="android-icon"></i>نسخه اندورید</a>
+                    <a href="<?= $this->siteAppUrls['windows'] ?>"><i class="windows-icon"></i>نسخه ویندوز</a>
+                    <a href="<?= $this->siteAppUrls['android'] ?>"><i class="android-icon"></i>نسخه اندورید</a>
                 </div>
                 <div class="namad"><img src="uploads/enamad.png"></div>
                 <nav class="links">
                     <ul class="nav nav-justified">
                         <li><a href="#">ناشران</a></li>
-                        <li><a href="#">راهنما</a></li>
-                        <li><a href="#">تماس با ما</a></li>
-                        <li><a href="#">درباره ما</a></li>
+                        <li><a href="<?= $this->createUrl('/help') ?>">راهنما</a></li>
+                        <li><a href="<?= $this->createUrl('/contactus') ?>">تماس با ما</a></li>
+                        <li><a href="<?= $this->createUrl('/about') ?>">درباره ما</a></li>
                     </ul>
                 </nav>
             </div>

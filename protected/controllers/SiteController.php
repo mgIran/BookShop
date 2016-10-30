@@ -61,6 +61,10 @@ class SiteController extends Controller
         // get advertise
         Yii::import('advertises.models.*');
         $advertises = new CActiveDataProvider('Advertises' ,array('criteria' => Advertises::model()->getActiveAdvertises()));
+        
+        // get news
+        Yii::import('news.models.*');
+        $advertises = new CActiveDataProvider('Advertises' ,array('criteria' => Advertises::model()->getActiveAdvertises()));
 
         $this->render('index' ,array(
             'categoriesDataProvider' => $categoriesDataProvider ,
@@ -113,7 +117,7 @@ class SiteController extends Controller
     public function actionAbout()
     {
         Yii::import('pages.models.*');
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $model = Pages::model()->findByPk(1);
         $this->render('//site/pages/page', array('model' => $model));
@@ -122,36 +126,18 @@ class SiteController extends Controller
     public function actionContactUs()
     {
         Yii::import('pages.models.*');
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
-        $model = Pages::model()->findByPk(2);
+        $model = Pages::model()->findByPk(8);
         $this->render('//site/pages/page', array('model' => $model));
     }
 
     public function actionHelp()
     {
         Yii::import('pages.models.*');
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
-        $model = Pages::model()->findByPk(3);
-        $this->render('//site/pages/page', array('model' => $model));
-    }
-
-    public function actionTerms()
-    {
-        Yii::import('pages.models.*');
-        Yii::app()->theme = 'market';
-        $this->layout = '//layouts/index';
-        $model = Pages::model()->findByPk(4);
-        $this->render('//site/pages/page', array('model' => $model));
-    }
-
-    public function actionPrivacy()
-    {
-        Yii::import('pages.models.*');
-        Yii::app()->theme = 'market';
-        $this->layout = '//layouts/index';
-        $model = Pages::model()->findByPk(5);
+        $model = Pages::model()->findByPk(6);
         $this->render('//site/pages/page', array('model' => $model));
     }
 }

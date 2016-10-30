@@ -38,47 +38,6 @@ class News extends CActiveRecord
 	];
 
 	/**
-	 * __set
-	 *
-	 * Rewrite default setter, so we can dynamically add
-	 * new virtual attribtues such as name_en, name_de etc.
-	 *
-	 * @param string $name
-	 * @param string $value
-	 * @return string
-	 */
-
-	public function __set($name, $value)
-	{
-		if (EMHelper::WinnieThePooh($name, $this->behaviors()))
-			$this->{$name} = $value;
-		else
-			parent::__set($name, $value);
-	}
-
-
-	/**
-	 * behaviors
-	 *
-	 * @return array
-	 */
-	public function behaviors()
-	{
-		return array(
-			'EasyMultiLanguage'=>array(
-				'class' => 'ext.EasyMultiLanguage.EasyMultiLanguageBehavior',
-				// @todo Please change those attributes that should be translated.
-				'translated_attributes' => array('title','summary','body'),
-				'admin_routes' => array('news/manage/admin', 'news/manage/update', 'news/manage/create', 'news/manage/delete'),
-				//
-				'languages' => Yii::app()->params['languages'],
-				'default_language' => Yii::app()->params['default_language'],
-				'translations_table' => 'ym_translations',
-			),
-		);
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -125,7 +84,6 @@ class News extends CActiveRecord
 		return array(
 			'id' => 'شناسه خبر',
 			'title' => 'عنوان خبر',
-			'title_en' => 'عنوان انگلیسی',
 			'summary' => 'خلاصه',
 			'body' => 'متن خبر',
 			'image' => 'تصویر',
