@@ -2,7 +2,7 @@
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-menu" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">نمایش / پنهان کردن منو</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -25,8 +25,20 @@
             ?>
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="#categories-modal" data-toggle="modal">موضوعات</a></li>
-                <li><a href="#">ثبت نام</a></li>
-                <li><a href="#login-modal" data-toggle="modal">ورود</a></li>
+                <?
+                if(Yii::app()->user->isGuest ||  Yii::app()->user->type == 'admin'):
+                    ?>
+                    <li><a href="<?= $this->createUrl('/register') ?>">ثبت نام</a></li>
+                    <li><a href="#login-modal" data-toggle="modal">ورود</a></li>
+                    <?
+                elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
+                    // @todo after user login change login and register buttons
+                    ?>
+                    <li><a href="<?= $this->createUrl('/dashboard') ?>">داشبورد</a></li>
+                    <li><a href="<?= $this->createUrl('/logout') ?>" class="error">خروج</a></li>
+                    <?
+                endif;
+                ?>
             </ul>
         </div>
     </div>
