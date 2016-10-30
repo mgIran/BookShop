@@ -63,7 +63,10 @@ class SiteController extends Controller
         
         // get news
         Yii::import('news.models.*');
-        $advertises = new CActiveDataProvider('Advertises' ,array('criteria' => Advertises::model()->getActiveAdvertises()));
+        $news = new CActiveDataProvider('News' ,array(
+            'criteria' => News::model()->getValidNews(null,10),
+            'pagination' => array('pageSize' => 10)
+        ));
 
         $this->render('index' ,array(
             'categoriesDataProvider' => $categoriesDataProvider ,
@@ -71,6 +74,7 @@ class SiteController extends Controller
             'mostPurchaseBooksDataProvider' => $mostPurchaseBooksDataProvider ,
             'suggestedDataProvider' => $suggestedDataProvider ,
             'advertises' => $advertises ,
+            'news' => $news ,
         ));
     }
 

@@ -182,12 +182,19 @@ class News extends CActiveRecord
 
 	/**
 	 * get Valid New to show
+	 * 
+	 * @param null $order
+	 * @param null $limit
 	 * @return CDbCriteria
 	 */
-	public static function getValidNews(){
+	public static function getValidNews($order = null,$limit = null){
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('t.status = "publish"');
 		$criteria->order = 't.publish_date DESC';
+		if($order)
+			$criteria->order = $order;
+		if($limit)
+			$criteria->limit = $limit;
 		return $criteria;
 	}
 }

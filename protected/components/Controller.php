@@ -77,6 +77,22 @@ class Controller extends CController
         return true;
     }
 
+    public function getConstBooks($type,$limit = 3){
+        $criteria = Books::model()->getValidBooks();
+        switch($type){
+            case 'popular':
+                $criteria->order = 'seen DESC';
+                break;
+            case 'latest':
+                $criteria->order = 'confirm_date DESC';
+                break;
+            default:
+                break;
+        }
+        $criteria->limit = $limit;
+        return new CActiveDataProvider("Books",array('criteria' => $criteria , 'pagination' => array('pageSize'=>$limit)));
+    }
+
     public static function createAdminMenu()
     {
         if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')

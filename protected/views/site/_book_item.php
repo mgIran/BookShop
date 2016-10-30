@@ -34,11 +34,19 @@
             <?php
             endif;
             ?>
+            <?php
+            if(isset($itemClass) && $itemClass == 'smallest'):
+                ?>
+                <h4><a href="<?= $this->createUrl('/book/'.$data->id.'/'.urlencode($data->title)) ?>"
+                       title="<?= CHtml::encode($data->title) ?>"><?= CHtml::encode($data->title) ?></a></h4>
+            <?php
+            endif;
+            ?>
             <div class="stars">
                 <?= Controller::printRateStars($data->rate); ?>
             </div>
             <?php
-            if(!isset($itemClass) || (isset($itemClass) && $itemClass != 'small')):
+            if(!isset($itemClass) || (isset($itemClass) && ($itemClass != 'small' && $itemClass != 'smallest'))):
                 ?>
             <h4><a href="<?= $this->createUrl('/book/'.$data->id.'/'.urlencode($data->title)) ?>"
                    title="<?= CHtml::encode($data->title) ?>"><?= CHtml::encode($data->title) ?></a></h4>
@@ -63,7 +71,7 @@
                     <?php endif;?>
             </span>
             <?php
-            if(!isset($itemClass) || (isset($itemClass) && $itemClass != 'small')):
+            if(!isset($itemClass) || (isset($itemClass) && ($itemClass != 'small' && $itemClass != 'smallest'))):
                 ?>
                 <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
                 <?php

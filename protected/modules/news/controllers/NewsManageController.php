@@ -82,14 +82,15 @@ class NewsManageController extends Controller
 		Yii::app()->db->createCommand()->update('{{news}}',array('seen'=>((int)$model->seen+1)),'id = :id',array(":id"=>$model->id));
 
 		// get latest news
-		$criteria = News::getValidNews();
+		$criteria = News::getValidNews(null,4);
 		$criteria->addCondition('id <> :id');
 		$criteria->params = array(':id' => $id);
-		$criteria->limit = 4;
 		$latestNewsProvider = new CActiveDataProvider("News",array(
 			'criteria' => $criteria,
             'pagination' => array('pageSize' => 4)
 		));
+
+		$this->categories = NewsCategories::model()->findAll();
 		$this->render('view',array(
 			'model'=>$model,
 			'latestNewsProvider' => $latestNewsProvider

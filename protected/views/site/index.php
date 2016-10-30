@@ -5,6 +5,7 @@
 /* @var $mostPurchaseBooksDataProvider CActiveDataProvider */
 /* @var $suggestedDataProvider CActiveDataProvider */
 /* @var $advertises CActiveDataProvider */
+/* @var $news CActiveDataProvider */
 
 Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/owl.carousel.css');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.mousewheel.min.js');
@@ -517,50 +518,29 @@ endif;
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-<!--    <div class="news">-->
-<!--        <div class="container">-->
-<!--            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">-->
-<!--                <div class="is-carousel" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="1" data-items="1" data-mouseDrag="0">-->
-<!--                    <div class="news-item">-->
-<!--                        <div class="thumb"><img src="uploads/news/logo.svg"></div>-->
-<!--                        <div class="text">-->
-<!--                            <h2><a href="#">رونمایی از کتاب سیستان وکوروش بزرگ در زاهدان</a></h2>-->
-<!--                            <div class="info">-->
-<!--                                <span class="date">15 شهریور 1395 - 10:20</span>-->
-<!--                            </div>-->
-<!--                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="news-item">-->
-<!--                        <div class="thumb"><img src="uploads/news/logo.svg"></div>-->
-<!--                        <div class="text">-->
-<!--                            <h2><a href="#">کتاب chemical thermodynamics منتشر شد</a></h2>-->
-<!--                            <div class="info">-->
-<!--                                <span class="date">15 شهریور 1395 - 10:20</span>-->
-<!--                            </div>-->
-<!--                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="news-item">-->
-<!--                        <div class="thumb"><img src="uploads/news/logo.svg"></div>-->
-<!--                        <div class="text">-->
-<!--                            <h2><a href="#">کتاب chemical منتشر شد</a></h2>-->
-<!--                            <div class="info">-->
-<!--                                <span class="date">15 شهریور 1395 - 10:20</span>-->
-<!--                            </div>-->
-<!--                            <div class="summary">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 controls">-->
-<!--                <i class="arrow-icon next"></i>-->
-<!--                <i class="arrow-icon prev"></i>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
+<?php
+if($news->totalItemCount):
+?>
+    <div class="news">
+        <div class="container">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                <div class="is-carousel" data-item-selector="news-item" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="1" data-items="1" data-mouseDrag="0">
+                    <?php
+                    foreach($news->getData() as $new):
+                        $this->renderPartial('_news_item',array('data'=>$new));
+                    endforeach;
+                    ?>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 controls">
+                <i class="arrow-icon next"></i>
+                <i class="arrow-icon prev"></i>
+            </div>
+        </div>
+    </div>
+    <?php
+endif;
+?>
 
 
 

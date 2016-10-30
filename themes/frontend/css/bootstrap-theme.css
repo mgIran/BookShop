@@ -607,6 +607,10 @@ a:active{
     overflow: hidden;
 }
 
+.thumbnail.smallest .caption h4 a {
+    color: #3f3f3f;
+}
+
 .thumbnail .caption h4 a:hover,
 .thumbnail .caption h4 a:focus,
 .thumbnail .caption h4 a:active {
