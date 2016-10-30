@@ -79,7 +79,7 @@ class Controller extends CController
 
     public static function createAdminMenu()
     {
-        //if (Yii::app()->user->roles === 'superAdmin')
+        if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
             return array(
                 array(
                     'label' => 'پیشخوان',
@@ -183,29 +183,8 @@ class Controller extends CController
                     'visible' => !Yii::app()->user->isGuest
                 ),
             );
-        /*elseif (Yii::app()->user->roles === 'supporter')
-            return array(
-                array(
-                    'label' => 'پیشخوان',
-                    'url' => array('/admins/dashboard')
-                ),
-                array(
-                    'label' => 'پشتیبانی',
-                    'url' => Yii::app()->createUrl('/tickets/manage/admin'),
-                ),
-                array(
-                    'label' => 'ورود',
-                    'url' => array('/admins/login'),
-                    'visible' => Yii::app()->user->isGuest
-                ),
-                array(
-                    'label' => 'خروج',
-                    'url' => array('/admins/login/logout'),
-                    'visible' => !Yii::app()->user->isGuest
-                ),
-            );
         else
-            return array();*/
+            return array();
     }
 
     /**
