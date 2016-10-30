@@ -2,7 +2,7 @@
 
 class UsersCreditController extends Controller
 {
-    public $layout='//layouts/panel';
+    public $layout = '//layouts/panel';
 
     /**
      * @return array actions type list
@@ -10,7 +10,7 @@ class UsersCreditController extends Controller
     public static function actionsType()
     {
         return array(
-            'frontend'=>array(
+            'frontend' => array(
                 'buy',
                 'bill',
                 'verify'
@@ -33,18 +33,18 @@ class UsersCreditController extends Controller
      */
     public function actionBuy()
     {
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        $model=Users::model()->findByPk(Yii::app()->user->getId());
+        $model = Users::model()->findByPk(Yii::app()->user->getId());
         Yii::import('application.modules.setting.models.*');
-        $buyCreditOptions=SiteSetting::model()->findByAttributes(array('name'=>'buy_credit_options'));
-        $amounts=array();
-        foreach(CJSON::decode($buyCreditOptions->value) as $amount)
-            $amounts[$amount]=Controller::parseNumbers(number_format($amount, 0)).' تومان';
+        $buyCreditOptions = SiteSetting::model()->findByAttributes(array('name' => 'buy_credit_options'));
+        $amounts = array();
+        foreach (CJSON::decode($buyCreditOptions->value) as $amount)
+            $amounts[$amount] = Controller::parseNumbers(number_format($amount, 0)) . ' تومان';
 
         $this->render('buy', array(
-            'model'=>$model,
-            'amounts'=>$amounts,
+            'model' => $model,
+            'amounts' => $amounts,
         ));
     }
 
@@ -53,23 +53,23 @@ class UsersCreditController extends Controller
      */
     public function actionBill()
     {
-        if(isset($_POST['pay'])) {
+        if (isset($_POST['pay'])) {
             // Save payment
-            $model=UserTransactions::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId(), 'status'=>'unpaid'));
-            if(!$model)
-                $model=new UserTransactions();
-            $model->user_id=Yii::app()->user->getId();
-            $model->amount=$_POST['amount'];
-            $model->date=time();
-            if($model->save()) {
+            $model = UserTransactions::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'status' => 'unpaid'));
+            if (!$model)
+                $model = new UserTransactions();
+            $model->user_id = Yii::app()->user->getId();
+            $model->amount = $_POST['amount'];
+            $model->date = time();
+            if ($model->save()) {
                 // Redirect to payment gateway
                 $MerchantID = '6194e8aa-0589-11e6-9b18-005056a205be';  //Required
                 $Amount = intval($_POST['amount']); //Amount will be based on Toman  - Required
-                $Description = 'افزایش اعتبار در '.Yii::app()->name;  // Required
+                $Description = 'افزایش اعتبار در ' . Yii::app()->name;  // Required
                 $Email = Yii::app()->user->email; // Optional
                 $Mobile = '0'; // Optional
 
-                $CallbackURL = Yii::app()->getBaseUrl(true).'/users/credit/verify';  // Required
+                $CallbackURL = Yii::app()->getBaseUrl(true) . '/users/credit/verify';  // Required
 
                 include("lib/nusoap.php");
                 $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
@@ -91,31 +91,29 @@ class UsersCreditController extends Controller
                 else
                     echo 'ERR: ' . $result['Status'];
             }
-        }
-        elseif(isset($_POST['amount'])) {
-            Yii::app()->theme = 'market';
+        } elseif (isset($_POST['amount'])) {
+            Yii::app()->theme = 'frontend';
             $amount = CHtml::encode($_POST['amount']);
             $model = Users::model()->findByPk(Yii::app()->user->getId());
             $this->render('bill', array(
                 'model' => $model,
                 'amount' => CHtml::encode($amount),
             ));
-        }
-        else
+        } else
             $this->redirect($this->createUrl('/users/credit/buy'));
     }
 
     public function actionVerify()
     {
-        Yii::app()->theme='market';
-        $this->layout='//layouts/panel';
-        $model=UserTransactions::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId(), 'status'=>'unpaid'));
-        $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+        $model = UserTransactions::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'status' => 'unpaid'));
+        $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
         $MerchantID = '6194e8aa-0589-11e6-9b18-005056a205be';
         $Amount = $model->amount; //Amount will be based on Toman
         $Authority = $_GET['Authority'];
 
-        if($_GET['Status'] == 'OK') {
+        if ($_GET['Status'] == 'OK') {
             include("lib/nusoap.php");
             $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
             $client->soap_defencoding = 'UTF-8';
@@ -159,13 +157,12 @@ class UsersCreditController extends Controller
                 Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بود.');
                 Yii::app()->user->setFlash('transactionFailed', isset($errors[$result['Status']]) ? $errors[$result['Status']] : 'در انجام عملیات پرداخت خطایی رخ داده است.');
             }
-        }
-        else
+        } else
             Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
 
         $this->render('verify', array(
-            'model'=>$model,
-            'userDetails'=>$userDetails,
+            'model' => $model,
+            'userDetails' => $userDetails,
         ));
     }
 }
