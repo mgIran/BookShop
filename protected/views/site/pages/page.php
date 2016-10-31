@@ -3,17 +3,21 @@
 /* @var $error array */
 
 $this->pageTitle= Yii::app()->name . ' - '.$model->title;
-$this->breadcrumbs=array(
-    $model->title=>array(''),
-);
 ?>
-<div class="page rtl col-lg-12 col-md-12 col-sm-12 col-xs-12 index " >
-    <div class="panel-body">
-        <h2 class="page-header">
-            <?= $model->title; ?>
-        </h2>
-        <div class="content">
-            <?= $model->summary; ?>
+<div class="page">
+    <div class="page-heading">
+        <div class="container">
+            <h1><?php echo $model->title; ?></h1>
+        </div>
+    </div>
+    <div class="container page-content book-list">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="text-content"><?= $model->summary; ?></div>
+                </div>
+            </div>
+            <?php $this->renderPartial('//partial-views/inner-sidebar') ?>
         </div>
     </div>
 </div>

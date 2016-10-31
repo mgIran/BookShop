@@ -2551,7 +2551,18 @@ input[type="checkbox"] + label:hover::before {
     fill: #555 !important;
 }
 
-
+.text-content{
+    display: block;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+    padding: 60px;
+    text-align: justify;
+    line-height: 30px;
+    font-weight: 300;
+    font-size: 14px;
+    white-space: pre-line;
+}
 .news-list-item{
     display: block;
     overflow: hidden;
