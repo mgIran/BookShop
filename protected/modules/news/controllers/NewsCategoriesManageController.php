@@ -44,8 +44,8 @@ class NewsCategoriesManageController extends Controller
 	 */
 	public function actionView($id)
 	{
-		Yii::app()->theme = 'front-end';
-		$this->layout = '//layouts/inner';
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/index';
 
 		$model = $this->loadModel($id);
 		$this->keywords = 'آوای شهیر,اخبار,دسته بندی اخبار,دسته بندی '.$model->title.','.$model->title;
@@ -127,6 +127,9 @@ class NewsCategoriesManageController extends Controller
 	 */
 	public function actionIndex()
 	{
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/index';
+		$this->categories = NewsCategories::model()->findAll();
 		$dataProvider=new CActiveDataProvider('NewsCategories');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

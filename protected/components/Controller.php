@@ -93,6 +93,23 @@ class Controller extends CController
         return new CActiveDataProvider("Books",array('criteria' => $criteria , 'pagination' => array('pageSize'=>$limit)));
     }
 
+    public function getConstNews($type,$limit = 3){
+        Yii::import('news.models.*');
+        $criteria = News::model()->getValidNews();
+        switch($type){
+            case 'popular':
+                $criteria->order = 'seen DESC';
+                break;
+            case 'latest':
+                $criteria->order = 'publish_date DESC';
+                break;
+            default:
+                break;
+        }
+        $criteria->limit = $limit;
+        return new CActiveDataProvider("News",array('criteria' => $criteria , 'pagination' => array('pageSize'=>$limit)));
+    }
+
     public static function createAdminMenu()
     {
         if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')

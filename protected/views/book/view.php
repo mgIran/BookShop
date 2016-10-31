@@ -10,7 +10,6 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/owl.t
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl.carousel.min.js');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.magnific-popup.min.js');
 Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/magnific-popup.css');
-
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
 ?>
 <svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +40,12 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         <div class="container">
             <h1><?= CHtml::encode($model->title) ?></h1>
             <div class="page-info">
-                <span>نویسنده<a href="#">حمید داوود آبادی</a></span>
+                <?php
+                if($model->getPerson('نویسنده')):?>
+                <span>نویسنده<?= $model->getPersonsTags('نویسنده') ?></span>
+                <?php
+                endif;
+                ?>
                 <span>ناشر<a href="<?php echo $this->createUrl('/book/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"
                     ><?= CHtml::encode($model->getPublisherName()) ?></a></span>
             </div>
@@ -314,13 +318,13 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         </div>
     </div>
 </div>
-
-<div class="book-comments border-none hidden">
-    <div class="comments">
-        <?
-        $this->widget('comments.widgets.ECommentsListWidget', array(
-            'model' => $model,
-        ));
-        ?>
-    </div>
-</div>
+<!---->
+<!--<div class="book-comments border-none hidden">-->
+<!--    <div class="comments">-->
+<!--        --><?//
+//        $this->widget('comments.widgets.ECommentsListWidget', array(
+//            'model' => $model,
+//        ));
+//        ?>
+<!--    </div>-->
+<!--</div>-->

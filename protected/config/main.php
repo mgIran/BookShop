@@ -115,6 +115,7 @@ return array(
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',
 				'news/<id:\d+>/<title:(.*)>'=>'news/manage/view',
+				'news/index'=>'news/manage/index',
 				'category/<action:\w+>'=>'bookCategories/<action>',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
                 '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',

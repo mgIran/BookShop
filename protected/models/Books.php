@@ -123,8 +123,8 @@ class Books extends CActiveRecord
 				'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
 				'showTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 0'),
 				'seoTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 1'),
-				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
-				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
+				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id)'),
+				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
 		);
 	}
 
@@ -134,6 +134,32 @@ class Books extends CActiveRecord
 //		var_dump($this->persons($criteria));exit;
 //	}
 
+    public function getPerson($role=NUlL){
+        $criteria = new CDbCriteria();
+        if($role)
+        {
+            $role = BookPersonRoles::model()->findByAttributes(array('title' => $role));
+            if(!$role)
+                return null;
+            $criteria->compare('role_id',$role->id);
+        }
+        return $this->persons($criteria);
+    }
+
+    public function getPersonsTags($role=NULL , $personProperty = 'fullName',$implode = true ,$tag = 'a' ,$htmlOptions=array()){
+        $html=array();
+        foreach ($this->getPerson($role) as $person) {
+            if($tag == 'a')
+            {
+                $link = array('/book/person/'.$person->id.'/'.urldecode($person->fullName));
+                $htmlTag = CHtml::link($person->{$personProperty}, $link ,$htmlOptions);
+            }
+            else
+                $htmlTag = CHtml::tag($tag, $htmlOptions, $person->{$personProperty});
+            array_push($html, $htmlTag);
+        }
+        return $implode?implode(',',$html):$html;
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
