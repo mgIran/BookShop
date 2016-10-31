@@ -314,13 +314,13 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         </div>
     </div>
 </div>
-
-<div class="book-comments border-none hidden">
-    <div class="comments">
-        <?
-        $this->widget('comments.widgets.ECommentsListWidget', array(
-            'model' => $model,
-        ));
-        ?>
-    </div>
-</div>
+<!---->
+<!--<div class="book-comments border-none hidden">-->
+<!--    <div class="comments">-->
+<!--        --><?//
+//        $this->widget('comments.widgets.ECommentsListWidget', array(
+//            'model' => $model,
+//        ));
+//        ?>
+<!--    </div>-->
+<!--</div>-->

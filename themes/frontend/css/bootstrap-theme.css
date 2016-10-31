@@ -2539,3 +2539,111 @@ input[type="checkbox"] + label:hover::before {
     color: #555 !important;
     fill: #555 !important;
 }
+
+
+.news-list-item{
+    display: block;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 15px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+.news-list-item:hover{
+    background-color: #dadada;
+}
+.news-list-item .pic {
+    display: inline-block;
+    float: right;
+    height: 150px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    width: 150px;
+}
+.news-list-item .pic > img {
+    height: 100%;
+    width: 100%;
+}
+.news-list-item .news-detail {
+    display: inline-block;
+    float: right;
+    overflow: hidden;
+    padding-right: 165px;
+    padding-left: 15px;
+    height: 150px;
+    width: 100%;
+}
+.news-list-item .news-detail h3 {
+    margin: 15px 0 0;
+    font-weight: 500;
+    font-size: 16px;
+    display: block;
+    padding-left: 90px;
+}
+#latest-news-list .news-list-item .pic{
+    width: 100px;
+    height: 100px;
+}
+#latest-news-list .news-list-item .news-detail{
+    height: 100px;
+    padding-right: 115px;
+}
+#latest-news-list .news-list-item .news-detail h3{
+    padding:0;
+}
+#latest-news-list .news-detail a > p{
+    height: 26px;
+}
+#latest-news-list .news-detail .date{
+    display: none;
+}
+.news-list-item .news-detail > a,
+.news-list-item .news-detail > a h3{
+    color: #111;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.news-list-item .news-detail > a:hover h3{
+    text-decoration: underline !important;
+}
+.news-list-item .category,
+.news-list-item .category strong,
+.news-list-item .date {
+    font-size: 11px;
+    font-weight: 300;
+}
+.news-list-item .category a{
+    color: #888;
+    font-size: 11px;
+}
+.news-list-item .category a:hover{
+    text-decoration: underline !important;
+}
+.news-list-item .category strong{
+    font-weight: 400;
+    color: #666;
+}
+.news-list-item .date{
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    color: #888;
+    font-size: 11px;
+}
+.news-detail a > p {
+    color: #444;
+    font-size: 14px;
+    font-weight: 300;
+    height: 78px;
+    line-height: 26px;
+    margin-top: 5px;
+    position: relative;
+    text-align: justify;
+    direction: ltr;
+    overflow: hidden;
+}

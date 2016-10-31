@@ -134,6 +134,16 @@ class Books extends CActiveRecord
 //		var_dump($this->persons($criteria));exit;
 //	}
 
+public function getPerson($role=NUlL){
+	$criteria = new CDbCriteria();
+	if($role)
+	{
+		$criteria->compare('roles.title',$role);
+		$criteria->with = array('roles');
+	}
+	var_dump($this->persons($criteria));exit;
+	return $this->persons($criteria);
+}
 
 	/**
 	 * @return array customized attribute labels (name=>label)

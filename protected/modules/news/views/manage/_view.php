@@ -5,7 +5,7 @@ $thumbPath = Yii::getPathOfAlias("webroot").'/uploads/news/200x200/';
 $date = Yii::app()->language=="fa"?JalaliDate::date("Y/m/d - H:i",$data->publish_date):date("Y/m/d - H:i",$data->publish_date);
 ?>
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-	<div class="news-item">
+	<div class="news-list-item">
 		<div class="pic">
 			<?php
 			if($data->image && file_exists($thumbPath.$data->image)):
