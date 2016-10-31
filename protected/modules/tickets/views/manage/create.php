@@ -3,9 +3,9 @@
 /* @var $model Tickets */
 
 ?>
+<div class="white-form">
+	<h3>ارسال تیکت جدید</h3>
+	<p class="description">لطفا فرم زیر را پر کنید.</p>
 
-<div class="container dashboard-container ticket-box">
-	<div class="container-fluid tab-content">
-		<?php $this->renderPartial('_form', array('model'=>$model)); ?>
-	</div>
+	<?php $this->renderPartial('_form', array('model'=>$model)); ?>
 </div>

@@ -5,20 +5,6 @@
 ?>
 
 <div class="form">
-	<div class="row">
-		<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-		<h3>ارسال تیکت جدید</h3>
-		</div>
-		<?
-		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
-		?>
-			<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<a class="btn btn-info pull-left" href="<?= $this->createUrl('/tickets/manage/') ?>" >بازگشت</a>
-			</div>
-		<?
-		endif;
-		?>
-	</div>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tickets-form',
 	'enableAjaxValidation'=>false,
@@ -72,9 +58,9 @@
 			<div class="uploader-message error"></div>
 		</div>
 	</div>
-	<div class="form-group buttons">
-		<?php echo CHtml::button('فایل ضمیمه',array('class' => 'btn btn-danger pull-right' ,'data-toggle' => 'collapse' ,'data-target' => '#file-uploader-box')); ?>
-		<?php echo CHtml::submitButton('ارسال',array('class' => 'btn btn-success pull-left')); ?>
+	<?php echo CHtml::button('فایل ضمیمه',array('class' => 'btn btn-danger' ,'data-toggle' => 'collapse' ,'data-target' => '#file-uploader-box')); ?>
+	<div class="buttons">
+		<?php echo CHtml::submitButton('ارسال',array('class' => 'btn btn-default')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

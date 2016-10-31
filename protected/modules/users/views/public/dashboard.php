@@ -36,54 +36,58 @@
     </ul>
     <div class="tab-content">
         <div id="downloaded" class="tab-pane fade in active">
-            <?php if(empty($model->bookBuys)):?>
-                نتیجه ای یافت نشد.
-            <?php else:?>
-                <table class="table">
-                    <thead>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td>زمان</td>
+                    <td>نام کتاب</td>
+                    <td>مبلغ</td>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if(empty($model->bookBuys)):?>
+                    <tr>
+                        <td colspan="3" class="text-center">نتیجه ای یافت نشد.</td>
+                    </tr>
+                <?php else:?>
+                    <?php foreach($model->bookBuys as $buy):?>
                         <tr>
-                            <td>زمان</td>
-                            <td>نام کتاب</td>
-                            <td>مبلغ</td>
+                            <td><?php echo JalaliDate::date('d F Y - H:i', $buy->date);?></td>
+                            <td><?php echo CHtml::encode($buy->book->title);?></td>
+                            <td><?php echo number_format($buy->book->price, 0).' تومان';?></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($model->bookBuys as $buy):?>
-                            <tr>
-                                <td><?php echo JalaliDate::date('d F Y - H:i', $buy->date);?></td>
-                                <td><?php echo CHtml::encode($buy->book->title);?></td>
-                                <td><?php echo number_format($buy->book->price, 0).' تومان';?></td>
-                            </tr>
-                        <?php endforeach;?>
-                    </tbody>
-                </table>
-            <?php endif;?>
+                    <?php endforeach;?>
+                <?php endif;?>
+                </tbody>
+            </table>
         </div>
         <div id="transactions" class="tab-pane fade">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>زمان</th>
+                    <th>مبلغ</th>
+                    <th>توضیحات</th>
+                    <th>کد رهگیری</th>
+                </tr>
+                </thead>
+                <tbody>
             <?php if(empty($model->transactions)):?>
-                نتیجه ای یافت نشد.
-            <?php else:?>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>زمان</th>
-                        <th>مبلغ</th>
-                        <th>توضیحات</th>
-                        <th>کد رهگیری</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($model->transactions as $transaction):?>
-                            <tr>
-                                <td><?php echo JalaliDate::date('d F Y - H:i', $transaction->date);?></td>
-                                <td><?php echo number_format($transaction->amount, 0).' تومان';?></td>
-                                <td><?php echo CHtml::encode($transaction->description);?></td>
-                                <td><?php echo CHtml::encode($transaction->token);?></td>
-                            </tr>
-                        <?php endforeach;?>
-                    </tbody>
-                </table>
-            <?php endif;?>
+                <tr>
+                    <td colspan="4" class="text-center">نتیجه ای یافت نشد.</td>
+                </tr>
+                <?php else:?>
+                    <?php foreach($model->transactions as $transaction):?>
+                        <tr>
+                            <td><?php echo JalaliDate::date('d F Y - H:i', $transaction->date);?></td>
+                            <td><?php echo number_format($transaction->amount, 0).' تومان';?></td>
+                            <td><?php echo CHtml::encode($transaction->description);?></td>
+                            <td><?php echo CHtml::encode($transaction->token);?></td>
+                        </tr>
+                    <?php endforeach;?>
+                <?php endif;?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
