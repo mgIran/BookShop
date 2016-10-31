@@ -3,22 +3,24 @@
         <?php foreach($comments as $key => $comment):
             ?>
             <li id="comment-<?php echo $comment->comment_id; ?>">
-                <div class="comment-avatar">
-                    <?php
-                    if($comment->avatarLink && !empty($comment->avatarLink) && file_exists($comment->avatarLink))
-                        echo '<img src="'.$comment->avatarLink.'" >';
-                    else
-                        echo '<div class="default-comment-avatar"></div>';
-                    ?>
+                <?php
+                if($comment->avatarLink && !empty($comment->avatarLink) && file_exists($comment->avatarLink))
+                    echo '<img src="'.$comment->avatarLink.'" >';
+                else
+                    echo '<div class="default-comment-avatar"></div>';
+                ?>
+                <div class="comment-text">
+                    <div class="text">
+                        <div class="stars">
+                            <?= Controller::printRateStars($comment->userRate) ?>
+                        </div>
+                        <div><p dir="auto"><?php echo CHtml::encode($comment->comment_text);?></p></div>
+                    </div>
+                    <p class="meta">
+                        <span class="pull-right"><?php echo $comment->userName;?></span>
+                        <span class="pull-left"><?php echo JalaliDate::differenceTime($comment->create_time);?></span>
+                    </p>
                 </div>
-                <div class="comment-header">
-                    <span class="comment-name"><?php echo $comment->userName;?></span>
-                    <span class="comment-date"><?php echo JalaliDate::differenceTime($comment->create_time);?></span>
-                </div>
-                <p dir="auto">
-                    <?php echo $comment->comment_text;?>
-                </p>
-
                 <?php if($this->adminMode === true):
                         if(Yii::app()->user->type == 'admin' ||
                             (Yii::app()->user->roles == 'publisher' && $this->model->publisher_id == Yii::app()->user->getId())

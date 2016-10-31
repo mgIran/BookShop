@@ -181,66 +181,11 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                             echo $model->description;
                                 ?></div>
                             <div id="comments" class="tab-pane fade">
-                                <ul class="comments-list">
-                                    <li>
-                                        <img src="uploads/users/user_1.jpg" alt="user name">
-                                        <div class="comment-text">
-                                            <div class="text">
-                                                <div class="stars">
-                                                    <?= Controller::printRateStars($model->rate) ?>
-                                                </div>
-                                                <div>کتاب خیلی خوبی بود...</div>
-                                            </div>
-                                            <p class="meta">
-                                                <span class="pull-right">حسین رامین فر</span>
-                                                <span class="pull-left">10:36 - 16 شهریور 1395</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <img src="uploads/users/user_1.jpg" alt="user name">
-                                        <div class="comment-text">
-                                            <div class="text">
-                                                <div class="stars">
-                                                    <i class="icon"></i>
-                                                    <i class="icon"></i>
-                                                    <i class="icon"></i>
-                                                    <i class="icon"></i>
-                                                    <i class="icon off"></i>
-                                                </div>
-                                                <div>من از این کتاب خیلی چیزا یاد گرفتم. امیدوارم شما هم این کتاب رو مطالعه کنید و از مطالب خوبش استفاده کنید.</div>
-                                            </div>
-                                            <p class="meta">
-                                                <span class="pull-right">حسین رامین فر</span>
-                                                <span class="pull-left">10:36 - 16 شهریور 1395</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="comment-form">
-                                    <h4>نظرتان را بگویید</h4>
-                                    <form>
-                                        <img src="uploads/users/user_1.jpg" alt="user name">
-                                        <div class="inputs-container">
-                                            <input type="text" class="text-field" placeholder="نام و نام خانوادگی" value="حسین رامین فر" disabled>
-                                            <input type="text" class="text-field" placeholder="پست الکترونیکی">
-                                            <div class="rating">
-                                                <span>امتیاز</span>
-                                                <ul>
-                                                    <li class="stars"><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i></li>
-                                                </ul>
-                                            </div>
-                                            <textarea class="text-field" placeholder="شرح..."></textarea>
-                                            <div class="button-block">
-                                                <input type="submit" class="btn-blue pull-left" value="ثبت نظر">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                <?
+                                $this->widget('comments.widgets.ECommentsListWidget', array(
+                                    'model' => $model,
+                                ));
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -302,14 +247,14 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                         ?>
                     </ul>
                 </div>
-                <?php if($model->showTags): ?>
+                <?php if($model->seoTags): ?>
                 <div class="boxed">
                     <div class="heading">
                         <h4>برچسب ها</h4>
                     </div>
                     <div class="tags">
                     <?php
-                        foreach ($model->showTags as $tag)
+                        foreach ($model->seoTags as $tag)
                             echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>'; ?>
                     </div>
                 </div>
@@ -318,13 +263,3 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         </div>
     </div>
 </div>
-<!---->
-<!--<div class="book-comments border-none hidden">-->
-<!--    <div class="comments">-->
-<!--        --><?//
-//        $this->widget('comments.widgets.ECommentsListWidget', array(
-//            'model' => $model,
-//        ));
-//        ?>
-<!--    </div>-->
-<!--</div>-->

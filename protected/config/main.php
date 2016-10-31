@@ -53,6 +53,7 @@ return array(
 				'isSuperuser'=>'Yii::app()->user->checkAccess("moderate")',
 				//order direction for comments
 				'orderComments'=>'DESC',
+				'translationCategory'=>'comments',
 				'showEmail' => false
 			),
 			//the models for commenting
@@ -78,6 +79,7 @@ return array(
 //				'avatarProperty'=>'userDetails.avatar',
 //				'avatarFolderPath'=>'userDetails.avatar',
 				'emailProperty'=>'email',
+				'rateProperty'=>'bookRate.rate',
 			),
 		)
 	),
@@ -115,6 +117,7 @@ return array(
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',
 				'news/<id:\d+>/<title:(.*)>'=>'news/manage/view',
+				'news/category/<id:\d+>/<title:(.*)>'=>'news/category/view',
 				'news/index'=>'news/manage/index',
 				'category/<action:\w+>'=>'bookCategories/<action>',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',

@@ -125,6 +125,7 @@ class Books extends CActiveRecord
 				'seoTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 1'),
 				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id)'),
 				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
+				'tagsRel' => array(self::HAS_MANY, 'BookTagRel', 'book_id'),
 		);
 	}
 
@@ -439,9 +440,4 @@ class Books extends CActiveRecord
         }
         return false;
     }
-
-	public function getPerson()
-	{
-		var_dump($this->persons);
-	}
 }
