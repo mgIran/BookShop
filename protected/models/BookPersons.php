@@ -52,7 +52,7 @@ class BookPersons extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'bookPersonRoleRels' => array(self::HAS_MANY, 'BookPersonRoleRel', 'person_id'),
+			'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, person_id, role_id)'),
 		);
 	}
 
@@ -112,5 +112,9 @@ class BookPersons extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getFullName(){
+		return $this->name.' '.$this->family;
 	}
 }

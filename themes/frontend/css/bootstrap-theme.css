@@ -1847,11 +1847,22 @@ input[type="checkbox"] + label:hover::before {
     font-weight: lighter;
 }
 .page-info a{
-    margin-right: 30px;
-    margin-left:60px;
+    margin-right: 5px;
+    margin-left:5px;
     display: inline-block;
     color: #fff;
     font-weight: bold;
+}
+.page-info a:first-of-type{
+    margin-right: 30px;
+}
+.page-info a:last-of-type{
+    margin-left:60px;
+}
+.page-info a:hover,
+.page-info a:active,
+.page-info a:focus{
+    text-decoration: underline !important;
 }
 .page-content{
     padding-top: 50px;
