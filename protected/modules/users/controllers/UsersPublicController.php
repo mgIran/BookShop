@@ -359,6 +359,38 @@ class UsersPublicController extends Controller
     }
 
     /**
+     * List all transactions
+     */
+    public function actionTransactions()
+    {
+        Yii::app()->theme='frontend';
+        $this->layout='//layouts/panel';
+
+        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        /* @var $user Users */
+
+        $this->render('transactions', array(
+            'transactions' => $user->transactions
+        ));
+    }
+
+    /**
+     * List all bought books
+     */
+    public function actionDownloaded()
+    {
+        Yii::app()->theme='frontend';
+        $this->layout='//layouts/panel';
+
+        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        /* @var $user Users */
+
+        $this->render('downloaded', array(
+            'downloaded' => $user->bookBuys
+        ));
+    }
+
+    /**
      * Performs the AJAX validation.
      * @param Books $model the model to be validated
      */

@@ -439,9 +439,4 @@ class Books extends CActiveRecord
         }
         return false;
     }
-
-	public function getPerson()
-	{
-		var_dump($this->persons);
-	}
 }

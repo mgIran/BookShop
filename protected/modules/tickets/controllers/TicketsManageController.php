@@ -105,6 +105,8 @@ class TicketsManageController extends Controller
 	 */
 	public function actionCreate()
 	{
+        Yii::app()->theme='frontend';
+        $this->layout='//layouts/panel';
 		$model=new Tickets;
 
 		if(isset($_POST['Tickets']))
@@ -225,6 +227,8 @@ class TicketsManageController extends Controller
 	 */
 	public function actionIndex()
 	{
+		Yii::app()->theme='frontend';
+        $this->layout='//layouts/panel';
 		$criteria = new CDbCriteria();
 		$criteria->compare('user_id',Yii::app()->user->getId());
 		$model = Tickets::model()->findAll($criteria);
