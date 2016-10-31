@@ -18,7 +18,8 @@ class UsersPublicController extends Controller
                 'verify',
                 'forgetPassword',
                 'changePassword',
-                'authCallback'
+                'authCallback',
+                'bookmarked',
             )
         );
     }
@@ -29,7 +30,7 @@ class UsersPublicController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + dashboard, logout, setting, notifications',
+            'checkAccess + dashboard, logout, setting, notifications, bookmarked',
         );
     }
 
@@ -338,6 +339,22 @@ class UsersPublicController extends Controller
         Yii::app()->theme = 'market';
         $this->render('notifications', array(
             'model' => $model
+        ));
+    }
+
+    /**
+     * List all bookmarked
+     */
+    public function actionBookmarked()
+    {
+        Yii::app()->theme='frontend';
+        $this->layout='//layouts/panel';
+
+        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        /* @var $user Users */
+
+        $this->render('bookmarked', array(
+            'bookmarked' => $user->bookmarkedBooks
         ));
     }
 

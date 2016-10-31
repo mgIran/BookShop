@@ -1155,7 +1155,8 @@ a:active{
     margin-bottom: 35px;
 }
 .white-form h3,
-.form h3{
+.form h3,
+.transparent-form h3{
     margin-top: 0;
 }
 .white-form .buttons{

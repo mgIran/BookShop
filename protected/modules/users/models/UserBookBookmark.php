@@ -1,15 +1,11 @@
 <?php
 
 /**
- * This is the model class for table "ym_user_book_bookmark".
+ * This is the model class for table "{{user_book_bookmark}}".
  *
- * The followings are the available columns in table 'ym_user_book_bookmark':
+ * The followings are the available columns in table '{{user_book_bookmark}}':
  * @property string $user_id
  * @property string $book_id
- *
- * The followings are the available model relations:
- * @property Users $user
- * @property Books $book
  */
 class UserBookBookmark extends CActiveRecord
 {
@@ -18,7 +14,7 @@ class UserBookBookmark extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_user_book_bookmark';
+		return '{{user_book_bookmark}}';
 	}
 
 	/**
@@ -29,6 +25,7 @@ class UserBookBookmark extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('user_id, book_id', 'required'),
 			array('user_id, book_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -44,8 +41,7 @@ class UserBookBookmark extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'book' => array(self::BELONGS_TO, 'Books', 'book_id'),
+
 		);
 	}
 

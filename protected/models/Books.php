@@ -116,7 +116,7 @@ class Books extends CActiveRecord
                     'params'=>array(':time' => time()),
                     'order'=>'id DESC'
                 ),
-				'bookmarker' => array(self::MANY_MANY, 'Users', 'ym_user_book_bookmark(book_id,user_id)'),
+				'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
 				'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id' ,'on' => 'status = "accepted"','order'=>'publish_date DESC'),
 				'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 				'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
@@ -413,4 +413,9 @@ class Books extends CActiveRecord
         }
         return false;
     }
+
+	public function getPerson()
+	{
+		var_dump($this->persons);
+	}
 }
