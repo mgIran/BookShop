@@ -4,7 +4,7 @@
 /* @var $suggestedDataProvider CActiveDataProvider */
 ?>
 <div class="statistics">
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div>
         <div class="green">
             <h4>اعتبار</h4>
             <span>میزان اعتبار شما در کتابیک</span>
@@ -12,7 +12,7 @@
             <a href="<?php echo $this->createUrl('/users/credit/buy');?>">خرید اعتبار<i class="arrow-icon"></i></a>
         </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div>
         <div class="red">
             <h4>نشان شده ها</h4>
             <span>کتاب هایی که مایلید مطالعه کنید</span>
@@ -20,7 +20,7 @@
             <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>">نشان شده ها<i class="arrow-icon"></i></a>
         </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div>
         <div class="blue">
             <h4>کتابخانه من</h4>
             <span>کتابخانه مجازی خود را بسازید</span>
