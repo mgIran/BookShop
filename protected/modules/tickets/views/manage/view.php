@@ -59,7 +59,7 @@
 			if($model->status == 'close'):
 				$this->renderPartial('//layouts/_alertMessage',array(
 					'type' => 'danger',
-					'message' => 'تیکت مورد نظر نوبت چاپ شده و امکان ارسال پیام وجود ندارد.'
+					'message' => 'تیکت مورد نظر بسته شده و امکان ارسال پیام وجود ندارد.'
 				));
 			elseif($model->status == 'pending'):
 				$this->renderPartial('//layouts/_alertMessage',array(

@@ -3,22 +3,34 @@
         <?php foreach($comments as $key => $comment):
             ?>
             <li id="comment-<?php echo $comment->comment_id; ?>">
-                <div class="comment-avatar">
-                    <?php
-                    if($comment->avatarLink && !empty($comment->avatarLink) && file_exists($comment->avatarLink))
-                        echo '<img src="'.$comment->avatarLink.'" >';
-                    else
-                        echo '<div class="default-comment-avatar"></div>';
-                    ?>
+                <?php
+                if($comment->avatarLink)
+                    echo '<div class="default-comment-avatar"><img src="'.$comment->avatarLink.'" ></div>';
+                else
+                    echo '<div class="default-comment-avatar"></div>';
+                ?>
+                <div class="comment-text">
+                    <div class="text">
+                        <div class="stars">
+                            <?php
+                            if($comment->userRate):
+                            ?>
+                                <?= Controller::printRateStars($comment->userRate) ?>
+                            <?php
+                            else:
+                            ?>
+                                امتیاز ثبت نشده
+                            <?php
+                            endif;
+                            ?>
+                        </div>
+                        <div><p dir="auto"><?php echo CHtml::encode($comment->comment_text);?></p></div>
+                    </div>
+                    <div class="meta">
+                        <span class="pull-right"><?php echo $comment->userName;?></span>
+                        <span class="pull-left"><?php echo JalaliDate::differenceTime($comment->create_time);?></span>
+                    </div>
                 </div>
-                <div class="comment-header">
-                    <span class="comment-name"><?php echo $comment->userName;?></span>
-                    <span class="comment-date"><?php echo JalaliDate::differenceTime($comment->create_time);?></span>
-                </div>
-                <p dir="auto">
-                    <?php echo $comment->comment_text;?>
-                </p>
-
                 <?php if($this->adminMode === true):
                         if(Yii::app()->user->type == 'admin' ||
                             (Yii::app()->user->roles == 'publisher' && $this->model->publisher_id == Yii::app()->user->getId())
@@ -46,7 +58,7 @@
                                 'data-parent' => '#comment-' . $comment->comment_id
                             ));
                             echo "<div class='comment-form comment-form-outer collapse' id='reply-" . $comment->comment_id . "'>";
-                            Yii::app()->controller->renderPartial('//partial-views/_loading');
+                            echo '<div class="loading-container"><div class="overly"></div><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
                             $this->widget('comments.widgets.ECommentsFormWidget' ,array(
                                 'model' => $this->model ,
                             ));

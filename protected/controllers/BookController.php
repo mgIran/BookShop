@@ -12,6 +12,7 @@ class BookController extends Controller
         return array(
             'frontend' => array(
                 'discount',
+                'tag',
                 'search',
                 'view',
                 'download',
@@ -502,7 +503,7 @@ class BookController extends Controller
         $criteria->params[':status'] = 'enable';
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
-        $criteria->order = 't.id DESC';
+        $criteria->order = 't.confirm_date DESC';
         if (isset($_GET['term']) && !empty($term = $_GET['term'])) {
             $terms = explode(' ', urldecode($term));
             $sql = null;
@@ -522,6 +523,25 @@ class BookController extends Controller
         $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria));
 
         $this->render('search', array(
+            'dataProvider' => $dataProvider
+        ));
+    }
+
+    /**
+     * This is the default 'index' action that is invoked
+     * when an action is not explicitly requested by users.
+     */
+    public function actionTag($id)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/index';
+        $criteria = Books::model()->getValidBooks();
+        $criteria->compare('tagsRel.tag_id',$id);
+        $criteria->with[] = 'tagsRel';
+        $criteria->together = true;
+        $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria,'pagination' => array('pageSize'=>8)));
+        $this->render('tag', array(
+            'model' => Tags::model()->findByPk($id),
             'dataProvider' => $dataProvider
         ));
     }

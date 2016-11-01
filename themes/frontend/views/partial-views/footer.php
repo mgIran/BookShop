@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 col-mm-12">
                 <ul class="statistics">
                     <li>افراد آنلاین<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getOnline())) ?></span></li>
                     <li>بازدید امروز<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getToday())) ?></span></li>
@@ -21,7 +21,7 @@
                     <li>کل بازدیدها<span><?= Controller::parseNumbers(number_format(Yii::app()->userCounter->getTotal())) ?></span></li>
                 </ul>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 col-mm-12">
                 <div class="buttons">
                     <a href="<?= $this->siteAppUrls['windows'] ?>"><i class="windows-icon"></i>نسخه ویندوز</a>
                     <a href="<?= $this->siteAppUrls['android'] ?>"><i class="android-icon"></i>نسخه اندورید</a>

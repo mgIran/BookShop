@@ -53,7 +53,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
     </div>
     <div class="container page-content book-view">
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb"><img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon ?>" alt="<?= CHtml::encode($model->title) ?>" ></div>
                     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 book-info">
@@ -61,27 +61,27 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                             <h4><?= CHtml::encode($model->title)?></h4>
                             <div class="book-meta">
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="page-count-icon"></i></div>
                                         <div class="meta-body">تعداد صفحات<div class="meta-heading"><?= CHtml::encode(Controller::parseNumbers(number_format($model->number_of_pages))) ?> صفحه</div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="calendar-icon"></i></div>
-                                        <div class="meta-body ltr text-right">تاریخ انتشار<div class="meta-heading"><?= CHtml::encode(JalaliDate::date('Y F d',$model->lastPackage->publish_date)) ?></div></div>
+                                        <div class="meta-body ltr text-right">تاریخ انتشار<div class="meta-heading"><?= CHtml::encode(JalaliDate::date('d F Y',$model->lastPackage->publish_date)) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="file-icon"></i></div>
                                         <div class="meta-body">نوع فایل<div class="meta-heading"><?= CHtml::encode(pathinfo($model->lastPackage->file_name,PATHINFO_EXTENSION)) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="download-icon"></i></div>
                                         <div class="meta-body">حجم فایل<div class="meta-heading"><?= CHtml::encode(Controller::fileSize($filePath.$model->lastPackage->file_name)) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="earth-icon"></i></div>
                                         <div class="meta-body">زبان<div class="meta-heading"><?= CHtml::encode($model->language) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="isbn-icon"></i></div>
                                         <div class="meta-body">شابک<div class="meta-heading"><?= CHtml::encode($model->lastPackage->isbn) ?></div></div>
                                     </div>
@@ -181,66 +181,11 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                             echo $model->description;
                                 ?></div>
                             <div id="comments" class="tab-pane fade">
-                                <ul class="comments-list">
-                                    <li>
-                                        <img src="uploads/users/user_1.jpg" alt="user name">
-                                        <div class="comment-text">
-                                            <div class="text">
-                                                <div class="stars">
-                                                    <?= Controller::printRateStars($model->rate) ?>
-                                                </div>
-                                                <div>کتاب خیلی خوبی بود...</div>
-                                            </div>
-                                            <p class="meta">
-                                                <span class="pull-right">حسین رامین فر</span>
-                                                <span class="pull-left">10:36 - 16 شهریور 1395</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <img src="uploads/users/user_1.jpg" alt="user name">
-                                        <div class="comment-text">
-                                            <div class="text">
-                                                <div class="stars">
-                                                    <i class="icon"></i>
-                                                    <i class="icon"></i>
-                                                    <i class="icon"></i>
-                                                    <i class="icon"></i>
-                                                    <i class="icon off"></i>
-                                                </div>
-                                                <div>من از این کتاب خیلی چیزا یاد گرفتم. امیدوارم شما هم این کتاب رو مطالعه کنید و از مطالب خوبش استفاده کنید.</div>
-                                            </div>
-                                            <p class="meta">
-                                                <span class="pull-right">حسین رامین فر</span>
-                                                <span class="pull-left">10:36 - 16 شهریور 1395</span>
-                                            </p>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="comment-form">
-                                    <h4>نظرتان را بگویید</h4>
-                                    <form>
-                                        <img src="uploads/users/user_1.jpg" alt="user name">
-                                        <div class="inputs-container">
-                                            <input type="text" class="text-field" placeholder="نام و نام خانوادگی" value="حسین رامین فر" disabled>
-                                            <input type="text" class="text-field" placeholder="پست الکترونیکی">
-                                            <div class="rating">
-                                                <span>امتیاز</span>
-                                                <ul>
-                                                    <li class="stars"><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i></li>
-                                                    <li class="stars"><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i><i class="icon"></i></li>
-                                                </ul>
-                                            </div>
-                                            <textarea class="text-field" placeholder="شرح..."></textarea>
-                                            <div class="button-block">
-                                                <input type="submit" class="btn-blue pull-left" value="ثبت نظر">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                <?
+                                $this->widget('comments.widgets.ECommentsListWidget', array(
+                                    'model' => $model,
+                                ));
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -278,7 +223,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     ?>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 sidebar-col">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 sidebar-col">
                 <div class="boxed">
                     <div class="heading">
                         <h4>درباره بوک شاپ</h4>
@@ -302,14 +247,14 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                         ?>
                     </ul>
                 </div>
-                <?php if($model->showTags): ?>
+                <?php if($model->seoTags): ?>
                 <div class="boxed">
                     <div class="heading">
                         <h4>برچسب ها</h4>
                     </div>
                     <div class="tags">
                     <?php
-                        foreach ($model->showTags as $tag)
+                        foreach ($model->seoTags as $tag)
                             echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>'; ?>
                     </div>
                 </div>
@@ -318,13 +263,3 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         </div>
     </div>
 </div>
-<!---->
-<!--<div class="book-comments border-none hidden">-->
-<!--    <div class="comments">-->
-<!--        --><?//
-//        $this->widget('comments.widgets.ECommentsListWidget', array(
-//            'model' => $model,
-//        ));
-//        ?>
-<!--    </div>-->
-<!--</div>-->

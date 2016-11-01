@@ -125,6 +125,7 @@ class Books extends CActiveRecord
 				'seoTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 1'),
 				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id)'),
 				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
+				'tagsRel' => array(self::HAS_MANY, 'BookTagRel', 'book_id'),
 		);
 	}
 
@@ -417,7 +418,7 @@ class Books extends CActiveRecord
 
 	public function getComments(){
 		$criteria = new CDbCriteria();
-		$criteria->addCondition('owner_name = :model AND owner_id = :id');
+		$criteria->addCondition('owner_name = :model AND owner_id = :id AND status = 1');
 		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
 		return Comment::model()->findAll($criteria);
 	}
@@ -425,7 +426,7 @@ class Books extends CActiveRecord
 	public function getCountComments(){
 		Yii::app()->getModule('comments');
 		$criteria = new CDbCriteria();
-		$criteria->addCondition('owner_name = :model AND owner_id = :id');
+		$criteria->addCondition('owner_name = :model AND owner_id = :id AND status = 1');
 		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
 		return Comment::model()->count($criteria);
 	}

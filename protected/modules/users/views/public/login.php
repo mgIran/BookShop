@@ -52,6 +52,10 @@
         <?php echo $form->error($model,'password'); ?>
         <span class="transition icon-key"></span>
     </div>
+    <div class="form-group">
+        <?= $form->checkBox($model,'rememberMe',array('id'=>'remember-me')); ?>
+        <?= CHtml::label('مرا به خاطر بسپار','remember-me') ?>
+    </div>
     <div class="form-row">
         <input id="login-btn" class="btn btn-success" type="submit" value="ورود">
     </div>
