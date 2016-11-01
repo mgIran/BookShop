@@ -54,7 +54,7 @@ a:active{
     top: 0;
     right: 0;
     left: 0;
-    z-index: 2;
+    z-index:100;
     -webkit-transition: all 0.4s ease 0s;
     -moz-transition: all 0.4s ease 0s;
     -ms-transition: all 0.4s ease 0s;
@@ -206,6 +206,7 @@ a:active{
     position: relative;
     width: 100%;
     height: 100vh;
+    max-height: 800px;
     z-index: 1;
 }
 
@@ -217,6 +218,7 @@ a:active{
     width: 100%;
     height: 100%;
     position: relative;
+    max-height: 800px;
 }
 
 .slider-item .slider-thumbnail {
@@ -227,8 +229,8 @@ a:active{
 }
 
 .slider-item .slider-thumbnail img {
-    max-width: 100%;
-    height: auto;
+    min-width: 100%;
+    height: 100%;
 }
 
 .slider-item .slider-overlay {
@@ -251,6 +253,7 @@ a:active{
     width: 100px;
     max-height: 150px;
     float: right;
+    position: absolute;
     margin-top: -52px;
 }
 
@@ -260,6 +263,12 @@ a:active{
     margin-right: 15px;
     margin-top: 5px;
     float: right;
+    overflow: hidden;
+    padding-right: 115px;
+    padding-left: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
 }
 
 .slider-item .slider-overlay h3 small {
@@ -360,7 +369,7 @@ a:active{
 
 .categories {
     padding: 50px 0;
-    max-height: 310px;
+    max-height: 400px;
     overflow: hidden;
 }
 .categories small{
@@ -1242,6 +1251,9 @@ a:active{
     position: relative;
 }
 
+.footer .about{
+    margin-bottom: 45px;
+}
 .footer .about img {
     max-width: 55px;
     max-height: 55px;
@@ -1898,6 +1910,7 @@ input[type="checkbox"] + label:hover::before {
     font-weight: bold;
     font-size: 14px;
     margin-top: 5px;
+    direction: rtl;
 }
 .book-meta .col-lg-6{
     margin-bottom: 30px;
@@ -1983,6 +1996,8 @@ input[type="checkbox"] + label:hover::before {
     background: #fff;
     padding: 20px;
     margin-bottom: 30px;
+    display: block;
+    overflow: hidden;
 }
 .sidebar-col .heading h4{
     font-size: 18px;
@@ -2111,16 +2126,14 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .comments-list li{
     margin-bottom: 30px;
+    position: relative;
 }
 .book-view .comments-list li img{
-    float: right;
-    width: 50px;
-    height:50px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.09);
+    width: 100%;
 }
 .book-view .comments-list .comment-text{
     overflow: hidden;
-    margin-right: 50px;
+    margin-right: 70px;
     padding-right: 15px;
 }
 .book-view .comments-list .comment-text .text{
@@ -2131,6 +2144,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .comments-list .stars{
     margin-bottom: 10px;
+    font-size: 11px;
 }
 .book-view .comments-list .stars .icon{
     background-size: 17px;
@@ -2146,20 +2160,18 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .comment-form{
     margin-top: 60px;
+    position: relative;
 }
 .book-view .comment-form h4{
     margin: 0 0 20px;
     font-weight: normal;
 }
 .book-view .comment-form img{
-    float: right;
-    width: 50px;
-    height:50px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.09);
+    width: 100%;
 }
 .book-view .comment-form .inputs-container{
     overflow: hidden;
-    margin-right: 50px;
+    margin-right: 70px;
     padding-right: 15px;
 }
 .book-view .comment-form .text-field{
@@ -2668,4 +2680,43 @@ input[type="checkbox"] + label:hover::before {
     text-align: justify;
     direction: ltr;
     overflow: hidden;
+}
+
+.default-comment-avatar {
+    background: url("../svg/comment-user.svg") no-repeat scroll center ;
+    background-size: 40px;
+    display: inline-block;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    -webkit-box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.comment-form .rating .stars{
+    position: relative;
+}
+.comment-form .rating .stars input[type='radio'].comment-radio-rate{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom:0;
+    z-index:2;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    opacity: 0;
+    overflow: hidden;
+    width: 100%;
+}
+.comment-form .rating .stars input[type='radio'].comment-radio-rate:checked ~ i.icon{
+    background-image: url("../svg/star-red.svg");
+}
+.comments-list-outer > p{
+    padding: 0 0 30px !important;
 }

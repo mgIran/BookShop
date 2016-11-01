@@ -40,7 +40,7 @@ class Tickets extends CActiveRecord
 		'waiting' => 'در انتظار پاسخ',
 		'pending' => 'در حال بررسی توسط کارشناس',
 		'open' => 'باز',
-		'close' => 'نوبت چاپ',
+		'close' => 'بسته',
 	);
 
 	/**

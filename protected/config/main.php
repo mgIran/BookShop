@@ -76,8 +76,8 @@ return array(
 			'userConfig'=>array(
 				'class'=>'Users',
 				'nameProperty'=>'userDetails.fa_name',
-//				'avatarProperty'=>'userDetails.avatar',
-//				'avatarFolderPath'=>'userDetails.avatar',
+				'avatarProperty'=>'userDetails.avatar',
+				'avatarFolderPath'=>'uploads/users/avatar/',
 				'emailProperty'=>'email',
 				'rateProperty'=>'bookRate.rate',
 			),

@@ -53,7 +53,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
     </div>
     <div class="container page-content book-view">
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb"><img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon ?>" alt="<?= CHtml::encode($model->title) ?>" ></div>
                     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 book-info">
@@ -61,27 +61,27 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                             <h4><?= CHtml::encode($model->title)?></h4>
                             <div class="book-meta">
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="page-count-icon"></i></div>
                                         <div class="meta-body">تعداد صفحات<div class="meta-heading"><?= CHtml::encode(Controller::parseNumbers(number_format($model->number_of_pages))) ?> صفحه</div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="calendar-icon"></i></div>
-                                        <div class="meta-body ltr text-right">تاریخ انتشار<div class="meta-heading"><?= CHtml::encode(JalaliDate::date('Y F d',$model->lastPackage->publish_date)) ?></div></div>
+                                        <div class="meta-body ltr text-right">تاریخ انتشار<div class="meta-heading"><?= CHtml::encode(JalaliDate::date('d F Y',$model->lastPackage->publish_date)) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="file-icon"></i></div>
                                         <div class="meta-body">نوع فایل<div class="meta-heading"><?= CHtml::encode(pathinfo($model->lastPackage->file_name,PATHINFO_EXTENSION)) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="download-icon"></i></div>
                                         <div class="meta-body">حجم فایل<div class="meta-heading"><?= CHtml::encode(Controller::fileSize($filePath.$model->lastPackage->file_name)) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="earth-icon"></i></div>
                                         <div class="meta-body">زبان<div class="meta-heading"><?= CHtml::encode($model->language) ?></div></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="isbn-icon"></i></div>
                                         <div class="meta-body">شابک<div class="meta-heading"><?= CHtml::encode($model->lastPackage->isbn) ?></div></div>
                                     </div>
@@ -223,7 +223,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     ?>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 sidebar-col">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 sidebar-col">
                 <div class="boxed">
                     <div class="heading">
                         <h4>درباره بوک شاپ</h4>

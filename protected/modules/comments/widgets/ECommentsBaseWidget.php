@@ -82,6 +82,9 @@ class ECommentsBaseWidget extends CWidget
             $comment = new Comment();
             $comment->owner_name = get_class($this->model);
             $comment->owner_id = $this->getOwnerPK();
+            $comment->user = Users::model()->findByPk(Yii::app()->user->getId());
+            $comment->user_name = $comment->getUserName(false);
+            $comment->user_email = $comment->getUserEmail();
             return $comment;
         }
         

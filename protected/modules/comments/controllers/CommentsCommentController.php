@@ -139,6 +139,16 @@ class CommentsCommentController extends Controller
                 Yii::app()->end();
             $result = array();
             if ($comment->save()) {
+                if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user' && isset($_POST['Comment']['rate'])) {
+                    $rateModel = BookRatings::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->getId(),'book_id'=>$comment->owner_id));
+                    if($rateModel)
+                        BookRatings::model()->deleteAllByAttributes(array('user_id'=>Yii::app()->user->getId(),'book_id'=>$comment->owner_id));
+                    $rateModel = new BookRatings();
+                    $rateModel->book_id = $comment->owner_id;
+                    $rateModel->user_id = Yii::app()->user->getId();
+                    $rateModel->rate = $_POST['Comment']['rate'];
+                    @$rateModel->save();
+                }
                 $result['code'] = 'success';
                 $this->beginClip('form');
                 $this->widget('comments.widgets.ECommentsFormWidget', array(

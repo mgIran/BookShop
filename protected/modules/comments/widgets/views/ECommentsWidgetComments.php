@@ -4,22 +4,32 @@
             ?>
             <li id="comment-<?php echo $comment->comment_id; ?>">
                 <?php
-                if($comment->avatarLink && !empty($comment->avatarLink) && file_exists($comment->avatarLink))
-                    echo '<img src="'.$comment->avatarLink.'" >';
+                if($comment->avatarLink)
+                    echo '<div class="default-comment-avatar"><img src="'.$comment->avatarLink.'" ></div>';
                 else
                     echo '<div class="default-comment-avatar"></div>';
                 ?>
                 <div class="comment-text">
                     <div class="text">
                         <div class="stars">
-                            <?= Controller::printRateStars($comment->userRate) ?>
+                            <?php
+                            if($comment->userRate):
+                            ?>
+                                <?= Controller::printRateStars($comment->userRate) ?>
+                            <?php
+                            else:
+                            ?>
+                                امتیاز ثبت نشده
+                            <?php
+                            endif;
+                            ?>
                         </div>
                         <div><p dir="auto"><?php echo CHtml::encode($comment->comment_text);?></p></div>
                     </div>
-                    <p class="meta">
+                    <div class="meta">
                         <span class="pull-right"><?php echo $comment->userName;?></span>
                         <span class="pull-left"><?php echo JalaliDate::differenceTime($comment->create_time);?></span>
-                    </p>
+                    </div>
                 </div>
                 <?php if($this->adminMode === true):
                         if(Yii::app()->user->type == 'admin' ||
@@ -48,7 +58,7 @@
                                 'data-parent' => '#comment-' . $comment->comment_id
                             ));
                             echo "<div class='comment-form comment-form-outer collapse' id='reply-" . $comment->comment_id . "'>";
-                            Yii::app()->controller->renderPartial('//partial-views/_loading');
+                            echo '<div class="loading-container"><div class="overly"></div><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
                             $this->widget('comments.widgets.ECommentsFormWidget' ,array(
                                 'model' => $this->model ,
                             ));

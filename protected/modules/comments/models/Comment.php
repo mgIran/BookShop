@@ -27,6 +27,7 @@
  * @property integer $create_time
  * @property integer $update_time
  * @property integer $status
+ * @property integer $rate
  */
 class Comment extends CActiveRecord
 {
@@ -42,6 +43,11 @@ class Comment extends CActiveRecord
      */
 
     public $verifyCode;
+
+    /**
+     * @var integer user rate
+     */
+    public $rate;
 
     /*
      * @var captcha action
@@ -97,9 +103,11 @@ class Comment extends CActiveRecord
         $modelConfig = $commentsModule->getModelConfig($this);
         $rules = array(
             array('owner_name, owner_id, comment_text', 'required'),
-            array('owner_id, parent_comment_id, creator_id, create_time, update_time, status', 'numerical', 'integerOnly' => true),
+            array('owner_id, parent_comment_id, creator_id, create_time, update_time, status, rate', 'numerical', 'integerOnly' => true),
             array('owner_name', 'length', 'max' => 50),
-            array('owner_name, creator_id, creator_name, user_name, user_email, verifyCode', 'checkConfig'),
+            array('rate, comment_text', 'filter', 'filter' => 'strip_tags'),
+            array('rate, owner_name, creator_id, creator_name, user_name, user_email, verifyCode', 'checkConfig'),
+            array('rate', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('owner_name, owner_id, comment_id, parent_comment_id, creator_id, user_name, user_email, comment_text, create_time, update_time, status', 'safe', 'on' => 'search'),
@@ -336,7 +344,7 @@ class Comment extends CActiveRecord
      * @return string 
      */
 
-    public function getUserName()
+    public function getUserName($email = true)
     {
         $userName = '';
         if(isset($this->user)) {
@@ -351,7 +359,7 @@ class Comment extends CActiveRecord
                     $user = $user->$relation;
                 $userName .= $user;
             }
-            if(empty($user) && isset($userConfig['emailProperty']))
+            if(empty($user) && isset($userConfig['emailProperty']) && $email)
                 $userName .= $this->user->$userConfig['emailProperty'];
         } else {
             $userName = $this->user_name;
@@ -361,6 +369,36 @@ class Comment extends CActiveRecord
                 $userName .= '('.$this->user_email.')';
         }
         return $userName;
+    }
+
+    /*
+     * returns the string, which represents comment's creator
+     * @return string
+     */
+
+    public function getUserEmail()
+    {
+        $userEmail = '';
+        if(isset($this->user)) {
+            //if User model has been configured and comment posted by registered user
+            $userConfig = Yii::app()->getModule('comments')->userConfig;
+            if(strpos($userConfig['emailProperty'], '.') === false)
+                $userEmail .= $this->user->$userConfig['emailProperty'];
+            else {
+                $relations = explode('.', $userConfig['emailProperty']);
+                $user = $this->user;
+                foreach($relations as $relation)
+                    $user = $user->$relation;
+                $userEmail .= $user;
+            }
+        } else {
+            $userEmail = $this->user_name;
+            if($userEmail == 'Admin')
+                $userEmail = Yii::t($this->config['translationCategory'], 'Admin');
+            if($this->config['showEmail'])
+                $userEmail .= '('.$this->user_email.')';
+        }
+        return $userEmail;
     }
 
     /*
@@ -380,7 +418,12 @@ class Comment extends CActiveRecord
                 $relations = explode('.', $userConfig['rateProperty']);
                 $user = $this->user;
                 foreach($relations as $relation)
-                    $user = $user->$relation;
+                {
+                    if ($user->$relation)
+                        $user = $user->$relation;
+                    else
+                        return false;
+                }
                 $rate = $user;
             }
             if(empty($user) && isset($userConfig['rateProperty']))
@@ -412,11 +455,11 @@ class Comment extends CActiveRecord
                 }
 
                 if(isset($userConfig['avatarFolderPath']) && isset($avatar) && $avatar && file_exists($userConfig['avatarFolderPath'].$avatar))
-                    $avatarLink = $userConfig['avatarFolderPath'].$avatar;
-                if(isset($userConfig['avatarFolderPath']) && isset($avatar) && $avatar && file_exists($userConfig['avatarFolderPath'].DIRECTORY_SEPARATOR.$avatar))
-                    $avatarLink = $userConfig['avatarFolderPath'].DIRECTORY_SEPARATOR.$avatar;
+                    $avatarLink = Yii::app()->createAbsoluteUrl($userConfig['avatarFolderPath'].$avatar);
+                elseif(isset($userConfig['avatarFolderPath']) && isset($avatar) && $avatar && file_exists($userConfig['avatarFolderPath'].DIRECTORY_SEPARATOR.$avatar))
+                    $avatarLink = Yii::app()->createAbsoluteUrl($userConfig['avatarFolderPath'].DIRECTORY_SEPARATOR.$avatar);
                 elseif(!isset($userConfig['avatarFolderPath']) && isset($avatar) && $avatar && file_exists($avatar))
-                    $avatarLink = $avatar;
+                    $avatarLink = Yii::app()->createAbsoluteUrl($avatar);
             }
         }
         return $avatarLink;

@@ -192,6 +192,10 @@ class NewsManageController extends Controller
 			mkdir($tmpDIR);
 		$tmpUrl = Yii::app()->baseUrl .'/uploads/temp/';
 		$imageDIR = Yii::getPathOfAlias("webroot") . "/uploads/news/";
+		if (!is_dir($imageDIR))
+			mkdir($imageDIR);
+		if (!is_dir($imageDIR.'200x200'))
+			mkdir($imageDIR.'200x200');
 		$imageUrl = Yii::app()->baseUrl .'/uploads/news/';
 
 		$image = array();
