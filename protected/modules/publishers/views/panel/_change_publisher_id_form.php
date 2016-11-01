@@ -5,9 +5,11 @@
 ?>
 
 <div class="col-md-6">
-    <h1>شناسه ناشر</h1>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#">شناسه ناشر</a></li>
+    </ul>
 
-    <div class="form">
+    <div class="form update-publisher-form">
 
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'change-publisher-id-form',
@@ -25,11 +27,11 @@
         <div class="form-group">
             <?php echo $form->textField($model,'requested_id',array('placeholder'=>'شناسه درخواستی *','maxlength'=>20,'class'=>'form-control')); ?>
             <?php echo $form->error($model,'requested_id'); ?>
-            <p class="desc">شناسهٔ توسعه‌دهنده باید عبارتی با حدّاقل طول ۵ حرف باشد که از حروف a-z و اعداد 0-9، «-» و «ـ» تشکیل شده باشد.<br>بعد از به تأیید رسیدن شناسهٔ انتخابی دیگر نمی‌توانید آن‌را تغییر دهید.</p>
+            <p class="description">شناسهٔ توسعه‌دهنده باید عبارتی با حدّاقل طول ۵ حرف باشد که از حروف a-z و اعداد 0-9، «-» و «ـ» تشکیل شده باشد.<br>بعد از به تأیید رسیدن شناسهٔ انتخابی دیگر نمی‌توانید آن‌را تغییر دهید.</p>
         </div>
 
         <div class="input-group buttons">
-            <?php echo CHtml::submitButton(($model->isNewRecord)?'ارسال':'تغییر شناسه درخواستی' ,array('class'=>'btn btn-success')); ?>
+            <?php echo CHtml::submitButton(($model->isNewRecord)?'ارسال':'تغییر شناسه درخواستی' ,array('class'=>'btn btn-default')); ?>
         </div>
 
     <?php $this->endWidget(); ?>

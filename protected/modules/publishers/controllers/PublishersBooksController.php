@@ -127,7 +127,7 @@ class PublishersBooksController extends Controller
                 mkdir($bookIconsDIR);
             $tmpUrl = Yii::app()->baseUrl.'/uploads/temp/';
 
-            Yii::app()->theme = 'market';
+            Yii::app()->theme = 'frontend';
             $this->layout = '//layouts/panel';
             $model = new Books;
             // Uncomment the following line if AJAX validation is needed

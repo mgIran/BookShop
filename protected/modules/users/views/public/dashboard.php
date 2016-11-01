@@ -7,7 +7,7 @@
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="green">
             <h4>اعتبار</h4>
-            <span>مانده اعتبار</span>
+            <span>میزان اعتبار شما در کتابیک</span>
             <h3><?php echo number_format($model->userDetails->credit, 0, ',', '.');?> تومان</h3>
             <a href="<?php echo $this->createUrl('/users/credit/buy');?>">خرید اعتبار<i class="arrow-icon"></i></a>
         </div>
@@ -15,17 +15,17 @@
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="red">
             <h4>نشان شده ها</h4>
-            <span>تعداد کتاب</span>
-            <h3><?php echo number_format(count($model->userDetails->user->bookmarkedBooks), 0, ',', '.');?> کتاب</h3>
+            <span>کتاب هایی که مایلید مطالعه کنید</span>
+            <h3><?php echo number_format(count($model->bookmarkedBooks), 0, ',', '.');?> کتاب</h3>
             <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>">نشان شده ها<i class="arrow-icon"></i></a>
         </div>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="blue">
             <h4>کتابخانه من</h4>
-            <span>تعداد کتاب</span>
-            <h3>10 کتاب</h3>
-            <a href="#">کتابخانه من<i class="arrow-icon"></i></a>
+            <span>کتابخانه مجازی خود را بسازید</span>
+            <h3><?php echo number_format(count($model->bookmarkedBooks)+count($model->bookBuys), 0, ',', '.');?> کتاب</h3>
+            <a href="<?php echo Yii::app()->createUrl('users/public/library');?>">کتابخانه من<i class="arrow-icon"></i></a>
         </div>
     </div>
 </div>
@@ -39,9 +39,9 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <td>زمان</td>
-                    <td>نام کتاب</td>
-                    <td>مبلغ</td>
+                    <th>زمان</th>
+                    <th>نام کتاب</th>
+                    <th>مبلغ</th>
                 </tr>
                 </thead>
                 <tbody>

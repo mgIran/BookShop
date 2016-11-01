@@ -4,7 +4,7 @@ return array(
     //'onBeginRequest'=>create_function('$event', 'return ob_start("ob_gzhandler");'),
     //'onEndRequest'=>create_function('$event', 'return ob_end_flush();'),
 	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'فروش کتاب',
+	'name'=>'کتابیک',
     'timeZone' => 'Asia/Tehran',
     'theme' => 'abound',
 	'sourceLanguage' => '00',

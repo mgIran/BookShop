@@ -20,6 +20,9 @@ class UsersPublicController extends Controller
                 'changePassword',
                 'authCallback',
                 'bookmarked',
+                'downloaded',
+                'transactions',
+                'library',
             )
         );
     }
@@ -30,7 +33,7 @@ class UsersPublicController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + dashboard, logout, setting, notifications, bookmarked',
+            'checkAccess + dashboard, logout, setting, notifications, bookmarked, downloaded, transactions, library',
         );
     }
 
@@ -152,7 +155,7 @@ class UsersPublicController extends Controller
      */
     public function actionSetting()
     {
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $model = Users::model()->findByPk(Yii::app()->user->getId());
         $model->setScenario('update');
@@ -327,6 +330,8 @@ class UsersPublicController extends Controller
      */
     public function actionNotifications()
     {
+        $this->layout = '//layouts/panel';
+        Yii::app()->theme = 'frontend';
         $criteria = new CDbCriteria();
         $criteria->addCondition('user_id=:user_id');
         $criteria->order = 'id DESC';
@@ -335,8 +340,6 @@ class UsersPublicController extends Controller
         );
         $model = UserNotifications::model()->findAll($criteria);
         UserNotifications::model()->updateAll(array('seen' => '1'), 'user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
-        $this->layout = '//layouts/panel';
-        Yii::app()->theme = 'market';
         $this->render('notifications', array(
             'model' => $model
         ));
@@ -387,6 +390,22 @@ class UsersPublicController extends Controller
 
         $this->render('downloaded', array(
             'downloaded' => $user->bookBuys
+        ));
+    }
+
+    /**
+     * List all bought and bookmarked books
+     */
+    public function actionLibrary()
+    {
+        Yii::app()->theme='frontend';
+        $this->layout='//layouts/panel';
+
+        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        /* @var $user Users */
+
+        $this->render('library', array(
+            'user' => $user
         ));
     }
 

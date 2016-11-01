@@ -1,12 +1,13 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $model Books */
 ?>
 
-<div class="container">
+<div class="white-form">
     <h3>افزودن کتاب جدید</h3>
+    <p class="description">جهت ثبت کتاب لطفا فرم زیر را پر کنید.</p>
 
-    <?php $this->renderPartial("//layouts/_flashMessage") ?>
+    <?php $this->renderPartial("//partial-views/_flashMessage") ?>
 
     <ul class="nav nav-tabs">
         <li class="active">

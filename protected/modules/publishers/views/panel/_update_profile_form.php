@@ -7,7 +7,9 @@
 ?>
 
 <div class="col-md-6">
-    <h1>مشخصات</h1>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#">مشخصات</a></li>
+    </ul>
 
     <div class="form update-publisher-form">
 
@@ -27,7 +29,7 @@
         <?php echo $form->errorSummary($model); ?>
 
         <div class="alert alert-<?php if($model->details_status=='accepted')echo 'success';elseif($model->details_status=='pending')echo 'warning';else echo 'danger';?>"><?php if($model->details_status=='accepted')echo 'اطلاعات قرارداد مورد تایید می باشد.';elseif($model->details_status=='pending')echo 'اطلاعات قرارداد در حال بررسی است.';else echo 'اطلاعات قرارداد مورد تایید قرار نگرفته است. لطفا اطلاعات صحیح را در فرم زیر وارد کنید.';?></div>
-        <div class="alert alert-warning">در صورت تغییر در اطلاعات این فرم حسابتان در صف در انتظار بررسی قرار خواهد گرفت و ممکن است باعث تأخیرهایی در انجام تصفیه‌حسابتان شود.</div>
+        <div class="alert alert-warning">در صورت تغییر در اطلاعات این فرم حسابتان در صف در انتظار بررسی قرار خواهد گرفت و ممکن است باعث تأخیرهایی در انجام تسویه حسابتان شود.</div>
 
         <div class="alert alert-info"><?php echo CHtml::label('پست الکترونیکی:&nbsp;&nbsp;', '');?><?php echo $model->user->email;?></div>
 
@@ -36,7 +38,7 @@
         <?php if($model->type=='real'):?>
             <div class="form-group">
                 <?php echo $form->textField($model,'fa_name',array('placeholder'=>$model->getAttributeLabel('fa_name').' *','maxlength'=>50,'class'=>'form-control')); ?>
-                <p class="desc">نام باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</p>
+                <small class="description">نام باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</small>
                 <?php echo $form->error($model,'fa_name'); ?>
             </div>
 
@@ -47,7 +49,7 @@
 
             <div class="form-group">
                 <?php echo $form->textField($model,'en_name',array('placeholder'=>$model->getAttributeLabel('en_name').' *','maxlength'=>50,'class'=>'form-control')); ?>
-                <p class="desc">نام باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</p>
+                <small class="description">نام باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</small>
                 <?php echo $form->error($model,'en_name'); ?>
             </div>
 
@@ -107,7 +109,7 @@
         <?php elseif($model->type=='legal'):?>
             <div class="form-group">
                 <?php echo $form->textField($model,'fa_name',array('placeholder'=>'نام و نام خانوادگی *','maxlength'=>50,'class'=>'form-control')); ?>
-                <p class="desc">باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</p>
+                <small class="description">باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</small>
                 <?php echo $form->error($model,'fa_name'); ?>
             </div>
 
@@ -177,7 +179,7 @@
         <?php endif;?>
 
         <div class="input-group buttons">
-            <?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ذخیره تغییرات',array('class'=>'btn btn-success')); ?>
+            <?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ذخیره تغییرات',array('class'=>'btn btn-default')); ?>
         </div>
 
     <?php $this->endWidget(); ?>

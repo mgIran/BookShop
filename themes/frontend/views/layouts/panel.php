@@ -63,6 +63,7 @@
         <ul class="nav navbar-nav navbar-left">
             <li><a href="<?= $this->createUrl('/tickets/manage/');?>"><i class="messages-icon"></i></a></li>
             <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
+            <li><a href="<?php echo $this->createUrl('logout');?>"><i class="logout-icon"></i></a></li>
         </ul>
     </div>
 </nav>
@@ -81,6 +82,11 @@
                 <span><?= $this->userDetails->roleLabels[Yii::app()->user->roles] ?></span>
             </div>
         </div>
+
+        <?php if(Yii::app()->user->roles!='publisher'):?>
+            <a href="<?php echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?>" class="signup-link"><i class="books-icon"></i>آیا ناشر هستید؟</a>
+        <?php endif;?>
+
         <div class="list-group">
             <h5>پنل کاربری</h5>
             <a href="<?php echo Yii::app()->createUrl('users/public/dashboard');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/dashboard')?' active':'';?>"><i class="dashboard-icon"></i>داشبورد</a>

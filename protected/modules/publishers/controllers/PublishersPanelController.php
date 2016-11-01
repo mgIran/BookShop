@@ -193,7 +193,7 @@ class PublishersPanelController extends Controller
      */
     public function actionAccount()
     {
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         Yii::import('application.modules.users.models.*');
 
         $detailsModel=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
@@ -274,7 +274,7 @@ class PublishersPanelController extends Controller
      */
     public function actionSignup()
     {
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         $data=array();
 
         switch(Yii::app()->request->getQuery('step'))
