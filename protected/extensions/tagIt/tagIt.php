@@ -72,7 +72,7 @@ class tagIt extends CWidget
         $this->_scripts = array(
             'css'.DIRECTORY_SEPARATOR.'jquery.tagit.css',
             'css'.DIRECTORY_SEPARATOR.'tagit.ui-zendesk.css',
-            'js'.DIRECTORY_SEPARATOR.'tag-it.min.js'
+            'js'.DIRECTORY_SEPARATOR.'tag-it.js'
         );
         return parent::init();
     }

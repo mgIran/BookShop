@@ -1884,6 +1884,10 @@ input[type="checkbox"] + label:hover::before {
     max-width: 100%;
     box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
+.book-view.news-view .thumb img{
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
 .book-view .info{
     background: #fff;
     padding: 20px;
@@ -2116,7 +2120,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .book-tabs .tab-content > .tab-pane#summary{
     color: #666;
-    line-height: 25px;
+    line-height: 30px;
     text-align: justify;
 }
 .book-view .comments-list{
@@ -2599,6 +2603,10 @@ input[type="checkbox"] + label:hover::before {
     right: 0;
     width: 150px;
 }
+.news-list-item.side-view .pic {
+    height: 70px;
+    width: 70px;
+}
 .news-list-item .pic > img {
     height: 100%;
     width: 100%;
@@ -2612,6 +2620,10 @@ input[type="checkbox"] + label:hover::before {
     height: 150px;
     width: 100%;
 }
+.news-list-item.side-view .news-detail {
+    padding-right: 85px;
+    height: 70px;
+}
 .news-list-item .news-detail h3 {
     margin: 15px 0 0;
     font-weight: 500;
@@ -2619,6 +2631,41 @@ input[type="checkbox"] + label:hover::before {
     display: block;
     padding-left: 90px;
 }
+.news-list-item.side-view .news-detail h3 {
+    margin:5px 0 0;
+    font-weight: 500;
+    font-size: 14px;
+    display: block;
+    padding-left: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.news-list-item.side-view .news-detail .category{
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    margin-top: 10px;
+}
+.news-view .well {
+    border: medium none;
+    border-radius: 0;
+    color: #666;
+    margin: 15px 0 0;
+    text-align: justify;
+    line-height: 30px;
+}
+.news-view .heading span{
+    margin-left: 60px;
+    font-size: 13px;
+}
+.news-view .heading span a{
+    padding-right: 15px;
+    color: #888;
+}
+
 #latest-news-list .news-list-item .pic{
     width: 100px;
     height: 100px;
@@ -2668,6 +2715,9 @@ input[type="checkbox"] + label:hover::before {
     top: 15px;
     color: #888;
     font-size: 11px;
+}
+.news-list-item.side-view .date{
+    position: static;
 }
 .news-detail a > p {
     color: #444;

@@ -42,12 +42,12 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
             <div class="page-info">
                 <?php
                 if($model->getPerson('نویسنده')):?>
-                <span>نویسنده<?= $model->getPersonsTags('نویسنده') ?></span>
+                <div>نویسنده<?= $model->getPersonsTags('نویسنده') ?></div>
                 <?php
                 endif;
                 ?>
-                <span>ناشر<a href="<?php echo $this->createUrl('/book/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"
-                    ><?= CHtml::encode($model->getPublisherName()) ?></a></span>
+                <div>ناشر<a href="<?php echo $this->createUrl('/book/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"
+                    ><?= CHtml::encode($model->getPublisherName()) ?></a></div>
             </div>
         </div>
     </div>

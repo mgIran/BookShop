@@ -119,6 +119,7 @@ return array(
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',
 				'news/<id:\d+>/<title:(.*)>'=>'news/manage/view',
 				'news/category/<id:\d+>/<title:(.*)>'=>'news/category/view',
+				'news/tag/<id:\d+>/<title:(.*)>'=>'news/manage/tag',
 				'news/index'=>'news/manage/index',
 				'category/<action:\w+>'=>'bookCategories/<action>',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',

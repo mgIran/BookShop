@@ -245,6 +245,8 @@ class NewsCategories extends CActiveRecord
 
 	public function countNews($id = NULL)
 	{
+		if(!$id)
+			$id = $this->id;
 		$criteria = News::getValidNews();
 		$criteria->addInCondition('category_id',NewsCategories::model()->getCategoryChildes($id));
 		return News::model()->count($criteria);

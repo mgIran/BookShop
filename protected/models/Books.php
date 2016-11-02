@@ -396,24 +396,24 @@ class Books extends CActiveRecord
 	}
 
 	public function getPrice(){
-		return $this->lastPackage->price;
+		return $this->lastPackage?$this->lastPackage->price:0;
 	}
 	public function getPrinted_price(){
-		return $this->lastPackage->printed_price;
+		return $this->lastPackage?$this->lastPackage->printed_price:0;
 	}
 	public function getOffPrice()
 	{
-		if($this->discount)
+		if($this->lastPackage && $this->discount)
 			return $this->lastPackage->price - $this->lastPackage->price * $this->discount->percent / 100;
 		else
-			return $this->lastPackage->price ;
+			return $this->lastPackage?$this->lastPackage->price:0;
 	}
 	public function getOff_printed_price()
 	{
-		if($this->discount)
+		if($this->lastPackage && $this->discount)
 			return $this->lastPackage->printed_price - $this->lastPackage->printed_price * $this->discount->percent / 100;
 		else
-			return $this->lastPackage->printed_price;
+			return $this->lastPackage?$this->lastPackage->printed_price:0;
 	}
 
 	public function getComments(){

@@ -10,8 +10,8 @@
             <?php
             foreach($this->categories as $category):
                 ?>
-                <li class="<?= (isset($activeId) && $category->id===$activeId)?'active':'' ?>"><a href="<?= $this->createUrl('/category/'.$category->id.'/'.urlencode($category->title)) ?>"><?= $category->title ?>
-                        <small>(<?= $category->getBooksCount() ?>)</small></a></li>
+                <li class="<?= (isset($activeId) && $category->id===$activeId)?'active':'' ?>"><a href="<?= $this->createUrl('/news/category/'.$category->id.'/'.urlencode($category->title)) ?>"><?= $category->title ?>
+                        <small>(<?= $category->countNews() ?>)</small></a></li>
                 <?php
             endforeach;
             ?>
@@ -24,10 +24,11 @@
         <div class="sidebar-book-list">
             <?php
             $this->widget('zii.widgets.CListView',array(
-                'id' => 'latest-news-list',
+                'id' => 'latest-side-news-list',
                 'dataProvider' => $this->getConstNews('latest'),
-                'itemView' => 'news.views.manage._side_view',
-                'template' => '{items}'
+                'itemView' => '//site/_news_item',
+                'template' => '{items}',
+                'viewData' => array('type' => 'side-view')
             ));
             ?>
         </div>

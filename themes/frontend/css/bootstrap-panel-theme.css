@@ -104,13 +104,18 @@ a:active{
     -ms-transition: all 0.2s linear;
     -o-transition: all 0.2s linear;
     transition: all 0.2s linear;
-}
-.sidebar-mini .navbar-header > .pin{
     -webkit-transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
     -o-transform: rotate(-45deg);
     transform: rotate(-45deg);
+}
+.sidebar-mini .navbar-header > .pin{
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
 }
 
 .navbar-brand > img {
@@ -360,15 +365,15 @@ a:active{
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
-.statistics .col-lg-4:hover .green{
+.statistics >div:hover .green{
     background: #82b440;
     color: #fff;
 }
-.statistics .col-lg-4:hover .red{
+.statistics >div:hover .red{
     background: #e74e40;
     color: #fff;
 }
-.statistics .col-lg-4:hover .blue{
+.statistics >div:hover .blue{
     background: #304056;
     color: #fff;
 }
@@ -400,16 +405,16 @@ a:active{
 .statistics .blue a{
     border-top-color: #304056;
 }
-.statistics .col-lg-4:hover a{
+.statistics div:hover a{
     background: rgba(0,0,0,0.2);
     color: #fff;
 }
-.statistics .col-lg-4 a:hover,
-.statistics .col-lg-4 a:focus,
-.statistics .col-lg-4 a:active{
+.statistics div a:hover,
+.statistics div a:focus,
+.statistics div a:active{
     background: rgba(0,0,0,0.4);
 }
-.statistics .col-lg-4 a .arrow-icon{
+.statistics div a .arrow-icon{
     background: url("../svg/arrow-white.svg") no-repeat center;
     background-size: 15px;
     width: 15px;
@@ -422,7 +427,7 @@ a:active{
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
-.statistics .col-lg-4:hover a .arrow-icon{
+.statistics div:hover a .arrow-icon{
     opacity:1;
 }
 .tabs .nav-tabs{

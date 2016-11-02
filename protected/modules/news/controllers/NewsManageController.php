@@ -119,6 +119,7 @@ class NewsManageController extends Controller
 			'criteria' => $criteria,
             'pagination' => array('pageSize' => 8)
 		));
+		$this->categories = NewsCategories::model()->findAll();
 		$this->render('tags',array(
 			'model' => $model,
 			'dataProvider' => $dataProvider

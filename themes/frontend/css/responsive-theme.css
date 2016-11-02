@@ -256,8 +256,59 @@
     .default-comment-avatar{
         display: none;
     }
+    .page-heading{
+        padding: 143px 0 53px;
+    }
+    .page-heading h1{
+        font-size: 2em;
+        line-height:45px;
+    }
+    .news-list-item{
+        width: 200px;
+        margin: 0 auto 15px;
+    }
+    .news-list-item .pic{
+        width: 200px;
+        height: 200px;
+        position: static;
+    }
+    .news-list-item .news-detail{
+        padding: 0 15px;
+    }
+    .news-list-item .news-detail .date{
+        position: static;
+        margin: 10px 0 5px;
+        display: block;
+    }
+    .news-list-item .news-detail .category{
+        display: none;
+    }
+    .news-list-item .news-detail h3{
+        padding: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+    .news-list-item .news-detail p{
+        font-size: 13px;
+        text-align: justify;
+        text-align-last: right;
+    }
 }
 @media (min-width: 480px) and (max-width: 650px){
+
+    .news-list-item.side-view .pic{
+        display: none;
+    }
+    .news-list-item.side-view .news-detail{
+        padding:5px 15px;
+        height: auto;
+        margin-bottom:5px;
+    }
+    .news-list-item.side-view .news-detail .category{
+        display: none;
+    }
     .book-view .comment-form .inputs-container,
     .book-view .comments-list .comment-text{
         margin-right: 60px;
@@ -341,8 +392,14 @@
     .book-view .book-tabs .tab-content > #comments.tab-pane{
         padding: 15px;
     }
+    .sidebar-col{
+        padding: 0 15px !important;
+    }
 }
 @media (min-width: 650px) and (max-width: 768px){
+    .sidebar-col{
+        padding: 0 15px !important;
+    }
     .book-view .book-tabs .tab-content > .tab-pane{
         padding: 30px;
     }
@@ -458,6 +515,17 @@
     }
     .footer .nav > li > a{
         padding: 10px 0;
+    }
+    .news-list-item.side-view .pic{
+        display: none;
+    }
+    .news-list-item.side-view .news-detail{
+        padding:5px 15px;
+        height: auto;
+        margin-bottom:5px;
+    }
+    .news-list-item.side-view .news-detail .category{
+        display: none;
     }
 }
 @media (min-width: 992px) and (max-width: 1024px){

@@ -21,6 +21,7 @@
 
     $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
     $cs->registerCssFile($baseUrl.'/css/bootstrap-rtl.min.css');
+    $cs->registerCssFile($baseUrl.'/css/font-awesome.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
     $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css');
@@ -117,7 +118,7 @@
             <a href="<?php echo Yii::app()->createUrl('users/public/setting');?>"><i class="setting-icon"></i></a>
         </div>
         <div class="pull-left copyright">
-            © 2016 BookShop
+            © 2016 Ketabic
         </div>
     </div>
 </div>
