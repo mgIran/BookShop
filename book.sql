@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-11-02 12:03:23
+Date: 2016-11-03 13:23:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -254,7 +254,7 @@ CREATE TABLE `ym_book_packages` (
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   CONSTRAINT `ym_book_packages_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_book_packages
@@ -262,6 +262,8 @@ CREATE TABLE `ym_book_packages` (
 INSERT INTO `ym_book_packages` VALUES ('46', '52', '1', 'تیراژ اول', '978-3-16-148410-0', 'AXfrV1477566608.docx', '1477566615', '1477687277', 'accepted', '', 'old_book', '10000', null, '150000');
 INSERT INTO `ym_book_packages` VALUES ('47', '53', '1', 'فتح خون جلد اول', '978-3-16-148410-0', '2BRbY1477582248.docx', '1477582805', '1477687320', 'accepted', '', 'old_book', '1500', null, '5000');
 INSERT INTO `ym_book_packages` VALUES ('48', '54', '1', 'جلد اول', '978-3-16-148410-0', 'kpg841477592881.docx', '1477592909', '1477687323', 'accepted', '', 'new_book', '100', null, '1220');
+INSERT INTO `ym_book_packages` VALUES ('64', '56', 'اول', null, '978-3-16-148410-0', 'sos821478083250.docx', '1478083257', '', 'pending', '', 'old_book', '2000', '0', '0');
+INSERT INTO `ym_book_packages` VALUES ('65', '56', 'دوم', null, '978-3-16-148410-0', '7vfy51478084026.docx', '1478084032', '', 'pending', '', 'old_book', '2000', '0', '0');
 
 -- ----------------------------
 -- Table structure for ym_book_persons
@@ -424,7 +426,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478075584');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478084033');
 
 -- ----------------------------
 -- Table structure for ym_news
