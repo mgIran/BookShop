@@ -53,7 +53,7 @@
                     </ul>
                 </div>
             </nav>
-            <span class="pull-left copy-right"> © 2016 BookShop</span>
+            <span class="pull-left copy-right"> © 2016 Ketabic</span>
         </div>
     </div>
 </div>

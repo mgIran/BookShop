@@ -54,6 +54,7 @@ class NewsCategoriesManageController extends Controller
 		// get latest news
 		$criteria = News::getValidNews();
 		$criteria->addInCondition('category_id',$model->getCategoryChildes());
+		$this->categories = NewsCategories::model()->findAll();
 		$dataProvider = new CActiveDataProvider("News",array(
 			'criteria' => $criteria
 		));

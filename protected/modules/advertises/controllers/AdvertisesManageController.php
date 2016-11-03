@@ -131,7 +131,7 @@ class AdvertisesManageController extends Controller
 		if(isset($_POST['Advertises']))
 		{
 			$model->attributes=$_POST['Advertises'];
-			if(isset($_POST['Advertises']['cover'])) {
+			if(isset($_POST['Advertises']['cover']) && file_exists($tmpDIR.$_POST['Advertises']['cover'])) {
 				$file = $_POST['Advertises']['cover'];
 				$cover = array(
 						'name' => $file,
@@ -141,7 +141,7 @@ class AdvertisesManageController extends Controller
 				);
 			}
 			if($model->save()) {
-				if($model->cover)
+				if($model->cover && file_exists($tmpDIR.$model->cover))
 					rename($tmpDIR.$model->cover, $coverDIR.$model->cover);
 				Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
 				$this->redirect(array('admin'));

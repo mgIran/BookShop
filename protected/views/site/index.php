@@ -14,7 +14,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
 <?php
 if($advertises->totalItemCount):
     ?>
-    <div class="slider">
+    <div class="slider" <?= $advertises->totalItemCount>1?'data-loop="true"':'' ?>>
         <?php
         foreach($advertises->getData() as $advertise):
             $this->renderPartial('_advertise_item',array('data'=>$advertise));

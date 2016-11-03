@@ -8,22 +8,24 @@
         <div class="container">
             <h1><?= CHtml::encode($model->title) ?></h1>
             <div class="page-info">
-                <span>تاریخ انتشار<span><?= JalaliDate::date('Y F d - h:i') ?></span></span>
-                <span>دسته بندی<a href="<?php echo $this->createUrl('/news/category/'.$model->category_id.'/'.urlencode($model->category->title));?>"
-                    ><?= CHtml::encode($model->category->title) ?></a></span>
+                <div>تاریخ انتشار<a><?= JalaliDate::date('Y F d - h:i') ?></a></div>
+                <div>دسته بندی<a href="<?php echo $this->createUrl('/news/category/'.$model->category_id.'/'.urlencode($model->category->title));?>"
+                    ><?= CHtml::encode($model->category->title) ?></a></div>
             </div>
         </div>
     </div>
-    <div class="container page-content book-view">
+    <div class="container page-content book-view news-view">
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 thumb"><img src="<?= Yii::app()->baseUrl.'/uploads/news/'.$model->image ?>" alt="<?= CHtml::encode($model->title) ?>" ></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 book-info">
-                        <div class="info">
+                        <div class="heading">
                             <h4><?= CHtml::encode($model->title)?></h4>
+                            <span>تاریخ: <a><?= $date = JalaliDate::date("Y F d - H:i",$model->publish_date); ?></a></span>
+                            <span>دسته بندی: <a href="<?= $this->createUrl('/news/category/'.$model->category_id.'/'.urldecode($model->category->title)) ?>" ><?= CHtml::encode($model->category->title) ?></a></span>
                         </div>
                     </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 thumb"><img src="<?= Yii::app()->baseUrl.'/uploads/news/'.$model->image ?>" alt="<?= CHtml::encode($model->title) ?>" ></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 book-tabs">
                         <?php
                         if(!empty($model->summary)):
@@ -74,7 +76,7 @@
 //                    ?>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 sidebar-col">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 sidebar-col">
                 <div class="boxed">
                     <div class="heading">
                         <h4>دسته بندی های خبر</h4>
