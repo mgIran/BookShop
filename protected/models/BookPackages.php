@@ -8,14 +8,15 @@
  * @property string $book_id
  * @property string $version
  * @property string $package_name
+ * @property string $isbn
  * @property string $file_name
  * @property string $create_date
  * @property string $publish_date
  * @property string $status
  * @property string $reason
  * @property string $for
- * @property string $isbn
  * @property string $price
+ * @property integer $sale_printed
  * @property string $printed_price
  *
  * The followings are the available model relations:
@@ -51,10 +52,11 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('book_id, package_name, version, isbn, price, printed_price, file_name', 'required'),
+            array('book_id, version, isbn, price, file_name', 'required'),
+            array('sale_printed', 'numerical', 'integerOnly'=>true),
             array('book_id, price, printed_price', 'length', 'max'=>10),
             array('version, isbn, create_date, publish_date', 'length', 'max'=>20),
-            array('version, price, printed_price', 'numerical', 'integerOnly'=>true),
+            array('sale_printed, price, printed_price', 'numerical', 'integerOnly'=>true),
             array('isbn, create_date, publish_date, reason', 'filter', 'filter'=>'strip_tags'),
             array('package_name', 'length', 'max'=>100),
             array('file_name', 'length', 'max'=>255),
@@ -64,7 +66,7 @@ class BookPackages extends CActiveRecord
             array('isbn', 'isbnChecker'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, book_id, version, package_name, isbn, file_name, create_date, publish_date, status, reason, for, price, printed_price', 'safe', 'on'=>'search'),
+            array('id, book_id, version, package_name, isbn, file_name, create_date, publish_date, status, reason, for, price, sale_printed, printed_price', 'safe', 'on'=>'search'),
         );
     }
 
@@ -129,7 +131,8 @@ class BookPackages extends CActiveRecord
             'reason' => 'دلیل',
             'for' => 'نوع نوبت چاپ',
             'isbn' => 'شابک',
-            'price' => 'قیمت',
+            'price' => 'قیمت نسخه دیجیتال',
+            'sale_printed' => 'فروش نسخه چاپی',
             'printed_price' => 'قیمت نسخه چاپی',
         );
     }

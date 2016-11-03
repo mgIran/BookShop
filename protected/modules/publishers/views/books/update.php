@@ -1,20 +1,23 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $model Books */
 /* @var $imageModel BookImages */
 /* @var $images [] */
 /* @var $step integer */
 /* @var $packagesDataProvider CActiveDataProvider */
 ?>
+<div class="white-form">
+    <h3>اطلاعات کتاب <?= CHtml::encode($model->title); ?></h3>
+    <p class="description">جهت ثبت اطلاعات کتاب لطفا فرم زیر را پر کنید.</p>
 
-<div class="container">
-    <h3>ویرایش کتاب <?= $model->title; ?></h3>
+    <?php $this->renderPartial("//partial-views/_flashMessage") ?>
+
     <ul class="nav nav-tabs">
         <li <?= !isset($step) || $step == 1 ?'class="active"':''; ?>>
             <a data-toggle="tab" href="#info">اطلاعات کتاب</a>
         </li>
         <li class="<? if($step == 2)echo 'active';elseif($step<2)echo 'disabled';?>">
-            <a data-toggle="<?= ($step == 2)?'tab':''?>" href="#packages">نوبت چاپ</a>
+            <a data-toggle="<?= ($step == 2)?'tab':''?>" href="#packages">نوبت های چاپ کتاب</a>
         </li>
         <li class="<? if($step == 3)echo 'active';elseif($step<3)echo 'disabled';?>">
             <a data-toggle="<?= ($step == 3)?'tab':''?>" href="#images">تصاویر کتاب</a>
@@ -22,7 +25,6 @@
     </ul>
 
     <div class="tab-content">
-        <?php $this->renderPartial('//layouts/_flashMessage');?>
         <div id="info" class="tab-pane fade <?= $step == 1?'in active':''; ?>">
             <?php if($step>= 1):?>
                 <?php $this->renderPartial('_form', array(

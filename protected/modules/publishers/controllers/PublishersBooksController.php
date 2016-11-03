@@ -41,7 +41,8 @@ class PublishersBooksController extends Controller
         );
     }
 
-    public function actions(){
+    public function actions()
+    {
         return array(
             'upload' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
@@ -52,7 +53,7 @@ class PublishersBooksController extends Controller
                         'minWidth' => 400,
                         'minHeight' => 590,
                     ),
-                    'acceptedTypes' => array('jpg','jpeg','png')
+                    'acceptedTypes' => array('jpg', 'jpeg', 'png')
                 )
             ),
             'uploadFile' => array(
@@ -60,7 +61,7 @@ class PublishersBooksController extends Controller
                 'attribute' => 'file_name',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('doc','docx')
+                    'acceptedTypes' => array('doc', 'docx')
                 )
             ),
             'uploadImage' => array(
@@ -68,7 +69,7 @@ class PublishersBooksController extends Controller
                 'attribute' => 'image',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('jpg','jpeg','png')
+                    'acceptedTypes' => array('jpg', 'jpeg', 'png')
                 )
             ),
             'deleteUpload' => array(
@@ -125,7 +126,7 @@ class PublishersBooksController extends Controller
             $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
             if (!is_dir($bookIconsDIR))
                 mkdir($bookIconsDIR);
-            $tmpUrl = Yii::app()->baseUrl.'/uploads/temp/';
+            $tmpUrl = Yii::app()->baseUrl . '/uploads/temp/';
 
             Yii::app()->theme = 'frontend';
             $this->layout = '//layouts/panel';
@@ -143,13 +144,13 @@ class PublishersBooksController extends Controller
                 $model->attributes = $_POST['Books'];
                 $model->publisher_id = $user->user_id;
                 $model->confirm = 'pending';
-                $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
-                $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
+                $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
+                $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
                 if ($model->save()) {
                     if ($iconFlag)
-                        @rename($tmpDIR . $model->icon,$bookIconsDIR . $model->icon);
+                        @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
                     Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد. لطفا مراحل بعدی را نیز انجام دهید.');
-                    $this->redirect(array('/publishers/books/update/' . $model->id.'?step=2'));
+                    $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
                 } else {
                     Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
                 }
@@ -174,7 +175,7 @@ class PublishersBooksController extends Controller
     public function actionUpdate($id)
     {
         $step = 1;
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $model = $this->loadModel($id);
         if ($model->publisher_id != Yii::app()->user->getId()) {
@@ -215,14 +216,14 @@ class PublishersBooksController extends Controller
                         'serverName' => $image->image,
                     );
 
-        foreach($model->showTags as $tag)
-            array_push($model->formTags,$tag->title);
-        foreach($model->seoTags as $tag)
-            array_push($model->formSeoTags,$tag->title);
+        foreach ($model->showTags as $tag)
+            array_push($model->formTags, $tag->title);
+        foreach ($model->seoTags as $tag)
+            array_push($model->formSeoTags, $tag->title);
 
         if (isset($_POST['packages-submit'])) {
             if (empty($model->packages))
-                Yii::app()->user->setFlash('failed', 'نوبت چاپ ای تعریف نشده است.');
+                Yii::app()->user->setFlash('failed', 'نوبت چاپی تعریف نشده است.');
             else
                 $this->redirect($this->createUrl('/publishers/books/update/' . $model->id . '?step=3'));
         }
@@ -236,11 +237,11 @@ class PublishersBooksController extends Controller
             }
             $model->attributes = $_POST['Books'];
             $model->confirm = 'pending';
-            $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
-            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
+            $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
             if ($model->save()) {
                 if ($iconFlag)
-                    @rename($tmpDIR . $model->icon,$bookIconsDIR . $model->icon);
+                    @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
                 $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
             } else {
@@ -316,7 +317,7 @@ class PublishersBooksController extends Controller
     {
         $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
-        if(!is_dir($uploadDir))
+        if (!is_dir($uploadDir))
             mkdir($uploadDir);
         if (isset($_POST['BookImages']['image'])) {
             $flag = true;
@@ -353,13 +354,13 @@ class PublishersBooksController extends Controller
 
             $model = new BookPackages();
             $model->attributes = $_POST;
+            if (!isset($_POST['sale_printed']))
+                $model->sale_printed = 0;
             if ($model->save()) {
                 $response = ['status' => true, 'fileName' => CHtml::encode($model->file_name)];
                 rename($tempDir . DIRECTORY_SEPARATOR . $_POST['file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
-            } else {
+            } else
                 $response = ['status' => false, 'message' => $this->implodeErrors($model)];
-                @unlink($tempDir . '/' . $_POST['file_name']);
-            }
 
             echo CJSON::encode($response);
             Yii::app()->end();

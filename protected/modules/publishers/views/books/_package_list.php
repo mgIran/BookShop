@@ -2,24 +2,23 @@
 /* @var $data BookPackages*/
 ?>
 
-<div class="tr">
-    <div class="col-lg-2 col-md-1 col-sm-4 col-xs-8"><?php echo CHtml::encode($data->package_name);?></div>
-    <div class="col-lg-1 col-md-1 col-sm-4 hidden-xs"><?php echo CHtml::encode($data->version);?></div>
-    <div class="col-lg-2 col-md-2 hidden-sm hidden-xs"><?php echo Controller::fileSize(Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$data->file_name);?></div>
-    <div class="col-lg-2 col-md-2 hidden-sm hidden-xs"><?php echo JalaliDate::date('d F Y', $data->create_date);?></div>
-    <div class="col-lg-2 col-md-2 hidden-sm hidden-xs"><?php if($data->status=='accepted')echo JalaliDate::date('d F Y', $data->publish_date);else echo '-';?></div>
-    <div class="col-lg-1 col-md-1 hidden-sm hidden-xs"><?php echo Controller::parseNumbers(number_format($data->price)).' تومان'?></div>
-    <div class="col-lg-1 col-md-1 hidden-sm hidden-xs"><?php echo Controller::parseNumbers(number_format($data->printed_price)).' تومان'?></div>
-    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4">
+<tr>
+    <td><?php echo CHtml::encode($data->version);?></td>
+    <td><?php echo Controller::fileSize(Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$data->file_name);?></td>
+    <td><?php echo JalaliDate::date('d F Y', $data->create_date);?></td>
+    <td><?php if($data->status=='accepted')echo JalaliDate::date('d F Y', $data->publish_date);else echo '-';?></td>
+    <td><?php echo Controller::parseNumbers(number_format($data->price)).' تومان'?></td>
+    <td><?php echo Controller::parseNumbers(number_format($data->printed_price)).' تومان'?></td>
+    <td>
         <span class="label <?php if($data->status=='accepted')echo 'label-success';elseif($data->status=='refused' || $data->status=='change_required')echo 'label-danger';else echo 'label-info';?>">
             <?php echo CHtml::encode($data->statusLabels[$data->status]);?>
         </span>
         <?php if($data->status=='refused' or $data->status=='change_required'):?>
             <a class="btn btn-info btn-xs" style="margin-right: 5px;margin-top: 5px;" data-toggle="collapse" data-parent="#packages-list" href="#reason-<?php echo $data->id?>">دلیل</a>
         <?php endif;?>
-    </div>
+    </td>
     <?php if($data->status=='refused' or $data->status=='change_required'):?>
-        <div id="reason-<?php echo $data->id?>" class="collapse col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <td id="reason-<?php echo $data->id?>" class="collapse">
             <div class="reason-collapse">
                 <?php if($data->status=='refused'):?>
                     <p>این نوبت چاپ به دلایل زیر رد شده است:</p>
@@ -28,6 +27,6 @@
                 <?php endif;?>
                 <?php echo CHtml::encode($data->reason);?>
             </div>
-        </div>
+        </td>
     <?php endif;?>
-</div>
+</tr>

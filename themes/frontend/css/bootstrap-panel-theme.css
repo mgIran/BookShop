@@ -47,11 +47,9 @@ a:active{
     left: 0;
     z-index: 2;
     box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    -webkit-transition: all 0.4s ease 0s;
-    -moz-transition: all 0.4s ease 0s;
-    -ms-transition: all 0.4s ease 0s;
-    -o-transition: all 0.4s ease 0s;
-    transition: all 0.4s ease 0s;
+}
+.modal-open .navbar-default {
+    right:17px;
 }
 
 .navbar-brand,
@@ -1439,4 +1437,18 @@ small.description{
 }
 .update-publisher-form{
     padding-top: 20px;
+}
+ul.tagit{
+    border-radius: 4px;
+    background: #fafafa;
+    border-color: #eee;
+    color: #555;
+    height:100px;
+    line-height: 14px;
+    padding:5px 10px;
+    font-size: 14px;
+}
+.uploader-message.error{
+    color: #e74e40;
+    font-size: 13px;
 }

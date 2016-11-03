@@ -8,31 +8,36 @@ Yii::app()->clientScript->registerCss('inline',"
 ");
 ?>
 
-<div class="container-fluid packages-list-container">
+<div class="packages-list-container">
     <a class="btn btn-success" href="#package-modal" data-toggle="modal"><i class="icon icon-plus"></i> ثبت نوبت چاپ</a>
-    <div class="table text-center">
-        <div class="thead">
-            <div class="col-lg-2 col-md-1 col-sm-4 col-xs-8">نام نوبت چاپ</div>
-            <div class="col-lg-1 col-md-1 col-sm-4 hidden-xs">نسخه</div>
-            <div class="col-lg-2 col-md-2 hidden-sm hidden-xs">حجم</div>
-            <div class="col-lg-2 col-md-3 hidden-sm hidden-xs">تاریخ بارگذاری</div>
-            <div class="col-lg-2 col-md-3 hidden-sm hidden-xs">تاریخ انتشار</div>
-            <div class="col-lg-1 col-md-1 hidden-sm hidden-xs">قیمت اینترنتی</div>
-            <div class="col-lg-1 col-md-1 hidden-sm hidden-xs">قیمت چاپی</div>
-            <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4">وضعیت</div>
-        </div>
-        <div class="tbody">
-            <?php $this->widget('zii.widgets.CListView', array(
-                'id'=>'packages-list',
-                'dataProvider'=>$dataProvider,
-                'itemView'=>'_package_list',
-                'template'=>'{items}'
-            ));?>
-        </div>
-    </div>
+    <table class="table">
+        <thead class="thead">
+            <tr>
+                <th>نسخه چاپ</th>
+                <th>حجم فایل</th>
+                <th>تاریخ بارگذاری</th>
+                <th>تاریخ انتشار</th>
+                <th>قیمت نسخه دیجیتال</th>
+                <th>قیمت نسخه چاپی</th>
+                <th>وضعیت</th>
+            </tr>
+        </thead>
+    <?php $this->widget('zii.widgets.CListView', array(
+        'id'=>'packages-list',
+        'dataProvider'=>$dataProvider,
+        'itemView'=>'_package_list',
+        'ajaxUrl'=>array('/publishers/books/update/'.$model->id),
+        'itemsTagName'=>'tr',
+        'tagName'=>'tbody',
+        'emptyTagName'=>'td colspan="8"',
+        'emptyCssClass'=>'text-center',
+        'template'=>'{items}',
+        'htmlOptions'=>array('class'=>'table'),
+    ));?>
+    </table>
 
     <?php echo CHtml::beginForm();?>
-        <?php echo CHtml::submitButton('ادامه', array('class'=>'btn btn-success', 'name'=>'packages-submit'));?>
+        <?php echo CHtml::submitButton('ادامه', array('class'=>'btn btn-default', 'name'=>'packages-submit'));?>
     <?php echo CHtml::endForm();?>
 
     <div id="package-modal" class="modal fade" role="dialog">
@@ -69,18 +74,20 @@ Yii::app()->clientScript->registerCss('inline',"
                                 ));?>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <?php echo CHtml::textField('version', '', array('class'=>'form-control', 'placeholder'=>'ورژن *'));?>
+                                        <?php echo CHtml::textField('version', '', array('class'=>'form-control', 'placeholder'=>'نسخه چاپ *'));?>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <?php echo CHtml::textField('package_name', '', array('class'=>'form-control', 'placeholder'=>'نام نوبت چاپ *'));?>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <?php //echo CHtml::textField('package_name', '', array('class'=>'form-control', 'placeholder'=>'نام نوبت چاپ *'));?>
                                         <?php echo CHtml::textField('isbn', '', array('class'=>'form-control', 'placeholder'=>'شابک *'));?>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت خرید اینترنتی * (تومان)'));?>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال * (تومان)'));?>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-top: 15px;">
+                                        <?php echo CHtml::checkBox('sale_printed', false, array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
+                                        <?php echo CHtml::label('میخواهم نسخه چاپی این کتاب را هم بفروشم.', 'sale_printed');?>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse" id="printed-price">
                                         <?php echo CHtml::textField('printed_price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه چاپی * (تومان)'));?>
                                     </div>
                                 </div>
@@ -104,7 +111,7 @@ Yii::app()->clientScript->registerCss('inline',"
                                             }",
                                             'success'=>"js:function(data){
                                                 if(data.status){
-                                                    $.fn.yiiListView.update('packages-list',{});
+                                                    $.fn.yiiListView.update('packages-list');
                                                     $('.uploader-message').text('');
                                                     $('#package-modal').modal('hide');
                                                     $('.dz-preview').remove();
