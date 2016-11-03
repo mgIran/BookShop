@@ -1524,3 +1524,17 @@ small.description{
 .sidebar-mini .navbar-collapse{
     padding-right: 100px;
 }
+ul.tagit{
+    border-radius: 4px;
+    background: #fafafa;
+    border-color: #eee;
+    color: #555;
+    height:100px;
+    line-height: 14px;
+    padding:5px 10px;
+    font-size: 14px;
+}
+.uploader-message.error {
+    color: #e74e40;
+    font-size: 13px;
+}
