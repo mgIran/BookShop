@@ -117,7 +117,8 @@ class PublishersPanelController extends Controller
 
     public function actionDiscount()
 	{
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
+        $this->layout = '//layouts/panel';
         $model = new BookDiscounts();
 
         if(isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form') {
@@ -174,9 +175,10 @@ class PublishersPanelController extends Controller
         $criteria=new CDbCriteria();
         $criteria->addCondition('publisher_id = :user_id');
         $criteria->addCondition('deleted = 0');
-        $criteria->addCondition('price != 0');
+        $criteria->addCondition('lastPackage.price != 0');
         $criteria->addCondition('title != ""');
         $criteria->with[] = 'discount';
+        $criteria->with[] = 'lastPackage';
         $criteria->addCondition('discount.book_id IS NULL');
         $criteria->params=array(':user_id'=>Yii::app()->user->getId());
 

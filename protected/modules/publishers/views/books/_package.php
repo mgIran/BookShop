@@ -35,10 +35,10 @@ Yii::app()->clientScript->registerCss('inline',"
         'htmlOptions'=>array('class'=>'table'),
     ));?>
     </table>
-
-    <?php echo CHtml::beginForm();?>
-        <?php echo CHtml::submitButton('ادامه', array('class'=>'btn btn-default', 'name'=>'packages-submit'));?>
-    <?php echo CHtml::endForm();?>
+<!---->
+<!--    --><?php //echo CHtml::beginForm();?>
+<!--        --><?php //echo CHtml::submitButton('ادامه', array('class'=>'btn btn-default', 'name'=>'packages-submit'));?>
+<!--    --><?php //echo CHtml::endForm();?>
 
     <div id="package-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
