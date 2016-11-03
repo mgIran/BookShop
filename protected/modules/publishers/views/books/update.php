@@ -16,12 +16,12 @@
         <li <?= !isset($step) || $step == 1 ?'class="active"':''; ?>>
             <a data-toggle="tab" href="#info">اطلاعات کتاب</a>
         </li>
-        <li class="<? if($step == 2)echo 'active';elseif($step<2)echo 'disabled';?>">
-            <a data-toggle="<?= ($step == 2)?'tab':''?>" href="#packages">نوبت های چاپ کتاب</a>
+        <li>
+            <a data-toggle="tab" href="#packages">نوبت های چاپ کتاب</a>
         </li>
-        <li class="<? if($step == 3)echo 'active';elseif($step<3)echo 'disabled';?>">
-            <a data-toggle="<?= ($step == 3)?'tab':''?>" href="#images">تصاویر کتاب</a>
-        </li>
+<!--        <li class="--><?// if($step == 3)echo 'active';elseif($step<3)echo 'disabled';?><!--">-->
+<!--            <a data-toggle="--><?//= ($step == 3)?'tab':''?><!--" href="#images">تصاویر کتاب</a>-->
+<!--        </li>-->
     </ul>
 
     <div class="tab-content">
@@ -42,14 +42,14 @@
                 'for'=>(Yii::app()->request->getParam('new')=='1')?'new_book':'old_book'
             ));?>
         </div>
-        <div id="images" class="tab-pane fade <?= $step == 3?'in active':''; ?>">
-            <?php if($step>=3):?>
-                <?php $this->renderPartial('_images_form', array(
-                    'model'=>$model,
-                    'imageModel'=>$imageModel,
-                    'images' => $images
-                ));?>
-            <?php endif;?>
-        </div>
+<!--        <div id="images" class="tab-pane fade --><?//= $step == 3?'in active':''; ?><!--">-->
+<!--            --><?php //if($step>=3):?>
+<!--                --><?php //$this->renderPartial('_images_form', array(
+//                    'model'=>$model,
+//                    'imageModel'=>$imageModel,
+//                    'images' => $images
+//                ));?>
+<!--            --><?php //endif;?>
+<!--        </div>-->
     </div>
 </div>

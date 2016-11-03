@@ -44,7 +44,8 @@ class TicketsManageController extends Controller
 
 	public function beforeAction($action)
 	{
-		Yii::app()->theme = 'market';
+		Yii::app()->theme='frontend';
+		$this->layout='//layouts/panel';
 		return parent::beforeAction($action);
 	}
 

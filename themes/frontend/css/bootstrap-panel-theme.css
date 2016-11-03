@@ -1538,3 +1538,72 @@ ul.tagit{
     color: #e74e40;
     font-size: 13px;
 }
+#message-list {
+    border-top: 1px solid #eee;
+    margin-top: 30px;
+}
+.message-item {
+    border-bottom: 1px solid #f1f1f1;
+    margin: 15px 0;
+    position: relative;
+}
+.message-item .avatar {
+    background-color: #f0f0f0;
+    border: 1px solid #dadada;
+    border-radius: 10px;
+    color: #aaa;
+    display: inline-block;
+    font-size: 24px;
+    height: 60px;
+    margin-left: 15px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 60px;
+}
+.avatar .icon {
+    display: block;
+    margin-top: -13.5px;
+    position: relative;
+    top: 50%;
+}
+.ticket-box .icon {
+    font-size: 30px;
+}
+.ticket-box .form {
+    display: block;
+    overflow: hidden;
+}
+.message-date {
+    display: block;
+    font-size: 12px;
+    font-weight: 300;
+    left: 0;
+    overflow: hidden;
+    padding: 0 0 0 15px;
+    position: absolute;
+    right: 75px;
+    text-align: left;
+    top: 0;
+}
+.message-content {
+    display: block;
+    font-size: 14px;
+    overflow: hidden;
+    padding: 30px 75px 30px 15px;
+    text-align: justify;
+}
+.message-date .title {
+    font-size: 16px;
+    font-weight: 500;
+}
+.attachment-link {
+    border-bottom: 1px dashed #26bede;
+    color: #26bede;
+}
+.attachment-link:hover, .attachment-link:active, .attachment-link:focus {
+    border-bottom: 1px dashed #0084be;
+    color: #0084be;
+}

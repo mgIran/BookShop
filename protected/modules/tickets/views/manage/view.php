@@ -4,8 +4,7 @@
 /* @var $model Tickets */
 
 ?>
-
-<div class="container dashboard-container ticket-box">
+<div class="transparent-form ticket-box">
 	<div class="container-fluid tab-content">
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-left">
 			<?
@@ -57,12 +56,12 @@
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 pull-right">
 			<?
 			if($model->status == 'close'):
-				$this->renderPartial('//layouts/_alertMessage',array(
+				$this->renderPartial('//partial-views/_alertMessage',array(
 					'type' => 'danger',
 					'message' => 'تیکت مورد نظر بسته شده و امکان ارسال پیام وجود ندارد.'
 				));
 			elseif($model->status == 'pending'):
-				$this->renderPartial('//layouts/_alertMessage',array(
+				$this->renderPartial('//partial-views/_alertMessage',array(
 						'type' => 'warning',
 						'message' => 'پیام شما در حال بررسی توسط کارشناس می باشد.'
 				));
@@ -73,7 +72,7 @@
 				<h5>موضوع: <?= $model->subject ?></h5>
 				<span class="ticket-date">تاریخ ایجاد: <?= Controller::parseNumbers(JalaliDate::date("Y/m/d H:i:s" ,$model->date)) ?></span>
 			</div>
-			<? $this->renderPartial('//layouts/_flashMessage') ?>
+			<? $this->renderPartial('//partial-views/_flashMessage') ?>
 			<?php
 			if($model->status != 'close')
 				$this->renderPartial('tickets.views.messages._form',array(

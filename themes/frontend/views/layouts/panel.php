@@ -66,7 +66,7 @@
         <ul class="nav navbar-nav navbar-left">
             <li><a href="<?= $this->createUrl('/tickets/manage/');?>"><i class="messages-icon"></i></a></li>
             <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
-            <li><a href="<?php echo $this->createUrl('logout');?>"><i class="logout-icon"></i></a></li>
+            <li><a href="<?php echo $this->createUrl('/logout');?>"><i class="logout-icon"></i></a></li>
         </ul>
     </div>
 </nav>

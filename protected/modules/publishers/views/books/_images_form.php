@@ -19,7 +19,7 @@
     )
 ));
 ?>
-<?= $this->renderPartial('//layouts/_flashMessage' ,array('prefix' => 'images-')); ?>
+<?= $this->renderPartial('//partial-views/_flashMessage' ,array('prefix' => 'images-')); ?>
 <div class="form-group">
     <?php
     $this->widget('ext.dropZoneUploader.dropZoneUploader', array(

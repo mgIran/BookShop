@@ -29,13 +29,13 @@
             <?php else:?>
                 <?php foreach($model as $key => $ticket):?>
                     <tr>
-                        <a href="<?= $this->createUrl('/tickets/'.$ticket->code) ?>">
-                            <td><?php echo $ticket->code ?></td>
-                            <td><?php echo CHtml::encode($ticket->subject);?></td>
-                            <td><?php echo CHtml::encode($ticket->department->title);?></td>
-                            <td><?php echo CHtml::encode($ticket->statusLabels[$ticket->status]);?></td>
-                            <td><?php echo JalaliDate::date('d F Y H:i', $ticket->date);?></td>
-                        </a>
+                        <td><a href="<?= $this->createUrl('/tickets/'.$ticket->code) ?>">
+                            <?php echo $ticket->code ?></a></td>
+                        <td><a href="<?= $this->createUrl('/tickets/'.$ticket->code) ?>">
+                            <?php echo CHtml::encode($ticket->subject);?></a></td>
+                        <td><?php echo CHtml::encode($ticket->department->title);?></td>
+                        <td><?php echo CHtml::encode($ticket->statusLabels[$ticket->status]);?></td>
+                        <td><?php echo JalaliDate::date('d F Y H:i', $ticket->date);?></td>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>
