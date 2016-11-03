@@ -34,10 +34,10 @@
     ?>
 </head>
 <body>
-
+<div class="overlay fade"></div>
 <nav class="navbar navbar-default">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-menu" aria-expanded="false">
+        <button type="button" class="navbar-toggle collapsed">
             <span class="sr-only">نمایش / پنهان کردن منو</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -47,7 +47,7 @@
         <a class="navbar-brand" href="<?php echo Yii::app()->createUrl('site'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
     </div>
 
-    <div class="collapse navbar-collapse" id="mobile-menu">
+    <div class="navbar-custom" id="mobile-menu">
         <?php $form = $this->beginWidget('CActiveForm',array(
             'id' => 'header-serach-form',
             'action' => array('/books/search'),
@@ -63,7 +63,7 @@
                 </span>
             </div>
         <?php $this->endWidget(); ?>
-        <ul class="nav navbar-nav navbar-left">
+        <ul class="navbar-buttons navbar-left">
             <li><a href="<?= $this->createUrl('/tickets/manage/');?>"><i class="messages-icon"></i></a></li>
             <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
             <li><a href="<?php echo $this->createUrl('/logout');?>"><i class="logout-icon"></i></a></li>
