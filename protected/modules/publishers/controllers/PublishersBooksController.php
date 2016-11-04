@@ -26,7 +26,8 @@ class PublishersBooksController extends Controller
                 'uploadFile',
                 'deleteUploadFile',
                 'images',
-                'savePackage'
+                'savePackage',
+                'getPackages'
             ),
         );
     }
@@ -37,7 +38,8 @@ class PublishersBooksController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadFile, images, savePackage', // perform access control for CRUD operations
+            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadFile, images, savePackage, getPackages', // perform access control for CRUD operations
+            'ajaxOnly + getPackages'
         );
     }
 
@@ -225,7 +227,7 @@ class PublishersBooksController extends Controller
             if (empty($model->packages))
                 Yii::app()->user->setFlash('failed', 'نوبت چاپی تعریف نشده است.');
             else
-                $this->redirect($this->createUrl('/publishers/books/update/' . $model->id . '?step=3'));
+                $this->redirect($this->createUrl('/publishers/panel'));
         }
 
         if (isset($_POST['Books'])) {
@@ -365,5 +367,12 @@ class PublishersBooksController extends Controller
             echo CJSON::encode($response);
             Yii::app()->end();
         }
+    }
+
+    public function actionGetPackages($id)
+    {
+        $model=$this->loadModel($id);
+        foreach($model->packages as $package)
+            $this->renderPartial('_package_list', array('data'=>$package));
     }
 }

@@ -168,7 +168,6 @@ class PublishersPanelController extends Controller
             ':now' => time()
         );
         BookDiscounts::model()->deleteAll($criteria);
-        //
 
         Yii::app()->getModule('users');
 

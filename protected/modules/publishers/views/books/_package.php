@@ -1,5 +1,5 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $model Books */
 /* @var $dataProvider CActiveDataProvider */
 /* @var $for string */
