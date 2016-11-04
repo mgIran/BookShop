@@ -1,6 +1,7 @@
 @media (max-width: 767px) {
     .page-container{
         padding-top: 60px;
+        min-height: 910px;
     }
     .navbar-brand, .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover{
         height: 60px;
@@ -12,7 +13,10 @@
     .navbar-brand{
         z-index: 101;
     }
-    .navbar-brand,
+    .sidebar .navbar-brand{
+        top: -60px;
+        position: absolute;
+    }
     .sidebar-mini .sidebar,
     .sidebar{
         position: absolute;z-index: 100;
@@ -28,9 +32,7 @@
         -ms-transition: all 0.3s linear;
         -o-transition: all 0.3s linear;
         transition: all 0.3s linear;
-
     }
-    body.open-sidebar .navbar-brand,
     body.open-sidebar.sidebar-mini .sidebar,
     body.open-sidebar .sidebar{
         -webkit-transform: translateX(0);
@@ -220,6 +222,11 @@
         column-count:2;
     }
 }
+@media screen and (max-width: 600px){
+    #header-serach-form{
+        display: none;
+    }
+}
 @media screen and (max-width: 480px){
     .thumbnail-list .thumbnail-container{
         width: 100%;
@@ -273,6 +280,20 @@
     }
     .login-box{
         padding: 0 2% !important;
+    }
+}
+@media screen and (max-width: 360px){
+    .sidebar .navbar-brand,
+    .sidebar-mini .sidebar,
+    .sidebar{
+        width: 250px;
+    }
+    .navbar-custom {
+        padding-right: 60px;
+        padding-left: 10px;
+    }
+    .navbar-default .navbar-buttons > li > a{
+        padding: 0 8px;
     }
 }
 @media (min-width: 480px) and (max-width: 650px){
@@ -463,53 +484,3 @@
         right: -moz-calc((100% - 1140px) / 2 + 30px);
     }
 }
-
-
-
-
-
-
-
-
-
-/*@media (max-width: 1200px) {
-    .thumbnail-list .thumbnail-container {
-        width: 25%;
-    }
-    .thumbnail-list .thumbnail-container:nth-child(n+9){
-        display: none;
-    }
-}
-@media (min-width: 1200px) {
-
-}
-@media (min-width: 1024px) {
-    .navbar-brand{
-        padding: 10px 0;
-    }
-    .navbar-form{
-        width: 35%;
-    }
-}
-@media (max-width: 992px) {
-    .thumbnail-list .thumbnail-container {
-        width: 33.3333%;
-    }
-    .thumbnail-list .thumbnail-container:nth-child(n+7){
-        display: none;
-    }
-}
-@media (min-width: 992px) {
-    .thumbnail-list .thumbnail-container {
-        width: 25%;
-    }
-    .thumbnail-list .thumbnail-container:nth-child(n+9){
-        display: none;
-    }
-}
-@media (max-width: 650px) {
-    .thumbnail-list .thumbnail-container {
-        width: 100%;
-    }
-}
-*/

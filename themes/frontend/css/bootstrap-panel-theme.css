@@ -1633,3 +1633,13 @@ ul.tagit{
     opacity: 1;
     visibility: visible;
 }
+.report-sale .book-item{
+    margin-bottom: 15px;
+}
+.report-sale .book-item img{
+    width: 50px;
+}
+.report-sale .btn.btn-info{
+    padding: 7px 15px;
+    margin-top: 25px;
+}

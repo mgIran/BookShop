@@ -107,25 +107,25 @@ class Books extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'bookBuys' => array(self::HAS_MANY, 'BookBuys', 'book_id'),
-				'images' => array(self::HAS_MANY, 'BookImages', 'book_id'),
-				'publisher' => array(self::BELONGS_TO, 'Users', 'publisher_id'),
-				'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
-				'discount' => array(self::HAS_ONE, 'BookDiscounts', 'book_id',
-                    'condition' => 'discount.start_date < :time AND discount.end_date > :time',
-                    'params'=>array(':time' => time()),
-                    'order'=>'discount.id DESC'
-                ),
-				'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
-				'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id' ,'on' => 'lastPackage.status = "accepted"','order'=>'lastPackage.publish_date DESC'),
-				'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
-				'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
-				'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
-				'showTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 0'),
-				'seoTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 1'),
-				'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id)'),
-				'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
-				'tagsRel' => array(self::HAS_MANY, 'BookTagRel', 'book_id'),
+			'bookBuys' => array(self::HAS_MANY, 'BookBuys', 'book_id'),
+			'images' => array(self::HAS_MANY, 'BookImages', 'book_id'),
+			'publisher' => array(self::BELONGS_TO, 'Users', 'publisher_id'),
+			'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
+			'discount' => array(self::HAS_ONE, 'BookDiscounts', 'book_id',
+				'on' => 'discount.start_date < :time AND discount.end_date > :time',
+				'params'=>array(':time' => time()),
+				'order'=>'discount.id DESC'
+			),
+			'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
+			'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id' ,'on' => 'lastPackage.status = "accepted"','order'=>'lastPackage.publish_date DESC'),
+			'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
+			'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
+			'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
+			'showTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 0'),
+			'seoTags' => array(self::MANY_MANY, 'Tags', '{{book_tag_rel}}(book_id,tag_id)', 'on' => 'for_seo = 1'),
+			'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id)'),
+			'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
+			'tagsRel' => array(self::HAS_MANY, 'BookTagRel', 'book_id'),
 		);
 	}
 

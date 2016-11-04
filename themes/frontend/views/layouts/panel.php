@@ -22,12 +22,17 @@
     $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
     $cs->registerCssFile($baseUrl.'/css/bootstrap-rtl.min.css');
     $cs->registerCssFile($baseUrl.'/css/font-awesome.css');
+    $cs->registerCssFile($baseUrl.'/css/persian-datepicker-0.4.5.min.css');
+    $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
     $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css');
     $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.cookie.js');
+    $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
+    $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.script.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/panel.script.js', CClientScript::POS_END);
@@ -44,13 +49,13 @@
             <span class="icon-bar"></span>
         </button>
         <div class="pin"></div>
-        <a class="navbar-brand" href="<?php echo Yii::app()->createUrl('site'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
+        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
     </div>
 
     <div class="navbar-custom" id="mobile-menu">
         <?php $form = $this->beginWidget('CActiveForm',array(
             'id' => 'header-serach-form',
-            'action' => array('/books/search'),
+            'action' => array('/book/search'),
             'method' => 'get',
             'htmlOptions' => array(
                 'class' => 'navbar-form navbar-center'
@@ -72,6 +77,7 @@
 </nav>
 <div class="page-container">
     <div class="sidebar">
+        <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
         <div class="profile">
             <div class="profile-image">
                 <img src="<?php echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->baseUrl.'/uploads/users/avatar/'.Yii::app()->user->avatar;?>" alt="<?= $this->userDetails->getShowName(); ?>">

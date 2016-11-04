@@ -136,10 +136,10 @@ class PublishersPanelController extends Controller
             if($model->save())
             {
                 if(isset($_GET['ajax'])) {
-                    echo CJSON::encode(array('state' => 'ok','msg' => 'تخفیف با موفقیت اعمال شد.'));
+                    echo CJSON::encode(array('status' => true,'msg' => 'تخفیف با موفقیت اعمال شد.'));
                     Yii::app()->end();
                 } else {
-                    Yii::app()->user->setFlash('discount-success','تخفیف با موفقیت اعمال شد.');
+                    Yii::app()->user->setFlash('discount-success','اعمال تخفیف با موفقیت اعمال شد.');
                     $this->refresh();
                 }
             }
@@ -183,7 +183,6 @@ class PublishersPanelController extends Controller
         $criteria->params=array(':user_id'=>Yii::app()->user->getId());
 
         $books = CHtml::listData(Books::model()->findAll($criteria),'id' ,'title');
-
         $this->render('discount', array(
             'booksDataProvider'=>$booksDataProvider,
             'books' => $books
@@ -370,7 +369,7 @@ class PublishersPanelController extends Controller
      */
     public function actionSettlement()
     {
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         $this->layout='//layouts/panel';
 
         Yii::app()->getModule('users');
@@ -415,7 +414,7 @@ class PublishersPanelController extends Controller
      */
     public function actionSales()
     {
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         $this->layout='//layouts/panel';
 
         // user's books
