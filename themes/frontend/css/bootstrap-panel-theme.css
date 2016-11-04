@@ -125,7 +125,7 @@ a:active{
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
-.navbar-collapse{
+.navbar-custom{
     padding-right: 330px;
     padding-left: 30px;
     position: relative;
@@ -197,19 +197,25 @@ a:active{
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
-
-.navbar-default .navbar-nav > li > a {
+.navbar-buttons{
+    list-style: none;
+    padding: 0;
+}
+.navbar-default .navbar-buttons > li {
+    display: inline-block;
+}
+.navbar-default .navbar-buttons > li > a {
+    padding: 0 15px;
     height: 80px;
+    display: inline-block;
     line-height: 80px;
-    padding-top: 0;
-    padding-bottom: 0;
     -webkit-transition: all 0.4s;
     -moz-transition: all 0.4s;
     -ms-transition: all 0.4s;
     -o-transition: all 0.4s;
     transition: all 0.4s;
 }
-.navbar-default .navbar-nav > li > a .badge {
+.navbar-default .navbar-buttons > li > a .badge {
     background: #e74e40;
     padding: 5px 6px 3px;
     font-weight: normal;
@@ -218,8 +224,8 @@ a:active{
     top: 18px;
 }
 
-.navbar-default .navbar-nav > li:focus > a,
-.navbar-default .navbar-nav > li:hover > a {
+.navbar-default .navbar-buttons > li:focus > a,
+.navbar-default .navbar-buttons > li:hover > a {
     background: #f9f9f9;
 }
 .notification-icon{
@@ -1521,7 +1527,7 @@ small.description{
     background-size: 20px;
     margin: 0;
 }
-.sidebar-mini .navbar-collapse{
+.sidebar-mini .navbar-custom{
     padding-right: 100px;
 }
 ul.tagit{
@@ -1606,4 +1612,34 @@ ul.tagit{
 .attachment-link:hover, .attachment-link:active, .attachment-link:focus {
     border-bottom: 1px dashed #0084be;
     color: #0084be;
+}
+.overlay{
+    position: fixed;
+    top:0;
+    right:0;
+    left: 0;
+    bottom:0;
+    z-index:98;
+    background-color: rgba(0,0,0,0.8);
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.overlay.in{
+    opacity: 1;
+    visibility: visible;
+}
+.report-sale .book-item{
+    margin-bottom: 15px;
+}
+.report-sale .book-item img{
+    width: 50px;
+}
+.report-sale .btn.btn-info{
+    padding: 7px 15px;
+    margin-top: 25px;
 }

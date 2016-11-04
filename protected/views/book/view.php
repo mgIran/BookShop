@@ -3,13 +3,6 @@
 /* @var $model Books */
 /* @var $similar CActiveDataProvider */
 /* @var $bookmarked boolean */
-
-Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/owl.carousel.css');
-Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/owl.theme.default.min.css');
-//Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.mousewheel.min.js');
-Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl.carousel.min.js');
-Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.magnific-popup.min.js');
-Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/magnific-popup.css');
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
 ?>
 <svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg">

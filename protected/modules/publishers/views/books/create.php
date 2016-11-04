@@ -16,9 +16,6 @@
         <li class="disabled" >
             <a href="#">نوبت های چاپ کتاب</a>
         </li>
-        <li class="disabled">
-            <a href="#">تصاویر کتاب</a>
-        </li>
     </ul>
 
     <div class="tab-content">

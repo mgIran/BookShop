@@ -175,7 +175,7 @@ class AjaxUploadAction extends CAction
                                     isset($this->afterSaveActions['resize']['height'])
                                 ) {
                                     $imager = new Imager();
-                                    $imageInfo = $imager->getImageInfo($uploadDir.$model->{$this->attribute});
+                                    $imageInfo = $imager->getImageInfo($uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute});
                                     if ($imageInfo['width'] > $this->afterSaveActions['resize']['width'] || $imageInfo['height'] > $this->afterSaveActions['resize']['height'])
                                         $imager->resize($uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute},
                                             $uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute},

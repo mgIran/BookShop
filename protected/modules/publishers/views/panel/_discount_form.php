@@ -26,7 +26,7 @@
                     {
                         var loading = $("#books-discount-form-parent .loading-container");
                         var url = \''.Yii::app()->createUrl('/publishers/panel/discount/?ajax=books-discount-form').'\';
-                        submitAjaxForm(form ,url ,loading ,"if(html.state == \'ok\') location.reload();");
+                        submitAjaxForm(form ,url ,loading ,"if(html.status) location.reload();");
                     }
                 }'
             )

@@ -118,6 +118,7 @@ class PublishersPanelController extends Controller
     public function actionDiscount()
 	{
         Yii::app()->theme='frontend';
+        $this->layout = '//layouts/panel';
         $model = new BookDiscounts();
 
         if(isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form') {
@@ -135,10 +136,10 @@ class PublishersPanelController extends Controller
             if($model->save())
             {
                 if(isset($_GET['ajax'])) {
-                    echo CJSON::encode(array('state' => 'ok','msg' => 'تخفیف با موفقیت اعمال شد.'));
+                    echo CJSON::encode(array('status' => true,'msg' => 'تخفیف با موفقیت اعمال شد.'));
                     Yii::app()->end();
                 } else {
-                    Yii::app()->user->setFlash('discount-success','تخفیف با موفقیت اعمال شد.');
+                    Yii::app()->user->setFlash('discount-success','اعمال تخفیف با موفقیت اعمال شد.');
                     $this->refresh();
                 }
             }
@@ -175,14 +176,12 @@ class PublishersPanelController extends Controller
         $criteria->addCondition('deleted = 0');
         $criteria->addCondition('lastPackage.price != 0');
         $criteria->addCondition('title != ""');
-        //$criteria->with[] = 'discount';
+        $criteria->with[] = 'discount';
         $criteria->with[] = 'lastPackage';
-        //$criteria->addCondition('discount.book_id IS NULL');
+        $criteria->addCondition('discount.book_id IS NULL');
         $criteria->params=array(':user_id'=>Yii::app()->user->getId());
 
-        //var_dump(Books::model()->findAll($criteria));exit;
         $books = CHtml::listData(Books::model()->findAll($criteria),'id' ,'title');
-
         $this->render('discount', array(
             'booksDataProvider'=>$booksDataProvider,
             'books' => $books
@@ -369,7 +368,7 @@ class PublishersPanelController extends Controller
      */
     public function actionSettlement()
     {
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         $this->layout='//layouts/panel';
 
         Yii::app()->getModule('users');
@@ -414,7 +413,7 @@ class PublishersPanelController extends Controller
      */
     public function actionSales()
     {
-        Yii::app()->theme='market';
+        Yii::app()->theme='frontend';
         $this->layout='//layouts/panel';
 
         // user's books
