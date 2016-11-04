@@ -203,6 +203,7 @@ a:active{
 }
 .navbar-default .navbar-buttons > li {
     display: inline-block;
+    position: relative;
 }
 .navbar-default .navbar-buttons > li > a {
     padding: 0 15px;
