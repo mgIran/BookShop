@@ -63,7 +63,7 @@ class UsersCreditController extends Controller
             $model->date = time();
             if ($model->save()) {
                 // Redirect to payment gateway
-                $MerchantID = '6194e8aa-0589-11e6-9b18-005056a205be';  //Required
+                $MerchantID = '012d3926-9824-11e6-a86b-005056a205be';  //Required
                 $Amount = intval($_POST['amount']); //Amount will be based on Toman  - Required
                 $Description = 'افزایش اعتبار در ' . Yii::app()->name;  // Required
                 $Email = Yii::app()->user->email; // Optional
