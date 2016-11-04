@@ -1,7 +1,8 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $model Books */
 /* @var $dataProvider CActiveDataProvider */
+/* @var $package BookPackages */
 /* @var $for string */
 Yii::app()->clientScript->registerCss('inline',"
 .dropzone.single{width:100%;}
@@ -10,7 +11,8 @@ Yii::app()->clientScript->registerCss('inline',"
 
 <div class="packages-list-container">
     <a class="btn btn-success" href="#package-modal" data-toggle="modal"><i class="icon icon-plus"></i> ثبت نوبت چاپ</a>
-    <table class="table">
+    <div id="packages-list-loading" class="hidden" style="margin-top: 20px;">در حال بروز رسانی لیست...</div>
+    <table class="table book-package">
         <thead class="thead">
             <tr>
                 <th>نسخه چاپ</th>
@@ -22,22 +24,48 @@ Yii::app()->clientScript->registerCss('inline',"
                 <th>وضعیت</th>
             </tr>
         </thead>
-    <?php $this->widget('zii.widgets.CListView', array(
-        'id'=>'packages-list',
-        'dataProvider'=>$dataProvider,
-        'itemView'=>'_package_list',
-        'ajaxUrl'=>array('/publishers/books/update/'.$model->id),
-        'itemsTagName'=>'tr',
-        'tagName'=>'tbody',
-        'emptyTagName'=>'td colspan="8"',
-        'emptyCssClass'=>'text-center',
-        'template'=>'{items}',
-        'htmlOptions'=>array('class'=>'table'),
-    ));?>
+        <tbody id="packages-list">
+        <?php if($dataProvider->totalItemCount==0):?>
+            <tr>
+                <td colspan="7" class="text-center">نتیجه ای یافت نشد.</td>
+            </tr>
+        <?php else:?>
+            <?php foreach($dataProvider->getData() as $package):?>
+                <tr>
+                    <td><?php echo CHtml::encode($package->version);?></td>
+                    <td><?php echo Controller::fileSize(Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$package->file_name);?></td>
+                    <td><?php echo JalaliDate::date('d F Y', $package->create_date);?></td>
+                    <td><?php if($package->status=='accepted')echo JalaliDate::date('d F Y', $package->publish_date);else echo '-';?></td>
+                    <td><?php echo Controller::parseNumbers(number_format($package->price)).' تومان'?></td>
+                    <td><?php echo Controller::parseNumbers(number_format($package->printed_price)).' تومان'?></td>
+                    <td>
+                        <span class="label <?php if($package->status=='accepted')echo 'label-success';elseif($package->status=='refused' || $package->status=='change_required')echo 'label-danger';else echo 'label-info';?>">
+                            <?php echo CHtml::encode($package->statusLabels[$package->status]);?>
+                        </span>
+                        <?php if($package->status=='refused' or $package->status=='change_required'):?>
+                            <a class="btn btn-info btn-xs" style="margin-right: 5px;margin-top: 5px;" data-toggle="collapse" data-parent="#packages-list" href="#reason-<?php echo $data->id?>">دلیل</a>
+                        <?php endif;?>
+                    </td>
+                    <?php if($package->status=='refused' or $package->status=='change_required'):?>
+                        <td id="reason-<?php echo $package->id?>" class="collapse">
+                            <div class="reason-collapse">
+                                <?php if($package->status=='refused'):?>
+                                    <p>این نوبت چاپ به دلایل زیر رد شده است:</p>
+                                <?php elseif($package->status=='change_required'):?>
+                                    <p>این نوبت چاپ نیاز به تغییرات زیر دارد:</p>
+                                <?php endif;?>
+                                <?php echo CHtml::encode($package->reason);?>
+                            </div>
+                        </td>
+                    <?php endif;?>
+                </tr>
+            <?php endforeach;?>
+        <?php endif;?>
+        </tbody>
     </table>
 
     <?php echo CHtml::beginForm();?>
-        <?php echo CHtml::submitButton('ادامه', array('class'=>'btn btn-default', 'name'=>'packages-submit'));?>
+        <?php echo CHtml::submitButton('تایید نهایی', array('class'=>'btn btn-default', 'name'=>'packages-submit'));?>
     <?php echo CHtml::endForm();?>
 
     <div id="package-modal" class="modal fade" role="dialog">
@@ -111,7 +139,15 @@ Yii::app()->clientScript->registerCss('inline',"
                                             }",
                                             'success'=>"js:function(data){
                                                 if(data.status){
-                                                    $.fn.yiiListView.update('packages-list');
+                                                    $('#packages-list-loading').removeClass('hidden');
+                                                    $.ajax({
+                                                        url:'".$this->createUrl('/publishers/books/getPackages', array('id'=>$model->id))."',
+                                                        dataType:'HTML',
+                                                        success: function(data){
+                                                            $('#packages-list').html(data);
+                                                            $('#packages-list-loading').addClass('hidden');
+                                                        }
+                                                    });
                                                     $('.uploader-message').text('');
                                                     $('#package-modal').modal('hide');
                                                     $('.dz-preview').remove();

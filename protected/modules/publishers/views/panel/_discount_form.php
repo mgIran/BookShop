@@ -1,5 +1,5 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $model BookDiscounts */
 /* @var $books [] */
 /* @var $form CActiveForm */
@@ -8,11 +8,9 @@
 <div class="container-fluid" id="books-discount-form-parent">
     <? $this->renderPartial('//partial-views/_loading'); ?>
     <div class="form">
-        <?
-        if($books){
-        ?>
+        <?php if($books){?>
         <span class="form-group description text-danger">
-            توجه: در صورتی که کتاب ای را در لیست تخفیفات قرار دهید تا زمانی که مدت آن به اتمام نرسد، امکان ویرایش یا حذف آن وجود ندارد.
+            توجه: در صورتی که کتابی را در لیست تخفیفات قرار دهید تا زمانی که مدت آن به اتمام نرسد، امکان ویرایش یا حذف آن وجود ندارد.
         </span>
         <?php $form = $this->beginWidget('CActiveForm', array(
             'id' => 'books-discount-form',
@@ -104,6 +102,6 @@
     ');
 
     }else
-        echo 'کتاب ای برای اعمال تخفیف موجود نیست.';
+        echo 'کتابی برای اعمال تخفیف موجود نیست.';
     ?>
 </div>

@@ -2,34 +2,50 @@
 /* @var $this PanelController */
 /* @var $booksDataProvider CActiveDataProvider */
 /* @var $books [] */
+/* @var $discount BookDiscounts */
 ?>
-<div class="container dashboard-container">
-    <? $this->renderPartial('_tab_links',array('active' => $this->action->id)); ?>
+<div class="transparent-form">
+    <h3>تخفیفات</h3>
+    <p class="description">لیست تخفیفاتی که در نظر گرفته اید.</p>
 
-    <a class="btn btn-success publisher-signup-link" href="<?php echo Yii::app()->createUrl('/dashboard')?>">پنل کاربری</a>
-    <div class="tab-content card-container">
-        <div class="tab-pane active">
-            <?php $this->renderPartial('//layouts/_flashMessage', array('prefix'=>'discount-'));?>
-            <a class="btn btn-success" data-toggle="modal" href="#discount-modal"><i class="icon icon-plus"></i> افزودن تخفیف جدید</a>
-            <div class="table text-center">
-                <div class="thead">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-4">عنوان کتاب</div>
-                    <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs">وضعیت</div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">قیمت</div>
-                    <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs">درصد</div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">قیمت با تخفیف</div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5">مدت تخفیف</div>
-                </div>
-                <div class="tbody">
-                    <?php $this->widget('zii.widgets.CListView', array(
-                        'dataProvider'=>$booksDataProvider,
-                        'itemView'=>'_book_discount_list',
-                        'template'=>'{items}'
-                    ));?>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php $this->renderPartial('//partial-views/_flashMessage', array('prefix'=>'discount-'));?>
+
+    <a class="btn btn-success" data-toggle="modal" href="#discount-modal">ثبت تخفیف جدید</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td>عنوان کتاب</td>
+                <td>وضعیت</td>
+                <td>قیمت</td>
+                <td>درصد</td>
+                <td>قیمت با تخفیف</td>
+                <td>مدت تخفیف</td>
+            </tr>
+        </thead>
+        <tbody id="discounts-list">
+        <?php if($booksDataProvider->totalItemCount==0):?>
+            <tr>
+                <td colspan="6" class="text-center">نتیجه ای یافت نشد.</td>
+            </tr>
+        <?php else:?>
+            <?php foreach($booksDataProvider->getData() as $discount):?>
+                <tr>
+                    <td><a target="_blank" href="<?= $this->createUrl('/book/'.$discount->book->id.'/'.urlencode($discount->book->title)) ?>"><?php echo $discount->book->title;?></a></td>
+                    <td><?php echo ($discount->book->status=='enable')?'فعال':'غیر فعال';?></td>
+                    <td><?php echo ($discount->book->price==0)?'رایگان':Controller::parseNumbers(number_format($discount->book->price,0)).' تومان';?></td>
+                    <td><?= Controller::parseNumbers($discount->percent).'%' ?></td>
+                    <td><?= Controller::parseNumbers(number_format($discount->offPrice)).' تومان' ?></td>
+                    <td>
+                        <?php echo Controller::parseNumbers(JalaliDate::date('Y/m/d - H:i',$discount->start_date));
+                        echo '<br>الی<br>';
+                        echo Controller::parseNumbers(JalaliDate::date('Y/m/d - H:i',$discount->end_date)); ?>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        <?php endif;?>
+        </tbody>
+    </table>
 </div>
 <div id="discount-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
