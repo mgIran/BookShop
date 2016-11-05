@@ -56,7 +56,7 @@
                     </div>
                     <div class="divider"></div>
                     <p class="text-center">می توانید با حساب کاربری گوگل وارد شوید...</p>
-                    <button class="btn-red"><i class="google-icon"></i>ورود با گوگل</button>
+                    <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red"><i class="google-icon"></i>ورود با گوگل</a>
                 <? $this->endWidget(); ?>
             </div>
         </div>

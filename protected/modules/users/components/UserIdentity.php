@@ -79,6 +79,7 @@ class UserIdentity extends CUserIdentity
                 $this->setState('fa_name', $record->userDetails->fa_name);
                 $this->setState('en_name', $record->userDetails->fa_name);
                 $this->setState('avatar', (is_null($record->userDetails->avatar) ? '' : $record->userDetails->avatar));
+                $this->setState('auth_mode', $record->auth_mode);
                 $this->errorCode = self::ERROR_NONE;
             }
         }

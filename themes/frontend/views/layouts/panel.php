@@ -80,7 +80,13 @@
         <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
         <div class="profile">
             <div class="profile-image">
-                <img src="<?php echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->baseUrl.'/uploads/users/avatar/'.Yii::app()->user->avatar;?>" alt="<?= $this->userDetails->getShowName(); ?>">
+                <img src="<?php
+                if(Yii::app()->user->auth_mode == 'site')
+                {
+                    echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->baseUrl.'/uploads/users/avatar/'.Yii::app()->user->avatar;
+                }else
+                    echo Yii::app()->user->avatar;
+                ?>" alt="<?= $this->userDetails->getShowName(); ?>">
                 <div class="profile-badges">
                     <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>" class="profile-badges-left"><i class="bookmark-icon"></i><span><?php echo Controller::parseNumbers(number_format(count($this->userDetails->user->bookmarkedBooks), 0, '.', '.'));?></span>نشان شده</a>
                     <a href="<?php echo Yii::app()->createUrl('/users/credit/buy');?>" class="profile-badges-right"><i class="credit-icon"></i><span><?php echo Controller::parseNumbers(number_format($this->userDetails->credit, 0, '.', '.'));?></span>تومان</a>
