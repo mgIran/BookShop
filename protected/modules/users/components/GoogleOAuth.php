@@ -52,10 +52,13 @@ class GoogleOAuth extends CComponent
         $this->image_size = 200;
     }
 
+    /**
+     * @param $model UserLoginForm
+     */
     public function login($model){
         if (!Yii::app()->user->getState('gp_access_token')) {
             if (!isset($_GET['code']) or Yii::app()->user->getState("gp_access_token") or Yii::app()->user->getState("gp_result")) {
-                $this->redirect($this->login_url);
+                Yii::app()->controller->redirect($this->login_url);
             }
             $header = array("Content-Type: application/x-www-form-urlencoded");
             $data = http_build_query(
@@ -73,7 +76,23 @@ class GoogleOAuth extends CComponent
                 var_dump($result['error']);
                 exit;
             } else {
-                Yii::app()->user->setState("gp_access_token", $result['access_token']); // Access Token
+                Yii::app()->user->setState("gp_access_token", $result['access_token']);
+                if($model->validate() && $model->login()) {
+                    if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
+                        $redirect = Yii::app()->user->returnUrl;
+                    else
+                        $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
+                    if(isset($_POST['ajax'])) {
+                        echo CJSON::encode(array('status' => true,'url' => $redirect));
+                        Yii::app()->end();
+                    } else
+                        $this->redirect($redirect);
+                } else
+                    if(isset($_POST['ajax'])) {
+                        echo CJSON::encode(array('status' => false , 'errors' => $this->implodeErrors($model)));
+                        Yii::app()->end();
+                    } else
+                        $this->redirect(array('//'));
             }
         }
     }
@@ -105,7 +124,6 @@ class GoogleOAuth extends CComponent
             $get_profile_image = $user_info['image']['url'];
             $change_image_size = str_replace("?sz=50", "?sz=$this->image_size", $get_profile_image);
             $profile_image_link = $change_image_size; // User profile image link
-            $page_title = "Hello my name is $first_name $last_name!"; // Page title if user is logged in
         }
         return $this;
     }
