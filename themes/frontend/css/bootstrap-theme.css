@@ -608,7 +608,7 @@ a:active{
 }
 
 .thumbnail .caption h4 a {
-    color: #fff;
+    color: #343434;
     font-size: 15px;
     display: block;
     text-overflow: ellipsis;
@@ -995,7 +995,9 @@ a:active{
     margin-top: -18px;
     margin-bottom: 15px;
 }
-
+.thumbnail.small .caption h4 a{
+    color: #fff;
+}
 .thumbnail.small .caption h4 {
     color: #fff;
     white-space: nowrap;

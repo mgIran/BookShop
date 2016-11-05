@@ -81,6 +81,7 @@ a:active{
 }
 .navbar-header{
     position: relative;
+    z-index:2;
 }
 .navbar-header > .pin{
     cursor: pointer;
@@ -1643,4 +1644,7 @@ ul.tagit{
 .report-sale .btn.btn-info{
     padding: 7px 15px;
     margin-top: 25px;
+}
+.buy-label{
+    width: 80px;
 }

@@ -77,9 +77,10 @@ class Controller extends CController
         return true;
     }
 
-    public function getConstBooks($type,$limit = 3){
+    public function getConstBooks($type, $limit = 3)
+    {
         $criteria = Books::model()->getValidBooks();
-        switch($type){
+        switch ($type) {
             case 'popular':
                 $criteria->order = 'seen DESC';
                 break;
@@ -90,13 +91,14 @@ class Controller extends CController
                 break;
         }
         $criteria->limit = $limit;
-        return new CActiveDataProvider("Books",array('criteria' => $criteria , 'pagination' => array('pageSize'=>$limit)));
+        return new CActiveDataProvider("Books", array('criteria' => $criteria, 'pagination' => array('pageSize' => $limit)));
     }
 
-    public function getConstNews($type,$limit = 3){
+    public function getConstNews($type, $limit = 3)
+    {
         Yii::import('news.models.*');
         $criteria = News::model()->getValidNews();
-        switch($type){
+        switch ($type) {
             case 'popular':
                 $criteria->order = 'seen DESC';
                 break;
@@ -107,7 +109,7 @@ class Controller extends CController
                 break;
         }
         $criteria->limit = $limit;
-        return new CActiveDataProvider("News",array('criteria' => $criteria , 'pagination' => array('pageSize'=>$limit)));
+        return new CActiveDataProvider("News", array('criteria' => $criteria, 'pagination' => array('pageSize' => $limit)));
     }
 
     public static function createAdminMenu()
@@ -140,17 +142,17 @@ class Controller extends CController
                     )
                 ),
                 array(
-                    'label' => 'اخبار<span class="caret"></span>' ,
-                    'url' => '#' ,
-                    'itemOptions' => array('class' => 'dropdown' ,'tabindex' => "-1") ,
-                    'linkOptions' => array('class' => 'dropdown-toggle' ,'data-toggle' => "dropdown") ,
+                    'label' => 'اخبار<span class="caret"></span>',
+                    'url' => '#',
+                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
+                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'مدیریت' ,'url' => Yii::app()->createUrl('/news/manage/admin/')) ,
-                        array('label' => ' افزودن خبر' ,'url' => Yii::app()->createUrl('/news/manage/create/')) ,
-                        array('label' => 'مدیریت دسته بندی ها' ,'url' => Yii::app()->createUrl('/news/category/admin/')) ,
-                        array('label' => 'کلمات کلیدی' ,'url' => Yii::app()->createUrl('/courses/tags/admin/'))
+                        array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/news/manage/admin/')),
+                        array('label' => ' افزودن خبر', 'url' => Yii::app()->createUrl('/news/manage/create/')),
+                        array('label' => 'مدیریت دسته بندی ها', 'url' => Yii::app()->createUrl('/news/category/admin/')),
+                        array('label' => 'کلمات کلیدی', 'url' => Yii::app()->createUrl('/courses/tags/admin/'))
                     )
-                ) ,
+                ),
                 array(
                     'label' => 'امور مالی<span class="caret"></span>',
                     'url' => '#',
@@ -456,10 +458,11 @@ class Controller extends CController
      */
     public function filterCheckAccess($filterChain)
     {
-        if (Yii::app()->user->isGuest)
-        {
-            if(isset($filterChain->controller->actionsType()['frontend']) && in_array($filterChain->action->id,$filterChain->controller->actionsType()['frontend']))
+        if (Yii::app()->user->isGuest) {
+            if (isset($filterChain->controller->actionsType()['frontend']) && in_array($filterChain->action->id, $filterChain->controller->actionsType()['frontend'])) {
+                Yii::app()->user->returnUrl = Yii::app()->request->pathInfo;
                 $this->redirect(array('/login'));
+            }
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
 

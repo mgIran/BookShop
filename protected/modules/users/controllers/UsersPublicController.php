@@ -404,8 +404,13 @@ class UsersPublicController extends Controller
         $user = Users::model()->findByPk(Yii::app()->user->getId());
         /* @var $user Users */
 
+        $boughtBooks=array();
+        foreach($user->bookBuys as $bookBuy)
+            array_push($boughtBooks, $bookBuy->book);
+
         $this->render('library', array(
-            'user' => $user
+            'user' => $user,
+            'boughtBooks' => $boughtBooks,
         ));
     }
 
