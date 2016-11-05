@@ -457,7 +457,11 @@ class Controller extends CController
     public function filterCheckAccess($filterChain)
     {
         if (Yii::app()->user->isGuest)
+        {
+            if(isset($filterChain->controller->actionsType()['frontend']) && in_array($filterChain->action->id,$filterChain->controller->actionsType()['frontend']))
+                $this->redirect(array('/login'));
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 
         $moduleID = is_null($filterChain->controller->module) ? 'base' : $filterChain->controller->module->name;
         $controllerID = (($moduleID == 'base') ? '' : ucfirst($moduleID)) . ucfirst($filterChain->controller->id) . 'Controller';

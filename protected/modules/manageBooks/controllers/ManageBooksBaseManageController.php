@@ -7,7 +7,7 @@ class ManageBooksBaseManageController extends Controller
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
-    public $formats = '.doc ,.docx';
+    public $formats = '.epub ,.pdf';
 
     /**
      * @return array actions type list
@@ -66,6 +66,8 @@ class ManageBooksBaseManageController extends Controller
                     'dimensions' => array(
                         'minWidth' => 400,
                         'minHeight' => 590,
+                        'maxWidth' => 400,
+                        'maxHeight' => 600
                     ),
                     'acceptedTypes' => array('jpg','jpeg','png')
                 )
@@ -75,7 +77,7 @@ class ManageBooksBaseManageController extends Controller
                 'attribute' => 'file_name',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('doc','docx')
+                    'acceptedTypes' => array('epub', 'pdf')
                 )
             ),
             'deleteUpload' => array(
