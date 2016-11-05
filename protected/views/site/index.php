@@ -524,7 +524,7 @@ if($news->totalItemCount):
     <div class="news">
         <div class="container">
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-                <div class="is-carousel" data-item-selector="news-item" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="1" data-items="1" data-mouseDrag="0">
+                <div class="is-carousel" data-item-selector="news-item" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="0" data-items="1" data-mouseDrag="0">
                     <?php
                     foreach($news->getData() as $new):
                         $this->renderPartial('_news_item',array('data'=>$new));

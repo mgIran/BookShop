@@ -10,7 +10,6 @@ class WebUser extends CWebUser
      */
     public function checkAccess($operation, $params=array())
     {
-        //var_dump(Yii::app()->getId());exit;
         if ( ( is_array( $operation ) && in_array( 'admin', $operation ) ) || $operation === 'admin' )
             Yii::app()->user->loginUrl = array( '/admins/login' );
         else

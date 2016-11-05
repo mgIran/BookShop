@@ -43,7 +43,8 @@ $(document).ready(function() {
             autoPlay=($this.data('autoplay') == 1) ? true : false,
             autoPlayHoverPause=($this.data('autoplay-hover-pause') == 1) ? true : false,
             mouseDrag=($this.data('mouse-drag') == 1) ? true : false;
-
+        if(typeof nestedItemSelector == 'undefined')
+            nestedItemSelector='div';
         if ($(this).hasClass('auto-width')) {
             var carousel=$(this);
             $(this).on('refresh.owl.carousel', function(){
