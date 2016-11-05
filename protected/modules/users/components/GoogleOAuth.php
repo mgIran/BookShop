@@ -68,8 +68,10 @@ class GoogleOAuth extends CComponent
     /**
      * @param $model UserLoginForm
      */
-    public function login($model){
+    public function login($model)
+    {
         $model->OAuth = self::GOOGLE_OAUTH;
+        // get info from google
         if (!Yii::app()->user->getState('gp_access_token')) {
             if (!isset($_GET['code']) or Yii::app()->user->getState("gp_access_token") or Yii::app()->user->getState("gp_result")) {
                 Yii::app()->controller->redirect($this->login_url);
@@ -89,62 +91,58 @@ class GoogleOAuth extends CComponent
             if (!empty($result['error'])) { // If error login
                 var_dump($result['error']);
                 exit;
-            } else {
+            } else
                 Yii::app()->user->setState("gp_access_token", $result['access_token']);
-                $model->email = $this->getInfo()->email;
-                if($model->validate() && $model->login() === true) {
-                    if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
-                        $redirect = Yii::app()->user->returnUrl;
-                    else
-                        $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
-                    if(isset($_POST['ajax'])) {
-                        echo CJSON::encode(array('status' => true,'url' => $redirect));
-                        Yii::app()->end();
-                    } else
-                        Yii::app()->controller->redirect($redirect);
-                }
-                elseif($model->validate() && $model->login() === UserIdentity::ERROR_USERNAME_INVALID)
-                {
-                    $this->register();
-                    if($model->validate() && $model->login() === true) {
-                        if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
-                            $redirect = Yii::app()->user->returnUrl;
-                        else
-                            $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
-                        if(isset($_POST['ajax'])) {
-                            echo CJSON::encode(array('status' => true,'url' => $redirect));
-                            Yii::app()->end();
-                        } else
-                            Yii::app()->controller->redirect($redirect);
-                    }
-                }else {
-                    if (isset($_POST['ajax'])) {
-                        echo CJSON::encode(array('status' => false, 'errors' => Yii::app()->controller->implodeErrors($model)));
-                        Yii::app()->end();
-                    } else
-                        Yii::app()->controller->redirect(array('//'));
-                }
+        }
+
+        // login start
+        $loginFlag = false;
+        $model->email = $this->getInfo()->email;
+        if ($model->validate() && $model->login(true) === true)
+            $loginFlag = true;
+        elseif ($model->validate() && $model->login(true) === UserIdentity::ERROR_USERNAME_INVALID) {
+            if ($this->register()) {
+                if ($model->validate() && $model->login(true) === true)
+                    $loginFlag = true;
             }
+        }
+        if ($loginFlag) {
+            if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
+                $redirect = Yii::app()->user->returnUrl;
+            else
+                $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
+            if (isset($_POST['ajax'])) {
+                echo CJSON::encode(array('status' => true, 'url' => $redirect));
+                Yii::app()->end();
+            } else
+                Yii::app()->controller->redirect($redirect);
+        } else {
+            if (isset($_POST['ajax'])) {
+                echo CJSON::encode(array('status' => false, 'errors' => Yii::app()->controller->implodeErrors($model)));
+                Yii::app()->end();
+            } else
+                Yii::app()->controller->redirect(array('//'));
         }
     }
 
     /**
      * register: insert google plus user into users database
      */
-    public function register(){
+    public function register()
+    {
         $user = new Users('OAuthInsert');
         $user->email = $this->getInfo()->email;
         $user->status = "active";
         $user->auth_mode = self::GOOGLE_OAUTH;
         $user->role_id = 1;
         $user->create_date = time();
-        if($user->save())
-        {
+        if ($user->save()) {
             $userDetails = UserDetails::model()->findByPk($user->userDetails->user_id);
             $userDetails->fa_name = $this->first_name.' '.$this->last_name;
             $userDetails->avatar = $this->profile_image_link;
-            $userDetails->save();
+            return $userDetails->save();
         }
+        return false;
     }
 
     public function getInfo()

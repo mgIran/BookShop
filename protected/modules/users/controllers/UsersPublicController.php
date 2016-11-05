@@ -58,17 +58,12 @@ class UsersPublicController extends Controller
             if ($model->save()) {
                 $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date);
                 $model->updateByPk($model->id, array('verification_token' => $token));
-                $userDetails = new UserDetails();
-                $userDetails->user_id = $model->id;
-                $userDetails->credit = 0;
-                $userDetails->save();
-
                 $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
                 $message .= '<div style="text-align: right;font-size: 9pt;">';
                 $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '</a>';
                 $message .= '</div>';
                 $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
-                Mailer::mail($model->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+                var_dump(Mailer::mail($model->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']));exit;
 
                 Yii::app()->user->setFlash('success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
                 $this->refresh();
@@ -386,7 +381,6 @@ class UsersPublicController extends Controller
         $googleAuth = new GoogleOAuth();
         $model = new UserLoginForm('OAuth');
         $googleAuth->login($model);
-        $googleAuth->getInfo();
     }
     /**
      * Login Action

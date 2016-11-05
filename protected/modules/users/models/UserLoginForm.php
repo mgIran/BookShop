@@ -81,8 +81,10 @@ class UserLoginForm extends CFormModel
 	 * Logs in the user using the given username and password in the model.
 	 * @return boolean whether login is successful
 	 */
-	public function login()
+	public function login($clearIdentity = false)
 	{
+        if($clearIdentity)
+            $this->_identity=null;
 		if($this->_identity===null) {
 			if ($this->OAuth)
 				$this->_identity = new UserIdentity($this->email, null, $this->OAuth);
@@ -92,7 +94,10 @@ class UserLoginForm extends CFormModel
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
-			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+			if(!$this->OAuth)
+				$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+			else
+				$duration=3600*24*30; // 30 days
 			Yii::app()->user->login($this->_identity,$duration,$this->OAuth?$this->OAuth:NULL);
 			return true;
 		}

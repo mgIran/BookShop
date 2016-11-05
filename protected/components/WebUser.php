@@ -39,7 +39,6 @@ class WebUser extends CWebUser
         if($this->beforeLogin($id,$states,false))
         {
             $this->changeIdentity($id,$identity->getName(),$states);
-
             if($duration>0)
             {
                 if($this->allowAutoLogin)
