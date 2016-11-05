@@ -57,7 +57,7 @@ class UserIdentity extends CUserIdentity
             $record = Users::model()->findByAttributes(array('email' => $this->email,'auth_mode'=>$this->OAuth));
         }else {
             $bCrypt = new bCrypt;
-            $record = Users::model()->findByAttributes(array('email' => $this->email,'auth_mode'=>$this->OAuth));
+            $record = Users::model()->findByAttributes(array('email' => $this->email));
         }
         if ($record === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
