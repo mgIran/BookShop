@@ -13,7 +13,8 @@
             <?php echo Yii::app()->user->getFlash('failed');?>
         </div>
     <?php endif;?>
-
+    <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red"><i class="google-icon"></i>ورود با گوگل</a>
+    <div class="text-center or-text">یا</div>
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'login-form',
         'enableAjaxValidation'=>false,

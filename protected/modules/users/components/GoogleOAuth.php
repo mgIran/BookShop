@@ -121,7 +121,10 @@ class GoogleOAuth extends CComponent
                 echo CJSON::encode(array('status' => false, 'errors' => Yii::app()->controller->implodeErrors($model)));
                 Yii::app()->end();
             } else
-                Yii::app()->controller->redirect(array('//'));
+            {
+                Yii::app()->user->setFlash('success',$model->showError());
+                Yii::app()->controller->redirect(array('/login'));
+            }
         }
     }
 

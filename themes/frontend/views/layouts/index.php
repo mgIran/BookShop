@@ -24,13 +24,13 @@
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
     $cs->registerCssFile($baseUrl.'/css/animate.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-theme.css');
-    $cs->registerCssFile($baseUrl.'/css/responsive-theme.css');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-theme.css?2');
+    $cs->registerCssFile($baseUrl.'/css/responsive-theme.css?2');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/parallax.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?2', CClientScript::POS_END);
     $cs->registerScript('scroll-mode', '
     if($(window).scrollTop() > 85)
             $(".navbar.navbar-default").addClass(\'scroll-mode\');
