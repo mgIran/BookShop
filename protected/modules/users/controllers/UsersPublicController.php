@@ -76,52 +76,7 @@ class UsersPublicController extends Controller
         }
         $this->render('register', array('model' => $model));
     }
-
-    /**
-     * Login Action
-     */
-    public function actionLogin()
-    {
-        Yii::app()->theme = 'frontend';
-        $this->layout = '//layouts/login';
-        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-            $this->redirect($this->createAbsoluteUrl('//'));
-
-        $model = new UserLoginForm;
-        // if it is ajax validation request
-        if(isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-            $errors = CActiveForm::validate($model);
-            if(CJSON::decode($errors)) {
-                echo $errors;
-                Yii::app()->end();
-            }
-        }
-
-        // collect user input data
-        if (isset($_POST['UserLoginForm'])) {
-            $model->attributes = $_POST['UserLoginForm'];
-            // validate user input and redirect to the previous page if valid
-            if($model->validate() && $model->login()) {
-                if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
-                    $redirect = Yii::app()->user->returnUrl;
-                else
-                    $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
-                if(isset($_POST['ajax'])) {
-                    echo CJSON::encode(array('status' => true,'url' => $redirect));
-                    Yii::app()->end();
-                } else 
-                    $this->redirect($redirect);
-            } else
-                if(isset($_POST['ajax'])) {
-                    echo CJSON::encode(array('status' => false , 'errors' => $this->implodeErrors($model)));
-                    Yii::app()->end();
-                } else
-                    $this->redirect(array('//'));
-        }
-        // display the login form
-        $this->render('login', array('model' => $model));
-    }
-
+    
     /**
      * Logout Action
      */
@@ -419,5 +374,57 @@ class UsersPublicController extends Controller
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+
+    public function actionGoogleLogin()
+    {
+        $googleAuth = new GoogleOAuth();
+        $model = new UserLoginForm('OAuth');
+        $googleAuth->login($model);
+        $googleAuth->getInfo();
+    }
+    /**
+     * Login Action
+     */
+    public function actionLogin()
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/login';
+        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+            $this->redirect($this->createAbsoluteUrl('//'));
+
+        $model = new UserLoginForm;
+        // if it is ajax validation request
+        if(isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
+            $errors = CActiveForm::validate($model);
+            if(CJSON::decode($errors)) {
+                echo $errors;
+                Yii::app()->end();
+            }
+        }
+
+        // collect user input data
+        if (isset($_POST['UserLoginForm'])) {
+            $model->attributes = $_POST['UserLoginForm'];
+            // validate user input and redirect to the previous page if valid
+            if($model->validate() && $model->login()) {
+                if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
+                    $redirect = Yii::app()->user->returnUrl;
+                else
+                    $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
+                if(isset($_POST['ajax'])) {
+                    echo CJSON::encode(array('status' => true,'url' => $redirect));
+                    Yii::app()->end();
+                } else
+                    $this->redirect($redirect);
+            } else
+                if(isset($_POST['ajax'])) {
+                    echo CJSON::encode(array('status' => false , 'errors' => $this->implodeErrors($model)));
+                    Yii::app()->end();
+                } else
+                    $this->redirect(array('//'));
+        }
+        // display the login form
+        $this->render('login', array('model' => $model));
     }
 }

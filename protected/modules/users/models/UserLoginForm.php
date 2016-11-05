@@ -11,6 +11,7 @@ class UserLoginForm extends CFormModel
     public $email;
 	public $password;
 	public $rememberMe;
+	public $OAuth;
     public $authenticate_field;
 
 	private $_identity;
@@ -24,7 +25,8 @@ class UserLoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-			array('email, password', 'required'),
+			array('email, password', 'required' ,'except' => 'OAuth'),
+			array('email ,OAuth', 'required' ,'on' => 'OAuth'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
             array('email', 'email'),
@@ -55,7 +57,10 @@ class UserLoginForm extends CFormModel
 	{
 		if(!$this->hasErrors())
 		{
-			$this->_identity = new UserIdentity($this->email,$this->password);
+			if($this->OAuth)
+				$this->_identity = new UserIdentity($this->email,null,$this->OAuth);
+			else
+				$this->_identity = new UserIdentity($this->email,$this->password);
             if(!$this->_identity->authenticate())
             {
                 if($this->_identity->errorCode===3)
@@ -77,15 +82,17 @@ class UserLoginForm extends CFormModel
 	 */
 	public function login()
 	{
-		if($this->_identity===null)
-		{
-			$this->_identity=new UserIdentity($this->email,$this->password);
+		if($this->_identity===null) {
+			if ($this->OAuth)
+				$this->_identity = new UserIdentity($this->email, null, $this->OAuth);
+			else
+				$this->_identity = new UserIdentity($this->email, $this->password);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
 			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
-			Yii::app()->user->login($this->_identity,$duration);
+			Yii::app()->user->login($this->_identity,$duration,$this->OAuth?$this->OAuth:NULL);
 			return true;
 		}
 		else
