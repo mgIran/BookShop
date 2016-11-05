@@ -21,7 +21,7 @@
 						$this->widget('zii.widgets.CListView', array(
 							'id' => 'news-list',
 							'dataProvider' => $dataProvider,
-							'itemView' => '_view',
+							'itemView' => '//site/_news_item',
 							'template' => '{items} {pager}',
 							'viewData' => array('type' => 'list-view'),
 							'ajaxUpdate' => true,

@@ -171,7 +171,6 @@ class Controller extends CController
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
                         array('label' => 'صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
-                        array('label' => 'مستندات', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/document')),
                     )
                 ),
                 array(
@@ -203,8 +202,8 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
-                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changesetting')),
-                        array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/sociallinks')),
+                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
+                        array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
                     )
                 ),
                 array(
