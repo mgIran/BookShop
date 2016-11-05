@@ -13,9 +13,8 @@
             'id' => 'downloaded-list',
             'dataProvider' => new CArrayDataProvider($boughtBooks),
             'itemView' => '//site/_book_item',
-            'viewData'=>array('buy'=>false),
             'template' => '{items}',
-            'viewData' => array('itemClass' => 'simple')
+            'viewData' => array('itemClass' => 'simple', 'buy'=>false)
         ));?>
     </div>
 </div>
@@ -28,9 +27,8 @@
             'id' => 'bookmarked-list',
             'dataProvider' => new CArrayDataProvider($user->bookmarkedBooks),
             'itemView' => '//site/_book_item',
-            'viewData'=>array('buy'=>false),
             'template' => '{items}',
-            'viewData' => array('itemClass' => 'simple')
+            'viewData' => array('itemClass' => 'simple', 'buy'=>false)
         )); ?>
     </div>
 </div>
