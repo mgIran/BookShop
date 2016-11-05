@@ -1,47 +1,44 @@
 <?php
-/* @var $this BooksController */
+/* @var $this BookController */
 /* @var $model Books */
 /* @var $user Users */
 /* @var $bought boolean */
 /* @var $price string */
 ?>
+<div class="white-form">
+    <h3>خرید کتاب</h3>
+    <p class="description">جزئیات خرید شما به شرح ذیل می باشد:</p>
 
-<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 buy-box">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">خرید</h3>
+    <?php $this->renderPartial('//partial-views/_flashMessage');?>
+
+    <?php if(Yii::app()->user->hasFlash('credit-failed')):?>
+        <div class="alert alert-danger fade in">
+            <?php echo Yii::app()->user->getFlash('credit-failed');?>
+            <?php if(Yii::app()->user->hasFlash('failReason') and Yii::app()->user->getFlash('failReason')=='min_credit'):?>
+                <a href="<?php echo $this->createUrl('/users/credit/buy');?>">خرید اعتبار</a>
+            <?php endif;?>
         </div>
-        <div class="panel-body step-content">
-            <div class="container-fluid buy-form">
-                <?php if(Yii::app()->user->hasFlash('failed')):?>
-                <div class="alert alert-danger fade in">
-                    <?php echo Yii::app()->user->getFlash('failed');?>
-                    <?php if(Yii::app()->user->hasFlash('failReason') and Yii::app()->user->getFlash('failReason')=='min_credit'):?>
-                        <a href="<?php echo $this->createUrl('/users/credit/buy');?>">خرید اعتبار</a>
-                    <?php endif;?>
-                </div>
-                <?php endif;?>
-                <?php $form=$this->beginWidget('CActiveForm', array(
-                    'id'=>'book-buys-form',
-                    'enableAjaxValidation'=>false,
-                )); ?>
-                    <h4>اطلاعات کتاب</h4>
-                    <p><span class="buy-label">کتاب </span><span class="buy-value"><a><?php echo CHtml::encode($model->title);?></a></span></p>
-                    <p><span class="buy-label">مبلغ</span><span class="buy-value"><?php echo CHtml::encode(number_format($price, 0));?> تومان</span></p>
-                    <h4>اطلاعات کاربری</h4>
-                    <p><span class="buy-label">اعتبار فعلی</span><span class="buy-value"><?php echo CHtml::encode(number_format($user->userDetails->credit, 0));?> تومان</span></p>
-                    <?php if($bought):?>
-                        <div class="alert alert-success fade in">
-                            مبلغ این کتاب قبلا از حساب شما کسر گردیده است. شما می توانید از <a href="<?php echo $this->createUrl('/book/download/'.CHtml::encode($model->id).'/'.CHtml::encode($model->title));?>">اینجا</a> این کتاب را دانلود کنید.
-                        </div>
-                    <?php else:?>
-                        <?php echo CHtml::submitButton('پرداخت', array(
-                            'class'=>'btn btn-success btn-buy pull-left',
-                            'name'=>'buy'
-                        ))?>
-                    <?php endif;?>
-                <?php $this->endWidget();?>
-            </div>
+    <?php endif;?>
+    <?php $form=$this->beginWidget('CActiveForm', array(
+        'id'=>'book-buys-form',
+        'enableAjaxValidation'=>false,
+    )); ?>
+    <p><label class="buy-label">کتاب</label><span><a href="<?php echo $this->createUrl('/book/view', array('id'=>$model->id, 'title'=>$model->title));?>" title="<?php echo CHtml::encode($model->title);?>"><?php echo CHtml::encode($model->title);?></a></span></p>
+    <p><label class="buy-label">مبلغ</label><span><?php echo CHtml::encode(number_format($price, 0));?> تومان</span></p>
+    <hr>
+    <p><label class="buy-label">اعتبار فعلی</label><span><?php echo CHtml::encode(number_format($user->userDetails->credit, 0));?> تومان</span></p>
+    <?php if($bought):?>
+        <div class="alert alert-success">
+            مبلغ این کتاب قبلا از حساب شما کسر گردیده است. شما می توانید از طریق برنامه موبایل و ویندوز کتاب مورد نظر را دریافت و مطالعه کنید.
         </div>
-    </div>
+    <?php else:?>
+        <div class="buttons">
+            <?php echo CHtml::submitButton('پرداخت', array(
+                'class'=>'btn btn-default',
+                'name'=>'buy'
+            ))?>
+        </div>
+    <?php endif;?>
+    <?php $this->endWidget();?>
+
 </div>

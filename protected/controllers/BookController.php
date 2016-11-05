@@ -79,24 +79,26 @@ class BookController extends Controller
      */
     public function actionBuy($id, $title)
     {
-        Yii::app()->theme = 'market';
+        Yii::app()->theme = 'frontend';
         $this->layout = 'panel';
 
         $model = $this->loadModel($id);
         $price = $model->hasDiscount() ? $model->offPrice : $model->price;
         $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
-        if ($buy)
-            $this->redirect(array('/books/download/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
 
         Yii::app()->getModule('users');
         $user = Users::model()->findByPk(Yii::app()->user->getId());
 
         if (isset($_POST['buy'])) {
             if ($user->userDetails->credit < $model->price) {
-                Yii::app()->user->setFlash('failed', 'اعتبار فعلی شما کافی نیست!');
+                Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
                 Yii::app()->user->setFlash('failReason', 'min_credit');
                 $this->refresh();
             }
+
+            $model->download += 1;
+            $model->setScenario('update-download');
+            $model->save();
 
             $buy = new BookBuys();
             $buy->book_id = $model->id;
@@ -108,8 +110,8 @@ class BookController extends Controller
                 $userDetails->score = $userDetails->score + 1;
                 if ($model->publisher)
                     $model->publisher->userDetails->credit = $model->publisher->userDetails->credit + $model->getPublisherPortion();
-                $model->publisher->userDetails->save();
                 if ($userDetails->save()) {
+                    $model->publisher->userDetails->save();
                     $message =
                         '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
                         <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
@@ -129,9 +131,12 @@ class BookController extends Controller
                         </table>';
                     Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
 
-                    $this->redirect(array('/books/download/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
-                }
-            }
+                    Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد. هم اکنون می توانید از طریق برنامه موبایل و ویندوز کتاب رو دریافت و مطالعه کنید.');
+                } else
+                    Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+            } else
+                Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+            $this->refresh();
         }
 
         $this->render('buy', array(
@@ -144,7 +149,7 @@ class BookController extends Controller
 
     /**
      * Download book
-     */
+
     public function actionDownload($id, $title)
     {
         $model = $this->loadModel($id);
@@ -161,7 +166,7 @@ class BookController extends Controller
                 $model->save();
                 $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
             } else
-                $this->redirect(array('/books/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
+                $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
         }
     }
 
@@ -196,7 +201,7 @@ class BookController extends Controller
         header('Content-Disposition: attachment; filename=' . $fakeFileName);
 
         echo stream_get_contents($fp);
-    }
+    }*/
 
     /**
      * Show programs list
