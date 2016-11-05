@@ -98,9 +98,9 @@
             </div>
         </div>
 
-        <?php if(Yii::app()->user->roles!='publisher'):?>
-            <a href="<?php echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?>" class="signup-link"><i class="books-icon"></i>آیا ناشر هستید؟</a>
-        <?php endif;?>
+<!--        --><?php //if(Yii::app()->user->roles!='publisher'):?>
+<!--            <a href="--><?php //echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?><!--" class="signup-link"><i class="books-icon"></i>آیا ناشر هستید؟</a>-->
+<!--        --><?php //endif;?>
 
         <div class="list-group">
             <h5>کاربری</h5>
