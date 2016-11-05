@@ -1,5 +1,5 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $data Books */
 /* @var $itemClass string */
 ?>
@@ -73,7 +73,7 @@
             <?php
             if(!isset($itemClass) || (isset($itemClass) && ($itemClass != 'small' && $itemClass != 'smallest'))):
                 ?>
-                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                <a href="<?php echo $this->createUrl('/books/buy', array('id'=>$data->id, 'title'=>$data->title));?>" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
                 <?php
             endif;
             ?>
