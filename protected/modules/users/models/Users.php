@@ -13,6 +13,7 @@
  * @property string $status
  * @property string $verification_token
  * @property integer $change_password_request_count
+ * @property integer $auth_mode
  * @property string $repeatPassword
  * @property string $oldPassword
  * @property string $newPassword
@@ -59,8 +60,8 @@ class Users extends CActiveRecord
         return array(
             array('email, password', 'required', 'on' => 'insert,create'),
             array('role_id', 'default', 'value' => 1),
-            array('email', 'required', 'on' => 'email'),
-            array('email', 'unique', 'on' => 'insert,create'),
+            array('email', 'required', 'on' => 'email, OAuthInsert'),
+            array('email', 'unique', 'on' => 'insert,create,OAuthInsert'),
             array('change_password_request_count', 'numerical', 'integerOnly' => true),
             array('email', 'email'),
             array('oldPassword ,newPassword ,repeatPassword', 'required', 'on' => 'update'),

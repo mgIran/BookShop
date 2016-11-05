@@ -25,6 +25,11 @@ class UserIdentity extends CUserIdentity
     public $email;
 
     /**
+     * @var string OAuth webservice
+     */
+    public $OAuth;
+
+    /**
      * User status errors
      */
     const ERROR_STATUS_PENDING = 3;
@@ -36,16 +41,22 @@ class UserIdentity extends CUserIdentity
      * @param string $email email
      * @param string $password password
      */
-    public function __construct($email, $password)
+    public function __construct($email, $password ,$OAuth = 'site')
     {
         $this->email = $email;
         $this->password = $password;
+        $this->OAuth = $OAuth;
     }
 
     public function authenticate()
     {
-        $bCrypt = new bCrypt;
-        $record = Users::model()->findByAttributes(array('email' => $this->email));
+        if($this->OAuth)
+        {
+            $record = Users::model()->findByAttributes(array('email' => $this->email));
+        }else {
+            $bCrypt = new bCrypt;
+            $record = Users::model()->findByAttributes(array('email' => $this->email));
+        }
         if ($record === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         elseif ($record->status == 'pending')
@@ -55,7 +66,7 @@ class UserIdentity extends CUserIdentity
         elseif ($record->status == 'deleted')
             $this->errorCode = self::ERROR_STATUS_DELETED;
         elseif ($record->status == 'active') {
-            if (!$bCrypt->verify($this->password, $record->password))
+            if (!$this->OAuth && !$bCrypt->verify($this->password, $record->password))
                 $this->errorCode = self::ERROR_PASSWORD_INVALID;
             else {
                 $this->_id = $record->id;
