@@ -459,7 +459,10 @@ class Controller extends CController
         if (Yii::app()->user->isGuest)
         {
             if(isset($filterChain->controller->actionsType()['frontend']) && in_array($filterChain->action->id,$filterChain->controller->actionsType()['frontend']))
+            {
+                Yii::app()->user->returnUrl = $this->getRoute();
                 $this->redirect(array('/login'));
+            }
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
 
