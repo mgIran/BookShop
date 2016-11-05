@@ -111,7 +111,9 @@ class BookController extends Controller
                 if ($model->publisher)
                     $model->publisher->userDetails->credit = $model->publisher->userDetails->credit + $model->getPublisherPortion();
                 if ($userDetails->save()) {
-                    $model->publisher->userDetails->save();
+                    if ($model->publisher)
+                        $model->publisher->userDetails->save();
+
                     $message =
                         '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
                         <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
@@ -131,12 +133,11 @@ class BookController extends Controller
                         </table>';
                     Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
 
-                    Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد. هم اکنون می توانید از طریق برنامه موبایل و ویندوز کتاب رو دریافت و مطالعه کنید.');
+                    Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
                 } else
                     Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
             } else
                 Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
-            $this->refresh();
         }
 
         $this->render('buy', array(
