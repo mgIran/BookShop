@@ -13,6 +13,7 @@ class UserLoginForm extends CFormModel
 	public $rememberMe;
 	public $OAuth;
     public $authenticate_field;
+    public $oauth_authenticate_field;
 
 	private $_identity;
 
@@ -31,7 +32,7 @@ class UserLoginForm extends CFormModel
 			array('rememberMe', 'boolean'),
             array('email', 'email'),
 			// authenticate_field needs to be authenticated
-			array('authenticate_field', 'authenticate'),
+			array('authenticate_field', 'authenticate','except' => 'OAuth'),
 		);
 	}
 
@@ -95,8 +96,12 @@ class UserLoginForm extends CFormModel
 			Yii::app()->user->login($this->_identity,$duration,$this->OAuth?$this->OAuth:NULL);
 			return true;
 		}
-		else
-			return false;
+		else{
+			if ($this->OAuth)
+				return $this->_identity->errorCode;
+			else
+				return false;
+		}
 	}
     protected function afterValidate()
     {

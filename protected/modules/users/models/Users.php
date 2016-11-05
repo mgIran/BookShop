@@ -192,13 +192,12 @@ class Users extends CActiveRecord
 
     public function afterSave()
     {
-        if (parent::afterSave()) {
-            if ($this->isNewRecord) {
-                $model = new UserDetails;
-                $model->user_id = $this->id;
-                $model->credit = 0;
-                $model->save();
-            }
+        parent::afterSave();
+        if ($this->isNewRecord) {
+            $model = new UserDetails;
+            $model->user_id = $this->id;
+            $model->credit = 0;
+            $model->save();
         }
         return true;
     }

@@ -7,6 +7,7 @@
  */
 class GoogleOAuth extends CComponent
 {
+    const GOOGLE_OAUTH = 'google';
     /**
      * Authenticates a user.
      * The example implementation makes sure if the username and password
@@ -23,6 +24,18 @@ class GoogleOAuth extends CComponent
      * @var string email
      */
     public $email;
+    /**
+     * @var string first_name
+     */
+    public $first_name;
+    /**
+     * @var string last_name
+     */
+    public $last_name;
+    /**
+     * @var string google plus profile image link
+     */
+    public $profile_image_link;
 
     /**
      * @var string OAuth webservice
@@ -56,6 +69,7 @@ class GoogleOAuth extends CComponent
      * @param $model UserLoginForm
      */
     public function login($model){
+        $model->OAuth = self::GOOGLE_OAUTH;
         if (!Yii::app()->user->getState('gp_access_token')) {
             if (!isset($_GET['code']) or Yii::app()->user->getState("gp_access_token") or Yii::app()->user->getState("gp_result")) {
                 Yii::app()->controller->redirect($this->login_url);
@@ -77,7 +91,8 @@ class GoogleOAuth extends CComponent
                 exit;
             } else {
                 Yii::app()->user->setState("gp_access_token", $result['access_token']);
-                if($model->validate() && $model->login()) {
+                $model->email = $this->getInfo()->email;
+                if($model->validate() && $model->login() === true) {
                     if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
                         $redirect = Yii::app()->user->returnUrl;
                     else
@@ -86,24 +101,50 @@ class GoogleOAuth extends CComponent
                         echo CJSON::encode(array('status' => true,'url' => $redirect));
                         Yii::app()->end();
                     } else
-                        $this->redirect($redirect);
-                } else
-                    if(isset($_POST['ajax'])) {
-                        echo CJSON::encode(array('status' => false , 'errors' => $this->implodeErrors($model)));
+                        Yii::app()->controller->redirect($redirect);
+                }
+                elseif($model->validate() && $model->login() === UserIdentity::ERROR_USERNAME_INVALID)
+                {
+                    $this->register();
+                    if($model->validate() && $model->login() === true) {
+                        if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
+                            $redirect = Yii::app()->user->returnUrl;
+                        else
+                            $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
+                        if(isset($_POST['ajax'])) {
+                            echo CJSON::encode(array('status' => true,'url' => $redirect));
+                            Yii::app()->end();
+                        } else
+                            Yii::app()->controller->redirect($redirect);
+                    }
+                }else {
+                    if (isset($_POST['ajax'])) {
+                        echo CJSON::encode(array('status' => false, 'errors' => Yii::app()->controller->implodeErrors($model)));
                         Yii::app()->end();
                     } else
-                        $this->redirect(array('//'));
+                        Yii::app()->controller->redirect(array('//'));
+                }
             }
         }
     }
-    
+
+    /**
+     * register: insert google plus user into users database
+     */
     public function register(){
         $user = new Users('OAuthInsert');
         $user->email = $this->getInfo()->email;
         $user->status = "active";
-        $user->auth_mode = 'google';
+        $user->auth_mode = self::GOOGLE_OAUTH;
         $user->role_id = 1;
-        $user->save();
+        $user->create_date = time();
+        if($user->save())
+        {
+            $userDetails = UserDetails::model()->findByPk($user->userDetails->user_id);
+            $userDetails->fa_name = $this->first_name.' '.$this->last_name;
+            $userDetails->avatar = $this->profile_image_link;
+            $userDetails->save();
+        }
     }
 
     public function getInfo()
@@ -118,12 +159,12 @@ class GoogleOAuth extends CComponent
             } else {
                 $user_info = Yii::app()->user->getState("gp_result");
             }
-            $first_name = $user_info['name']['givenName']; // User first name
-            $last_name = $user_info['name']['familyName']; // User last name
+            $this->first_name = $user_info['name']['givenName']; // User first name
+            $this->last_name = $user_info['name']['familyName']; // User last name
             $this->email = $user_info['emails'][0]['value']; // User email
             $get_profile_image = $user_info['image']['url'];
             $change_image_size = str_replace("?sz=50", "?sz=$this->image_size", $get_profile_image);
-            $profile_image_link = $change_image_size; // User profile image link
+            $this->profile_image_link = $change_image_size; // User profile image link
         }
         return $this;
     }

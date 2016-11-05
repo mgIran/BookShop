@@ -42,7 +42,7 @@ class UserIdentity extends CUserIdentity
      * @param string $password
      * @param string $OAuth
      */
-    public function __construct($email, $password ,$OAuth = 'site')
+    public function __construct($email, $password ,$OAuth = null)
     {
         $this->email = $email;
         $this->password = $password;
@@ -54,10 +54,10 @@ class UserIdentity extends CUserIdentity
     {
         if($this->OAuth)
         {
-            $record = Users::model()->findByAttributes(array('email' => $this->email));
+            $record = Users::model()->findByAttributes(array('email' => $this->email,'auth_mode'=>$this->OAuth));
         }else {
             $bCrypt = new bCrypt;
-            $record = Users::model()->findByAttributes(array('email' => $this->email));
+            $record = Users::model()->findByAttributes(array('email' => $this->email,'auth_mode'=>$this->OAuth));
         }
         if ($record === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
