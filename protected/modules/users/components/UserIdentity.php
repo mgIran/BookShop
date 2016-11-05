@@ -37,15 +37,17 @@ class UserIdentity extends CUserIdentity
     const ERROR_STATUS_DELETED = 5;
 
     /**
-     * Constructor.
-     * @param string $email email
-     * @param string $password password
+     * UserIdentity constructor.
+     * @param string $email
+     * @param string $password
+     * @param string $OAuth
      */
     public function __construct($email, $password ,$OAuth = 'site')
     {
         $this->email = $email;
         $this->password = $password;
         $this->OAuth = $OAuth;
+        parent::__construct($email,$password);
     }
 
     public function authenticate()
