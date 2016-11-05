@@ -153,7 +153,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                                     <?
                                 endif;
                                 ?>
-                                <a href="#" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                 <div class="small-info">
                                     <p>دسته بندی: <span><a href="<?= $this->createUrl('/category/'.$model->category_id.'/'.urldecode($model->category->title)) ?>" ><?= CHtml::encode($model->category->title) ?></a></span></p>
                                     <?php if($model->showTags): ?><p>بر چسب ها: <span><?php

@@ -4,6 +4,8 @@ class UsersCreditController extends Controller
 {
     public $layout = '//layouts/panel';
 
+    private $merchantID ='012d3926-9824-11e6-a86b-005056a205be';
+
     /**
      * @return array actions type list
      */
@@ -63,7 +65,7 @@ class UsersCreditController extends Controller
             $model->date = time();
             if ($model->save()) {
                 // Redirect to payment gateway
-                $MerchantID = '012d3926-9824-11e6-a86b-005056a205be';  //Required
+                $MerchantID = $this->merchantID;  //Required
                 $Amount = intval($_POST['amount']); //Amount will be based on Toman  - Required
                 $Description = 'افزایش اعتبار در ' . Yii::app()->name;  // Required
                 $Email = Yii::app()->user->email; // Optional
@@ -109,7 +111,7 @@ class UsersCreditController extends Controller
         $this->layout = '//layouts/panel';
         $model = UserTransactions::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'status' => 'unpaid'));
         $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
-        $MerchantID = '6194e8aa-0589-11e6-9b18-005056a205be';
+        $MerchantID = $this->merchantID;
         $Amount = $model->amount; //Amount will be based on Toman
         $Authority = $_GET['Authority'];
 

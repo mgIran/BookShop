@@ -465,6 +465,10 @@ class Controller extends CController
             }
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
+        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin' && isset($filterChain->controller->actionsType()['frontend']) && in_array($filterChain->action->id, $filterChain->controller->actionsType()['frontend'])) {
+            Yii::app()->user->returnUrl = Yii::app()->request->pathInfo;
+            $this->redirect(array('/login'));
+        }
 
         $moduleID = is_null($filterChain->controller->module) ? 'base' : $filterChain->controller->module->name;
         $controllerID = (($moduleID == 'base') ? '' : ucfirst($moduleID)) . ucfirst($filterChain->controller->id) . 'Controller';
