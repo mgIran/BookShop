@@ -7,7 +7,7 @@
         // There is a call to performAjaxValidation() commented in generated controller code.
         // See class documentation of CActiveForm for details on this.
         'enableAjaxValidation'=>false,
-        'action' => array('/manageBooks/base/images?id='.$model->id),
+        'action' => array('/manageBooks/baseManage/images?id='.$model->id),
         'enableClientValidation'=>true,
         'clientOptions' => array(
             'validateOnSubmit' => true

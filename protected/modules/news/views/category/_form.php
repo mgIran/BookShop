@@ -13,7 +13,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'title'); ?>
-		<?php echo EMHelper::megaOgogo($model,'title',array('size'=>50,'maxlength'=>255)); ?>
+		<?php echo $form->textField($model,'title',array('size'=>50,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'title'); ?>
 	</div>
 

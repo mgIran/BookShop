@@ -21,7 +21,6 @@ $this->menu=array(
 	'filter'=>$model,
 	'columns'=>array(
 		'title',
-		'title_en',
 		array(
 			'header' => 'والد',
 			'name' => 'parent.fullTitle',

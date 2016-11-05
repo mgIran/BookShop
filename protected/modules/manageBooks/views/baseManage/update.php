@@ -11,8 +11,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'افزودن', 'url'=>Yii::app()->createUrl('/manageBooks/base/create')),
-    array('label'=>'مدیریت', 'url'=>Yii::app()->createUrl('/manageBooks/base/admin')),
+	array('label'=>'افزودن', 'url'=>Yii::app()->createUrl('/manageBooks/baseManage/create')),
+    array('label'=>'مدیریت', 'url'=>Yii::app()->createUrl('/manageBooks/baseManage/admin')),
     array('label'=>'مشاهده کتاب', 'url'=>Yii::app()->createUrl('/book/'.$model->id.'/'.urlencode($model->title))),
 );
 if(isset($_GET['step']))

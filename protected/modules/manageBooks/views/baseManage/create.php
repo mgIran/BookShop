@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'مدیریت', 'url'=>Yii::app()->createUrl('/manageBooks/base/admin')),
+	array('label'=>'مدیریت', 'url'=>Yii::app()->createUrl('/manageBooks/baseManage/admin')),
 );
 ?>
 

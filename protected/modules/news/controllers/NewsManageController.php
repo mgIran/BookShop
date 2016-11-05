@@ -276,6 +276,7 @@ class NewsManageController extends Controller
 		Yii::app()->theme = 'frontend';
 		$this->layout = '//layouts/index';
 		$criteria = News::model()->getValidNews();
+		$this->categories = NewsCategories::model()->findAll();
 		$dataProvider=new CActiveDataProvider('News',array(
 			'criteria' => $criteria,
 			'pagination' => false
