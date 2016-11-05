@@ -108,7 +108,10 @@
             <a href="<?php echo Yii::app()->createUrl('users/public/library');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/library')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتابخانه من</span></a>
             <a href="<?php echo Yii::app()->createUrl('users/public/transactions');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/transactions')?' active':'';?>"><i class="transaction-icon"></i><span class="text">تراکنش ها</span></a>
             <a href="<?php echo Yii::app()->createUrl('users/public/downloaded');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/downloaded')?' active':'';?>"><i class="downloaded-icon"></i><span class="text">دانلود شده ها</span></a>
-            <a href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i><span class="text">پشتیبانی</span><span class="badge">3</span></a>
+            <a href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i><span class="text">پشتیبانی</span><?php
+                if($mc = Users::getTicketNewMessageCount())
+                    echo '<span class="badge">'.Controller::parseNumbers($mc).'</span>';
+                ?></a>
         </div>
         <?php if(Yii::app()->user->roles=='publisher'):?>
             <div class="list-group">
