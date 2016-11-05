@@ -3,6 +3,8 @@
 /* @var $data Books */
 /* @var $itemClass string */
 /* @var $buy boolean */
+if(!isset($buy))
+    $buy=true;
 ?>
 <div class="thumbnail-container <?=$data->hasDiscount()?'discount':'';?>">
     <div class="thumbnail <?= (isset($itemClass)?$itemClass:''); ?>">
@@ -72,7 +74,7 @@
                     <?php endif;?>
             </span>
             <?php
-            if(isset($buy) and $buy):
+            if($buy):
                 if(!isset($itemClass) || (isset($itemClass) && ($itemClass != 'small' && $itemClass != 'smallest'))):
                     ?>
                     <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$data->id, 'title'=>$data->title));?>" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
