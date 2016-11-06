@@ -40,7 +40,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'parent_id'); ?>
-		<?php echo $form->dropDownList($model,'parent_id',BookCategories::model()->adminSortList($model->id)); ?>
+		<?php echo $form->dropDownList($model,'parent_id',BookCategories::model()->getParents()); ?>
 		<?php echo $form->error($model,'parent_id'); ?>
 	</div>
 

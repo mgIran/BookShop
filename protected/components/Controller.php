@@ -33,6 +33,7 @@ class Controller extends CController
     public $userNotifications;
     public $aboutFooter;
     public $siteAppUrls = array();
+    public $booksCount = 0;
 
     public function beforeAction($action)
     {
@@ -68,7 +69,17 @@ class Controller extends CController
             ->from('ym_site_setting')
             ->where('name = "default_title"')
             ->queryScalar();
-        $this->categories = BookCategories::model()->findAll('parent_id IS NULL');
+        $this->categories = BookCategories::model()->findAll();
+        $criteria=new CDbCriteria();
+        $criteria->select='COUNT(id) as id';
+        $criteria->addCondition('status = :status');
+        $criteria->addCondition('confirm = :confirm');
+        $criteria->addCondition('deleted = 0');
+        $criteria->params=array(
+            ':status'=>'enable',
+            ':confirm'=>'accepted',
+        );
+        $this->booksCount=Books::model()->find($criteria)->id;
         Yii::import('pages.models.*');
         $this->aboutFooter = Pages::model()->findByPk(2)->summary;
         Yii::import('setting.models.*');
@@ -112,6 +123,17 @@ class Controller extends CController
         return new CActiveDataProvider("News", array('criteria' => $criteria, 'pagination' => array('pageSize' => $limit)));
     }
 
+    public function getCategoryBooks($id)
+    {
+        $model=BookCategories::model()->findByPk($id);
+        $catIds = $model->getCategoryChilds();
+        $criteria = Books::model()->getValidBooks($catIds);
+        $dataProvider=new CActiveDataProvider('Books', array(
+            'criteria' => $criteria,
+        ));
+        return $dataProvider->getData();
+    }
+
     public static function createAdminMenu()
     {
         if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
@@ -150,7 +172,6 @@ class Controller extends CController
                         array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/news/manage/admin/')),
                         array('label' => ' افزودن خبر', 'url' => Yii::app()->createUrl('/news/manage/create/')),
                         array('label' => 'مدیریت دسته بندی ها', 'url' => Yii::app()->createUrl('/news/category/admin/')),
-                        array('label' => 'کلمات کلیدی', 'url' => Yii::app()->createUrl('/courses/tags/admin/'))
                     )
                 ),
                 array(
@@ -195,6 +216,10 @@ class Controller extends CController
                 array(
                     'label' => 'پشتیبانی',
                     'url' => Yii::app()->createUrl('/tickets/manage/admin'),
+                ),
+                array(
+                    'label' => 'تگ ها',
+                    'url' => Yii::app()->createUrl('/tags/admin'),
                 ),
                 array(
                     'label' => 'تنظیمات<span class="caret"></span>',

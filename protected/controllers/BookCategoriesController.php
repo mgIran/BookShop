@@ -106,7 +106,7 @@ class BookCategoriesController extends Controller
 			'criteria' => $criteria,
 			'pagination' => array('pageSize' => 8)
 		));
-		$this->render('index',array(
+		$this->render('//bookCategories/index',array(
 			'model'=>$model,
 			'dataProvider'=>$dataProvider
 		));

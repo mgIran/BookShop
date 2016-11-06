@@ -30,6 +30,7 @@
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/parallax.min.js', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.nicescroll.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.script.js', CClientScript::POS_END);
     $cs->registerScript('scroll-mode', '
     if($(window).scrollTop() > 85)

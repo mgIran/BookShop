@@ -122,6 +122,7 @@ return array(
 				'news/tag/<id:\d+>/<title:(.*)>'=>'news/manage/tag',
 				'news/index'=>'news/manage/index',
 				'category/<action:\w+>'=>'bookCategories/<action>',
+				'news/category/<action:\w+>'=>'news/categoriesManage/<action>',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
                 '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
@@ -175,7 +176,10 @@ return array(
         ),
 		'category' => array(
             'class' =>'application.controllers.BookCategoriesController',
-        )
+        ),
+//		'news.category' => array(
+//            'class' =>'application.modules.news.controllers.NewsCategoriesManageController',
+//        ),
     ),
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']

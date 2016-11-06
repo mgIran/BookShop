@@ -124,6 +124,34 @@ $(document).ready(function() {
         return false;
     });
 
+    if($('#categories-modal').length > 0) {
+        var catsList = null,
+            content = null;
+        $('#categories-modal').on('shown.bs.modal', function () {
+            if (catsList == null && content == null) {
+                catsList = $(this).find('.cats-list').niceScroll({
+                    cursorcolor: '#999',
+                    cursorborder: 'none',
+                    autohidemode: false,
+                    railalign: 'left',
+                    cursorwidth: '4px',
+                    cursorborderradius: '4px'
+                });
+                content = $(this).find('.cats-content').niceScroll({
+                    cursorcolor: '#999',
+                    cursorborder: 'none',
+                    autohidemode: false,
+                    railalign: 'left',
+                    cursorwidth: '4px',
+                    cursorborderradius: '4px'
+                });
+            }else {
+                catsList.resize();
+                content.resize();
+            }
+        });
+    }
+
     //paralax
     var $window = $(window);
     $('.paralax .content').each(function(){
