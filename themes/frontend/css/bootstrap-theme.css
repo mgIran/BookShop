@@ -1860,6 +1860,9 @@ input[type="checkbox"] + label:hover::before {
 .page-info{
     font-weight: lighter;
 }
+.page-info > div{
+    display: inline-block;
+}
 .page-info a{
     margin-right: 5px;
     margin-left:5px;

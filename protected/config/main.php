@@ -17,6 +17,7 @@ return array(
         'application.vendor.*',
         'application.models.*',
 		'application.components.*',
+		'ext.yiiSortableModel.models.*',
 	),
 
 	'modules'=>array(
@@ -37,6 +38,7 @@ return array(
 		'tickets',
 		'advertises',
 		'news',
+		'rows',
 		'comments'=>array(
 			//you may override default config for all connecting models
 			'defaultModelConfig' => array(
@@ -111,7 +113,7 @@ return array(
             'showScriptName'=>false,
             'appendParams'=>true,
 			'rules'=>array(
-				'<action:(about|contactus|help)>' => 'site/<action>',
+				'<action:(about|contactus|help|publishers)>' => 'site/<action>',
 				'<action:(logout|login|register|dashboard|googleLogin)>' => 'users/public/<action>',
 				'/help'=>'site/help',
 				'books/<id:\d+>'=>'books/view',

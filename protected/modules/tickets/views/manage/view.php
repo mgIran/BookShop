@@ -1,11 +1,8 @@
-
 <?php
 /* @var $this TicketsManageController */
 /* @var $model Tickets */
-
 ?>
-<div class="transparent-form ticket-box">
-	<div class="container-fluid tab-content">
+<div class="transparent-form">
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-left">
 			<?
 			if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin'):
@@ -72,7 +69,11 @@
 				<h5>موضوع: <?= $model->subject ?></h5>
 				<span class="ticket-date">تاریخ ایجاد: <?= Controller::parseNumbers(JalaliDate::date("Y/m/d H:i:s" ,$model->date)) ?></span>
 			</div>
-			<? $this->renderPartial('//partial-views/_flashMessage') ?>
+			<?php
+			if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
+				$this->renderPartial('//layouts/_flashMessage');
+			elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+				$this->renderPartial('//partial-views/_flashMessage'); ?>
 			<?php
 			if($model->status != 'close')
 				$this->renderPartial('tickets.views.messages._form',array(
@@ -88,7 +89,5 @@
 				'template' => '{items}'
 			));
 			?>
-
 		</div>
-	</div>
 </div>

@@ -165,6 +165,15 @@ class Controller extends CController
                     )
                 ),
                 array(
+                    'label' => 'ردیف های کتاب<span class="caret"></span>',
+                    'url' => '#',
+                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
+                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'items' => array(
+                        array('label' => 'مدیریت ردیف های دلخواه', 'url' => Yii::app()->createUrl('/rows/manage/admin')),
+                    )
+                ),
+                array(
                     'label' => 'صفحات متنی<span class="caret"></span>',
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),

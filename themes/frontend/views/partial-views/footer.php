@@ -29,7 +29,7 @@
                 <div class="namad"><img src="uploads/enamad.png"></div>
                 <nav class="links">
                     <ul class="nav nav-justified">
-                        <li><a href="#">ناشران</a></li>
+                        <li><a href="<?= $this->createUrl('/publishers') ?>">ناشران</a></li>
                         <li><a href="<?= $this->createUrl('/help') ?>">راهنما</a></li>
                         <li><a href="<?= $this->createUrl('/contactus') ?>">تماس با ما</a></li>
                         <li><a href="<?= $this->createUrl('/about') ?>">درباره ما</a></li>

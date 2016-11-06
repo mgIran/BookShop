@@ -126,6 +126,7 @@ class Books extends CActiveRecord
 			'persons' => array(self::MANY_MANY, 'BookPersons', '{{book_person_role_rel}}(book_id, person_id)'),
 			'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
 			'tagsRel' => array(self::HAS_MANY, 'BookTagRel', 'book_id'),
+			'rowRel' => array(self::HAS_MANY, 'RowBookRel', 'book_id'),
 		);
 	}
 

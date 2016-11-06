@@ -76,6 +76,8 @@ class TicketsManageController extends Controller
 	 */
 	public function actionView($id)
 	{
+		Yii::app()->theme='abound';
+		$this->layout='//layouts/main';
 		Yii::app()->user->returnUrl = Yii::app()->request->url;
 		$model = $this->loadModel($id);
 		// seen messages
