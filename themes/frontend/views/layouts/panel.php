@@ -26,16 +26,16 @@
     $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css');
-    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?2');
+    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?2');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.cookie.js');
     $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
     $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/panel.script.js', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?2', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/panel.script.js?2', CClientScript::POS_END);
     ?>
 </head>
 <body>
@@ -98,9 +98,9 @@
             </div>
         </div>
 
-        <?php if(Yii::app()->user->roles!='publisher'):?>
-            <a href="<?php echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?>" class="signup-link"><i class="books-icon"></i>آیا ناشر هستید؟</a>
-        <?php endif;?>
+<!--        --><?php //if(Yii::app()->user->roles!='publisher'):?>
+<!--            <a href="--><?php //echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?><!--" class="signup-link"><i class="books-icon"></i>آیا ناشر هستید؟</a>-->
+<!--        --><?php //endif;?>
 
         <div class="list-group">
             <h5>کاربری</h5>
@@ -108,7 +108,10 @@
             <a href="<?php echo Yii::app()->createUrl('users/public/library');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/library')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتابخانه من</span></a>
             <a href="<?php echo Yii::app()->createUrl('users/public/transactions');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/transactions')?' active':'';?>"><i class="transaction-icon"></i><span class="text">تراکنش ها</span></a>
             <a href="<?php echo Yii::app()->createUrl('users/public/downloaded');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/downloaded')?' active':'';?>"><i class="downloaded-icon"></i><span class="text">دانلود شده ها</span></a>
-            <a href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i><span class="text">پشتیبانی</span><span class="badge">3</span></a>
+            <a href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i><span class="text">پشتیبانی</span><?php
+                if($mc = Users::getTicketNewMessageCount())
+                    echo '<span class="badge">'.Controller::parseNumbers($mc).'</span>';
+                ?></a>
         </div>
         <?php if(Yii::app()->user->roles=='publisher'):?>
             <div class="list-group">

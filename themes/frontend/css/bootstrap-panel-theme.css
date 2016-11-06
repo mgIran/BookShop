@@ -1648,3 +1648,41 @@ ul.tagit{
 .buy-label{
     width: 80px;
 }
+
+.btn-red {
+    width: 100%;
+    display: block;
+    padding: 13px 15px;
+    background: #c8385e;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.btn-red:hover,
+.btn-red:focus,
+.btn-red:active {
+    background: #9f3752;
+    color: #fff;
+}
+.or-text{
+    display: block;
+    overflow: hidden;
+    line-height: 50px;
+}
+.google-icon {
+    background: url("../svg/google-plus-logo.svg") no-repeat center;
+    background-size: 20px;
+    width: 20px;
+    height: 22px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}

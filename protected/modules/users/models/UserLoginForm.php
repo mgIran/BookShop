@@ -119,4 +119,15 @@ class UserLoginForm extends CFormModel
         $enc = NEW bCrypt();
         return $enc->hash($value);
     }
+
+	public function showError(){
+		if($this->_identity->errorCode===3)
+			return 'این حساب کاربری فعال نشده است.';
+		elseif($this->_identity->errorCode===4)
+			return 'این حساب کاربری مسدود شده است.';
+		elseif($this->_identity->errorCode===5)
+			return 'این حساب کاربری حذف شده است.';
+		else
+			return 'پست الکترونیک یا کلمه عبور اشتباه است .';
+	}
 }

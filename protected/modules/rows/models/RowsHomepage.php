@@ -1,28 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "ym_ticket_messages".
+ * This is the model class for table "{{rows_homepage}}".
  *
- * The followings are the available columns in table 'ym_ticket_messages':
+ * The followings are the available columns in table '{{rows_homepage}}':
  * @property string $id
- * @property string $ticket_id
- * @property string $sender
- * @property string $date
- * @property string $text
- * @property string $attachment
- * @property integer $visit
+ * @property string $title
+ * @property string $order
  *
  * The followings are the available model relations:
- * @property Tickets $ticket
+ * @property Books[] $books
  */
-class TicketMessages extends CActiveRecord
+class RowsHomepage extends SortableCActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'ym_ticket_messages';
+		return '{{rows_homepage}}';
 	}
 
 	/**
@@ -32,24 +28,13 @@ class TicketMessages extends CActiveRecord
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
-		$sender = null;
-		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
-			$sender = 'admin';
-		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-			$sender = 'user';
 		return array(
-			array('text', 'required'),
-			array('visit', 'numerical', 'integerOnly' => true),
-			array('ticket_id', 'length', 'max' => 10),
-			array('date', 'length', 'max' => 20),
-			array('sender', 'default', 'value' => $sender),
-			array('date', 'default', 'value' => time()),
-			array('visit', 'default', 'value' => 0),
-			array('attachment', 'length', 'max' => 500),
-			array('text', 'safe'),
+			array('title', 'required'),
+			array('title', 'length', 'max'=>50),
+			array('order', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, ticket_id, date, text, attachment, visit', 'safe', 'on' => 'search'),
+			array('id, title, order', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +46,7 @@ class TicketMessages extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ticket' => array(self::BELONGS_TO, 'Tickets', 'ticket_id'),
+			'books' => array(self::MANY_MANY, 'Books', '{{row_book_rel}}(row_id, book_id)'),
 		);
 	}
 
@@ -71,12 +56,9 @@ class TicketMessages extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'ticket_id' => 'تیکت',
-			'date' => 'تاریخ',
-			'text' => 'متن',
-			'attachment' => 'فایل ضمیمه',
-			'visit' => 'Visit',
+			'id' => 'شناسه',
+			'title' => 'عنوان',
+			'order' => 'ترتیب',
 		);
 	}
 
@@ -99,13 +81,36 @@ class TicketMessages extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('ticket_id',$this->ticket_id,true);
-		$criteria->compare('date',$this->date,true);
-		$criteria->compare('text',$this->text,true);
-		$criteria->compare('attachment',$this->attachment,true);
-		$criteria->compare('visit',$this->visit);
-
+		$criteria->compare('title',$this->title,true);
+		$criteria->compare('order',$this->order,true);
 		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+
+	public function searchBooks()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('row_id',$this->id);
+		return new CActiveDataProvider("RowBookRel", array(
+			'criteria'=>$criteria,
+		));
+	}
+    
+    public function searchOtherBooks()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=Books::model()->getValidBooks();
+        $criteria->together =true;
+        $criteria->with[] = 'rowRel';
+        $criteria->addCondition('rowRel.row_id IS NULL OR rowRel.row_id <> :this_id');
+        $criteria->params[':this_id'] = $this->id;
+
+		return new CActiveDataProvider("Books", array(
 			'criteria'=>$criteria,
 		));
 	}
@@ -114,7 +119,7 @@ class TicketMessages extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return TicketMessages the static model class
+	 * @return RowsHomepage the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

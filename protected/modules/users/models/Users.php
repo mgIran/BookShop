@@ -220,4 +220,15 @@ class Users extends CActiveRecord
             $criteria->compare('role_id',$role_id);
         return $this->count($criteria);
     }
+
+    public static function getTicketNewMessageCount()
+    {
+        Yii::import("tickets.models.*");
+        $criteria = new CDbCriteria();
+        $criteria->compare('user_id',Yii::app()->user->getId());
+        $criteria->with[] = 'messages';
+        $criteria->compare('messages.visit', 0);
+        $criteria->compare('messages.sender', '<> user');
+        return Tickets::model()->count($criteria);
+    }
 }

@@ -143,4 +143,13 @@ class SiteController extends Controller
         $model = Pages::model()->findByPk(6);
         $this->render('//site/pages/page', array('model' => $model));
     }
+
+    public function actionPublishers()
+    {
+        Yii::import('pages.models.*');
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/index';
+        $model = Pages::model()->findByPk(9);
+        $this->render('//site/pages/page', array('model' => $model));
+    }
 }

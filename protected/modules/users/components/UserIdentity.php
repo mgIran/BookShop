@@ -54,7 +54,7 @@ class UserIdentity extends CUserIdentity
     {
         if($this->OAuth)
         {
-            $record = Users::model()->findByAttributes(array('email' => $this->email,'auth_mode'=>$this->OAuth));
+            $record = Users::model()->findByAttributes(array('email' => $this->email));
         }else {
             $bCrypt = new bCrypt;
             $record = Users::model()->findByAttributes(array('email' => $this->email));
