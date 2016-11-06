@@ -6,19 +6,11 @@
 /* @var $settlementHistory CActiveDataProvider */
 /* @var $formDisabled boolean */
 ?>
-<div class="transparent-form">
+<div class="white-form">
     <h3>تسویه حساب</h3>
+    <p class="description">می توانید ماهیانه با کتابیک تسویه حساب کنید.</p>
+
     <?php $this->renderPartial('//partial-views/_flashMessage');?>
-    <div class="panel panel-warning settlement-help">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" href="#help-box">راهنما</a>
-            </h4>
-        </div>
-        <div id="help-box" class="panel-collapse collapse">
-            <div class="panel-body"><?php echo $helpText;?></div>
-        </div>
-    </div>
 
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'user-details-form',
@@ -31,78 +23,78 @@
         'clientOptions' => array(
             'validateOnSubmit' => true
         ),
+        'htmlOptions'=>array(
+            'class'=>'form'
+        )
     ));?>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3>تسویه حساب ماهانه</h3>
-                <div class="alert alert-danger">
-                    <span><b>مبلغ قابل تسویه این ماه :</b> <?php echo number_format($userDetailsModel->getSettlementAmount(), 0);?> تومان</span>
-                </div>
-                <hr>
-                <div class="col-md-6">
-                    <?php echo $form->checkBox($userDetailsModel, 'monthly_settlement', array(
-                        'onchange'=>"$('#UserDetails_iban').prop('disabled', function(i, v){return !v;});",
-                        'disabled'=>$formDisabled,
-                    ));?>
-                    <?php echo $form->label($userDetailsModel, 'monthly_settlement', array(
-                        'style'=>'display:inline-block',
-                    ));?>
-                    <span>: مبلغ قابل تسویه 20اُم هر ماه به این شبا واریز شود.</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="col-md-8" style="padding: 0">
-                        <?php echo $form->label($userDetailsModel, 'iban');?>
-                        <div class="input-group">
-                            <?php
-                            if(!$formDisabled)
-                                $disabled=(!is_null($userDetailsModel->iban))?false:true;
-                            else
-                                $disabled=true;
-                            ?>
-                            <?php echo $form->textField($userDetailsModel, 'iban', array(
-                                'class'=>'form-control',
-                                'aria-describedby'=>'basic-addon1',
-                                'style'=>'direction: ltr;',
-                                'placeholder'=>'10002000300040005000607:مثال',
-                                'disabled'=>$disabled,
-                            ));?>
-                            <span id="basic-addon1" class="input-group-addon">IR</span>
-                        </div>
-                        <?php echo $form->error($userDetailsModel, 'iban');?>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <?php echo CHtml::submitButton('ثبت', array(
-                                'class'=>'btn btn-success pull-left',
-                                'id'=>'settlement-button',
-                                'disabled'=>$formDisabled,
-                            ));?>
-                        </div>
-                    </div>
-                </div>
+    <label>مبلغ قابل تسویه این ماه :</label><span><?php echo number_format($userDetailsModel->getSettlementAmount(), 0);?> تومان</span>
+    <div class="form-row">
+        <?php echo $form->checkBox($userDetailsModel, 'monthly_settlement', array(
+            'onchange'=>"$('#UserDetails_iban').prop('disabled', function(i, v){return !v;});",
+            'disabled'=>$formDisabled,
+        ));?>
+        <?php echo $form->label($userDetailsModel, 'monthly_settlement', array(
+            'style'=>'display:inline-block;margin:15px 0;',
+        ));?>
+        <span>: مبلغ قابل تسویه 20اُم هر ماه به این شبا واریز شود.</span>
+    </div>
+    <div class="form-row">
+        <div class="iban-container">
+            <?php echo $form->label($userDetailsModel, 'iban');?>
+            <div class="input-group">
+                <?php
+                if(!$formDisabled)
+                    $disabled=(!is_null($userDetailsModel->iban))?false:true;
+                else
+                    $disabled=true;
+                ?>
+                <?php echo $form->textField($userDetailsModel, 'iban', array(
+                    'class'=>'form-control',
+                    'aria-describedby'=>'basic-addon1',
+                    'style'=>'direction: ltr;',
+                    'placeholder'=>'10002000300040005000607:مثال',
+                    'disabled'=>$disabled,
+                ));?>
+                <span id="basic-addon1" class="input-group-addon">IR</span>
             </div>
+            <?php echo $form->error($userDetailsModel, 'iban');?>
         </div>
+        <div class="buttons overflow-hidden">
+            <?php echo CHtml::submitButton('ثبت', array(
+                'class'=>'btn btn-default pull-right',
+                'id'=>'settlement-button',
+                'disabled'=>$formDisabled,
+            ));?>
+            <a data-toggle="collapse" href="#help-box" class="btn btn-danger pull-left">راهنما</a>
+        </div>
+    </div>
     <?php $this->endWidget();?>
 
-    <div class="panel panel-default settlement-history">
-        <div class="panel-body">
-            <h3>تاریخچه تسویه حساب</h3>
-            <hr>
-            <div class="table text-center">
-                <div class="thead">
-                    <div class="col-md-4">مبلغ</div>
-                    <div class="col-md-4">تاریخ</div>
-                    <div class="col-md-4">شماره شبا</div>
-                </div>
-                <div class="tbody">
-                    <?php $this->widget('zii.widgets.CListView', array(
-                        'dataProvider'=>$settlementHistory,
-                        'itemView'=>'_settlement_list',
-                        'template'=>'{items}'
-                    ));?>
-                </div>
-            </div>
+    <div class="panel panel-warning settlement-help">
+        <div id="help-box" class="panel-collapse collapse">
+            <div class="panel-body"><?php echo $helpText;?></div>
         </div>
+    </div>
+
+    <div class="settlement-history">
+        <h3>تاریخچه تسویه حساب</h3>
+        <p class="description">تسویه حساب هایی که تا به امروز انجام شده است.</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>مبلغ</td>
+                    <td>تاریخ</td>
+                    <td>شماره شبا</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $this->widget('zii.widgets.CListView', array(
+                    'dataProvider'=>$settlementHistory,
+                    'itemView'=>'_settlement_list',
+                    'template'=>'{items}'
+                ));?>
+            </tbody>
+        </table>
     </div>
 </div>

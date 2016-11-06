@@ -5,7 +5,7 @@
 ?>
 <div class="transparent-form">
     <h3>تخفیفات</h3>
-    <p class="description">لیست کتاب هایی که تخفیف داده اید.</p>
+    <p class="description">لیست تخفیفاتی که در نظر گرفته اید.</p>
     <?php $this->renderPartial('//partial-views/_flashMessage', array('prefix'=>'discount-'));?>
     <div class="buttons">
         <a class="btn btn-success" data-toggle="modal" href="#discount-modal"> افزودن تخفیف جدید</a>
@@ -24,7 +24,7 @@
         <?php if(!$booksDataProvider->totalItemCount):?>
             <tbody>
             <tr>
-                <td colspan="7" class="text-center">نتیجه ای یافت نشد.</td>
+                <td colspan="6" class="text-center">نتیجه ای یافت نشد.</td>
             </tr>
             </tbody>
         <?php else:?>

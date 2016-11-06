@@ -4,11 +4,13 @@
 /* @var $labels array */
 /* @var $values array */
 ?>
-<div class="report-sale">
-<h3>گزارش فروش</h3>
-<?php $this->renderPartial('//partial-views/_flashMessage');?>
-    <?php echo CHtml::beginForm();?>
-        <p>کتاب مورد نظر را انتخاب کنید:</p>
+<div class="white-form report-sale">
+    <h3>گزارش فروش</h3>
+    <p class="description">کتاب مورد نظر را انتخاب کنید:</p>
+    <?php $this->renderPartial('//partial-views/_flashMessage');?>
+    <?php echo CHtml::beginForm('', 'POST', array(
+        'class'=>'form'
+    ));?>
         <div class="panel panel-default">
             <div class="panel-body">
                 <?php $this->widget('zii.widgets.CListView', array(
@@ -18,7 +20,7 @@
                 ));?>
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="margin-bottom: 50px;">
             <div class="form-group col-lg-4 col-md-4 col-sm-6 col-md-12">
                 <?php echo CHtml::label('از تاریخ', 'from_date');?>
                 <?php $this->widget('application.extensions.PDatePicker.PDatePicker', array(

@@ -13,8 +13,6 @@
             <?php echo Yii::app()->user->getFlash('failed');?>
         </div>
     <?php endif;?>
-    <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red"><i class="google-icon"></i>ثبت نام با گوگل</a>
-    <div class="text-center or-text">یا</div>
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'register-form',
         'enableAjaxValidation'=>true,
@@ -47,6 +45,9 @@
     <?php $this->endWidget(); ?>
 
     <p><a href="<?php echo $this->createUrl('/login');?>">ورود به حساب کاربری</a></p>
+
+    <div class="text-center or-text">می توانید با حساب کاربری گوگل ثبت نام کنید...</div>
+    <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red"><i class="google-icon"></i>ثبت نام با گوگل</a>
 
     <div class="loading-container">
         <div class="overly"></div>

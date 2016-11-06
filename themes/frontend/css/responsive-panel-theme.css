@@ -281,6 +281,9 @@
     .login-box{
         padding: 0 2% !important;
     }
+    .or-text{
+        width:100%;
+    }
 }
 @media screen and (max-width: 360px){
     .sidebar .navbar-brand,
@@ -342,6 +345,9 @@
         text-align: center;
         margin-top: 30px;
     }
+    .or-text{
+        width:100%;
+    }
 }
 @media (min-width: 650px) and (max-width: 768px){
     .thumbnail-list .thumbnail-container{
@@ -371,6 +377,9 @@
     .footer .nav-justified > li{
         display: table-cell;
         width: 1%;
+    }
+    .or-text{
+        width:100%;
     }
 }
 @media (min-width: 768px) and (max-width: 992px){
@@ -429,6 +438,9 @@
         font-size: 20px;
         margin-right: 10px;
     }
+    .or-text{
+        width:100%;
+    }
 }
 @media (min-width: 992px) and (max-width: 1200px){
     .thumbnail-list .thumbnail-container{
@@ -468,6 +480,9 @@
     }
     .content .statistics h3{
         font-size: 22px;
+    }
+    .or-text{
+        width:100%;
     }
 }
 @media (min-width: 1200px){

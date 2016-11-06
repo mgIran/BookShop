@@ -1186,7 +1186,7 @@ a:active{
     padding: 15px;
     border-radius: 0;
     margin-top: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 .login-form .btn-info{
     background: #3b5998;
@@ -1198,6 +1198,7 @@ a:active{
 }
 .login-form a{
     color: #fff;
+    font-size: 12px;
 }
 .login-box .copyright{
     color: #667d8d;
@@ -1496,6 +1497,7 @@ small.description{
 }
 .sidebar-mini .navbar-header .navbar-brand img{
     max-height: 30px;
+    margin: 10px 0;
 }
 .sidebar-mini .navbar-header .navbar-brand,
 .sidebar-mini .sidebar{
@@ -1638,8 +1640,17 @@ ul.tagit{
 .report-sale .book-item{
     margin-bottom: 15px;
 }
+.report-sale .book-item input[type="radio"]{
+    display: block;
+    margin: 0 auto 15px;
+}
 .report-sale .book-item img{
-    width: 50px;
+    width: 70px;
+    display: block;
+    margin:0 auto 15px;
+}
+.report-sale .book-item h5{
+    text-align: center;
 }
 .report-sale .btn.btn-info{
     padding: 7px 15px;
@@ -1676,6 +1687,9 @@ ul.tagit{
     display: block;
     overflow: hidden;
     line-height: 50px;
+    border-top: 4px double rgba(255, 255, 255, 0.1);
+    width: 70%;
+    margin: 20px auto 0;
 }
 .google-icon {
     background: url("../svg/google-plus-logo.svg") no-repeat center;
@@ -1685,4 +1699,66 @@ ul.tagit{
     display: inline-block;
     vertical-align: middle;
     margin-left: 10px;
+}
+.login-form .btn-red{
+    border-bottom: none;
+    font-size: 16px;
+}
+.login-form #remember-me + label{
+    color: #667d8d;
+    font-weight: normal;
+}
+input[type="checkbox"]{
+    opacity:0;
+    position: absolute;
+    z-index:1;
+}
+input[type="checkbox"] + label{
+    z-index:2;
+    cursor: pointer;
+    position: relative;
+    padding-right: 25px;
+}
+input[type="checkbox"] + label::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #667d8d;
+    background-size: 0;
+    background-position: center;
+    -webkit-transition: background 0.3s ease 0s;
+    -moz-transition: background 0.3s ease 0s;
+    -ms-transition: background 0.3s ease 0s;
+    -o-transition: background 0.3s ease 0s;
+    transition: background 0.3s ease 0s;
+}
+
+input[type="checkbox"]:checked + label::before {
+    background: url("../svg/checked.svg") no-repeat 2px center;
+    background-size: 11px;
+}
+.panel{
+    box-shadow: none;
+    border:none;
+}
+.panel .panel-body{
+    padding: 15px;
+    box-shadow: none;
+    border-radius: 5px;
+    border:1px solid #e7ebf1;
+}
+.settlement-help{
+    margin-top: 15px;
+}
+.form .input-group-addon:last-child{
+    border-color: #eee;
+}
+.iban-container{
+    width: 30%;
+    margin-bottom: 15px;
+}
+.settlement-history{
+    margin-top: 70px;
 }
