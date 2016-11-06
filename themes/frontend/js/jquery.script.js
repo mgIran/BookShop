@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $(window).scroll(function() {
-        if($(window).scrollTop() > 85)
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 85)
             $(".navbar.navbar-default").addClass('scroll-mode');
         else
             $(".navbar.navbar-default").removeClass('scroll-mode');
@@ -8,7 +8,7 @@ $(document).ready(function() {
 
     if ($('.slider').length != 0) {
         var loop = $('.slider').attr('data-loop');
-        if(typeof loop === 'undefined')
+        if (typeof loop === 'undefined')
             loop = false;
         $('.slider').owlCarousel({
             items: 1,
@@ -39,14 +39,14 @@ $(document).ready(function() {
             nav = ($this.data('nav') == 1) ? true : false,
             margin = $this.data('margin'),
             responsive = $this.data('responsive'),
-            loop=($this.data('loop') == 1) ? true : false,
-            autoPlay=($this.data('autoplay') == 1) ? true : false,
-            autoPlayHoverPause=($this.data('autoplay-hover-pause') == 1) ? true : false,
-            mouseDrag=($this.data('mouse-drag') == 1) ? true : false;
-        
+            loop = ($this.data('loop') == 1) ? true : false,
+            autoPlay = ($this.data('autoplay') == 1) ? true : false,
+            autoPlayHoverPause = ($this.data('autoplay-hover-pause') == 1) ? true : false,
+            mouseDrag = ($this.data('mouse-drag') == 1) ? true : false;
+
         if ($(this).hasClass('auto-width')) {
-            var carousel=$(this);
-            $(this).on('refresh.owl.carousel', function(){
+            var carousel = $(this);
+            $(this).on('refresh.owl.carousel', function () {
                 setCarouselItemsWidth(carousel, items, margin);
             });
 
@@ -64,7 +64,7 @@ $(document).ready(function() {
                 autoplay: autoPlay,
                 items: items,
                 nestedItemSelector: nestedItemSelector,
-                dots:dots,
+                dots: dots,
                 nav: nav,
                 autoplayHoverPause: autoPlayHoverPause,
                 mouseDrag: mouseDrag,
@@ -73,7 +73,7 @@ $(document).ready(function() {
                 rtl: true
             });
         } else {
-            if(typeof nestedItemSelector=='undefined') {
+            if (typeof nestedItemSelector == 'undefined') {
                 $(this).owlCarousel({
                     loop: loop,
                     autoplay: autoPlay,
@@ -86,7 +86,7 @@ $(document).ready(function() {
                     responsive: responsive,
                     rtl: true
                 });
-            }else {
+            } else {
                 $(this).owlCarousel({
                     loop: loop,
                     autoplay: autoPlay,
@@ -119,9 +119,9 @@ $(document).ready(function() {
         owlClasses.trigger('destroy.owl.carousel');
         owlClasses.html(owlClasses.find('.owl-stage-outer').html()).removeClass('owl-loaded');
 
-        owlClasses.on('refresh.owl.carousel', function(){
-            var items=owlClasses.data('items'),
-                margin=owlClasses.data('margin');
+        owlClasses.on('refresh.owl.carousel', function () {
+            var items = owlClasses.data('items'),
+                margin = owlClasses.data('margin');
             setCarouselItemsWidth(owlClasses, items, margin);
         });
 
@@ -133,12 +133,12 @@ $(document).ready(function() {
         });
     });
 
-    $('.back-to-top').click(function(){
-        $('html').animate({scrollTop:0}, 1000);
+    $('.back-to-top').click(function () {
+        $('html').animate({scrollTop: 0}, 1000);
         return false;
     });
 
-    if($('#categories-modal').length > 0) {
+    if ($('#categories-modal').length > 0) {
         var catsList = null,
             content = null;
         $('#categories-modal').on('shown.bs.modal', function () {
@@ -159,7 +159,7 @@ $(document).ready(function() {
                     cursorwidth: '4px',
                     cursorborderradius: '4px'
                 });
-            }else {
+            } else {
                 catsList.resize();
                 content.resize();
             }
@@ -168,25 +168,25 @@ $(document).ready(function() {
 
     //paralax
     var $window = $(window);
-    $('.paralax .content').each(function(){
+    $('.paralax .content').each(function () {
         var $bgobj = $(this);
-        var yPos = -( ($window.scrollTop()-$bgobj.offset().top + 30) / 5);
-        var ycss = 'background-position: 50% '+ yPos + 'px !important; transition: none;';
+        var yPos = -( ($window.scrollTop() - $bgobj.offset().top + 30) / 5);
+        var ycss = 'background-position: 50% ' + yPos + 'px !important; transition: none;';
         $bgobj.attr('style', ycss);
 
-        $(window).scroll(function() {
-            var yPos = -( ($window.scrollTop()-$bgobj.offset().top + 30) / 5);
-            var ycss = 'background-position: 50% '+ yPos + 'px !important; transition: none;';
+        $(window).scroll(function () {
+            var yPos = -( ($window.scrollTop() - $bgobj.offset().top + 30) / 5);
+            var ycss = 'background-position: 50% ' + yPos + 'px !important; transition: none;';
             $bgobj.attr('style', ycss);
         });
     });
 
 
-    $(window).resize(function(){
+    $(window).resize(function () {
         var slider = $('.slider');
         if (slider.length != 0) {
             var loop = $('.slider').attr('data-loop');
-            if(typeof loop === 'undefined')
+            if (typeof loop === 'undefined')
                 loop = false;
             slider.trigger('destroy.owl.carousel');
             slider.html(slider.find('.owl-stage-outer').html()).removeClass('owl-loaded');
@@ -199,7 +199,7 @@ $(document).ready(function() {
                 autoplayTimeout: 8000,
                 autoplayHoverPause: true,
                 rtl: true,
-                loop:loop
+                loop: loop
             });
             $('.slider-overlay-nav').click(function () {
                 if ($(this).hasClass('slider-next'))
