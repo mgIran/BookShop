@@ -43,8 +43,7 @@ $(document).ready(function() {
             autoPlay=($this.data('autoplay') == 1) ? true : false,
             autoPlayHoverPause=($this.data('autoplay-hover-pause') == 1) ? true : false,
             mouseDrag=($this.data('mouse-drag') == 1) ? true : false;
-        if(typeof nestedItemSelector == 'undefined')
-            nestedItemSelector='div';
+        
         if ($(this).hasClass('auto-width')) {
             var carousel=$(this);
             $(this).on('refresh.owl.carousel', function(){
@@ -74,19 +73,34 @@ $(document).ready(function() {
                 rtl: true
             });
         } else {
-            $(this).owlCarousel({
-                loop: loop,
-                autoplay: autoPlay,
-                items: items,
-                nestedItemSelector: nestedItemSelector,
-                dots:dots,
-                nav: nav,
-                autoplayHoverPause: autoPlayHoverPause,
-                mouseDrag: mouseDrag,
-                navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
-                responsive: responsive,
-                rtl: true
-            });
+            if(typeof nestedItemSelector=='undefined') {
+                $(this).owlCarousel({
+                    loop: loop,
+                    autoplay: autoPlay,
+                    items: items,
+                    dots: dots,
+                    nav: nav,
+                    autoplayHoverPause: autoPlayHoverPause,
+                    mouseDrag: mouseDrag,
+                    navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
+                    responsive: responsive,
+                    rtl: true
+                });
+            }else {
+                $(this).owlCarousel({
+                    loop: loop,
+                    autoplay: autoPlay,
+                    items: items,
+                    nestedItemSelector: nestedItemSelector,
+                    dots: dots,
+                    nav: nav,
+                    autoplayHoverPause: autoPlayHoverPause,
+                    mouseDrag: mouseDrag,
+                    navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
+                    responsive: responsive,
+                    rtl: true
+                });
+            }
         }
     });
 
