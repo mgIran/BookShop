@@ -2775,3 +2775,6 @@ input[type="checkbox"] + label:hover::before {
 .comments-list-outer > p{
     padding: 0 0 30px !important;
 }
+#categories-modal .tab-content{
+    height:400px;
+}
