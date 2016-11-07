@@ -65,11 +65,12 @@
 		<?php echo $form->error($model,'attachment'); ?>
 	</div>
 
-	<div class="form-group buttons col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		<?php echo CHtml::button('فایل ضمیمه',array('class' => 'btn btn-danger pull-right' ,'data-toggle' => 'collapse' ,'data-target' => '#file-uploader-box')); ?>
+	<?php echo CHtml::button('فایل ضمیمه',array('class' => 'btn btn-danger' ,'data-toggle' => 'collapse' ,'data-target' => '#file-uploader-box')); ?>
+	<div class="buttons">
+		<?php echo CHtml::submitButton('ارسال' , array('class' => 'btn btn-default')); ?>
 	</div>
 	<div class="form-group buttons col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		<?php echo CHtml::submitButton('ارسال' , array('class' => 'btn btn-default pull-right')); ?>
+
 	</div>
 
 <?php $this->endWidget(); ?>

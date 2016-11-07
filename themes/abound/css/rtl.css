@@ -156,8 +156,8 @@ label{
     width: 90%;
     margin-bottom: 15px;
 }
-[class*="col-"]{
-    display: inline-block !important;
+.clearfix{
+    clear: both;
 }
 .transparent-form .btn{
     width: 130px;

@@ -9,7 +9,7 @@ Yii::app()->clientScript->registerCss('inline',"
 ?>
 
 <div class="packages-list-container">
-    <a class="btn btn-success" href="#package-modal" data-toggle="modal"><i class="icon icon-plus"></i> ثبت نوبت چاپ</a>
+    <a class="btn btn-success" href="#package-modal" data-toggle="modal">ثبت نوبت چاپ</a>
     <table class="table">
         <thead class="thead">
             <tr>

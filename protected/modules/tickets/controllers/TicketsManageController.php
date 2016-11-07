@@ -6,7 +6,7 @@ class TicketsManageController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/panel';
+	public $layout = '//layouts/panel';
 
 	/**
 	 * @return array actions type list
@@ -14,7 +14,7 @@ class TicketsManageController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend'=>array(
+			'backend' => array(
 				'delete',
 				'pendingTicket',
 				'openTicket',
@@ -44,12 +44,13 @@ class TicketsManageController extends Controller
 
 	public function beforeAction($action)
 	{
-		Yii::app()->theme='frontend';
-		$this->layout='//layouts/panel';
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/panel';
 		return parent::beforeAction($action);
 	}
 
-	public function actions(){
+	public function actions()
+	{
 		return array(
 			'upload' => array(
 				'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
@@ -76,29 +77,32 @@ class TicketsManageController extends Controller
 	 */
 	public function actionView($id)
 	{
-		Yii::app()->theme='abound';
-		$this->layout='//layouts/main';
+		if (Yii::app()->user->type == 'admin') {
+			Yii::app()->theme = 'abound';
+			$this->layout = '//layouts/main';
+		} else {
+			Yii::app()->theme = 'frontend';
+			$this->layout = '//layouts/panel';
+		}
 		Yii::app()->user->returnUrl = Yii::app()->request->url;
 		$model = $this->loadModel($id);
 		// seen messages
 		$criteria = new CDbCriteria();
-		$criteria->compare('visit',0);
-		$criteria->compare('ticket_id',$model->id);
+		$criteria->compare('visit', 0);
+		$criteria->compare('ticket_id', $model->id);
 
-		if(!Yii::app()->user->isGuest)
-		{
-			if(Yii::app()->user->type == 'admin')
-				$criteria->compare('sender','user');
-			elseif(Yii::app()->user->type == 'user')
-			{
+		if (!Yii::app()->user->isGuest) {
+			if (Yii::app()->user->type == 'admin')
+				$criteria->compare('sender', 'user');
+			elseif (Yii::app()->user->type == 'user') {
 				$criteria->addCondition('sender regexp :sender');
 				$criteria->params[":sender"] = "(admin|supporter)";
 			}
 		}
-		TicketMessages::model()->updateAll(array('visit' => '1'),$criteria);
+		TicketMessages::model()->updateAll(array('visit' => '1'), $criteria);
 
-		$this->render('view',array(
-			'model'=>$model,
+		$this->render('view', array(
+			'model' => $model,
 		));
 	}
 
@@ -108,23 +112,22 @@ class TicketsManageController extends Controller
 	 */
 	public function actionCreate()
 	{
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
-		$model=new Tickets;
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/panel';
+		$model = new Tickets;
 
-		if(isset($_POST['Tickets']))
-		{
-			$model->attributes=$_POST['Tickets'];
-			if($model->save()) {
-				if($model->firstMessageId)
+		if (isset($_POST['Tickets'])) {
+			$model->attributes = $_POST['Tickets'];
+			if ($model->save()) {
+				if ($model->firstMessageId)
 					$this->redirect(array('view', 'id' => $model->code));
 				else
 					$this->redirect(array('/tickets/manage/'));
 			}
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
+		$this->render('create', array(
+			'model' => $model,
 		));
 	}
 
@@ -135,11 +138,11 @@ class TicketsManageController extends Controller
 	 */
 	public function actionCloseTicket($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 		$model->status = 'close';
 		$model->update();
-		if(!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
-			$this->redirect(array('/tickets/'.$id));
+		if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
+			$this->redirect(array('/tickets/' . $id));
 		else
 			$this->redirect(array('/tickets/manage/'));
 	}
@@ -150,13 +153,12 @@ class TicketsManageController extends Controller
 	 */
 	public function actionSend()
 	{
-		$model=new TicketMessages;
+		$model = new TicketMessages;
 
-		if(isset($_POST['TicketMessages']))
-		{
-			$model->attributes=$_POST['TicketMessages'];
-			if($model->save())
-				$this->redirect(array('/tickets/'.$model->ticket->code));
+		if (isset($_POST['TicketMessages'])) {
+			$model->attributes = $_POST['TicketMessages'];
+			if ($model->save())
+				$this->redirect(array('/tickets/' . $model->ticket->code));
 		}
 		$this->redirect(Yii::app()->user->returnUrl);
 	}
@@ -168,10 +170,10 @@ class TicketsManageController extends Controller
 	 */
 	public function actionPendingTicket($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 		$model->status = 'pending';
 		$model->update();
-		$this->redirect(array('/tickets/'.$id));
+		$this->redirect(array('/tickets/' . $id));
 	}
 
 	/**
@@ -181,10 +183,10 @@ class TicketsManageController extends Controller
 	 */
 	public function actionOpenTicket($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 		$model->status = 'open';
 		$model->update();
-		$this->redirect(array('/tickets/'.$id));
+		$this->redirect(array('/tickets/' . $id));
 	}
 
 	/**
@@ -197,7 +199,7 @@ class TicketsManageController extends Controller
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
+		if (!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
@@ -209,10 +211,9 @@ class TicketsManageController extends Controller
 		Yii::app()->theme = 'abound';
 		$this->layout = '//layouts/column1';
 		$criteria = new CDbCriteria();
-		if(isset($_GET['Tickets']))
-			foreach($_GET['Tickets'] as $key=>$param)
-			{
-				$criteria->compare($key,$param,true);
+		if (isset($_GET['Tickets']))
+			foreach ($_GET['Tickets'] as $key => $param) {
+				$criteria->compare($key, $param, true);
 			}
 		$criteria->order = 'case when status regexp \'waiting\' then 1
 							when status regexp \'pending\' then 2
@@ -230,15 +231,16 @@ class TicketsManageController extends Controller
 	 */
 	public function actionIndex()
 	{
-		Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
+		Yii::app()->theme = 'frontend';
+		$this->layout = '//layouts/panel';
 		$criteria = new CDbCriteria();
-		$criteria->compare('user_id',Yii::app()->user->getId());
+		$criteria->compare('user_id', Yii::app()->user->getId());
 		$model = Tickets::model()->findAll($criteria);
-		$this->render('index',array(
-				'model'=>$model,
+		$this->render('index', array(
+			'model' => $model,
 		));
 	}
+
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -248,13 +250,13 @@ class TicketsManageController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Tickets::model()->findByPk($id);
-		if($model===null) {
-			if(!Yii::app()->user->isGuest && Yii::app()->user->type != 'admin')
-				$model = Tickets::model()->findByAttributes(array('code'=>$id ,'user_id' => Yii::app()->user->getId()));
-			elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
-				$model = Tickets::model()->findByAttributes(array('code'=>$id));
-			if($model===null)
+		$model = Tickets::model()->findByPk($id);
+		if ($model === null) {
+			if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'admin')
+				$model = Tickets::model()->findByAttributes(array('code' => $id, 'user_id' => Yii::app()->user->getId()));
+			elseif (!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
+				$model = Tickets::model()->findByAttributes(array('code' => $id));
+			if ($model === null)
 				throw new CHttpException(404, 'The requested page does not exist.');
 		}
 		return $model;
@@ -266,8 +268,7 @@ class TicketsManageController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='tickets-form')
-		{
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'tickets-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

@@ -1549,16 +1549,15 @@ ul.tagit{
     font-size: 13px;
 }
 #message-list {
-    border-top: 1px solid #eee;
     margin-top: 30px;
 }
 .message-item {
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #ccc;
     margin: 15px 0;
     position: relative;
 }
 .message-item .avatar {
-    background-color: #f0f0f0;
+    background-color: #fff;
     border: 1px solid #dadada;
     border-radius: 10px;
     color: #aaa;
