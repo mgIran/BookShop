@@ -103,13 +103,9 @@ class RowsHomepage extends SortableCActiveRecord
     public function searchOtherBooks()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
-
+		$thisBooks = CHtml::listData(RowBookRel::model()->findAll('row_id = :row_id',array(':row_id'=>$this->id)),'book_id','book_id');
 		$criteria=Books::model()->getValidBooks();
-        $criteria->together =true;
-        $criteria->with[] = 'rowRel';
-        $criteria->addCondition('rowRel.row_id IS NULL OR rowRel.row_id <> :this_id');
-        $criteria->params[':this_id'] = $this->id;
-
+		$criteria->addNotInCondition('t.id',$thisBooks);
 		return new CActiveDataProvider("Books", array(
 			'criteria'=>$criteria,
 		));

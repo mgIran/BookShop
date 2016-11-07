@@ -51,6 +51,7 @@ $(document).ready(function() {
             });
 
             $(this).owlCarousel({
+                slideBy:1,
                 autoWidth: true,
                 dots: dots,
                 nav: nav,
@@ -60,6 +61,7 @@ $(document).ready(function() {
             });
         } else if ($(this).hasClass('vertical')) {
             $(this).owlCarousel({
+                slideBy:1,
                 loop: loop,
                 autoplay: autoPlay,
                 items: items,
@@ -75,6 +77,7 @@ $(document).ready(function() {
         } else {
             if (typeof nestedItemSelector == 'undefined') {
                 $(this).owlCarousel({
+                    slideBy:1,
                     loop: loop,
                     autoplay: autoPlay,
                     items: items,
@@ -88,6 +91,7 @@ $(document).ready(function() {
                 });
             } else {
                 $(this).owlCarousel({
+                    slideBy:1,
                     loop: loop,
                     autoplay: autoPlay,
                     items: items,

@@ -107,32 +107,45 @@ class SortableCGridView extends CGridView
    public function renderTableRow($row)
    {
       $data=$this->dataProvider->data[$row];
-      echo '<tr';
-      if($this->rowCssClassExpression !== null) {
-         echo ' class="'.$this->evaluateExpression($this->rowCssClassExpression,array('row'=>$row,'data'=>$data)).'"';
-      } else if(is_array($this->rowCssClass) && ($n=count($this->rowCssClass))>0) {
-         echo ' class="'.$this->rowCssClass[$row%$n].'"';
+      $htmlOptions=array();
+      if($this->rowHtmlOptionsExpression!==null)
+      {
+         $data=$this->dataProvider->data[$row];
+         $options=$this->evaluateExpression($this->rowHtmlOptionsExpression,array('row'=>$row,'data'=>$data));
+         if(is_array($options))
+            $htmlOptions = $options;
       }
-      
-      if($this->rowHtmlOptionsExpression !== null) {
-         echo ' '.$this->evaluateExpression($this->rowHtmlOptionsExpression,array('row'=>$row,'data'=>$data)).'';
+
+      if($this->rowCssClassExpression!==null)
+      {
+         $data=$this->dataProvider->data[$row];
+         $class=$this->evaluateExpression($this->rowCssClassExpression,array('row'=>$row,'data'=>$data));
       }
-      /*Render the record id as its 'data-id' atribute. This information will be used to sort*/
+      elseif(is_array($this->rowCssClass) && ($n=count($this->rowCssClass))>0)
+         $class=$this->rowCssClass[$row%$n];
+
+      if(!empty($class))
+      {
+         if(isset($htmlOptions['class']))
+            $htmlOptions['class'].=' '.$class;
+         else
+            $htmlOptions['class']=$class;
+      }
       if ($this->enableDragDropSorting === true) {
          $count = count($idField = explode(',',$this->idField));
          if($count == 1)
-            echo ' data-id="'.CHtml::value($data, $this->idField).'"';
+            $htmlOptions['data-id'] = CHtml::value($data, $this->idField);
          elseif($count>1)
          {
             foreach($idField as $key => $item)
                $idField[$key] = CHtml::value($data, trim($item));
-            echo ' data-id="'.implode(',',$idField).'"';
+            $htmlOptions['data-id'] = implode(',',$idField);
+            $htmlOptions['data-id-names'] = $this->idField;
          }
       }
-      echo '>';
-      foreach($this->columns as $column) {
-         $column->renderDataCell($row);
-      }
+      echo CHtml::openTag('tr', $htmlOptions)."\n";
+      foreach($this->columns as $column)
+         $this->renderDataCell($column, $row);
       echo "</tr>\n";
    }
 
@@ -164,7 +177,9 @@ class SortableCGridView extends CGridView
          $(tbody_selector).bind("sortupdate", function(event, ui) {
             $(grid_selector).addClass('.CJavascript::encode($this->loadingCssClass).');
             var data = {};
-            data["dragged_item_id"] = parseInt(ui.item.attr("data-id"));
+            data["dragged_item_id"] = ui.item.attr("data-id");
+            if(ui.item.attr("data-id-names"))
+               data["id_names"] = ui.item.attr("data-id-names");
             var prev_index = parseInt(ui.item.attr("data-prev-index"));
             var new_index = parseInt(ui.item.index());
             /*which item place take dragged item*/

@@ -378,13 +378,13 @@ class Books extends CActiveRecord
      * @param string $limit
      * @return CDbCriteria
      */
-	public function getValidBooks($categoryIds = array(),$order = 'confirm_date DESC',$limit = null)
+	public function getValidBooks($categoryIds = array(),$order = 'confirm_date DESC',$limit = null ,$alias = 't')
 	{
 		$criteria = new CDbCriteria();
-		$criteria->addCondition('t.status=:status');
+		$criteria->addCondition($alias.'.'.'status=:status');
 		$criteria->addCondition('confirm=:confirm');
 		$criteria->addCondition('deleted=:deleted');
-		$criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+		$criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id='.$alias.'.id) != 0');
 		$criteria->params[':status'] = 'enable';
 		$criteria->params[':confirm'] = 'accepted';
 		$criteria->params[':deleted'] = 0;

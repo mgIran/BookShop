@@ -13,6 +13,7 @@ $this->menu=array(
 
 <h1>مدیریت ردیف های کتاب</h1>
 <? $this->renderPartial('//layouts/_flashMessage'); ?>
+<div class="description">** می توانید با جابجا کردن سطرها ردیف ها را مرتب سازی کنید.</div>
 <?php $this->widget('ext.yiiSortableModel.widgets.SortableCGridView', array(
 	'orderField' => 'order',
 	'idField' => 'id',
