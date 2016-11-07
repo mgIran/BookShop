@@ -228,7 +228,7 @@ class Users extends CActiveRecord
         $criteria->compare('user_id',Yii::app()->user->getId());
         $criteria->with[] = 'messages';
         $criteria->compare('messages.visit', 0);
-        $criteria->compare('messages.sender', '<> "user"');
+        $criteria->addCondition('messages.sender <> "user"');
         return Tickets::model()->count($criteria);
     }
 }
