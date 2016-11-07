@@ -187,7 +187,6 @@ class RowsManageController extends Controller
 
     public function actionRemove()
     {
-        var_dump($_POST);exit;
         if(isset($_POST) && isset($_POST['row_id']) && isset($_POST['book_id'])){
             $book_id = (int)$_POST['book_id'];
             $row_id = (int)$_POST['row_id'];

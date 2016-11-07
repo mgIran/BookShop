@@ -30,15 +30,32 @@ class AjaxSortingAction extends CAction
    const SCENARIO = 'sort_order_change';
    public function run()
    {
-      Yii::app()->language = 'fa';
+      Yii::app()->language = 'fa_ir';
       if (isset($_POST))
       {
          $order_field = $_POST['order_field'];
          $model = call_user_func(array($_POST['model'], 'model'));
-         $dragged_entry = $model->findByPk($_POST['dragged_item_id']);
+         if(count($pk = explode(',',$_POST['dragged_item_id'])) == 1)
+            $dragged_entry = $model->findByPk((int)$_POST['dragged_item_id']);
+         else if(count($pk = explode(',',$_POST['dragged_item_id'])) > 1) {
+            $attributes = explode(',',$_POST['id_names']);
+            $attributesArray = array();
+            foreach ($attributes as $key => $attribute)
+               $attributesArray[$attribute] = $pk[$key];
+            $dragged_entry = $model->findByAttributes($attributesArray);
+         }
          /*load dragged entry before changing orders*/
          $prev = $dragged_entry->{$order_field};
-         $new = $model->findByPk($_POST['replacement_item_id'])->{$order_field};
+         if(count($pk = explode(',',$_POST['replacement_item_id'])) == 1)
+            $replacement_entry = $model->findByPk($_POST['replacement_item_id']);
+         else if(count($pk = explode(',',$_POST['replacement_item_id'])) > 1) {
+            $attributes = explode(',',$_POST['id_names']);
+            $attributesArray = array();
+            foreach ($attributes as $key => $attribute)
+               $attributesArray[$attribute] = $pk[$key];
+            $replacement_entry = $model->findByAttributes($attributesArray);
+         }
+         $new = $replacement_entry->{$order_field};
          /*update order only for the affected records*/
          if ($prev < $new)
          {

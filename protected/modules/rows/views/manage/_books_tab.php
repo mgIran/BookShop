@@ -49,6 +49,7 @@ $('body').on('click','.remove-from-row',function(){
 	<? $this->renderPartial('//layouts/_loading'); ?>
 	<div class="row">
 		<div class="description">لیست کتاب های این ردیف</div>
+		<div class="description">** می توانید با جابجا کردن سطرها کتاب های ردیف را مرتب سازی کنید.</div>
 		<?php $this->widget('ext.yiiSortableModel.widgets.SortableCGridView', array(
 			'orderField' => 'order',
 			'idField' => 'row_id,book_id',
