@@ -45,15 +45,44 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        Yii::import('rows.models.*');
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
 
         $categoriesDataProvider = new CActiveDataProvider('BookCategories' ,array('criteria' => BookCategories::model()->getValidCategories()));
         // get suggested list
-        $visitedCats = CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
-        $suggestedDataProvider = new CActiveDataProvider('Books' ,array('criteria' => Books::model()->getValidBooks($visitedCats)));
+        $suggestedDataProvider = null;
+        $model = RowsHomepage::model()->findByAttributes(array('title' => 'پیشنهاد ما'));
+        if($model && $model->status == 1)
+        {
+            $visitedCats = CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
+            $suggestedCookieDataProvider = Books::model()->findAll(Books::model()->getValidBooks($visitedCats));
+            if(count($suggestedCookieDataProvider)<10) {
+                $criteria = $model->getConstCriteria(Books::model()->getValidBooks(null, 'id DESC', 10));
+                $suggestedDataProvider = Books::model()->findAll($criteria);
+                $data = $suggestedCookieDataProvider;
+                $cookieIds = CHtml::listData($suggestedCookieDataProvider,'id','id');
+                var_dump($data);
+                foreach ($suggestedDataProvider as $item)
+                {
+                    if(!in_array($item->id,$cookieIds))
+                        $data[] = $item;
+                }
+                var_dump($data);exit;
+            }else $data = $suggestedCookieDataProvider;
+            $suggestedDataProvider = new CArrayDataProvider($data);exit;
+        }
         // latest books
-        $latestBooksDataProvider = new CActiveDataProvider('Books' ,array('criteria' => Books::model()->getValidBooks(null ,'id DESC' ,10)));
+        $latestBooksDataProvider = null;
+        $model = RowsHomepage::model()->findByAttributes(array('title' => 'تازه ترین کتاب ها'));
+        if($model && $model->status == 1)
+        {
+            $criteria = $model->getConstCriteria(Books::model()->getValidBooks(null ,'id DESC' ,10));
+            $latestBooksDataProvider = new CActiveDataProvider('Books' ,array(
+                'criteria' => $criteria
+            ));
+            var_dump($latestBooksDataProvider->getData());exit;
+        }
         // most purchase books
         $mostPurchaseBooksDataProvider = new CActiveDataProvider('Books' ,array('criteria' => Books::model()->getValidBooks(null ,'download DESC' ,10)));
 
@@ -64,7 +93,7 @@ class SiteController extends Controller
         // get rows
         Yii::import('rows.models.*');
         $rows = new CActiveDataProvider('RowsHomepage' ,array(
-            'criteria' => array('order' => 't.order'),
+            'criteria' => RowsHomepage::model()->getActiveRows(),
             'pagination' => false
         ));
 

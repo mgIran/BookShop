@@ -192,6 +192,7 @@ class Controller extends CController
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
                         array('label' => 'مدیریت ردیف های دلخواه', 'url' => Yii::app()->createUrl('/rows/manage/admin')),
+                        array('label' => 'مدیریت ردیف های ثابت', 'url' => Yii::app()->createUrl('/rows/manage/const')),
                     )
                 ),
                 array(

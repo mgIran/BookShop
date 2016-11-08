@@ -3,7 +3,7 @@
 /* @var $model RowsHomepage */
 
 $this->breadcrumbs=array(
-	'مدیریت',
+	'مدیریت ردیف های دلخواه کتاب',
 );
 
 $this->menu=array(
@@ -23,6 +23,11 @@ $this->menu=array(
 	'filter'=>$model,
 	'columns'=>array(
 		'title',
+		array(
+			'name' => 'status',
+			'value' => '$data->statusLabel',
+			'filter' => $model->statusLabels
+		),
 		array(
 			'class'=>'CButtonColumn',
             'template' => '{update} {delete}'
