@@ -1,12 +1,7 @@
 <?php
-/* @var $this SiteSettingManageController */
+/* @var $this SettingManageController */
 /* @var $model SiteSetting */
 ?>
-
-<?php Yii::app()->clientScript->registerCoreScript('jquery.ui');?>
-<?php Yii::app()->clientScript->registerScript('callTagIt',"
-    $('#SiteSetting_buy_credit_options').tagit();
-");?>
 
 <div class="form">
     <?
@@ -37,8 +32,12 @@
                         <?php echo CHtml::label($field->title ,'' ,array('class' => 'col-lg-3 control-label')); ?>
                         <p style="clear: both;padding-right: 15px;color: #aaa">گزینه اول به عنوان انتخاب پیش فرض در نظر
                             گرفته میشود</p>
-                        <ul id="credit-options"></ul>
-                        <?php echo CHtml::textField("SiteSetting[$field->name]" ,(!empty($field->value)) ? implode(',' ,CJSON::decode($field->value)) : ''); ?>
+                        <?php
+                        $this->widget("ext.tagIt.tagIt",array(
+                            'attribute' => "SiteSetting[$field->name]",
+                            'data' => CJSON::decode($field->value)
+                        ));
+                        ?>
                         <?php echo $form->error($field ,'name'); ?>
                     </div>
                 </div>

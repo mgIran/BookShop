@@ -11,7 +11,7 @@
 	'id'=>'news-form',
 	'enableAjaxValidation'=>false,
 )); ?>
-	<?= $this->renderPartial("//layouts/_loading");?>
+	<? $this->renderPartial('//layouts/_flashMessage'); ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'category_id'); ?>
