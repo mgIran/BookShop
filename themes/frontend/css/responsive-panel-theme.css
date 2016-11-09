@@ -11,7 +11,7 @@
         display: none;
     }
     .navbar-brand{
-        z-index: 101;
+        z-index: 1002;
     }
     .sidebar .navbar-brand{
         top: -60px;
@@ -19,7 +19,7 @@
     }
     .sidebar-mini .sidebar,
     .sidebar{
-        position: absolute;z-index: 100;
+        position: absolute;z-index: 1002;
         width: 300px;
         right: 0;
         -webkit-transform: translate(100%);
@@ -220,6 +220,9 @@
         -webkit-column-count:2;
         -moz-column-count:2;
         column-count:2;
+    }
+    .white-form .tab-content > .tab-pane{
+        padding:30px 0 !important;
     }
 }
 @media screen and (max-width: 600px){

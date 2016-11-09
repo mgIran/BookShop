@@ -139,6 +139,8 @@ class ManageBooksBaseManageController extends Controller
             $model->confirm = 'accepted';
             $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
+            $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+            $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
             if ($model->save()) {
                 if ($model->icon)
                     @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
@@ -200,7 +202,11 @@ class ManageBooksBaseManageController extends Controller
             array_push($model->formTags,$tag->title);
         foreach($model->seoTags as $tag)
             array_push($model->formSeoTags,$tag->title);
-
+        foreach ($model->persons(array('condition'=>'role_id = 1')) as $person)
+            array_push($model->formAuthor, $person->name_family);
+        foreach ($model->persons(array('condition'=>'role_id = 2')) as $person)
+            array_push($model->formTranslator, $person->name_family);
+        
         if (isset($_POST['Books'])) {
             $iconFlag = false;
             $newFileSize = $model->size;
@@ -213,6 +219,8 @@ class ManageBooksBaseManageController extends Controller
             $model->size = $newFileSize;
             $model->formTags = isset($_POST['Books']['formTags'])?explode(',',$_POST['Books']['formTags']):null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',',$_POST['Books']['formSeoTags']):null;
+            $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+            $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
             if ($model->save()) {
                 if ($iconFlag)
                     rename($tmpDIR . $model->icon ,$bookIconsDIR . $model->icon);

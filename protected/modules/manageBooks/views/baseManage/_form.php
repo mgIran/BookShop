@@ -66,7 +66,33 @@
 		<?php echo $form->textField($model,'language',array('size'=>50,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'language'); ?>
 	</div>
+	<div class="row">
+		<?php echo $form->labelEx($model,'formAuthor'); ?>
+		<?php
+		$this->widget("ext.tagIt.tagIt",array(
+			'model' => $model,
+			'attribute' => 'formAuthor',
+			'suggestType' => 'json',
+			'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
+			'data' => $model->formAuthor
+		));
+		?>
+		<?php echo $form->error($model,'formAuthor'); ?>
+	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'formTranslator'); ?>
+		<?php
+		$this->widget("ext.tagIt.tagIt",array(
+			'model' => $model,
+			'attribute' => 'formTranslator',
+			'suggestType' => 'json',
+			'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
+			'data' => $model->formTranslator
+		));
+		?>
+		<?php echo $form->error($model,'formTranslator'); ?>
+	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'number_of_pages'); ?>
 		<?php echo $form->textField($model,'number_of_pages',array('size'=>10,'maxlength'=>5)); ?>

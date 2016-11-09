@@ -5,8 +5,7 @@
  *
  * The followings are the available columns in table '{{book_persons}}':
  * @property string $id
- * @property string $name
- * @property string $family
+ * @property string $name_family
  * @property string $alias
  * @property string $birthday
  * @property string $deathday
@@ -33,8 +32,8 @@ class BookPersons extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, family', 'required'),
-			array('name, family', 'length', 'max'=>50),
+			array('name_family', 'required'),
+			array('name_family', 'length', 'max'=>100),
 			array('alias', 'length', 'max'=>100),
 			array('birthday, deathday', 'length', 'max'=>20),
 			array('biography', 'safe'),
@@ -63,8 +62,7 @@ class BookPersons extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'نام',
-			'family' => 'نام خانوادگی',
+			'name_family' => 'نام و نام خانوادگی',
 			'alias' => 'نام مستعار',
 			'birthday' => 'تاریخ تولد',
 			'deathday' => 'تاریخ وفات',
@@ -91,8 +89,7 @@ class BookPersons extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('family',$this->family,true);
+		$criteria->compare('name_family',$this->name_family,true);
 		$criteria->compare('alias',$this->alias,true);
 		$criteria->compare('birthday',$this->birthday,true);
 		$criteria->compare('deathday',$this->deathday,true);
@@ -115,6 +112,6 @@ class BookPersons extends CActiveRecord
 	}
 
 	public function getFullName(){
-		return $this->name.' '.$this->family;
+		return $this->name_family;
 	}
 }

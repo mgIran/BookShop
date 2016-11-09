@@ -72,6 +72,8 @@ class Books extends CActiveRecord
 
 	public $formTags = [];
 	public $formSeoTags = [];
+	public $formAuthor = [];
+	public $formTranslator = [];
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -82,9 +84,9 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, category_id ,icon', 'required'),
+			array('title, category_id, icon, formAuthor, formTranslator', 'required'),
 			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
-			array('description, change_log ,formTags ,formSeoTags', 'filter', 'filter' => array($this->_purifier, 'purify')),
+			array('description, change_log, formTags, formSeoTags, formAuthor, formTranslator', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
@@ -92,7 +94,7 @@ class Books extends CActiveRecord
 			array('language', 'filter' ,'filter'=>'strip_tags'),
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
-			array('description, change_log ,publisher_name ,_purifier', 'safe'),
+			array('description, change_log, publisher_name, _purifier, formAuthor, formTranslator', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
@@ -188,6 +190,8 @@ class Books extends CActiveRecord
             'size' => 'حجم فایل',
             'formTags' => 'برچسب های نمایشی',
             'formSeoTags' => 'برچسب های سئو',
+            'formAuthor' => 'نویسندگان',
+            'formTranslator' => 'مترجمان',
 		);
 	}
 
@@ -240,54 +244,108 @@ class Books extends CActiveRecord
 
 	protected function afterSave()
 	{
-		if($this->formTags && !empty($this->formTags)) {
+		if ($this->formTags && !empty($this->formTags)) {
+			if (!$this->IsNewRecord)
+				BookTagRel::model()->deleteAll('for_seo = 0 AND book_id='.$this->id);
+			foreach ($this->formTags as $tag) {
+				if (!empty($tag)) {
+					$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
+					if ($tagModel) {
+						$tag_rel = new BookTagRel('not_seo');
+						$tag_rel->book_id = $this->id;
+						$tag_rel->tag_id = $tagModel->id;
+						$tag_rel->save();
+					} else {
+						$tagModel = new Tags;
+						$tagModel->title = $tag;
+						if ($tagModel->save()) {
+							$tag_rel = new BookTagRel('not_seo');
+							$tag_rel->book_id = $this->id;
+							$tag_rel->tag_id = $tagModel->id;
+							$tag_rel->save();
+						}
+					}
+				}
+			}
+		}
+		if ($this->formSeoTags && !empty($this->formSeoTags)) {
+			if (!$this->IsNewRecord)
+				BookTagRel::model()->deleteAll('for_seo = 1 AND book_id='.$this->id);
+			foreach ($this->formSeoTags as $tag) {
+				if (!empty($tag)) {
+					$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
+					if ($tagModel) {
+						$tag_rel = new BookTagRel('for_seo');
+						$tag_rel->book_id = $this->id;
+						$tag_rel->tag_id = $tagModel->id;
+						$tag_rel->save();
+					} else {
+						$tagModel = new Tags;
+						$tagModel->title = $tag;
+						if ($tagModel->save()) {
+							$tag_rel = new BookTagRel('for_seo');
+							$tag_rel->book_id = $this->id;
+							$tag_rel->tag_id = $tagModel->id;
+							$tag_rel->save();
+						}
+					}
+				}
+			}
+		}
+		if ($this->formAuthor && !empty($this->formAuthor)) {
+            $roleId = BookPersonRoles::model()->find('title = :title',array(':title' => 'نویسنده'))->id;
             if (!$this->IsNewRecord)
-                BookTagRel::model()->deleteAll('for_seo = 0 AND book_id='.$this->id);
-            foreach ($this->formTags as $tag) {
-                if (!empty($tag)) {
-                    $tagModel = Tags::model()->findByAttributes(array('title' => $tag));
-                    if ($tagModel) {
-                        $tag_rel = new BookTagRel('not_seo');
-                        $tag_rel->book_id = $this->id;
-                        $tag_rel->tag_id = $tagModel->id;
-                        $tag_rel->save();
+                BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id',array(':book_id'=>$this->id,':role_id'=>$roleId));
+            foreach ($this->formAuthor as $person) {
+                if (!empty($person)) {
+                    $personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
+                    if ($personModel) {
+                        $person_rel = new BookPersonRoleRel();
+                        $person_rel->book_id = $this->id;
+                        $person_rel->person_id = $personModel->id;
+                        $person_rel->role_id = $roleId;
+                        $person_rel->save();
                     } else {
-                        $tagModel = new Tags;
-                        $tagModel->title = $tag;
-                        if ($tagModel->save()) {
-                            $tag_rel = new BookTagRel('not_seo');
-                            $tag_rel->book_id = $this->id;
-                            $tag_rel->tag_id = $tagModel->id;
-                            $tag_rel->save();
+                        $personModel = new BookPersons();
+                        $personModel->name_family = $person;
+                        if ($personModel->save()) {
+                            $person_rel = new BookPersonRoleRel();
+                            $person_rel->book_id = $this->id;
+                            $person_rel->person_id = $personModel->id;
+                            $person_rel->role_id = $roleId;
+                            $person_rel->save();
                         }
                     }
                 }
             }
         }
-		if($this->formSeoTags && !empty($this->formSeoTags)) {
-			if(!$this->IsNewRecord)
-                BookTagRel::model()->deleteAll('for_seo = 1 AND book_id='.$this->id);
-			foreach($this->formSeoTags as $tag) {
-                if(!empty($tag)) {
-                    $tagModel = Tags::model()->findByAttributes(array('title' => $tag));
-                    if ($tagModel) {
-                        $tag_rel = new BookTagRel('for_seo');
-                        $tag_rel->book_id = $this->id;
-                        $tag_rel->tag_id = $tagModel->id;
-                        $tag_rel->save();
+        if ($this->formTranslator && !empty($this->formTranslator)) {
+            $roleId = BookPersonRoles::model()->find('title = :title',array(':title' => 'مترجم'))->id;
+            if (!$this->IsNewRecord)
+                BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id',array(':book_id'=>$this->id,':role_id'=>$roleId));
+            foreach ($this->formTranslator as $person) {
+                if (!empty($person)) {
+                    $personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
+                    if ($personModel) {
+                        $person_rel = new BookPersonRoleRel();
+                        $person_rel->book_id = $this->id;
+                        $person_rel->person_id = $personModel->id;
+                        $person_rel->role_id = $roleId;
+                        $person_rel->save();
                     } else {
-                        $tagModel = new Tags;
-                        $tagModel->title = $tag;
-                        if ($tagModel->save()) {
-                            $tag_rel = new BookTagRel('for_seo');
-                            $tag_rel->book_id = $this->id;
-                            $tag_rel->tag_id = $tagModel->id;
-                            $tag_rel->save();
+                        $personModel = new BookPersons();
+                        $personModel->name_family = $person;
+                        if ($personModel->save()) {
+                            $person_rel = new BookPersonRoleRel();
+                            $person_rel->book_id = $this->id;
+                            $person_rel->person_id = $personModel->id;
+                            $person_rel->role_id = $roleId;
+                            $person_rel->save();
                         }
                     }
                 }
-			}
-		}
+            }
+        }
 		parent::afterSave();
 	}
 
