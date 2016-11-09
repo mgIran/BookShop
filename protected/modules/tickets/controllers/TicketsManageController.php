@@ -152,16 +152,20 @@ class TicketsManageController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionSend()
-	{
-		$model = new TicketMessages;
+    {
+        $model = new TicketMessages;
 
-		if (isset($_POST['TicketMessages'])) {
-			$model->attributes = $_POST['TicketMessages'];
-			if ($model->save())
-				$this->redirect(array('/tickets/' . $model->ticket->code));
-		}
-		$this->redirect(Yii::app()->user->returnUrl);
-	}
+        if (isset($_POST['TicketMessages'])) {
+            $model->attributes = $_POST['TicketMessages'];
+            if ($model->save()) {
+                if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
+                    $this->createLog('پاسخ تیکت شماره #' . $model->ticket->code . ' توسط کارشناسان بخش پشتیبانی برای شما ارسال شد.', $model->ticket->user_id);
+
+                $this->redirect(array('/tickets/' . $model->ticket->code));
+            }
+        }
+        $this->redirect(Yii::app()->user->returnUrl);
+    }
 
 	/**
 	 * @param $id

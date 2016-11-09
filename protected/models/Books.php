@@ -242,6 +242,20 @@ class Books extends CActiveRecord
 		return parent::model($className);
 	}
 
+	/**
+	 * Return developer portion
+	 */
+	public function getPublisherPortion()
+	{
+		Yii::app()->getModule('setting');
+		$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+		$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
+		$price = $this->price;
+		$tax = ($price * $tax) / 100;
+		$commission = ($price * $commission) / 100;
+		return $price - $tax - $commission;
+	}
+
 	protected function afterSave()
 	{
 		if ($this->formTags && !empty($this->formTags)) {
