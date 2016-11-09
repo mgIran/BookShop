@@ -122,7 +122,7 @@ class BookController extends Controller
                     $Email = Yii::app()->user->email; // Optional
                     $Mobile = '0'; // Optional
 
-                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . Yii::app()->request->pathInfo;  // Required
+                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id.'/'.urlencode($title);  // Required
 
                     include("lib/nusoap.php");
                     $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
