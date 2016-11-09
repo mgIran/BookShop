@@ -1,9 +1,11 @@
 <?
 /* @var $this SiteController */
-/* @var $categoriesDataProvider CActiveDataProvider */
-/* @var $latestBooksDataProvider CActiveDataProvider */
-/* @var $mostPurchaseBooksDataProvider CActiveDataProvider */
-/* @var $suggestedDataProvider CActiveDataProvider */
+/* @var $categoriesDP CActiveDataProvider */
+/* @var $latestBooksDP CActiveDataProvider */
+/* @var $buyBooksDP CActiveDataProvider */
+/* @var $suggestedDP CActiveDataProvider */
+/* @var $popularBooksDP CActiveDataProvider */
+/* @var $activeRows [] */
 /* @var $advertises CActiveDataProvider */
 /* @var $news CActiveDataProvider */
 /* @var $rows CActiveDataProvider */
@@ -34,7 +36,7 @@ endif;
                 <?php
                 $this->widget('zii.widgets.CListView',array(
                     'id' => 'categories-list',
-                    'dataProvider' => $categoriesDataProvider,
+                    'dataProvider' => $categoriesDP,
                     'itemView' => '_category_item',
                     'template' => '{items}'
                 ))
@@ -42,7 +44,7 @@ endif;
             </div>
         </div>
     </div>
-<?php if($suggestedDataProvider->totalItemCount):?>
+<?php if($activeRows['suggested'] && $suggestedDP->totalItemCount):?>
     <div class="offers paralax">
         <div class="container">
             <div class="content">
@@ -53,7 +55,7 @@ endif;
                     <?php
                     $this->widget('zii.widgets.CListView',array(
                         'id' => 'suggested-list',
-                        'dataProvider' => $suggestedDataProvider,
+                        'dataProvider' => $suggestedDP,
                         'itemView' => '_book_item',
                         'template' => '{items}',
                         'viewData' => array('itemClass' => 'full')
@@ -67,7 +69,7 @@ endif;
 endif;
 ?>
 <?php
-if($latestBooksDataProvider->totalItemCount):
+if($activeRows['latest'] && $latestBooksDP->totalItemCount):
     ?>
     <div class="newest">
         <div class="container">
@@ -78,7 +80,7 @@ if($latestBooksDataProvider->totalItemCount):
                 <?php
                 $this->widget('zii.widgets.CListView',array(
                     'id' => 'latest-list',
-                    'dataProvider' => $latestBooksDataProvider,
+                    'dataProvider' => $latestBooksDP,
                     'itemView' => '_book_item',
                     'template' => '{items}',
                     'viewData' => array('itemClass' => 'simple')
@@ -92,7 +94,7 @@ if($latestBooksDataProvider->totalItemCount):
 endif;
 ?>
 <?php
-if($mostPurchaseBooksDataProvider->totalItemCount):
+if($activeRows['buy'] && $buyBooksDP->totalItemCount):
 ?>
     <div class="bestselling paralax">
         <div class="container">
@@ -104,13 +106,37 @@ if($mostPurchaseBooksDataProvider->totalItemCount):
                     <?php
                     $this->widget('zii.widgets.CListView',array(
                         'id' => 'latest-list',
-                        'dataProvider' => $latestBooksDataProvider,
+                        'dataProvider' => $buyBooksDP,
                         'itemView' => '_book_item',
                         'template' => '{items}',
                         'viewData' => array('itemClass' => 'small')
                     ));
                     ?>
                 </div>
+            </div>
+        </div>
+    </div>
+<?php
+endif;
+?>
+<?php
+if($activeRows['popular'] && $popularBooksDP->totalItemCount):
+?>
+    <div class="newest">
+        <div class="container">
+            <div class="heading">
+                <h2>پربازدیدترین ها</h2>
+            </div>
+            <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"5", "1024":"4", "992":"4", "768":"3", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">
+                <?php
+                $this->widget('zii.widgets.CListView',array(
+                    'id' => 'latest-list',
+                    'dataProvider' => $popularBooksDP,
+                    'itemView' => '_book_item',
+                    'template' => '{items}',
+                    'viewData' => array('itemClass' => 'small')
+                ));
+                ?>
             </div>
         </div>
     </div>

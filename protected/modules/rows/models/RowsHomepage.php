@@ -159,7 +159,7 @@ class RowsHomepage extends SortableCActiveRecord
         if($const)
             $criteria->addCondition('const_query = 1');
         else
-            $criteria->addCondition('const_query = 0');
+            $criteria->addCondition('const_query = 0 AND query IS NULL');
         $criteria->order = 't.order';
         return $criteria;
     }
@@ -180,6 +180,9 @@ class RowsHomepage extends SortableCActiveRecord
                 break;
             case 'latest':
                 $criteria->order = 'confirm_date DESC';
+                break;
+            case 'buy':
+                $criteria->order = 'download DESC';
                 break;
             default:
                 break;

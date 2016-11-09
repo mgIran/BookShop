@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50616
+Source Server         : localhost
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50616
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-11-06 14:12:07
+Date: 2016-11-08 14:13:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -409,11 +409,11 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '157');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457699');
+INSERT INTO `ym_counter_save` VALUES ('counter', '160');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457701');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '10');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1478334600');
-INSERT INTO `ym_counter_save` VALUES ('yesterday', '10');
+INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
 
 -- ----------------------------
 -- Table structure for ym_counter_users
@@ -428,8 +428,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478428802');
-INSERT INTO `ym_counter_users` VALUES ('9f0c51f72251c65347b809cf57bb5372', '1478385387');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478601658');
 
 -- ----------------------------
 -- Table structure for ym_news
@@ -543,15 +542,20 @@ DROP TABLE IF EXISTS `ym_rows_homepage`;
 CREATE TABLE `ym_rows_homepage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `const_query` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `query` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
   `order` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_rows_homepage
 -- ----------------------------
-INSERT INTO `ym_rows_homepage` VALUES ('2', 'پیشنهاد ما', '1');
-INSERT INTO `ym_rows_homepage` VALUES ('3', 'پرفروش ها', '2');
+INSERT INTO `ym_rows_homepage` VALUES ('2', 'پیشنهاد ما', '1', '0', null, '1');
+INSERT INTO `ym_rows_homepage` VALUES ('3', 'پرفروش ترین ها', '1', '1', 'buy', '2');
+INSERT INTO `ym_rows_homepage` VALUES ('4', 'تازه ترین کتاب ها', '1', '1', 'latest', '3');
+INSERT INTO `ym_rows_homepage` VALUES ('5', 'پربازدیدترین ها', '0', '1', 'popular', '4');
 
 -- ----------------------------
 -- Table structure for ym_row_book_rel
@@ -570,9 +574,13 @@ CREATE TABLE `ym_row_book_rel` (
 -- ----------------------------
 -- Records of ym_row_book_rel
 -- ----------------------------
-INSERT INTO `ym_row_book_rel` VALUES ('2', '52', '1');
-INSERT INTO `ym_row_book_rel` VALUES ('2', '54', '3');
-INSERT INTO `ym_row_book_rel` VALUES ('3', '53', '2');
+INSERT INTO `ym_row_book_rel` VALUES ('2', '52', '3');
+INSERT INTO `ym_row_book_rel` VALUES ('2', '53', '2');
+INSERT INTO `ym_row_book_rel` VALUES ('2', '54', '1');
+INSERT INTO `ym_row_book_rel` VALUES ('2', '55', '7');
+INSERT INTO `ym_row_book_rel` VALUES ('3', '52', '5');
+INSERT INTO `ym_row_book_rel` VALUES ('3', '53', '6');
+INSERT INTO `ym_row_book_rel` VALUES ('3', '54', '4');
 
 -- ----------------------------
 -- Table structure for ym_site_setting
@@ -593,7 +601,7 @@ INSERT INTO `ym_site_setting` VALUES ('1', 'site_title', 'عنوان سایت', 
 INSERT INTO `ym_site_setting` VALUES ('2', 'default_title', 'عنوان پیش فرض صفحات', 'کتابیک');
 INSERT INTO `ym_site_setting` VALUES ('3', 'keywords', 'کلمات کلیدی سایت', '');
 INSERT INTO `ym_site_setting` VALUES ('4', 'site_description', 'شرح وبسایت', '');
-INSERT INTO `ym_site_setting` VALUES ('5', 'buy_credit_options', 'گزینه های خرید اعتبار', '[\"5000\",\"10000\",\"20000\"]');
+INSERT INTO `ym_site_setting` VALUES ('5', 'buy_credit_options', 'گزینه های خرید اعتبار', '[\"5000\",\"10000\",\"20000\",\"30000\"]');
 INSERT INTO `ym_site_setting` VALUES ('6', 'min_credit', 'حداقل اعتبار جهت تبدیل عضویت', '1000');
 INSERT INTO `ym_site_setting` VALUES ('7', 'tax', 'میزان مالیات (درصد)', '9');
 INSERT INTO `ym_site_setting` VALUES ('8', 'commission', 'حق کمیسیون (درصد)', '15');
@@ -683,7 +691,7 @@ CREATE TABLE `ym_ticket_messages` (
 -- Records of ym_ticket_messages
 -- ----------------------------
 INSERT INTO `ym_ticket_messages` VALUES ('2', '2', 'user', '1478384825', 'سلام', null, '1');
-INSERT INTO `ym_ticket_messages` VALUES ('3', '2', '', '1478420402', 'علیک', null, '0');
+INSERT INTO `ym_ticket_messages` VALUES ('3', '2', 'admin', '1478420402', 'علیک', null, '0');
 
 -- ----------------------------
 -- Table structure for ym_users
