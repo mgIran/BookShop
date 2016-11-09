@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50616
+Source Server         : localhost
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50616
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-11-06 14:12:07
+Date: 2016-11-09 12:49:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -127,7 +127,7 @@ CREATE TABLE `ym_books` (
 -- Records of ym_books
 -- ----------------------------
 INSERT INTO `ym_books` VALUES ('52', 'دختر شینا', 'JNSLy1477560156.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', '120', '', 'فارسی', 'enable', null, '52', null, '45', 'accepted', '1478355968', '255', '0', '0');
-INSERT INTO `ym_books` VALUES ('53', 'فتح خون', 'gvXUa1477582174.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\n\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\n\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\n', '150', '', 'فارسی', 'enable', null, '52', 'واحه', null, 'accepted', '1477687320', '141', '0', '0');
+INSERT INTO `ym_books` VALUES ('53', 'فتح خون', 'gvXUa1477582174.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', '150', '', 'فارسی', 'enable', null, '52', 'واحه', null, 'accepted', '1477687320', '141', '6', '0');
 INSERT INTO `ym_books` VALUES ('54', 'دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل', 'wD8Oc1477588685.jpg', '<p>دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل</p>\n', '150', '', 'فارسی', 'enable', null, '52', 'گلوری', null, 'accepted', '1477687323', '77', '5', '0');
 INSERT INTO `ym_books` VALUES ('55', 'تست', 'btT6c1477722786.jpg', '<p>لورم ایپسوم</p>\r\n', '1025', '', 'فارسی', 'enable', null, '55', 'انتشارات علوی', null, 'accepted', null, '0', '0', '0');
 INSERT INTO `ym_books` VALUES ('56', 'test', 'Xcdss1478068579.jpg', '<p>testttt</p>\n', '12', '', 'en', 'enable', null, '52', null, '43', 'accepted', '1478355975', '0', '0', '0');
@@ -160,19 +160,24 @@ CREATE TABLE `ym_book_buys` (
   `book_id` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
   `date` varchar(20) DEFAULT NULL COMMENT 'تاریخ',
+  `method` varchar(10) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'روش خرید',
+  `package_id` int(10) unsigned DEFAULT NULL COMMENT 'نسخه',
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   KEY `user_id` (`user_id`) USING BTREE,
+  KEY `package_id` (`package_id`),
+  CONSTRAINT `ym_book_buys_ibfk_3` FOREIGN KEY (`package_id`) REFERENCES `ym_book_packages` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION,
   CONSTRAINT `ym_book_buys_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `ym_book_buys_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_book_buys
 -- ----------------------------
-INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663');
-INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463');
-INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870');
+INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663', null, null);
+INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463', null, null);
+INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870', null, null);
+INSERT INTO `ym_book_buys` VALUES ('21', '53', '43', '1478681143', 'gateway', null);
 
 -- ----------------------------
 -- Table structure for ym_book_categories
@@ -265,7 +270,7 @@ CREATE TABLE `ym_book_packages` (
 -- Records of ym_book_packages
 -- ----------------------------
 INSERT INTO `ym_book_packages` VALUES ('46', '52', '1', 'تیراژ اول', '978-3-16-148410-0', 'AXfrV1477566608.docx', '1477566615', '1478355968', 'accepted', '', 'old_book', '10000', null, '150000');
-INSERT INTO `ym_book_packages` VALUES ('47', '53', '1', 'فتح خون جلد اول', '978-3-16-148410-0', '2BRbY1477582248.docx', '1477582805', '1477687320', 'accepted', '', 'old_book', '1500', null, '5000');
+INSERT INTO `ym_book_packages` VALUES ('47', '53', '1', 'فتح خون جلد اول', '978-3-16-148410-0', '2BRbY1477582248.docx', '1477582805', '1477687320', 'accepted', '', 'old_book', '100', null, '5000');
 INSERT INTO `ym_book_packages` VALUES ('48', '54', '1', 'جلد اول', '978-3-16-148410-0', 'kpg841477592881.docx', '1477592909', '1477687323', 'accepted', '', 'new_book', '100', null, '1220');
 
 -- ----------------------------
@@ -409,11 +414,11 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '157');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457699');
+INSERT INTO `ym_counter_save` VALUES ('counter', '161');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457702');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '10');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1478334600');
-INSERT INTO `ym_counter_save` VALUES ('yesterday', '10');
+INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
 
 -- ----------------------------
 -- Table structure for ym_counter_users
@@ -428,8 +433,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478428802');
-INSERT INTO `ym_counter_users` VALUES ('9f0c51f72251c65347b809cf57bb5372', '1478385387');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478681431');
 
 -- ----------------------------
 -- Table structure for ym_news
@@ -545,13 +549,14 @@ CREATE TABLE `ym_rows_homepage` (
   `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `order` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_rows_homepage
 -- ----------------------------
 INSERT INTO `ym_rows_homepage` VALUES ('2', 'پیشنهاد ما', '1');
 INSERT INTO `ym_rows_homepage` VALUES ('3', 'پرفروش ها', '2');
+INSERT INTO `ym_rows_homepage` VALUES ('4', 'ابول', '3');
 
 -- ----------------------------
 -- Table structure for ym_row_book_rel
@@ -573,6 +578,7 @@ CREATE TABLE `ym_row_book_rel` (
 INSERT INTO `ym_row_book_rel` VALUES ('2', '52', '1');
 INSERT INTO `ym_row_book_rel` VALUES ('2', '54', '3');
 INSERT INTO `ym_row_book_rel` VALUES ('3', '53', '2');
+INSERT INTO `ym_row_book_rel` VALUES ('4', '52', '4');
 
 -- ----------------------------
 -- Table structure for ym_site_setting
@@ -776,7 +782,7 @@ CREATE TABLE `ym_user_details` (
 -- ----------------------------
 -- Records of ym_user_details
 -- ----------------------------
-INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null);
+INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '8500', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '8', null);
 INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '0', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '3', null);
 INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, null, null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
 INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
@@ -885,14 +891,14 @@ CREATE TABLE `ym_user_role_permissions` (
 -- ----------------------------
 -- Records of ym_user_role_permissions
 -- ----------------------------
-INSERT INTO `ym_user_role_permissions` VALUES ('17', '1', 'base', 'BookController', 'buy,bookmark,rate');
+INSERT INTO `ym_user_role_permissions` VALUES ('17', '1', 'base', 'BookController', 'buy,bookmark,rate,verify');
 INSERT INTO `ym_user_role_permissions` VALUES ('18', '1', 'publishers', 'PublishersPanelController', 'uploadNationalCardImage,uploadRegistrationCertificateImage,signup');
 INSERT INTO `ym_user_role_permissions` VALUES ('19', '1', 'tickets', 'TicketsDepartmentsController', 'create,update');
 INSERT INTO `ym_user_role_permissions` VALUES ('20', '1', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
 INSERT INTO `ym_user_role_permissions` VALUES ('21', '1', 'tickets', 'TicketsMessagesController', 'delete,create');
 INSERT INTO `ym_user_role_permissions` VALUES ('22', '1', 'users', 'UsersCreditController', 'buy,bill,verify');
 INSERT INTO `ym_user_role_permissions` VALUES ('23', '1', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications,bookmarked,library,transactions,downloaded,changePassword');
-INSERT INTO `ym_user_role_permissions` VALUES ('33', '2', 'base', 'BookController', 'buy,bookmark,rate');
+INSERT INTO `ym_user_role_permissions` VALUES ('33', '2', 'base', 'BookController', 'buy,bookmark,rate,verify');
 INSERT INTO `ym_user_role_permissions` VALUES ('34', '2', 'base', 'TagsController', 'list');
 INSERT INTO `ym_user_role_permissions` VALUES ('35', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
 INSERT INTO `ym_user_role_permissions` VALUES ('36', '2', 'publishers', 'PublishersPanelController', 'uploadNationalCardImage,uploadRegistrationCertificateImage,account,index,discount,settlement,sales,documents');
@@ -939,7 +945,7 @@ CREATE TABLE `ym_user_transactions` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `ym_user_transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_user_transactions
@@ -949,3 +955,8 @@ INSERT INTO `ym_user_transactions` VALUES ('4', '45', '100', '1470118630', 'unpa
 INSERT INTO `ym_user_transactions` VALUES ('5', '46', '5000', '1478352890', 'unpaid', null, null);
 INSERT INTO `ym_user_transactions` VALUES ('6', '43', '5000', '1478341454', 'unpaid', null, null);
 INSERT INTO `ym_user_transactions` VALUES ('7', '57', '5000', '1478352780', 'paid', '44178512655', 'خرید اعتبار از طریق درگاه زرین پال');
+INSERT INTO `ym_user_transactions` VALUES ('8', '43', '1500', '1478592974', 'unpaid', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('9', '43', '100', '1478596474', 'unpaid', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('10', '43', '100', '1478675725', 'unpaid', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('11', '43', '100', '1478679969', 'unpaid', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('12', '43', '100', '1478680096', 'paid', '53182497499', 'خرید کتاب از طریق درگاه زرین پال');

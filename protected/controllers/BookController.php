@@ -4,6 +4,8 @@ class BookController extends Controller
 {
     public $layout = '//layouts/inner';
 
+    private $merchantID = '012d3926-9824-11e6-a86b-005056a205be';
+
     /**
      * @return array actions type list
      */
@@ -19,7 +21,8 @@ class BookController extends Controller
                 'publisher',
                 'buy',
                 'bookmark',
-                'rate'
+                'rate',
+                'verify'
             ),
             'backend' => array(
                 'reportSales',
@@ -34,7 +37,7 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + reportSales, reportIncome, buy, bookmark, rate',
+            'checkAccess + reportSales, reportIncome, buy, bookmark, rate, verify',
             'postOnly + bookmark',
         );
     }
@@ -46,7 +49,7 @@ class BookController extends Controller
         $this->layout = "//layouts/index";
         $model = $this->loadModel($id);
         $this->keywords = $model->getKeywords();
-        $this->description = mb_substr(strip_tags($model->description) ,0 ,160,'utf-8');
+        $this->description = mb_substr(strip_tags($model->description), 0, 160, 'utf-8');
         $model->seen = $model->seen + 1;
         $model->save();
         $this->saveInCookie($model->category_id);
@@ -88,57 +91,69 @@ class BookController extends Controller
 
         Yii::app()->getModule('users');
         $user = Users::model()->findByPk(Yii::app()->user->getId());
+        /* @var $user Users */
 
-        if (isset($_POST['buy'])) {
-            if ($user->userDetails->credit < $model->price) {
-                Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
-                Yii::app()->user->setFlash('failReason', 'min_credit');
-                $this->refresh();
-            }
+        $buyResult = false;
+        if (isset($_POST['Buy'])) {
+            if (isset($_POST['Buy']['credit'])) {
+                if ($user->userDetails->credit < $model->price) {
+                    Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
+                    Yii::app()->user->setFlash('failReason', 'min_credit');
+                    $this->refresh();
+                }
 
-            $model->download += 1;
-            $model->setScenario('update-download');
-            $model->save();
-
-            $buy = new BookBuys();
-            $buy->book_id = $model->id;
-            $buy->user_id = $user->id;
-            if ($buy->save()) {
                 $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
                 $userDetails->setScenario('update-credit');
                 $userDetails->credit = $userDetails->credit - $price;
                 $userDetails->score = $userDetails->score + 1;
-                if ($model->publisher)
-                    $model->publisher->userDetails->credit = $model->publisher->userDetails->credit + $model->getPublisherPortion();
-                if ($userDetails->save()) {
-                    if ($model->publisher)
-                        $model->publisher->userDetails->save();
+                if ($userDetails->save())
+                    $buyResult = true;
+            } elseif (isset($_POST['Buy']['gateway'])) {
+                // Save payment
+                $transaction = new UserTransactions();
+                $transaction->user_id = Yii::app()->user->getId();
+                $transaction->amount = $price;
+                $transaction->date = time();
+                if ($transaction->save()) {
+                    // Redirect to payment gateway
+                    $MerchantID = $this->merchantID;  //Required
+                    $Amount = intval($price); //Amount will be based on Toman  - Required
+                    $Description = 'خرید کتاب از ' . Yii::app()->name;  // Required
+                    $Email = Yii::app()->user->email; // Optional
+                    $Mobile = '0'; // Optional
 
-                    $message =
-                        '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
-                        <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
-                        <table style="font-size: 9pt;text-align: right;">
-                            <tr>
-                                <td style="font-weight: bold;width: 120px;">عنوان کتاب</td>
-                                <td>' . CHtml::encode($model->title) . '</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: bold;width: 120px;">قیمت</td>
-                                <td>' . Controller::parseNumbers(number_format($price, 0)) . ' تومان</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: bold;width: 120px;">تاریخ</td>
-                                <td>' . JalaliDate::date('d F Y - H:i', $buy->date) . '</td>
-                            </tr>
-                        </table>';
-                    Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . Yii::app()->request->pathInfo;  // Required
 
-                    Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-                } else
-                    Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+                    include("lib/nusoap.php");
+                    $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
+                    $client->soap_defencoding = 'UTF-8';
+                    $result = $client->call('PaymentRequest', array(
+                        array(
+                            'MerchantID' => $MerchantID,
+                            'Amount' => $Amount,
+                            'Description' => $Description,
+                            'Email' => $Email,
+                            'Mobile' => $Mobile,
+                            'CallbackURL' => $CallbackURL
+                        )
+                    ));
+
+                    //Redirect to URL You can do it also by creating a form
+                    if ($result['Status'] == 100)
+                        $this->redirect('https://www.zarinpal.com/pg/StartPay/' . $result['Authority']);
+                    else
+                        echo 'ERR: ' . $result['Status'];
+                }
+            }
+
+            if ($buyResult) {
+                $this->saveBuyInfo($model, $user, 'credit');
+                Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
             } else
                 Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
         }
+
+        $user->refresh();
 
         $this->render('buy', array(
             'model' => $model,
@@ -148,61 +163,181 @@ class BookController extends Controller
         ));
     }
 
-    /**
-     * Download book
-
-    public function actionDownload($id, $title)
+    public function actionVerify($id, $title)
     {
-        $model = $this->loadModel($id);
-        if ($model->price == 0) {
-            $model->download += 1;
-            $model->setScenario('update-download');
-            $model->save();
-            $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
-        } else {
-            $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
-            if ($buy) {
-                $model->download += 1;
-                $model->setScenario('update-download');
+        if (!isset($_GET['Authority']))
+            $this->redirect(array('/book/buy', 'id' => $id, 'title' => $title));
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+        $criteria=new CDbCriteria();
+        $criteria->addCondition('user_id = :user_id');
+        $criteria->addCondition('status = :status');
+        $criteria->order='id DESC';
+        $criteria->params=array(':user_id'=>Yii::app()->user->getId(), ':status'=>'unpaid');
+        $model = UserTransactions::model()->find($criteria);
+        $book = Books::model()->findByPk($id);
+        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        $MerchantID = $this->merchantID;
+        $Amount = $model->amount; //Amount will be based on Toman
+        $Authority = $_GET['Authority'];
+
+        $transactionResult = false;
+        if ($_GET['Status'] == 'OK') {
+            include("lib/nusoap.php");
+            $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
+            $client->soap_defencoding = 'UTF-8';
+            $result = $client->call('PaymentVerification', array(
+                    array(
+                        'MerchantID' => $MerchantID,
+                        'Authority' => $Authority,
+                        'Amount' => $Amount
+                    )
+                )
+            );
+
+            if ($result['Status'] == 100) {
+                $model->status = 'paid';
+                $model->token = $result['RefID'];
+                $model->description = 'خرید کتاب از طریق درگاه زرین پال';
                 $model->save();
-                $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
-            } else
-                $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
-        }
+
+                $transactionResult = true;
+                $this->saveBuyInfo($book, $user, 'gateway');
+                Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
+            } else {
+                $errors = array(
+                    '-1' => 'اطلاعات ارسال شده ناقص است.',
+                    '-2' => 'IP یا کد پذیرنده صحیح نیست.',
+                    '-3' => 'با توجه به محدودیت ها امکان پرداخت رقم درخواست شده میسر نمی باشد.',
+                    '-4' => 'سطح تایید پذیرنده پایین تر از سطح نقره ای است.',
+                    '-11' => 'درخواست مورد نظر یافت نشد.',
+                    '-12' => 'امکان ویرایش درخواست میسر نمی باشد.',
+                    '-21' => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد.',
+                    '-22' => 'تراکنش ناموفق بود.',
+                    '-33' => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد.',
+                    '-34' => 'سقف تقسیم تراکنش از لحاظ تعداد یا رقم عبور نموده است.',
+                    '-40' => 'اجازه دسترسی به متد مربوطه وجود ندارد.',
+                    '-41' => 'اطلاعات ارسال شده مربوط به AdditionalData غیر معتبر می باشد.',
+                    '-42' => 'مدت زمان معتبر طول عمر شناسه پرداخت باید بین 30 دقیقه تا 45 روز باشد.',
+                    '-54' => 'درخواست مورد نظر آرشیو شده است.',
+                    '101' => 'عملیات پرداخت موفق بوده و قبلا بررسی تراکنش انجام شده است.',
+                );
+                Yii::app()->user->setFlash('failed', isset($errors[$result['Status']]) ? $errors[$result['Status']] : 'در انجام عملیات پرداخت خطایی رخ داده است.');
+            }
+        } else
+            Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+
+        $this->render('verify', array(
+            'transaction' => $model,
+            'book' => $book,
+            'user' => $user,
+            'price' => $model->amount,
+            'transactionResult' => $transactionResult,
+        ));
     }
 
-    protected function download($fileName, $filePath)
+    /**
+     * Save buy information
+     *
+     * @param $book Books
+     * @param $user Users
+     * @param $method string
+     */
+    private function saveBuyInfo($book, $user, $method)
     {
-        $fakeFileName = $fileName;
-        $realFileName = $fileName;
+        $price = $book->hasDiscount() ? $book->offPrice : $book->price;
 
-        $file = $filePath . DIRECTORY_SEPARATOR . $realFileName;
-        $fp = fopen($file, 'rb');
+        $book->download += 1;
+        $book->setScenario('update-download');
+        $book->save();
 
-        $mimeType = '';
-        switch (pathinfo($fileName, PATHINFO_EXTENSION)) {
-            case 'apk':
-                $mimeType = 'application/vnd.android.package-archive';
-                break;
+        $buy = new BookBuys();
+        $buy->book_id = $book->id;
+        $buy->user_id = $user->id;
+        $buy->method = $method;
+        $buy->package_id=$book->lastPackage->id;
+        $buy->save();
 
-            case 'xap':
-                $mimeType = 'application/x-silverlight-app';
-                break;
-
-            case 'ipa':
-                $mimeType = 'application/octet-stream';
-                break;
+        if ($book->publisher) {
+            $book->publisher->userDetails->credit = $book->publisher->userDetails->credit + $book->getPublisherPortion();
+            $book->publisher->userDetails->save();
         }
 
-        header('Pragma: public');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Type: ' . $mimeType);
-        header('Content-Disposition: attachment; filename=' . $fakeFileName);
+        $message =
+            '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
+            <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
+            <table style="font-size: 9pt;text-align: right;">
+                <tr>
+                    <td style="font-weight: bold;width: 120px;">عنوان کتاب</td>
+                    <td>' . CHtml::encode($book->title) . '</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;width: 120px;">قیمت</td>
+                    <td>' . Controller::parseNumbers(number_format($price, 0)) . ' تومان</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;width: 120px;">تاریخ</td>
+                    <td>' . JalaliDate::date('d F Y - H:i', $buy->date) . '</td>
+                </tr>
+            </table>';
+        Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+    }
 
-        echo stream_get_contents($fp);
-    }*/
+    /**
+     * Download book
+     *
+     * public function actionDownload($id, $title)
+     * {
+     * $model = $this->loadModel($id);
+     * if ($model->price == 0) {
+     * $model->download += 1;
+     * $model->setScenario('update-download');
+     * $model->save();
+     * $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+     * } else {
+     * $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
+     * if ($buy) {
+     * $model->download += 1;
+     * $model->setScenario('update-download');
+     * $model->save();
+     * $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+     * } else
+     * $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
+     * }
+     * }
+     *
+     * protected function download($fileName, $filePath)
+     * {
+     * $fakeFileName = $fileName;
+     * $realFileName = $fileName;
+     *
+     * $file = $filePath . DIRECTORY_SEPARATOR . $realFileName;
+     * $fp = fopen($file, 'rb');
+     *
+     * $mimeType = '';
+     * switch (pathinfo($fileName, PATHINFO_EXTENSION)) {
+     * case 'apk':
+     * $mimeType = 'application/vnd.android.package-archive';
+     * break;
+     *
+     * case 'xap':
+     * $mimeType = 'application/x-silverlight-app';
+     * break;
+     *
+     * case 'ipa':
+     * $mimeType = 'application/octet-stream';
+     * break;
+     * }
+     *
+     * header('Pragma: public');
+     * header('Expires: 0');
+     * header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+     * header('Content-Transfer-Encoding: binary');
+     * header('Content-Type: ' . $mimeType);
+     * header('Content-Disposition: attachment; filename=' . $fakeFileName);
+     *
+     * echo stream_get_contents($fp);
+     * }*/
 
     /**
      * Show programs list
@@ -225,12 +360,10 @@ class BookController extends Controller
             'pagination' => array('pageSize' => 8)
         ));
 
-        if($id)
-        {
+        if ($id) {
             $user = UserDetails::model()->findByAttributes(array('user_id' => $id));
-            $pageTitle = 'کتاب های '.($user->publisher_id?$user->publisher_id:$user->fa_name);
-        }
-        else
+            $pageTitle = 'کتاب های ' . ($user->publisher_id ? $user->publisher_id : $user->fa_name);
+        } else
             $pageTitle = $title;
         $this->render('books_list', array(
             'dataProvider' => $dataProvider,
@@ -239,15 +372,16 @@ class BookController extends Controller
         ));
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $criteria = Books::model()->getValidBooks();
-        $dataProvider = new CActiveDataProvider("Books",array(
+        $dataProvider = new CActiveDataProvider("Books", array(
             'criteria' => $criteria,
             'pagination' => array('pageSize' => 8)
         ));
-        $this->render('books_list',array(
+        $this->render('books_list', array(
             'dataProvider' => $dataProvider
         ));
     }
@@ -542,10 +676,10 @@ class BookController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $criteria = Books::model()->getValidBooks();
-        $criteria->compare('tagsRel.tag_id',$id);
+        $criteria->compare('tagsRel.tag_id', $id);
         $criteria->with[] = 'tagsRel';
         $criteria->together = true;
-        $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria,'pagination' => array('pageSize'=>8)));
+        $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria, 'pagination' => array('pageSize' => 8)));
         $this->render('tag', array(
             'model' => Tags::model()->findByPk($id),
             'dataProvider' => $dataProvider

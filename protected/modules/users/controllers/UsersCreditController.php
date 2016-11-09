@@ -57,9 +57,7 @@ class UsersCreditController extends Controller
     {
         if (isset($_POST['pay'])) {
             // Save payment
-            $model = UserTransactions::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'status' => 'unpaid'));
-            if (!$model)
-                $model = new UserTransactions();
+            $model = new UserTransactions();
             $model->user_id = Yii::app()->user->getId();
             $model->amount = $_POST['amount'];
             $model->date = time();

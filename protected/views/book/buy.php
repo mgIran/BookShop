@@ -4,6 +4,7 @@
 /* @var $user Users */
 /* @var $bought boolean */
 /* @var $price string */
+$hasFlash=Yii::app()->user->hasFlash('success');
 ?>
 <div class="white-form">
     <h3>خرید کتاب</h3>
@@ -28,14 +29,18 @@
     <hr>
     <p><label class="buy-label">اعتبار فعلی</label><span><?php echo CHtml::encode(number_format($user->userDetails->credit, 0));?> تومان</span></p>
     <?php if($bought):?>
-        <div class="alert alert-success">
-            مبلغ این کتاب قبلا از حساب شما کسر گردیده است. شما می توانید از طریق برنامه موبایل و ویندوز کتاب مورد نظر را دریافت و مطالعه کنید.
-        </div>
+        <?php if(!$hasFlash):?>
+            <div class="alert alert-success">این کتاب قبلا خریداری شده است. شما می توانید از طریق برنامه موبایل و ویندوز کتاب مورد نظر را دریافت و مطالعه کنید.</div>
+        <?php endif;?>
     <?php else:?>
         <div class="buttons">
-            <?php echo CHtml::submitButton('پرداخت', array(
+            <?php echo CHtml::submitButton('کسر از اعتبار', array(
                 'class'=>'btn btn-default',
-                'name'=>'buy'
+                'name'=>'Buy[credit]'
+            ))?>
+            <?php echo CHtml::submitButton('پرداخت از طریق درگاه', array(
+                'class'=>'btn btn-default',
+                'name'=>'Buy[gateway]'
             ))?>
         </div>
     <?php endif;?>
