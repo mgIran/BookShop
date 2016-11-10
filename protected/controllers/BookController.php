@@ -372,6 +372,35 @@ class BookController extends Controller
         ));
     }
 
+    /**
+     * show person books list
+     */
+    public function actionPerson($id,$title = null)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = 'index';
+        $person = BookPersons::model()->findByPk((int)$id);
+        if (!$person)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        else
+            $pageTitle = 'کتاب های ' . $person->name_family;
+        $criteria = Books::model()->getValidBooks();
+        $criteria->together = true;
+        $criteria->with[] = 'personRel';
+        $criteria->addCondition('personRel.person_id =:person_id');
+        $criteria->params[':person_id'] = $id;
+        $dataProvider = new CActiveDataProvider('Books', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 8)
+        ));
+
+        $this->render('books_list', array(
+            'dataProvider' => $dataProvider,
+            'title' => $pageTitle,
+            'pageTitle' => 'کتاب ها'
+        ));
+    }
+
     public function actionIndex()
     {
         Yii::app()->theme = 'frontend';

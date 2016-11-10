@@ -25,7 +25,7 @@ Yii::app()->clientScript->registerCss('inline',"
                     $(".uploader-message").html("");
                 }
                 else{
-                    $(".uploader-message").text(responseObj.message).addClass("error");
+                    $(".uploader-message").html(responseObj.message).addClass("error");
                     this.removeFile(file);
                 }
             ',
@@ -38,7 +38,10 @@ Yii::app()->clientScript->registerCss('inline',"
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <?php echo CHtml::textField('isbn', '', array('class'=>'form-control', 'placeholder'=>'شابک *'));?>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <?php echo CHtml::textField('print_year', '', array('class'=>'form-control', 'placeholder'=>'سال چاپ *'));?>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال * (تومان)'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clearfix" style="margin-top: 15px;">
@@ -76,10 +79,11 @@ Yii::app()->clientScript->registerCss('inline',"
                         $('#package-info-form #package_name').val('');
                         $('#package-info-form #isbn').val('');
                         $('#package-info-form #price').val('');
+                        $('#package-info-form #print_year').val('');
                         $('#package-info-form #printed_price').val('');
                     }
                     else
-                        $('.uploader-message').text(data.message);
+                        $('.uploader-message').html(data.message);
                 }",
             ), array('class'=>'btn btn-success pull-left'));?>
         </div>
@@ -104,10 +108,13 @@ Yii::app()->clientScript->registerCss('inline',"
         ),
         array(
             'class'=>'CButtonColumn',
-            'template' => '{delete}',
+            'template' => '{update} {delete}',
             'buttons'=>array(
                 'delete'=>array(
                     'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/deletePackage/".$data->id)',
+                ),
+                'update'=>array(
+                    'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/updatePackage/", array("id" => $data->id,"book_id"=>$data->book_id))',
                 ),
             ),
         ),

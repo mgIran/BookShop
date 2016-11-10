@@ -149,18 +149,9 @@ class Controller extends CController
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
                         array('label' => 'مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/baseManage/admin/')),
+                        array('label' => 'مدیریت دسته بندی کتاب ها', 'url' => Yii::app()->createUrl('/category/admin/')),
                         array('label' => 'تبلیغات', 'url' => Yii::app()->createUrl('/advertises/manage/admin/')),
                         array('label' => 'نظرات', 'url' => Yii::app()->createUrl('/comments/comment/adminBooks')),
-                    )
-                ),
-                array(
-                    'label' => 'دسته بندی کتاب ها<span class="caret"></span>',
-                    'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
-                    'items' => array(
-                        array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/category/admin/')),
-                        array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/category/create/')),
                     )
                 ),
                 array(
@@ -228,10 +219,6 @@ class Controller extends CController
                     'url' => Yii::app()->createUrl('/tickets/manage/admin'),
                 ),
                 array(
-                    'label' => 'تگ ها',
-                    'url' => Yii::app()->createUrl('/tags/admin'),
-                ),
-                array(
                     'label' => 'تنظیمات<span class="caret"></span>',
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
@@ -239,6 +226,7 @@ class Controller extends CController
                     'items' => array(
                         array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
                         array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
+                        array('label' => 'مدیریت تگ ها', 'url' => Yii::app()->createUrl('/tags/admin')),
                     )
                 ),
                 array(

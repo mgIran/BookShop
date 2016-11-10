@@ -18,12 +18,21 @@
  * @property string $price
  * @property integer $sale_printed
  * @property string $printed_price
+ * @property string $print_year
  *
  * The followings are the available model relations:
  * @property Books $book
  */
 class BookPackages extends CActiveRecord
 {
+    const FOR_NEW_BOOK = 'new_book';
+    const FOR_OLD_BOOK = 'old_book';
+    const STATUS_PENDING = 'pending';
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_REFUSED = 'refused';
+    const STATUS_CHANGE_REQUIRED = 'change_required';
+
+    
     public $statusLabels = array(
         'pending' => 'بارگذاری شده',
         'accepted' => 'تایید شده',
@@ -52,12 +61,12 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('book_id, version, isbn, price, file_name', 'required'),
-            array('sale_printed', 'numerical', 'integerOnly'=>true),
+            array('book_id, version, isbn, price, file_name, print_year', 'required'),
             array('book_id, price, printed_price', 'length', 'max'=>10),
+            array('print_year', 'length', 'max'=>8),
             array('version, isbn, create_date, publish_date', 'length', 'max'=>20),
-            array('sale_printed, price, printed_price', 'numerical', 'integerOnly'=>true),
-            array('isbn, create_date, publish_date, reason', 'filter', 'filter'=>'strip_tags'),
+            array('version ,sale_printed, price, printed_price, print_year', 'numerical', 'integerOnly'=>true),
+            array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter'=>'strip_tags'),
             array('package_name', 'length', 'max'=>100),
             array('file_name', 'length', 'max'=>255),
             array('status', 'length', 'max'=>15),
@@ -134,6 +143,7 @@ class BookPackages extends CActiveRecord
             'price' => 'قیمت نسخه دیجیتال',
             'sale_printed' => 'فروش نسخه چاپی',
             'printed_price' => 'قیمت نسخه چاپی',
+            'print_year' => 'سال چاپ',
         );
     }
 
