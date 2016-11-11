@@ -27,7 +27,7 @@ body {
     color: #343434;
     font-family: 'IRANSans';
     font-size: 14px;
-    overflow-x: hidden!important;
+    overflow-x: hidden !important;
 }
 body.overflow-hidden{
     overflow: hidden !important;
@@ -735,13 +735,14 @@ a:active{
     width: 20px;
     height: 20px;
     display: inline-block;
-    position: relative;
+    position: absolute;
     top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .thumbnail .thumbnail-overlay-icon .icon::before {
