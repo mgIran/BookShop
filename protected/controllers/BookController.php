@@ -673,12 +673,12 @@ class BookController extends Controller
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
         $criteria->order = 't.confirm_date DESC';
-        if (isset($_GET['term']) && !empty($term = $_GET['term'])) {
-            $terms = explode(' ', urldecode($term));
+        if(isset($_GET['term']) && !empty($term = $_GET['term'])){
+            $terms = explode(' ' ,urldecode($term));
             $sql = null;
-            foreach ($terms as $key => $term)
-                if ($term) {
-                    if (!$sql)
+            foreach($terms as $key => $term)
+                if($term){
+                    if(!$sql)
                         $sql = "(";
                     else
                         $sql .= " OR (";
@@ -689,11 +689,34 @@ class BookController extends Controller
             $criteria->addCondition($sql);
 
         }
-        $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria));
-
-        $this->render('search', array(
-            'dataProvider' => $dataProvider
+        $pagination = new CPagination();
+        $pagination->pageSize = 8;
+        if(Yii::app()->request->isAjaxRequest)
+        {
+            $criteria->limit=6;
+            $pagination->pageSize = 6;
+        }
+        $dataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $criteria,
+            'pagination' => $pagination
         ));
+        if(Yii::app()->request->isAjaxRequest){
+            $this->beginClip('book-list');
+            $this->widget('zii.widgets.CListView',array(
+                'id' => 'search-book-list',
+                'dataProvider' => $dataProvider,
+                'itemView' => '//site/_search_book_item',
+                'template' => '{items}',
+            ));
+            $this->endClip();
+            $response['html'] = $this->clips['book-list'];
+            $response['status'] = true;
+            echo CJSON::encode($response);
+            Yii::app()->end();
+        }else
+            $this->render('search' ,array(
+                'dataProvider' => $dataProvider
+            ));
     }
 
     /**

@@ -1,4 +1,25 @@
 @media (max-width: 767px) {
+    .navbar-collapse.in {
+        overflow: visible;
+    }
+    .scroll-mode .navbar-form .search-btn-icon > .btn{
+        height: 40px;
+        background-size: 18px;
+        padding: 10px 0;
+    }
+    .scroll-mode .navbar-form .form-control{
+        height: 40px;
+        font-size: 14px;
+    }
+    .search-suggest-box{
+        display: none;
+    }
+    .search-suggest-box.open{
+        display: block;
+    }
+    #categories-modal .modal-dialog{
+        width: 95%;
+    }
     .navbar-default,
     .navbar-default.scroll-mode{
         height:60px;
@@ -33,7 +54,7 @@
         left:auto;
         width: 100%;
         padding: 0;
-        margin: 0;
+        margin: 0 !important;
         -webkit-transform: none;
         -moz-transform: none;
         -ms-transform: none;
@@ -457,6 +478,9 @@
     }
 }
 @media (min-width: 768px) and (max-width: 991px){
+    #categories-modal .modal-dialog{
+        width: 95%;
+    }
     .sidebar-col{
         margin-top: 15px;
         padding: 0;
@@ -494,6 +518,9 @@
     }
 }
 @media (min-width: 992px) and (max-width: 1200px){
+    #categories-modal .modal-dialog{
+        width: 85%;
+    }
     .thumbnail-list .thumbnail-container{
         width: 25%;
     }
