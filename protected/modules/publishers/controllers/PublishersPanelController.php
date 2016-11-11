@@ -499,6 +499,28 @@ class PublishersPanelController extends Controller
     {
         Yii::app()->theme='abound';
         $this->layout='//layouts/column2';
+
+        if(isset($_POST['token'])) {
+            if(!isset($_POST['token']) or $_POST['token']==''){
+                Yii::app()->user->setFlash('failed', 'کد رهگیری نمی تواند خالی باشد.');
+                $this->refresh();
+            }
+            $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>$_POST['user_id']));
+            $model=new UserSettlement();
+            $model->user_id=$userDetails->user_id;
+            $model->token=$_POST['token'];
+            $model->amount=$userDetails->getSettlementAmount();
+            $model->date=time();
+            $model->iban=$userDetails->iban;
+            if($model->save()) {
+                $userDetails->credit=$userDetails->credit-$userDetails->getSettlementAmount();
+                $userDetails->save();
+                Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+            }
+            else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+        }
+
         $criteria=new CDbCriteria();
         $criteria->select='SUM(amount) AS amount, date';
         $criteria->group='EXTRACT(DAY FROM FROM_UNIXTIME(date, "%Y %D %M %h:%i:%s %x"))';
@@ -514,27 +536,6 @@ class PublishersPanelController extends Controller
         $settlementRequiredUsers=new CActiveDataProvider('UserDetails', array(
             'criteria'=>$criteria,
         ));
-
-        if(isset($_POST['ajax']) and isset($_POST['uid'])) {
-            $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>$_POST['uid']));
-            $model=new UserSettlement();
-            $model->user_id=$userDetails->user_id;
-            $model->amount=$userDetails->getSettlementAmount();
-            $model->date=time();
-            $model->iban=$userDetails->iban;
-            if($model->save()) {
-                $userDetails->credit=$userDetails->credit-$userDetails->getSettlementAmount();
-                $userDetails->save();
-                echo CJSON::encode(array(
-                    'status' => true
-                ));
-            }
-            else
-                echo CJSON::encode(array(
-                    'status'=>false
-                ));
-            Yii::app()->end();
-        }
 
         $this->render('manage_settlement', array(
             'settlementHistory'=>$settlementHistory,
