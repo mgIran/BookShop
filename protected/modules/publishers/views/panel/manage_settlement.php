@@ -40,22 +40,6 @@
             'value'=>'number_format($data->getSettlementAmount(), 0)." تومان"'
         ),
         'settled'=>array(
-//            'value'=>'CHtml::textField("test","a");CHtml::ajaxButton("تسویه شد", Yii::app()->createUrl("/publishers/panel/manageSettlement"), array(
-//                "type"=>"POST",
-//                "dataType"=>"JSON",
-//                "data"=>"js:{uid:".$data->user_id.", ajax:\"submit-settlement\", token:$(this).parent().find(\"\")}",
-//                "success"=>"function(data){
-//                    if(data.status) {
-//                        $.fn.yiiGridView.update(\'required-settlements-grid\');
-//                        $.fn.yiiGridView.update(\'settlements-grid\');
-//                    }
-//                    else
-//                        alert(\"در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.\");
-//                }"
-//            ), array(
-//                "class"=>"btn btn-success",
-//                "id"=>"btn-settled-".$data->user_id
-//            ))',
             'value'=>function($data){
                 $form=CHtml::beginForm(Yii::app()->createUrl("/publishers/panel/manageSettlement"), 'post', array('class'=>'settlement-form'));
                 $form.=CHtml::textField('token', '', array('class'=>'form-control ','placeholder'=>'کد رهگیری'));
