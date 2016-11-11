@@ -25,9 +25,12 @@ class PublishersBooksController extends Controller
                 'deleteUpload',
                 'uploadFile',
                 'deleteUploadFile',
+                'deleteFile',
                 'images',
                 'savePackage',
-                'getPackages'
+                'deletePackage',
+                'getPackages',
+                'updatePackage'
             ),
         );
     }
@@ -90,6 +93,13 @@ class PublishersBooksController extends Controller
                 'uploadDir' => '/uploads/books/files',
                 'storedMode' => 'record'
             ),
+            'deleteFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'BookPackages',
+                'attribute' => 'file_name',
+                'uploadDir' => '/uploads/books/files',
+                'storedMode' => 'field'
+            ),
             'deleteImage' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'BookImages',
@@ -150,6 +160,8 @@ class PublishersBooksController extends Controller
                 $model->confirm = 'pending';
                 $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
                 $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
+                $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+                $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
                 if ($model->save()) {
                     if ($iconFlag)
                         @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
@@ -224,6 +236,10 @@ class PublishersBooksController extends Controller
             array_push($model->formTags, $tag->title);
         foreach ($model->seoTags as $tag)
             array_push($model->formSeoTags, $tag->title);
+        foreach ($model->persons(array('condition'=>'role_id = 1')) as $person)
+            array_push($model->formAuthor, $person->name_family);
+        foreach ($model->persons(array('condition'=>'role_id = 2')) as $person)
+            array_push($model->formTranslator, $person->name_family);
 
         if (isset($_POST['packages-submit'])) {
             if (empty($model->packages))
@@ -243,6 +259,8 @@ class PublishersBooksController extends Controller
             $model->confirm = 'pending';
             $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
+            $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+            $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
             if ($model->save()) {
                 if ($iconFlag)
                     @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
@@ -376,5 +394,65 @@ class PublishersBooksController extends Controller
         $model=$this->loadModel($id);
         foreach($model->packages as $package)
             $this->renderPartial('_package_list', array('data'=>$package));
+    }
+
+    public function actionDeletePackage($id)
+    {
+        $model = BookPackages::model()->findByPk($id);
+        if($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+            throw new CHttpException(404 ,'The requested page does not exist.');
+        $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
+        if(file_exists($uploadDir . '/' . $model->file_name))
+            if(@unlink($uploadDir . '/' . $model->file_name))
+                $model->delete();
+
+        if(!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+    }
+
+
+    public function actionUpdatePackage()
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout= '//layouts/panel';
+        if(isset($_GET['id']) && !empty($_GET['id'])){
+            $id = (int)$_GET['id'];
+            $model = BookPackages::model()->findByPk($id);
+            if($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+                throw new CHttpException(404 ,'The requested page does not exist.');
+            $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
+            $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';
+            $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
+            if(!is_dir($uploadDir))
+                mkdir($uploadDir);
+
+            $package = array();
+            if($model->file_name && file_exists($uploadDir . $model->file_name))
+                $package = array(
+                    'name' => $model->file_name ,
+                    'src' => $uploadUrl . '/' . $model->file_name ,
+                    'size' => filesize($uploadDir . $model->file_name) ,
+                    'serverName' => $model->file_name ,
+                );
+            if(isset($_POST['BookPackages'])){
+                $model->attributes = $_POST['BookPackages'];
+                $model->for = $model::FOR_OLD_BOOK;
+                $model->status = $model::STATUS_PENDING;
+                if (!isset($_POST['BookPackages']['sale_printed']))
+                    $model->sale_printed = 0;
+                if($model->save()){
+                    if($model->file_name && file_exists($tempDir .DIRECTORY_SEPARATOR. $model->file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->file_name ,$uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
+                    Yii::app()->user->setFlash('success' ,'اطلاعات با موفقیت ثبت شد.');
+                    $this->redirect(array('/publishers/books/update/' . $model->book_id . '?step=2'));
+                }else
+                    Yii::app()->user->setFlash('failed' ,'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+            }
+            $this->render('update_package' ,array(
+                'model' => $model ,
+                'package' => $package
+            ));
+        }else
+            $this->redirect(array('/publishers/panel'));
     }
 }

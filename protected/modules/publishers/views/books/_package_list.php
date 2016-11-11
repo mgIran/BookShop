@@ -10,6 +10,14 @@
     <td><?php echo Controller::parseNumbers(number_format($data->price)).' تومان'?></td>
     <td><?php echo Controller::parseNumbers(number_format($data->printed_price)).' تومان'?></td>
     <td>
+        <span style="margin-right: 6px;font-size: 17px">
+            <a class="icon-pencil text-info" href="<?php echo $this->createUrl('/publishers/books/updatePackage/'.$data->id);?>"></a>
+        </span>
+        <span style="font-size: 16px">
+            <a class="icon-trash text-danger" href="<?php echo $this->createUrl('/publishers/books/deletePackage/'.$data->id);?>"></a>
+        </span>
+    </td>
+    <td>
         <span class="label <?php if($data->status=='accepted')echo 'label-success';elseif($data->status=='refused' || $data->status=='change_required')echo 'label-danger';else echo 'label-info';?>">
             <?php echo CHtml::encode($data->statusLabels[$data->status]);?>
         </span>

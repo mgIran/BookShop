@@ -88,6 +88,16 @@ return array(
 
 	// application components
 	'components'=>array(
+//		'session' => array(
+//			'class' => 'system.web.CDbHttpSession',
+//			'connectionID' => 'db',
+//			'sessionTableName' => 'session',
+//			'autoCreateSessionTable' => true,
+//			'timeout' => 1200,
+//		),
+		'assetManager' => array(
+			'linkAssets' => true
+		),
         'userCounter' => array(
             'class' => 'application.components.UserCounter',
             'tableUsers' => 'ym_counter_users',

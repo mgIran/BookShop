@@ -122,7 +122,7 @@ class BookController extends Controller
                     $Email = Yii::app()->user->email; // Optional
                     $Mobile = '0'; // Optional
 
-                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . Yii::app()->request->pathInfo;  // Required
+                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id.'/'.urlencode($title);  // Required
 
                     include("lib/nusoap.php");
                     $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
@@ -365,6 +365,35 @@ class BookController extends Controller
             $pageTitle = 'کتاب های ' . ($user->publisher_id ? $user->publisher_id : $user->fa_name);
         } else
             $pageTitle = $title;
+        $this->render('books_list', array(
+            'dataProvider' => $dataProvider,
+            'title' => $pageTitle,
+            'pageTitle' => 'کتاب ها'
+        ));
+    }
+
+    /**
+     * show person books list
+     */
+    public function actionPerson($id,$title = null)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = 'index';
+        $person = BookPersons::model()->findByPk((int)$id);
+        if (!$person)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        else
+            $pageTitle = 'کتاب های ' . $person->name_family;
+        $criteria = Books::model()->getValidBooks();
+        $criteria->together = true;
+        $criteria->with[] = 'personRel';
+        $criteria->addCondition('personRel.person_id =:person_id');
+        $criteria->params[':person_id'] = $id;
+        $dataProvider = new CActiveDataProvider('Books', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 8)
+        ));
+
         $this->render('books_list', array(
             'dataProvider' => $dataProvider,
             'title' => $pageTitle,

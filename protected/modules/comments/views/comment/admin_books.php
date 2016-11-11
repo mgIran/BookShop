@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 	'columns'=>array(
 		array(
 			'header'=>Yii::t('commentsModule.msg', 'User Name'),
-			'value'=>'$data->userName',
+			'value'=>'$data->userName?$data->userName:"کاربر حذف شده"',
 			'htmlOptions'=>array('width'=>80),
 		),
 		array(

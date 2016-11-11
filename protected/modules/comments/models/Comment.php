@@ -228,6 +228,9 @@ class Comment extends CActiveRecord
             $criteria->with[] = 'user';
         $criteria->addCondition('t.status <> 2');
         $criteria->order = 't.status';
+        $criteria->together = true;
+        $criteria->with[] = 'books';
+        $criteria->addCondition('books.id IS NOT NULL');
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array(

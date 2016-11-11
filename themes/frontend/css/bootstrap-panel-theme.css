@@ -45,7 +45,7 @@ a:active{
     top: 0;
     right: 0;
     left: 0;
-    z-index: 2;
+    z-index: 1000;
     box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
 .modal-open .navbar-default {
@@ -1539,10 +1539,20 @@ ul.tagit{
     background: #fafafa;
     border-color: #eee;
     color: #555;
-    height:100px;
     line-height: 14px;
     padding:5px 10px;
     font-size: 14px;
+    margin: 0;
+}
+ul.tagit input[type="text"]{
+    width: 250px;
+}
+ul.tagit li{
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+.large-tagit ul.tagit{
+    height:100px;
 }
 .uploader-message.error {
     color: #e74e40;
@@ -1622,7 +1632,7 @@ ul.tagit{
     right:0;
     left: 0;
     bottom:0;
-    z-index:98;
+    z-index:1001;
     background-color: rgba(0,0,0,0.8);
     opacity: 0;
     visibility: hidden;
