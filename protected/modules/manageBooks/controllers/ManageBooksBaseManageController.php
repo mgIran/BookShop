@@ -542,7 +542,7 @@ class ManageBooksBaseManageController extends Controller
             if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
-                $model->status = $model::STATUS_PENDING;
+                $model->status = $model::STATUS_ACCEPTED;
                 if (!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
                 if($model->save()){
