@@ -20,6 +20,7 @@
                         <?php echo CHtml::submitButton('',array('name'=>'','class'=>'btn btn-default')) ?>
                     </span>
                 </div>
+                <div class="search-suggest-box"></div>
             <?php
             echo CHtml::endForm();
             ?>
