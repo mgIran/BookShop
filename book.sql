@@ -176,7 +176,6 @@ CREATE TABLE `ym_book_buys` (
 -- ----------------------------
 INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663', null, null);
 INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463', null, null);
-INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870', null, null);
 INSERT INTO `ym_book_buys` VALUES ('21', '53', '43', '1478681143', 'gateway', null);
 
 -- ----------------------------
