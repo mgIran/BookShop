@@ -927,16 +927,11 @@ CREATE TABLE `ym_user_settlement` (
   `amount` varchar(15) DEFAULT NULL COMMENT 'مبلغ',
   `date` varchar(20) DEFAULT NULL COMMENT 'تاریخ',
   `iban` varchar(24) DEFAULT NULL COMMENT 'شماره شبا',
+  `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'کد رهگیری',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `ym_user_settlement_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of ym_user_settlement
--- ----------------------------
-INSERT INTO `ym_user_settlement` VALUES ('28', '43', '19000', '1462175546', '234242342');
-INSERT INTO `ym_user_settlement` VALUES ('29', '45', '4949900', '1478354499', '23423');
 
 -- ----------------------------
 -- Table structure for ym_user_transactions
