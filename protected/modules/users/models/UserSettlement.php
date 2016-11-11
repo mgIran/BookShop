@@ -9,6 +9,7 @@
  * @property string $amount
  * @property string $date
  * @property string $iban
+ * @property string $token
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -35,9 +36,10 @@ class UserSettlement extends CActiveRecord
 			array('amount', 'length', 'max'=>15),
 			array('date', 'length', 'max'=>20),
 			array('iban', 'length', 'max'=>24),
+			array('token', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, amount, date, iban', 'safe', 'on'=>'search'),
+			array('id, user_id, amount, date, iban, token', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +66,7 @@ class UserSettlement extends CActiveRecord
 			'amount' => 'مبلغ',
 			'date' => 'تاریخ',
 			'iban' => 'شماره شبا',
+			'token' => 'کد رهگیری',
 		);
 	}
 
@@ -90,6 +93,7 @@ class UserSettlement extends CActiveRecord
 		$criteria->compare('amount',$this->amount,true);
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('iban',$this->iban,true);
+		$criteria->compare('token',$this->token,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -3,12 +3,9 @@
 /* @var $settlementHistory CActiveDataProvider*/
 /* @var $settlementRequiredUsers CActiveDataProvider*/
 ?>
-<?php if(Yii::app()->user->hasFlash('success')):?>
-    <div class="alert alert-success fade in">
-        <button class="close close-sm" type="button" data-dismiss="alert"><i class="icon-remove"></i></button>
-        <?php echo Yii::app()->user->getFlash('success');?>
-    </div>
-<?php endif;?>
+
+<?php $this->renderPartial('//layouts/_flashMessage');?>
+
 <h3>تاریخچه تسویه حساب ها</h3>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'settlements-grid',
@@ -43,23 +40,21 @@
             'value'=>'number_format($data->getSettlementAmount(), 0)." تومان"'
         ),
         'settled'=>array(
-            'value'=>'CHtml::ajaxButton("تسویه شد", Yii::app()->createUrl("/publishers/panel/manageSettlement"), array(
-                "type"=>"POST",
-                "dataType"=>"JSON",
-                "data"=>"js:{uid:".$data->user_id.", ajax:\"submit-settlement\"}",
-                "success"=>"function(data){
-                    if(data.status) {
-                        $.fn.yiiGridView.update(\'required-settlements-grid\');
-                        $.fn.yiiGridView.update(\'settlements-grid\');
-                    }
-                    else
-                        alert(\"در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.\");
-                }"
-            ), array(
-                "class"=>"btn btn-success",
-                "id"=>"btn-settled-".$data->user_id
-            ))',
+            'value'=>function($data){
+                $form=CHtml::beginForm(Yii::app()->createUrl("/publishers/panel/manageSettlement"), 'post', array('class'=>'settlement-form'));
+                $form.=CHtml::textField('token', '', array('class'=>'form-control ','placeholder'=>'کد رهگیری'));
+                $form.=CHtml::hiddenField('user_id', $data->user_id);
+                $form.=CHtml::submitButton('تسویه شد', array('class'=>'btn btn-success'));
+                $form.=CHtml::endForm();
+                return $form;
+            },
             'type'=>'raw'
         ),
     ),
 ));?>
+<?php Yii::app()->clientScript->registerCss('this-page','
+.settlement-form .form-control{
+    width:200px;
+    margin-left:3px;
+}
+');?>
