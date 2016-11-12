@@ -95,9 +95,9 @@ return array(
 //			'autoCreateSessionTable' => true,
 //			'timeout' => 1200,
 //		),
-		'assetManager' => array(
-			'linkAssets' => true
-		),
+//		'assetManager' => array(
+//			'linkAssets' => true
+//		),
         'userCounter' => array(
             'class' => 'application.components.UserCounter',
             'tableUsers' => 'ym_counter_users',

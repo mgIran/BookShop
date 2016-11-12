@@ -20,7 +20,7 @@ class ChartJs extends CApplicationComponent
         $cs = Yii::app()->getClientScript();
         $cs->registerCoreScript('jquery');
         $jsFilename = YII_DEBUG ? 'Chart.js' : 'Chart.min.js';
-        $cssFilename = YII_DEBUG ? 'styles.css' : 'styles.min.css';
+        $cssFilename = YII_DEBUG ? 'styles.css' : 'styles.css';
         $cs->registerScriptFile($this->getAssetsUrl().'/js/'.$jsFilename, CClientScript::POS_HEAD);
         $cs->registerCssFile($this->getAssetsUrl() . "/css/".$cssFilename, '');
     }
