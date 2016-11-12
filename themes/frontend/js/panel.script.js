@@ -2,6 +2,10 @@ var $window = $(window),
     $body = $("body");
     $sidebar = $(".sidebar");
 $(document).ready(function() {
+    $("[data-toggle='tooltip']").tooltip({
+        trigger:'hover'
+    });
+
     var $panel_cookie=1;
     if($window.width() > 768 && $.cookie('p-s-mode'))
     {

@@ -844,14 +844,22 @@ a:active{
     width: 212px;
     margin: 0 10px;
 }
+.thumbnail-container .thumbnail{
+    width: 212px;
+    margin: 0 auto;
+}
 
 .is-carousel .thumbnail-container {
-    margin-right: 0;
+    margin: 0 auto;
 }
 
 .owl-item {
+    text-align: center;
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(0) scale(1.0, 1.0);
+}
+.owl-item > div {
+    text-align: right;
 }
 
 .thumbnail-list .thumbnail-container {
@@ -1101,8 +1109,7 @@ a:active{
 }
 
 .tabs .thumbnail-container {
-    width: 199px;
-    margin-left: 15px;
+    width: 212px;
 }
 
 .tabs .tabs-container {
@@ -2241,10 +2248,6 @@ input[type="checkbox"] + label:hover::before {
 .book-view .similar-books{
     background: #fff;
     padding: 20px;
-}
-.book-view .similar-books .thumbnail-container{
-    width: 194px;
-    margin-left: 10px;
 }
 .offers .owl-dots,
 .bestselling .owl-dots{

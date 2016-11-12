@@ -196,7 +196,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                         <div class="similar-books">
                             <div class="heading">
                                 <h4>کتاب های مشابه</h4>
-                                <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="0" data-nav="1">
+                                <div class="is-carousel" data-item-selector="thumbnail-container"  data-mouse-drag="1" data-responsive='{"1024":{"items":"3"},"992":{"items":"2"},"710":{"items":"3"},"520":{"items":"2"},"0":{"items":"1","dots":true, "nav":false}}' data-dots="1" data-nav="0">
                                     <?php
                                     $this->widget('zii.widgets.CListView',array(
                                         'id' => 'latest-list',

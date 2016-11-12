@@ -196,6 +196,7 @@
     }
     .thumbnail-list .items{
         padding: 0 15px;
+        margin: 0 -15px;
     }
     .book-view .thumb{
         text-align: center;

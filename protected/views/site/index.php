@@ -32,7 +32,7 @@ endif;
             <div class="heading">
                 <h2>دسته بندی ها</h2>
             </div>
-            <div class="is-carousel" data-items="4" data-item-selector="cat-item" data-margin="10" data-dots="1" data-nav="0" data-mouse-drag="1" data-responsive='{"1200":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"650":{"items":"2"},"0":{"items":"1"}}'>
+            <div class="is-carousel" data-item-selector="cat-item" data-margin="10" data-dots="1" data-nav="0" data-mouse-drag="1" data-responsive='{"1920":{"items":"5"},"1200":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"480":{"items":"2"},"0":{"items":"1"}}'>
                 <?php
                 $this->widget('zii.widgets.CListView',array(
                     'id' => 'categories-list',
@@ -51,7 +51,7 @@ endif;
                 <div class="head">
                     <h2>پیشنهاد ما</h2>
                 </div>
-                <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"5", "1024":"4", "992":"4", "768":"3", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-nav="1" data-dots="1">
+                <div class="is-carousel" data-item-selector="thumbnail-container" data-mouse-drag="1" data-responsive='{"1600":{"items":"5"},"1024":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"480":{"items":"2"},"0":{"items":"1"}}'     data-nav="1" data-dots="1">
                     <?php
                     $this->widget('zii.widgets.CListView',array(
                         'id' => 'suggested-list',
@@ -102,7 +102,7 @@ if($activeRows['buy'] && $buyBooksDP->totalItemCount):
                 <div class="head">
                     <h2>پرفروش ترین ها</h2>
                 </div>
-                <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"5", "1024":"4", "992":"4", "768":"3", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="1">
+                <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-mouse-drag="1" data-responsive='{"1600":{"items":"5"},"1024":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"480":{"items":"2"},"0":{"items":"1"}}' data-dots="1" data-nav="1">
                     <?php
                     $this->widget('zii.widgets.CListView',array(
                         'id' => 'latest-list',
@@ -127,7 +127,7 @@ if($activeRows['popular'] && $popularBooksDP->totalItemCount):
             <div class="heading">
                 <h2>پربازدیدترین ها</h2>
             </div>
-            <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"5", "1024":"4", "992":"4", "768":"3", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="1" data-nav="0">
+            <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-mouse-drag="1" data-responsive='{"1600":{"items":"5"},"1024":{"items":"4"},"992":{"items":"3"},"768":{"items":"3"},"480":{"items":"2"},"0":{"items":"1"}}' data-dots="1" data-nav="0">
                 <?php
                 $this->widget('zii.widgets.CListView',array(
                     'id' => 'latest-list',
@@ -166,7 +166,7 @@ if($rows->totalItemCount):
                     foreach ($rowData as $key=>$row):
                         ?>
                         <div id="row-<?= $key ?>" class="tab-pane fade<?= $key == 0?' in active':'' ?>">
-                            <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"4", "1024":"3", "992":"3", "768":"2", "650":"3", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-dots="0" data-nav="1">
+                            <div class="is-carousel" data-item-selector="thumbnail-container" data-mouse-drag="1" data-responsive='{"992":{"items":"3"},"768":{"items":"2"},"700":{"items":"3"},"480":{"items":"2"},"0":{"items":"1"}}' data-dots="1" data-nav="0">
                                 <?php
                                 $this->widget('zii.widgets.CListView',array(
                                     'id' => 'row-'.$key.'-carousel-list',
@@ -194,7 +194,7 @@ if($news->totalItemCount):
     <div class="news">
         <div class="container">
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-                <div class="is-carousel" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="0" data-items="1" data-mouseDrag="0">
+                <div class="is-carousel" data-dots="0" data-nav="1" data-autoplay="1" data-autoplay-hover-pause="1" data-loop="0" data-responsive='{"0":{"items":1}}' data-mouseDrag="0">
                     <?php
                     foreach($news->getData() as $new):
                         $this->renderPartial('_news_item',array('data'=>$new));

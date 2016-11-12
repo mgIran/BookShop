@@ -514,16 +514,15 @@ a:active{
 }
 .thumbnail-container {
     width: 212px;
-    margin: 0 10px;
-}
-
-.is-carousel .thumbnail-container {
-    margin-right: 0;
+    margin: 0 auto;
 }
 .thumbnail {
+    width: 212px;
     border: none;
     border-radius: 0;
     padding: 0;
+    text-align: right;
+    margin: 0 auto;
     margin-bottom: 0;
     overflow: hidden;
 }
@@ -1773,4 +1772,28 @@ input[type="checkbox"]:checked + label::before {
 }
 .settlement-history{
     margin-top: 70px;
+}
+
+.tooltip{
+    display: none !important;
+}
+.tooltip.left{
+    left: 0 !important;
+    -webkit-transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    -o-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+.tooltip .tooltip-inner{
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: IRANSans !important;
+}
+.tooltip .tooltip-arrow {
+    display: none;
+}
+.sidebar-mini .tooltip{
+    display: block !important;
 }
