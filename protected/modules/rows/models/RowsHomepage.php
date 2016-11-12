@@ -49,7 +49,7 @@ class RowsHomepage extends SortableCActiveRecord
             array('order', 'length', 'max' => 10),
             array('status', 'default', 'value' => 1),
             array('const_query', 'default', 'value' => 0),
-            array('query', 'default', 'value' => 255),
+            array('query', 'length', 'max' => 255),
             array('query', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.

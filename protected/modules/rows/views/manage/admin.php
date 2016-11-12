@@ -30,7 +30,12 @@ $this->menu=array(
 		),
 		array(
 			'class'=>'CButtonColumn',
-            'template' => '{update} {delete}'
+            'template' => '{update} {delete}',
+			'buttons' =>array(
+				'delete' =>array(
+					'visible' => '!$data->query'
+				)
+			)
 		),
 	),
 )); ?>

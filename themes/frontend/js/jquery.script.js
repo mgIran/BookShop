@@ -6,6 +6,56 @@ $(document).ready(function() {
             $(".navbar.navbar-default").removeClass('scroll-mode');
     });
 
+    // ajax search
+    $("body").on("keyup","#search-term",function(e){
+        var $this = $(this),
+            $form = $this.parents('form');
+        if($.inArray(e.keyCode,[37,38,39,40]) === -1)
+            return searchNavbarKeydown($this);
+    });
+
+    $("body").on("focus","#search-term",function(){
+        var $this = $(this),
+            $form = $this.parents('form');
+        if($this.val().length > 0)
+            $form.find('.search-suggest-box').addClass('open');
+    });
+
+    /**
+     * search ajax call action
+     * @param $this
+     */
+    function searchNavbarKeydown($this) {
+        var $form = $this.parents('form');
+        if($this.val().length > 0) {
+            $.ajax({
+                url: $form.attr("action"),
+                type: "GET",
+                dataType: "JSON",
+                data: {term: $this.val()},
+                beforeSend: function () {
+                    // $form.find('.search-suggest-box').addClass('opening').find('.loading-container').show();
+                },
+                success: function (data) {
+                    $form.find('.search-suggest-box').removeClass('opening').addClass('open').find('.loading-container').hide();
+                    if (data.status)
+                        $form.find('.search-suggest-box .search-entries').html(data.html);
+                    else
+                        $form.find('.search-suggest-box .search-entries').html(data.message);
+                }
+            });
+        }
+    }
+    $("body").on("click",function(event){
+        var $target = $(event.target),
+            close = true;
+        if($target.is(".navbar-form, .navbar-form *"))
+            close = false;
+        if(close)
+            $('.navbar-form .search-suggest-box').removeClass('open');
+    });
+    // end ajax search
+
     if ($('.slider').length != 0) {
         var loop = $('.slider').attr('data-loop');
         if (typeof loop === 'undefined')
