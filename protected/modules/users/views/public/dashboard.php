@@ -95,7 +95,7 @@
     <div class="head">
         <h4>پیشنهاد ما به شما</h4>
     </div>
-    <div class="is-carousel auto-width" data-item-selector="thumbnail-container" data-items='{"1200":"5", "1024":"4", "992":"4", "768":"2", "650":"4", "480":"2", "0":"1"}' data-margin='{"768":"20", "0":"10"}' data-nav="1" data-dots="1">
+    <div class="is-carousel" data-item-selector="thumbnail-container" data-mouse-drag="1" data-responsive='{"1600":{"items":"5"},"1400":{"items":"4"},"1024":{"items":"3"},"992":{"items":"3"},"768":{"items":"2"},"700":{"items":"3"},"480":{"items":"2"},"0":{"items":"1"}}' data-dots="1" data-nav="1">
         <?php $this->widget('zii.widgets.CListView',array(
             'id' => 'suggested-list',
             'dataProvider' => $suggestedDataProvider,

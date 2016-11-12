@@ -1,4 +1,7 @@
 @media (max-width: 767px) {
+    .thumbnail-list {
+        margin: 0;
+    }
     .navbar-collapse.in {
         overflow: visible;
     }
@@ -193,6 +196,7 @@
     }
     .thumbnail-list .items{
         padding: 0 15px;
+        margin: 0 -15px;
     }
     .book-view .thumb{
         text-align: center;

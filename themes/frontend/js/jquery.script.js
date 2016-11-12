@@ -82,80 +82,7 @@ $(document).ready(function() {
     }
 
     $('.is-carousel').each(function () {
-        var $this = $(this),
-            items = $this.data('items'),
-            nestedItemSelector = $this.data('item-selector'),
-            dots = ($this.data('dots') == 1) ? true : false,
-            nav = ($this.data('nav') == 1) ? true : false,
-            margin = $this.data('margin'),
-            responsive = $this.data('responsive'),
-            loop = ($this.data('loop') == 1) ? true : false,
-            autoPlay = ($this.data('autoplay') == 1) ? true : false,
-            autoPlayHoverPause = ($this.data('autoplay-hover-pause') == 1) ? true : false,
-            mouseDrag = ($this.data('mouse-drag') == 1) ? true : false;
-
-        if ($(this).hasClass('auto-width')) {
-            var carousel = $(this);
-            $(this).on('refresh.owl.carousel', function () {
-                setCarouselItemsWidth(carousel, items, margin);
-            });
-
-            $(this).owlCarousel({
-                slideBy:1,
-                autoWidth: true,
-                dots: dots,
-                nav: nav,
-                nestedItemSelector: nestedItemSelector,
-                navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
-                rtl: true
-            });
-        } else if ($(this).hasClass('vertical')) {
-            $(this).owlCarousel({
-                slideBy:1,
-                loop: loop,
-                autoplay: autoPlay,
-                items: items,
-                nestedItemSelector: nestedItemSelector,
-                dots: dots,
-                nav: nav,
-                autoplayHoverPause: autoPlayHoverPause,
-                mouseDrag: mouseDrag,
-                animateOut: 'slideOutUp',
-                animateIn: 'slideInUp',
-                rtl: true
-            });
-        } else {
-            if (typeof nestedItemSelector == 'undefined') {
-                $(this).owlCarousel({
-                    slideBy:1,
-                    loop: loop,
-                    autoplay: autoPlay,
-                    items: items,
-                    dots: dots,
-                    nav: nav,
-                    autoplayHoverPause: autoPlayHoverPause,
-                    mouseDrag: mouseDrag,
-                    navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
-                    responsive: responsive,
-                    rtl: true
-                });
-            } else {
-                $(this).owlCarousel({
-                    slideBy:1,
-                    loop: loop,
-                    autoplay: autoPlay,
-                    items: items,
-                    nestedItemSelector: nestedItemSelector,
-                    dots: dots,
-                    nav: nav,
-                    autoplayHoverPause: autoPlayHoverPause,
-                    mouseDrag: mouseDrag,
-                    navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
-                    responsive: responsive,
-                    rtl: true
-                });
-            }
-        }
+        initCarousel($(this));
     });
 
     $('.news .arrow-icon').click(function () {
@@ -171,20 +98,13 @@ $(document).ready(function() {
         var thisTabId = thisTag.attr('href');
         var owlClasses = $(thisTabId).find('.is-carousel');
         owlClasses.trigger('destroy.owl.carousel');
-        owlClasses.html(owlClasses.find('.owl-stage-outer').html()).removeClass('owl-loaded');
-
-        owlClasses.on('refresh.owl.carousel', function () {
-            var items = owlClasses.data('items'),
-                margin = owlClasses.data('margin');
-            setCarouselItemsWidth(owlClasses, items, margin);
-        });
-
-        owlClasses.owlCarousel({
-            autoWidth: true,
-            dots: true,
-            nav: false,
-            rtl: true
-        });
+        owlClasses.removeClass('owl-loaded');
+        // owlClasses.owlCarousel({
+        //     dots: true,
+        //     nav: false,
+        //     rtl: true
+        // });
+        initCarousel(owlClasses);
     });
 
     $('.back-to-top').click(function () {
@@ -265,37 +185,45 @@ $(document).ready(function() {
         }
     });
 });
-
-function setCarouselItemsWidth(carousel, items, margin) {
-    var objKeys = Object.keys(items),
-        itemsCount,
-        itemsMargin,
-        sumMargin,
-        width;
-
-    // Get count of items
-    objKeys.reverse();
-    for (var i = 0; i < objKeys.length; i++) {
-        if ($(window).width() >= objKeys[i]) {
-            itemsCount = items[objKeys[i]];
-            break;
-        }
+function initCarousel($this) {
+    var nestedItemSelector = $this.data('item-selector'),
+        dots = ($this.data('dots') == 1) ? true : false,
+        nav = ($this.data('nav') == 1) ? true : false,
+        responsive = $this.data('responsive'),
+        loop = ($this.data('loop') == 1) ? true : false,
+        autoPlay = ($this.data('autoplay') == 1) ? true : false,
+        autoPlayHoverPause = ($this.data('autoplay-hover-pause') == 1) ? true : false,
+        mouseDrag = ($this.data('mouse-drag') == 1) ? true : false;
+    if (typeof nestedItemSelector == 'undefined') {
+        $this.owlCarousel({
+            slideBy: 1,
+            loop: loop,
+            autoplay: autoPlay,
+            items: 1,
+            dots: dots,
+            nav: nav,
+            autoplayHoverPause: autoPlayHoverPause,
+            mouseDrag: mouseDrag,
+            navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
+            responsive: responsive,
+            rtl: true
+        });
+    } else {
+        $this.owlCarousel({
+            slideBy: 1,
+            loop: loop,
+            autoplay: autoPlay,
+            items: 1,
+            nestedItemSelector: nestedItemSelector,
+            dots: dots,
+            nav: nav,
+            autoplayHoverPause: autoPlayHoverPause,
+            mouseDrag: mouseDrag,
+            navText: ["<i class='arrow-icon'></i>", "<i class='arrow-icon'></i>"],
+            responsive: responsive,
+            rtl: true
+        });
     }
-
-    // Get margin
-    objKeys=Object.keys(margin);
-    objKeys.reverse();
-    for (i = 0; i < objKeys.length; i++) {
-        if ($(window).width() >= objKeys[i]) {
-            itemsMargin = margin[objKeys[i]];
-            break;
-        }
-    }
-
-    sumMargin = (itemsCount - 1) * itemsMargin;
-    width = (carousel.width() - sumMargin) / itemsCount;
-
-    carousel.find('.thumbnail-container').width(width).css('margin-left', parseInt(itemsMargin));
 }
 
 

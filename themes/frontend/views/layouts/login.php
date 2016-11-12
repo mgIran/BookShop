@@ -23,12 +23,12 @@
     $cs->registerCssFile($baseUrl.'/css/bootstrap-rtl.min.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?2');
-    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?2');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?3');
+    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?3');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?2', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3', CClientScript::POS_END);
     ?>
 </head>
 <body class="login-page">

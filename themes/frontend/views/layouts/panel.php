@@ -26,16 +26,16 @@
     $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?2');
-    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?2');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?3');
+    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?3');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.cookie.js');
     $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
     $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?2', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/panel.script.js?2', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/panel.script.js?3', CClientScript::POS_END);
     ?>
 </head>
 <body>
@@ -104,11 +104,11 @@
 
         <div class="list-group">
             <h5>کاربری</h5>
-            <a href="<?php echo Yii::app()->createUrl('users/public/dashboard');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/dashboard')?' active':'';?>"><i class="dashboard-icon"></i><span class="text">داشبورد</span></a>
-            <a href="<?php echo Yii::app()->createUrl('users/public/library');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/library')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتابخانه من</span></a>
-            <a href="<?php echo Yii::app()->createUrl('users/public/transactions');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/transactions')?' active':'';?>"><i class="transaction-icon"></i><span class="text">تراکنش ها</span></a>
-            <a href="<?php echo Yii::app()->createUrl('users/public/downloaded');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/downloaded')?' active':'';?>"><i class="downloaded-icon"></i><span class="text">دانلود شده ها</span></a>
-            <a href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i><span class="text">پشتیبانی</span><?php
+            <a data-toggle="tooltip" data-placement="left" title="داشبورد" href="<?php echo Yii::app()->createUrl('users/public/dashboard');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/dashboard')?' active':'';?>"><i class="dashboard-icon"></i><span class="text">داشبورد</span></a>
+            <a data-toggle="tooltip" data-placement="left" title="کتابخانه من" href="<?php echo Yii::app()->createUrl('users/public/library');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/library')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتابخانه من</span></a>
+            <a data-toggle="tooltip" data-placement="left" title="تراکنش ها" href="<?php echo Yii::app()->createUrl('users/public/transactions');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/transactions')?' active':'';?>"><i class="transaction-icon"></i><span class="text">تراکنش ها</span></a>
+            <a data-toggle="tooltip" data-placement="left" title="دانلود شده ها" href="<?php echo Yii::app()->createUrl('users/public/downloaded');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/downloaded')?' active':'';?>"><i class="downloaded-icon"></i><span class="text">دانلود شده ها</span></a>
+            <a data-toggle="tooltip" data-placement="left" title="پشتیبانی" href="<?php echo Yii::app()->createUrl('tickets/manage');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='tickets/manage')?' active':'';?>"><i class="support-icon"></i><span class="text">پشتیبانی</span><?php
                 if($mc = Users::getTicketNewMessageCount())
                     echo '<span class="badge">'.Controller::parseNumbers($mc).'</span>';
                 ?></a>
@@ -116,11 +116,11 @@
         <?php if(Yii::app()->user->roles=='publisher'):?>
             <div class="list-group">
                 <h5>ناشرین</h5>
-                <a href="<?php echo Yii::app()->createUrl('publishers/panel');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتاب ها</span></a>
-                <a href="<?php echo Yii::app()->createUrl('publishers/panel/discount');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/discount')?' active':'';?>"><i class="discount-icon"></i><span class="text">تخفیفات</span></a>
-                <a href="<?php echo Yii::app()->createUrl('publishers/panel/account');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/account')?' active':'';?>"><i class="user-icon"></i><span class="text">پروفایل ناشر</span></a>
-                <a href="<?php echo Yii::app()->createUrl('publishers/panel/sales');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/sales')?' active':'';?>"><i class="chart-icon"></i><span class="text">گزارش فروش</span></a>
-                <a href="<?php echo Yii::app()->createUrl('publishers/panel/settlement');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/settlement')?' active':'';?>"><i class="payment-icon"></i><span class="text">تسویه حساب</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="کتاب ها" href="<?php echo Yii::app()->createUrl('publishers/panel');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتاب ها</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="تخفیفات" href="<?php echo Yii::app()->createUrl('publishers/panel/discount');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/discount')?' active':'';?>"><i class="discount-icon"></i><span class="text">تخفیفات</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="پروفایل ناشر" href="<?php echo Yii::app()->createUrl('publishers/panel/account');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/account')?' active':'';?>"><i class="user-icon"></i><span class="text">پروفایل ناشر</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="گزارش فروش" href="<?php echo Yii::app()->createUrl('publishers/panel/sales');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/sales')?' active':'';?>"><i class="chart-icon"></i><span class="text">گزارش فروش</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="تسویه حساب" href="<?php echo Yii::app()->createUrl('publishers/panel/settlement');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/settlement')?' active':'';?>"><i class="payment-icon"></i><span class="text">تسویه حساب</span></a>
             </div>
         <?php endif;?>
     </div>

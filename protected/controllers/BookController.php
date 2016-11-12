@@ -688,8 +688,9 @@ class BookController extends Controller
     {
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
+        // book criteria
         $criteria = new CDbCriteria();
-        $criteria->addCondition('status=:status AND confirm=:confirm AND deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+        $criteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
         $criteria->params[':status'] = 'enable';
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
@@ -703,12 +704,15 @@ class BookController extends Controller
                         $sql = "(";
                     else
                         $sql .= " OR (";
-                    $sql .= "t.title regexp :term$key OR t.description regexp :term$key OR category.title regexp :term$key)";
+                    $sql .= "t.title regexp :term$key OR t.description regexp :term$key OR t.publisher_name regexp :term$key OR userDetails.publisher_id regexp :term$key OR userDetails.fa_name regexp :term$key OR category.title regexp :term$key OR persons.name_family regexp :term$key)";
                     $criteria->params[":term$key"] = $term;
                 }
+            $criteria->together = true;
             $criteria->with[] = 'category';
+            $criteria->with[] = 'persons';
+            $criteria->with[] = 'publisher';
+            $criteria->with[] = 'publisher.userDetails';
             $criteria->addCondition($sql);
-
         }
         $pagination = new CPagination();
         $pagination->pageSize = 8;
