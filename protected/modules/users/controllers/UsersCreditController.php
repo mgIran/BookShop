@@ -61,6 +61,8 @@ class UsersCreditController extends Controller
             $model->user_id = Yii::app()->user->getId();
             $model->amount = $_POST['amount'];
             $model->date = time();
+            $model->gateway_name='زرین پال';
+            $model->type='credit';
             if ($model->save()) {
                 // Redirect to payment gateway
                 $MerchantID = $this->merchantID;  //Required

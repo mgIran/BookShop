@@ -11,6 +11,8 @@
  * @property string $status
  * @property string $token
  * @property string $description
+ * @property string $gateway_name
+ * @property string $type
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -34,13 +36,13 @@ class UserTransactions extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('user_id, amount', 'length', 'max'=>10),
-			array('date', 'length', 'max'=>20),
+			array('date, type', 'length', 'max'=>20),
 			array('status', 'length', 'max'=>6),
-			array('token', 'length', 'max'=>50),
+			array('token, gateway_name', 'length', 'max'=>50),
 			array('description', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, amount, date, status, token, description', 'safe', 'on'=>'search'),
+			array('id, user_id, amount, date, status, token, description, gateway_name, type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +71,8 @@ class UserTransactions extends CActiveRecord
 			'status' => 'وضعیت',
 			'token' => 'کد رهگیری',
 			'description' => 'توضیحات',
+			'gateway_name' => 'نام درگاه',
+			'type' => 'نوع تراکنش',
 		);
 	}
 
@@ -97,6 +101,8 @@ class UserTransactions extends CActiveRecord
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('token',$this->token,true);
 		$criteria->compare('description',$this->description,true);
+        $criteria->compare('gateway_name',$this->gateway_name,true);
+        $criteria->compare('type',$this->type,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

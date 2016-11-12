@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2016-11-11 12:57:11
+Date: 2016-11-12 12:05:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -157,21 +157,25 @@ CREATE TABLE `ym_book_buys` (
   `book_id` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
   `date` varchar(20) DEFAULT NULL COMMENT 'تاریخ',
+  `method` varchar(10) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'روش خرید',
+  `package_id` int(10) unsigned DEFAULT NULL COMMENT 'نسخه',
+  `rel_id` int(10) unsigned DEFAULT NULL COMMENT 'تراکنش',
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   KEY `user_id` (`user_id`) USING BTREE,
+  KEY `package_id` (`package_id`),
   CONSTRAINT `ym_book_buys_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `ym_book_buys_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+  CONSTRAINT `ym_book_buys_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ym_book_buys_ibfk_3` FOREIGN KEY (`package_id`) REFERENCES `ym_book_packages` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_book_buys
 -- ----------------------------
-INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663');
-INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463');
-INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870');
-INSERT INTO `ym_book_buys` VALUES ('13', '53', '45', '1478676772');
-INSERT INTO `ym_book_buys` VALUES ('14', '52', '45', '1478676805');
+INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663', null, null, null);
+INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463', null, null, null);
+INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870', null, null, null);
+INSERT INTO `ym_book_buys` VALUES ('21', '53', '43', '1478681143', 'gateway', null, null);
 
 -- ----------------------------
 -- Table structure for ym_book_categories
@@ -931,7 +935,14 @@ CREATE TABLE `ym_user_settlement` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `ym_user_settlement_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of ym_user_settlement
+-- ----------------------------
+INSERT INTO `ym_user_settlement` VALUES ('28', '43', '19000', '1462175546', '234242342', null);
+INSERT INTO `ym_user_settlement` VALUES ('29', '45', '4949900', '1478354499', '23423', null);
+INSERT INTO `ym_user_settlement` VALUES ('32', '43', '19000', '1478892568', '123456789123456789123456', '1234');
 
 -- ----------------------------
 -- Table structure for ym_user_transactions
@@ -945,16 +956,23 @@ CREATE TABLE `ym_user_transactions` (
   `status` enum('unpaid','paid') DEFAULT 'unpaid' COMMENT 'وضعیت',
   `token` varchar(50) DEFAULT NULL COMMENT 'کد رهگیری',
   `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'توضیحات',
+  `gateway_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'نام درگاه',
+  `type` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT 'نوع تراکنش',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `ym_user_transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_user_transactions
 -- ----------------------------
-INSERT INTO `ym_user_transactions` VALUES ('1', '43', '5000', '1461646925', 'paid', 'j2343jk4h2k4h24h', 'خرید اعتبار از طریق درگاه زرین پال');
-INSERT INTO `ym_user_transactions` VALUES ('4', '45', '100', '1470118630', 'unpaid', null, null);
-INSERT INTO `ym_user_transactions` VALUES ('5', '46', '5000', '1478352890', 'unpaid', null, null);
-INSERT INTO `ym_user_transactions` VALUES ('6', '43', '5000', '1478341454', 'unpaid', null, null);
-INSERT INTO `ym_user_transactions` VALUES ('7', '57', '5000', '1478352780', 'paid', '44178512655', 'خرید اعتبار از طریق درگاه زرین پال');
+INSERT INTO `ym_user_transactions` VALUES ('1', '43', '5000', '1461646925', 'paid', 'j2343jk4h2k4h24h', 'خرید اعتبار از طریق درگاه زرین پال', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('4', '45', '100', '1470118630', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('5', '46', '5000', '1478352890', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('6', '43', '5000', '1478341454', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('7', '57', '5000', '1478352780', 'paid', '44178512655', 'خرید اعتبار از طریق درگاه زرین پال', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('8', '43', '1500', '1478592974', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('9', '43', '100', '1478596474', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('10', '43', '100', '1478675725', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('11', '43', '100', '1478679969', 'unpaid', null, null, null, null);
+INSERT INTO `ym_user_transactions` VALUES ('12', '43', '100', '1478680096', 'paid', '53182497499', 'خرید کتاب از طریق درگاه زرین پال', null, null);
