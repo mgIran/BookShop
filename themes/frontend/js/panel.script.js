@@ -3,7 +3,7 @@ var $window = $(window),
     $sidebar = $(".sidebar");
 $(document).ready(function() {
     var $panel_cookie=1;
-    if ($.cookie('p-s-mode'))
+    if($window.width() > 768 && $.cookie('p-s-mode'))
     {
         $panel_cookie = $.cookie('p-s-mode');
         if($panel_cookie == 1)
@@ -21,27 +21,33 @@ $(document).ready(function() {
         $.cookie('p-s-mode', $panel_cookie,{expires: time ,path:'/'});
     });
 
-    $("body").on("click",".navbar-toggle",function(){
-        $("body").toggleClass("open-sidebar");
-        $(".overlay").toggleClass("in");
+    $body.on("click",".navbar-toggle",function(){
+        if($body.hasClass("open-sidebar")) {
+            $body.removeClass("open-sidebar");
+            $(".overlay").removeClass("in");
+        }else {
+            $window.scrollTop(0);
+            $body.addClass("open-sidebar");
+            $(".overlay").addClass("in");
+        }
     });
 
-    $("body").on("click",function(event){
-        var close = true;
-        if($(event.target).is('.navbar-toggle'))
-            close = false;
-        if($body.hasClass('open-sidebar') && $(event.target).is('.sidebar , .sidebar *'))
-           close = false;
-        if(close) {
-            $("body").removeClass("open-sidebar");
-            $(".overlay").removeClass("in");
-        }
+    $body.on("click",".overlay",function(event){
+        $body.removeClass("open-sidebar");
+        $(".overlay").removeClass("in");
     });
     $window.resize(function () {
         if($window.width() > 768)
         {
-            $("body").removeClass("open-sidebar");
+            $body.removeClass("open-sidebar");
             $(".overlay").removeClass("in");
+            if($panel_cookie == 1)
+                $body.addClass('sidebar-mini');
+            else
+                $body.removeClass('sidebar-mini');
+        }else if($window.width() < 768)
+        {
+            $body.removeClass("sidebar-mini");
         }
     });
 });

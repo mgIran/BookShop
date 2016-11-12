@@ -229,6 +229,12 @@
     #header-serach-form{
         display: none;
     }
+    .sidebar-mini .statistics,
+    .statistics{
+        -webkit-column-count:1;
+        -moz-column-count:1;
+        column-count:1;
+    }
 }
 @media screen and (max-width: 480px){
     .thumbnail-list .thumbnail-container{

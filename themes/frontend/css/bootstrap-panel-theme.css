@@ -201,6 +201,7 @@ a:active{
 .navbar-buttons{
     list-style: none;
     padding: 0;
+    direction: rtl;
 }
 .navbar-default .navbar-buttons > li {
     display: inline-block;
@@ -355,7 +356,8 @@ a:active{
     column-gap:1em;
 }
 .statistics > div{
-    display: block;
+    display: inline-block;
+    width: 100% ;
     overflow: hidden;
     padding-right: 10px;
     padding-left: 10px;
