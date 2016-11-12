@@ -13,12 +13,25 @@
  * @property string $description
  * @property string $gateway_name
  * @property string $type
+ * @property string $user_name
  *
  * The followings are the available model relations:
  * @property Users $user
  */
 class UserTransactions extends CActiveRecord
 {
+    public $statusLabels=array(
+        'paid'=>'پرداخت کامل',
+        'unpaid'=>'پرداخت ناقص',
+    );
+
+    public $typeLabels=array(
+        'credit'=>'خرید اعتبار',
+        'book'=>'خرید کتاب',
+    );
+
+    public $user_name;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -42,7 +55,7 @@ class UserTransactions extends CActiveRecord
 			array('description', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, amount, date, status, token, description, gateway_name, type', 'safe', 'on'=>'search'),
+			array('id, user_id, amount, date, status, token, description, gateway_name, type, user_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -98,11 +111,17 @@ class UserTransactions extends CActiveRecord
 		$criteria->compare('user_id',$this->user_id,true);
 		$criteria->compare('amount',$this->amount,true);
 		$criteria->compare('date',$this->date,true);
-		$criteria->compare('status',$this->status,true);
+		$criteria->compare('status',$this->status);
 		$criteria->compare('token',$this->token,true);
 		$criteria->compare('description',$this->description,true);
         $criteria->compare('gateway_name',$this->gateway_name,true);
         $criteria->compare('type',$this->type,true);
+        $criteria->order='t.id DESC';
+        if($this->user_name) {
+            $criteria->with=array('user','user.userDetails');
+            $criteria->addSearchCondition('userDetails.fa_name', $this->user_name);
+            $criteria->addSearchCondition('user.email', $this->user_name, true, 'OR');
+        }
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

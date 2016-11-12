@@ -171,6 +171,7 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
+                        array('label' => 'تراکنش ها', 'url' => Yii::app()->createUrl('/site/transactions')),
                         array('label' => 'تسویه حساب', 'url' => Yii::app()->createUrl('/publishers/panel/manageSettlement')),
                         array('label' => 'گزارش فروش', 'url' => Yii::app()->createUrl('/book/reportSales')),
                         array('label' => 'گزارش درآمد', 'url' => Yii::app()->createUrl('/book/reportIncome')),

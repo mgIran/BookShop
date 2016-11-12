@@ -260,6 +260,7 @@ class BookController extends Controller
         $buy->user_id = $user->id;
         $buy->method = $method;
         $buy->package_id = $book->lastPackage->id;
+        $buy->price=$price;
         if ($method == 'gateway')
             $buy->rel_id = $transactionID;
         $buy->save();
@@ -463,6 +464,7 @@ class BookController extends Controller
         $labels = $values = array();
         $showChart = false;
         $activeTab = 'monthly';
+        $sumSales=0;
         if (isset($_POST['show-chart-monthly'])) {
             $activeTab = 'monthly';
             $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $_POST['month_altField'], false), JalaliDate::date('m', $_POST['month_altField'], false), 1);
@@ -487,8 +489,10 @@ class BookController extends Controller
                 $labels[] = JalaliDate::date('d F Y', $startTime + (60 * 60 * (24 * $i)));
                 $count = 0;
                 foreach ($report as $model) {
-                    if ($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1))))
+                    if ($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1)))) {
                         $count++;
+                        $sumSales+=$model->price;
+                    }
                 }
                 $values[] = $count;
             }
@@ -517,8 +521,10 @@ class BookController extends Controller
                 $tempDate = $tempDate + (60 * 60 * 24 * ($monthDaysCount));
                 $count = 0;
                 foreach ($report as $model) {
-                    if ($model->date >= $startTime + (60 * 60 * 24 * ($monthDaysCount * $i)) and $model->date < $startTime + (60 * 60 * 24 * ($monthDaysCount * ($i + 1))))
+                    if ($model->date >= $startTime + (60 * 60 * 24 * ($monthDaysCount * $i)) and $model->date < $startTime + (60 * 60 * 24 * ($monthDaysCount * ($i + 1)))) {
                         $count++;
+                        $sumSales += $model->price;
+                    }
                 }
                 $values[] = $count;
             }
@@ -543,8 +549,10 @@ class BookController extends Controller
                     $labels[] = JalaliDate::date('d F Y', $_POST['from_date_altField'] + (60 * 60 * (24 * $i)));
                     $count = 0;
                     foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1))))
+                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1)))) {
                             $count++;
+                            $sumSales += $model->price;
+                        }
                     }
                     $values[] = $count;
                 }
@@ -556,8 +564,10 @@ class BookController extends Controller
                     $labels[] = JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
                     $count = 0;
                     foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))))
+                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1)))) {
                             $count++;
+                            $sumSales += $model->price;
+                        }
                     }
                     $values[] = $count;
                 }
@@ -580,8 +590,10 @@ class BookController extends Controller
                     $labels[] = JalaliDate::date('d F Y', $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)));
                     $count = 0;
                     foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * ($i + 1))))
+                        if ($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * ($i + 1)))) {
                             $count++;
+                            $sumSales += $model->price;
+                        }
                     }
                     $values[] = $count;
                 }
@@ -593,8 +605,10 @@ class BookController extends Controller
                     $labels[] = JalaliDate::date('d F', $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F', $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
                     $count = 0;
                     foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1))))
+                        if ($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1)))) {
                             $count++;
+                            $sumSales += $model->price;
+                        }
                     }
                     $values[] = $count;
                 }
@@ -606,6 +620,7 @@ class BookController extends Controller
             'values' => $values,
             'showChart' => $showChart,
             'activeTab' => $activeTab,
+            'sumSales' => $sumSales,
         ));
     }
 

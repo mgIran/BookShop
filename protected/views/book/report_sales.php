@@ -1,9 +1,10 @@
 <?php
-/* @var $this BooksController */
+/* @var $this BookController */
 /* @var $labels array */
 /* @var $values array */
 /* @var $showChart boolean */
 /* @var $activeTab string */
+/* @var $sumSales string */
 
 Yii::app()->clientScript->registerCss('booksStyle','
 .report-sale .book-item:nth-child(n+3){
@@ -62,6 +63,7 @@ Yii::app()->clientScript->registerCss('booksStyle','
     <div class="panel panel-default chart-container">
         <div class="panel-body">
             <h4>نمودار گزارش</h4>
+            <label>مجموع فروش:</label><span><?php echo number_format($sumSales, 0).' تومان';?></span>
             <?php $this->widget(
                 'chartjs.widgets.ChBars',
                 array(
