@@ -1,4 +1,7 @@
 @media (max-width: 767px) {
+    .thumbnail-list {
+        margin: 0;
+    }
     .navbar-collapse.in {
         overflow: visible;
     }

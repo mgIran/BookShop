@@ -46,8 +46,8 @@ endif;
     </div>
 <?php if($activeRows['suggested'] && $suggestedDP->totalItemCount):?>
     <div class="offers paralax">
-        <div class="container">
-            <div class="content">
+        <div class="content">
+            <div class="container">
                 <div class="head">
                     <h2>پیشنهاد ما</h2>
                 </div>
@@ -97,8 +97,8 @@ endif;
 if($activeRows['buy'] && $buyBooksDP->totalItemCount):
 ?>
     <div class="bestselling paralax">
-        <div class="container">
-            <div class="content">
+        <div class="content">
+            <div class="container">
                 <div class="head">
                     <h2>پرفروش ترین ها</h2>
                 </div>

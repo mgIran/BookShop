@@ -223,8 +223,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     <div class="text-justify"><?php
                         echo strip_tags($about->summary);
                         ?></div>
-                </div>
-                <div class="boxed">
+                </div><div class="boxed">
                     <div class="heading">
                         <h4>دسته بندی ها</h4>
                     </div>
@@ -238,9 +237,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                         endforeach;
                         ?>
                     </ul>
-                </div>
-                <?php if($model->seoTags): ?>
-                <div class="boxed">
+                </div><?php if($model->seoTags): ?><div class="boxed">
                     <div class="heading">
                         <h4>برچسب ها</h4>
                     </div>
