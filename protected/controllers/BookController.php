@@ -372,6 +372,35 @@ class BookController extends Controller
         ));
     }
 
+    /**
+     * show person books list
+     */
+    public function actionPerson($id,$title = null)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = 'index';
+        $person = BookPersons::model()->findByPk((int)$id);
+        if (!$person)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        else
+            $pageTitle = 'کتاب های ' . $person->name_family;
+        $criteria = Books::model()->getValidBooks();
+        $criteria->together = true;
+        $criteria->with[] = 'personRel';
+        $criteria->addCondition('personRel.person_id =:person_id');
+        $criteria->params[':person_id'] = $id;
+        $dataProvider = new CActiveDataProvider('Books', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 8)
+        ));
+
+        $this->render('books_list', array(
+            'dataProvider' => $dataProvider,
+            'title' => $pageTitle,
+            'pageTitle' => 'کتاب ها'
+        ));
+    }
+
     public function actionIndex()
     {
         Yii::app()->theme = 'frontend';
@@ -644,12 +673,12 @@ class BookController extends Controller
         $criteria->params[':confirm'] = 'accepted';
         $criteria->params[':deleted'] = 0;
         $criteria->order = 't.confirm_date DESC';
-        if (isset($_GET['term']) && !empty($term = $_GET['term'])) {
-            $terms = explode(' ', urldecode($term));
+        if(isset($_GET['term']) && !empty($term = $_GET['term'])){
+            $terms = explode(' ' ,urldecode($term));
             $sql = null;
-            foreach ($terms as $key => $term)
-                if ($term) {
-                    if (!$sql)
+            foreach($terms as $key => $term)
+                if($term){
+                    if(!$sql)
                         $sql = "(";
                     else
                         $sql .= " OR (";
@@ -660,11 +689,34 @@ class BookController extends Controller
             $criteria->addCondition($sql);
 
         }
-        $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria));
-
-        $this->render('search', array(
-            'dataProvider' => $dataProvider
+        $pagination = new CPagination();
+        $pagination->pageSize = 8;
+        if(Yii::app()->request->isAjaxRequest)
+        {
+            $criteria->limit=6;
+            $pagination->pageSize = 6;
+        }
+        $dataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $criteria,
+            'pagination' => $pagination
         ));
+        if(Yii::app()->request->isAjaxRequest){
+            $this->beginClip('book-list');
+            $this->widget('zii.widgets.CListView',array(
+                'id' => 'search-book-list',
+                'dataProvider' => $dataProvider,
+                'itemView' => '//site/_search_book_item',
+                'template' => '{items}',
+            ));
+            $this->endClip();
+            $response['html'] = $this->clips['book-list'];
+            $response['status'] = true;
+            echo CJSON::encode($response);
+            Yii::app()->end();
+        }else
+            $this->render('search' ,array(
+                'dataProvider' => $dataProvider
+            ));
     }
 
     /**

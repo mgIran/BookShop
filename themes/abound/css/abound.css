@@ -30,8 +30,24 @@ body {
   border-radius:5px;
 }
 
+/* Desktops ----------- */
+@media only screen
+and (max-width : 1200px) {
+    .container-fluid {
+        padding-top: 160px;
+    }
+    #navigation-main .brand{
+        display: none;
+    }
+}
+/* mobile ----------- */
+@media only screen and (max-width : 768px) {
+    #navigation-main .brand{
+        display: block;
+    }
+}
 /* Desktops and laptops ----------- */
-@media only screen 
+@media only screen
 and (min-width : 1224px) {
 	.container-fluid{padding-top: 100px;}
 	.navbar .brand {margin-left:-90px;}

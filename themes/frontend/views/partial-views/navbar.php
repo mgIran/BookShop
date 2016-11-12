@@ -14,11 +14,15 @@
             <?php
             echo CHtml::beginForm(array('/book/search'),'get',array('class'=>'navbar-form navbar-center'))
             ?>
-                <div class="input-group">
-                    <?php echo CHtml::textField('term',isset($_GET['term'])?CHtml::encode($_GET['term']):'',array('class'=>'form-control','placeholder'=>'جستجو کنید...')) ?>
-                    <span class="input-group-btn">
+                <div class="form-group">
+                    <?php echo CHtml::textField('term',isset($_GET['term'])?CHtml::encode($_GET['term']):'',array('id'=>'search-term','class'=>'form-control','placeholder'=>'جستجو کنید...','autocomplete' => 'off')) ?>
+                    <span class="search-btn-icon">
                         <?php echo CHtml::submitButton('',array('name'=>'','class'=>'btn btn-default')) ?>
                     </span>
+                </div>
+                <div class="search-suggest-box">
+                    <div class="loading-container"><div class="spinners"><div class="spinner"></div><div class="spinner-2"></div><div class="spinner-3"></div></div></div>
+                    <div class="search-entries"></div>
                 </div>
             <?php
             echo CHtml::endForm();

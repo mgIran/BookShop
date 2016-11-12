@@ -84,7 +84,7 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, category_id, icon, formAuthor, formTranslator', 'required'),
+			array('title, category_id, icon', 'required'),
 			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
 			array('description, change_log, formTags, formSeoTags, formAuthor, formTranslator', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
@@ -129,6 +129,7 @@ class Books extends CActiveRecord
 			'roles' => array(self::MANY_MANY, 'BookPersonRoles', '{{book_person_role_rel}}(book_id, role_id)'),
 			'tagsRel' => array(self::HAS_MANY, 'BookTagRel', 'book_id'),
 			'rowRel' => array(self::HAS_MANY, 'RowBookRel', 'book_id'),
+			'personRel' => array(self::HAS_MANY, 'BookPersonRoleRel', 'book_id'),
 		);
 	}
 
