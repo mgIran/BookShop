@@ -27,7 +27,8 @@ class PublishersPanelController extends Controller
             'backend'=>array(
                 'manageSettlement',
                 'uploadNationalCardImage',
-                'uploadRegistrationCertificateImage'
+                'uploadRegistrationCertificateImage',
+                'create'
             )
         );
     }
@@ -73,7 +74,7 @@ class PublishersPanelController extends Controller
                 'insert' => true,
                 'module' => 'users',
                 'modelName' => 'UserDetails',
-                'findAttributes' => 'array("user_id" => Yii::app()->user->getId())',
+                'findAttributes' => 'array("user_id" => $_POST["user_id"])',
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(
@@ -622,4 +623,88 @@ class PublishersPanelController extends Controller
         unset($this->objPHPExcel);
         exit();
     }//fin del método actionExcel
+
+    public function actionCreate()
+    {
+        Yii::app()->theme='abound';
+        $this->layout='//layouts/column2';
+
+        $model=new Users();
+        /* @var $model Users */
+
+        $this->performAjaxValidation($model);
+
+        if(isset($_POST['Users'])){
+            $model->attributes=$_POST['Users'];
+            $model->role_id=2;
+            $model->create_date=time();
+
+            if($model->save()){
+                Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                $this->redirect(array('update', 'id'=>$model->id));
+            }else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+        }
+
+        $this->render('create', array(
+            'model'=>$model
+        ));
+    }
+
+    public function actionUpdate($id)
+    {
+        Yii::app()->theme='abound';
+        $this->layout='//layouts/column2';
+
+        $model=Users::model()->findByPk($id);
+        /* @var $model Users */
+
+        $model->userDetails->scenario='update_'.$model->userDetails->type.'_profile';
+
+        if(isset($_POST['Users']))
+            $this->performAjaxValidation($model);
+        else
+            $this->performAjaxValidation($model->userDetails);
+
+        // Save publisher profile
+        if(isset($_POST['UserDetails']))
+        {
+            $model->userDetails->attributes=$_POST['UserDetails'];
+            if($model->userDetails->save())
+            {
+                Yii::app()->user->setFlash('success' , 'اطلاعات با موفقیت ثبت شد.');
+                $this->refresh();
+            }
+            else
+                Yii::app()->user->setFlash('failed' , 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+        }
+
+        $nationalCardImageUrl=$this->createUrl('/uploads/users/national_cards');
+        $nationalCardImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/national_cards';
+        $nationalCardImage=array();
+        if($model->userDetails->national_card_image!='')
+            $nationalCardImage=array(
+                'name' => $model->userDetails->national_card_image,
+                'src' => $nationalCardImageUrl.'/'.$model->userDetails->national_card_image,
+                'size' => (file_exists($nationalCardImagePath.'/'.$model->userDetails->national_card_image))?filesize($nationalCardImagePath.'/'.$model->userDetails->national_card_image):0,
+                'serverName' => $model->userDetails->national_card_image,
+            );
+
+        $registrationCertificateImageUrl=$this->createUrl('/uploads/users/registration_certificate');
+        $registrationCertificateImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/registration_certificate';
+        $registrationCertificateImage=array();
+        if($model->userDetails->registration_certificate_image!='')
+            $registrationCertificateImage=array(
+                'name' => $model->userDetails->registration_certificate_image,
+                'src' => $registrationCertificateImageUrl.'/'.$model->userDetails->registration_certificate_image,
+                'size' => (file_exists($registrationCertificateImagePath.'/'.$model->userDetails->registration_certificate_image))?filesize($registrationCertificateImagePath.'/'.$model->userDetails->registration_certificate_image):0,
+                'serverName' => $model->userDetails->registration_certificate_image,
+            );
+
+        $this->render('update', array(
+            'model'=>$model,
+            'nationalCardImage'=>$nationalCardImage,
+            'registrationCertificateImage'=>$registrationCertificateImage,
+        ));
+    }
 }

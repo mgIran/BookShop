@@ -24,21 +24,25 @@ $parentsID=array();
                     <div class="tab-content row">
                         <?php $i=0;foreach($parentsID as $key=>$id):?>
                             <div id="<?php echo $key;?>" class="tab-pane fade<?php echo ($i==0)?' in active':'';$i++;?>">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <?php $subCategories=array();
+                                foreach($this->categories as $category)
+                                    if($category->parent_id==$id)
+                                        $subCategories[]=$category;
+                                ?>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12<?php echo (count($subCategories)==0)?' hidden':'';?>">
                                     <h5>زیر مجموعه ها</h5>
                                     <ul>
-                                        <?php foreach($this->categories as $category):?>
-                                            <?php if($category->parent_id==$id):?>
-                                                <li><a href="<?php echo $this->createUrl('/category/index', array('id'=>$category->id,'title'=>$category->title));?>"><?php echo CHtml::encode($category->title);?></a></li>
-                                            <?php endif;?>
+                                        <?php foreach($subCategories as $category):?>
+                                            <li><a href="<?php echo $this->createUrl('/category/index', array('id'=>$category->id,'title'=>$category->title));?>"><?php echo CHtml::encode($category->title);?></a></li>
                                         <?php endforeach;?>
                                     </ul>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <?php $books=$this->getCategoryBooks($id);?>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12<?php echo (count($books)==0)?' hidden':'';?>">
                                     <h5>کتاب های تازه</h5>
                                     <ul>
-                                        <?php foreach($this->getCategoryBooks($id) as $book):?>
-                                            <li><a href="#"><?php echo CHtml::encode($book->title);?></a></li>
+                                        <?php foreach($books as $book):?>
+                                            <li><a href="<?php echo $this->createUrl('/book/view', array('id'=>$book->id,'title'=>$book->title));?>"><?php echo CHtml::encode($book->title);?></a></li>
                                         <?php endforeach;?>
                                     </ul>
                                 </div>
