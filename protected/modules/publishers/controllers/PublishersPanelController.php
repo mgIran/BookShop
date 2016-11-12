@@ -622,7 +622,7 @@ class PublishersPanelController extends Controller
         unset($this->objReader);
         unset($this->objPHPExcel);
         exit();
-    }//fin del método actionExcel
+    }
 
     public function actionCreate()
     {
