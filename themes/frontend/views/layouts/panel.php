@@ -53,21 +53,21 @@
     </div>
 
     <div class="navbar-custom" id="mobile-menu">
-        <?php $form = $this->beginWidget('CActiveForm',array(
-            'id' => 'header-serach-form',
-            'action' => array('/book/search'),
-            'method' => 'get',
-            'htmlOptions' => array(
-                'class' => 'navbar-form navbar-center'
-            )
-        )); ?>
-            <div class="input-group">
-                <?php echo CHtml::textField('term',isset($_GET['term'])?trim($_GET['term']):'',array('placeholder' => 'جستجو کنید ...', 'class'=>'form-control')); ?>
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit"></button>
-                </span>
-            </div>
-        <?php $this->endWidget(); ?>
+        <?php
+        echo CHtml::beginForm(array('/book/search'),'get',array('class'=>'navbar-form navbar-center'))
+        ?>
+        <div class="form-group">
+            <?php echo CHtml::textField('term',isset($_GET['term'])?CHtml::encode($_GET['term']):'',array('id'=>'search-term','class'=>'form-control','placeholder'=>'جستجو کنید...','autocomplete' => 'off')) ?>
+            <span class="search-btn-icon">
+                <?php echo CHtml::submitButton('',array('name'=>'','class'=>'btn btn-default')) ?>
+            </span>
+        </div>
+        <div class="search-suggest-box">
+            <div class="search-entries"></div>
+        </div>
+        <?php
+        echo CHtml::endForm();
+        ?>
         <ul class="navbar-buttons navbar-left">
             <li><a href="<?= $this->createUrl('/tickets/manage/');?>"><i class="messages-icon"></i></a></li>
             <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
@@ -97,11 +97,6 @@
                 <span><?= $this->userDetails->roleLabels[Yii::app()->user->roles] ?></span>
             </div>
         </div>
-
-<!--        --><?php //if(Yii::app()->user->roles!='publisher'):?>
-<!--            <a href="--><?php //echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?><!--" class="signup-link"><i class="books-icon"></i>آیا ناشر هستید؟</a>-->
-<!--        --><?php //endif;?>
-
         <div class="list-group">
             <h5>کاربری</h5>
             <a data-toggle="tooltip" data-placement="left" title="داشبورد" href="<?php echo Yii::app()->createUrl('users/public/dashboard');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/dashboard')?' active':'';?>"><i class="dashboard-icon"></i><span class="text">داشبورد</span></a>
