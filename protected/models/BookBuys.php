@@ -11,6 +11,7 @@
  * @property string $method
  * @property string $package_id
  * @property string $rel_id
+ * @property string $price
  *
  * The followings are the available model relations:
  * @property Books $book
@@ -37,11 +38,11 @@ class BookBuys extends CActiveRecord
 		return array(
 			array('book_id, user_id', 'required'),
 			array('date', 'default', 'value'=>time()),
-			array('book_id, user_id, method, package_id, rel_id', 'length', 'max'=>10),
+			array('book_id, user_id, method, package_id, rel_id, price', 'length', 'max'=>10),
 			array('date', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, book_id, user_id, date, method, package_id, rel_id', 'safe', 'on'=>'search'),
+			array('id, book_id, user_id, date, method, package_id, rel_id, price', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +73,7 @@ class BookBuys extends CActiveRecord
             'method' => 'روش خرید',
             'package_id' => 'نسخه',
             'rel_id' => 'تراکنش',
+            'price' => 'مبلغ',
 		);
 	}
 
@@ -100,6 +102,7 @@ class BookBuys extends CActiveRecord
         $criteria->compare('method',$this->method,true);
         $criteria->compare('package_id',$this->package_id,true);
         $criteria->compare('rel_id',$this->rel_id,true);
+        $criteria->compare('price',$this->price,true);
 
         return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

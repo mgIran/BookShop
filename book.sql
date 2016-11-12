@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-11-12 17:31:52
+Date: 2016-11-12 17:34:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -67,32 +67,33 @@ CREATE TABLE `ym_admin_role_permissions` (
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `ym_admin_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `ym_admin_roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_admin_role_permissions
 -- ----------------------------
-INSERT INTO `ym_admin_role_permissions` VALUES ('141', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
-INSERT INTO `ym_admin_role_permissions` VALUES ('142', '2', 'base', 'BookController', 'reportSales,reportIncome');
-INSERT INTO `ym_admin_role_permissions` VALUES ('143', '2', 'base', 'TagsController', 'index,create,update,admin,delete,list');
-INSERT INTO `ym_admin_role_permissions` VALUES ('144', '2', 'admins', 'AdminsDashboardController', 'index');
-INSERT INTO `ym_admin_role_permissions` VALUES ('145', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('146', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('147', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
-INSERT INTO `ym_admin_role_permissions` VALUES ('148', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
-INSERT INTO `ym_admin_role_permissions` VALUES ('149', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,uploadFile,deleteUploadFile,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,downloadPackage');
-INSERT INTO `ym_admin_role_permissions` VALUES ('150', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
-INSERT INTO `ym_admin_role_permissions` VALUES ('151', '2', 'news', 'NewsCategoriesManageController', 'create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('152', '2', 'news', 'NewsManageController', 'create,update,admin,delete,upload,deleteUpload,order');
-INSERT INTO `ym_admin_role_permissions` VALUES ('153', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('154', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('155', '2', 'publishers', 'PublishersPanelController', 'manageSettlement');
-INSERT INTO `ym_admin_role_permissions` VALUES ('156', '2', 'setting', 'SettingManageController', 'changeSetting,social_links');
-INSERT INTO `ym_admin_role_permissions` VALUES ('157', '2', 'tickets', 'TicketsDepartmentsController', 'admin,create,update,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('158', '2', 'tickets', 'TicketsManageController', 'delete,pendingTicket,openTicket,admin,index,view,create,update,closeTicket,upload,deleteUploaded,send');
-INSERT INTO `ym_admin_role_permissions` VALUES ('159', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
-INSERT INTO `ym_admin_role_permissions` VALUES ('160', '2', 'users', 'UsersManageController', 'index,view,create,update,admin,delete,confirmDevID,deleteDevID,confirmPublisher,refusePublisher');
-INSERT INTO `ym_admin_role_permissions` VALUES ('161', '2', 'users', 'UsersRolesController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('162', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
+INSERT INTO `ym_admin_role_permissions` VALUES ('163', '2', 'base', 'BookController', 'reportSales,reportIncome');
+INSERT INTO `ym_admin_role_permissions` VALUES ('164', '2', 'base', 'TagsController', 'index,create,update,admin,delete,list');
+INSERT INTO `ym_admin_role_permissions` VALUES ('165', '2', 'base', 'SiteController', 'transactions');
+INSERT INTO `ym_admin_role_permissions` VALUES ('166', '2', 'admins', 'AdminsDashboardController', 'index');
+INSERT INTO `ym_admin_role_permissions` VALUES ('167', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('168', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('169', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
+INSERT INTO `ym_admin_role_permissions` VALUES ('170', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_admin_role_permissions` VALUES ('171', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,uploadFile,deleteUploadFile,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,downloadPackage');
+INSERT INTO `ym_admin_role_permissions` VALUES ('172', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
+INSERT INTO `ym_admin_role_permissions` VALUES ('173', '2', 'news', 'NewsCategoriesManageController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('174', '2', 'news', 'NewsManageController', 'create,update,admin,delete,upload,deleteUpload,order');
+INSERT INTO `ym_admin_role_permissions` VALUES ('175', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('176', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('177', '2', 'publishers', 'PublishersPanelController', 'manageSettlement');
+INSERT INTO `ym_admin_role_permissions` VALUES ('178', '2', 'setting', 'SettingManageController', 'changeSetting,social_links');
+INSERT INTO `ym_admin_role_permissions` VALUES ('179', '2', 'tickets', 'TicketsDepartmentsController', 'admin,create,update,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('180', '2', 'tickets', 'TicketsManageController', 'delete,pendingTicket,openTicket,admin,index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_admin_role_permissions` VALUES ('181', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_admin_role_permissions` VALUES ('182', '2', 'users', 'UsersManageController', 'index,view,create,update,admin,delete,confirmDevID,deleteDevID,confirmPublisher,refusePublisher');
+INSERT INTO `ym_admin_role_permissions` VALUES ('183', '2', 'users', 'UsersRolesController', 'create,update,admin,delete');
 
 -- ----------------------------
 -- Table structure for ym_books
@@ -160,6 +161,7 @@ CREATE TABLE `ym_book_buys` (
   `method` varchar(10) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'روش خرید',
   `package_id` int(10) unsigned DEFAULT NULL COMMENT 'نسخه',
   `rel_id` int(10) unsigned DEFAULT NULL COMMENT 'تراکنش',
+  `price` varchar(10) CHARACTER SET utf8 DEFAULT NULL COMMENT 'مبلغ',
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   KEY `user_id` (`user_id`) USING BTREE,
@@ -172,10 +174,10 @@ CREATE TABLE `ym_book_buys` (
 -- ----------------------------
 -- Records of ym_book_buys
 -- ----------------------------
-INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663', null, null, null);
-INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463', null, null, null);
-INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870', null, null, null);
-INSERT INTO `ym_book_buys` VALUES ('21', '53', '43', '1478681143', 'gateway', null, null);
+INSERT INTO `ym_book_buys` VALUES ('9', '54', '43', '1478350663', null, null, null, null);
+INSERT INTO `ym_book_buys` VALUES ('10', '54', '45', '1478352463', null, null, null, null);
+INSERT INTO `ym_book_buys` VALUES ('11', '54', '57', '1478352870', null, null, null, null);
+INSERT INTO `ym_book_buys` VALUES ('21', '53', '43', '1478681143', 'gateway', null, null, null);
 
 -- ----------------------------
 -- Table structure for ym_book_categories
@@ -434,7 +436,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478959266');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1478959466');
 
 -- ----------------------------
 -- Table structure for ym_news
@@ -973,13 +975,13 @@ CREATE TABLE `ym_user_transactions` (
 -- ----------------------------
 -- Records of ym_user_transactions
 -- ----------------------------
-INSERT INTO `ym_user_transactions` VALUES ('1', '43', '5000', '1461646925', 'paid', 'j2343jk4h2k4h24h', 'خرید اعتبار از طریق درگاه زرین پال', null, null);
-INSERT INTO `ym_user_transactions` VALUES ('4', '45', '100', '1470118630', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('5', '46', '5000', '1478352890', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('6', '43', '5000', '1478341454', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('7', '57', '5000', '1478352780', 'paid', '44178512655', 'خرید اعتبار از طریق درگاه زرین پال', null, null);
-INSERT INTO `ym_user_transactions` VALUES ('8', '43', '1500', '1478592974', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('9', '43', '100', '1478596474', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('10', '43', '100', '1478675725', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('11', '43', '100', '1478679969', 'unpaid', null, null, null, null);
-INSERT INTO `ym_user_transactions` VALUES ('12', '43', '100', '1478680096', 'paid', '53182497499', 'خرید کتاب از طریق درگاه زرین پال', null, null);
+INSERT INTO `ym_user_transactions` VALUES ('1', '43', '5000', '1461646925', 'paid', 'j2343jk4h2k4h24h', 'خرید اعتبار از طریق درگاه زرین پال', 'زرین پال', 'credit');
+INSERT INTO `ym_user_transactions` VALUES ('4', '45', '100', '1470118630', 'unpaid', null, null, null, 'book');
+INSERT INTO `ym_user_transactions` VALUES ('5', '46', '5000', '1478352890', 'unpaid', null, null, null, 'book');
+INSERT INTO `ym_user_transactions` VALUES ('6', '43', '5000', '1478341454', 'unpaid', null, null, null, 'book');
+INSERT INTO `ym_user_transactions` VALUES ('7', '57', '5000', '1478352780', 'paid', '44178512655', 'خرید اعتبار از طریق درگاه زرین پال', null, 'credit');
+INSERT INTO `ym_user_transactions` VALUES ('8', '43', '1500', '1478592974', 'unpaid', null, null, null, 'book');
+INSERT INTO `ym_user_transactions` VALUES ('9', '43', '100', '1478596474', 'unpaid', null, null, null, 'credit');
+INSERT INTO `ym_user_transactions` VALUES ('10', '43', '100', '1478675725', 'unpaid', null, null, null, 'book');
+INSERT INTO `ym_user_transactions` VALUES ('11', '43', '100', '1478679969', 'unpaid', null, null, null, 'book');
+INSERT INTO `ym_user_transactions` VALUES ('12', '43', '100', '1478680096', 'paid', '53182497499', 'خرید کتاب از طریق درگاه زرین پال', null, 'book');
