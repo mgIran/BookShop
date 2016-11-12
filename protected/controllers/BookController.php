@@ -114,6 +114,9 @@ class BookController extends Controller
                 $transaction->user_id = Yii::app()->user->getId();
                 $transaction->amount = $price;
                 $transaction->date = time();
+                $transaction->gateway_name = 'زرین پال';
+                $transaction->type = 'book';
+
                 if ($transaction->save()) {
                     // Redirect to payment gateway
                     $MerchantID = $this->merchantID;  //Required
@@ -122,7 +125,7 @@ class BookController extends Controller
                     $Email = Yii::app()->user->email; // Optional
                     $Mobile = '0'; // Optional
 
-                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id.'/'.urlencode($title);  // Required
+                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);  // Required
 
                     include("lib/nusoap.php");
                     $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
@@ -169,11 +172,11 @@ class BookController extends Controller
             $this->redirect(array('/book/buy', 'id' => $id, 'title' => $title));
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('user_id = :user_id');
         $criteria->addCondition('status = :status');
-        $criteria->order='id DESC';
-        $criteria->params=array(':user_id'=>Yii::app()->user->getId(), ':status'=>'unpaid');
+        $criteria->order = 'id DESC';
+        $criteria->params = array(':user_id' => Yii::app()->user->getId(), ':status' => 'unpaid');
         $model = UserTransactions::model()->find($criteria);
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
@@ -198,11 +201,11 @@ class BookController extends Controller
             if ($result['Status'] == 100) {
                 $model->status = 'paid';
                 $model->token = $result['RefID'];
-                $model->description = 'خرید کتاب از طریق درگاه زرین پال';
+                $model->description = 'خرید کتاب "' . CHtml::encode($book->title) . '" از طریق درگاه زرین پال';
                 $model->save();
 
                 $transactionResult = true;
-                $this->saveBuyInfo($book, $user, 'gateway');
+                $this->saveBuyInfo($book, $user, 'gateway', $model->id);
                 Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
             } else {
                 $errors = array(
@@ -242,8 +245,9 @@ class BookController extends Controller
      * @param $book Books
      * @param $user Users
      * @param $method string
+     * @param $transactionID string
      */
-    private function saveBuyInfo($book, $user, $method)
+    private function saveBuyInfo($book, $user, $method, $transactionID = null)
     {
         $price = $book->hasDiscount() ? $book->offPrice : $book->price;
 
@@ -255,7 +259,9 @@ class BookController extends Controller
         $buy->book_id = $book->id;
         $buy->user_id = $user->id;
         $buy->method = $method;
-        $buy->package_id=$book->lastPackage->id;
+        $buy->package_id = $book->lastPackage->id;
+        if ($method == 'gateway')
+            $buy->rel_id = $transactionID;
         $buy->save();
 
         if ($book->publisher) {
@@ -375,7 +381,7 @@ class BookController extends Controller
     /**
      * show person books list
      */
-    public function actionPerson($id,$title = null)
+    public function actionPerson($id, $title = null)
     {
         Yii::app()->theme = 'frontend';
         $this->layout = 'index';
