@@ -88,6 +88,9 @@ return array(
 
 	// application components
 	'components'=>array(
+		'yexcel' => array(
+			'class' => 'ext.yexcel.Yexcel'
+		),
 //		'session' => array(
 //			'class' => 'system.web.CDbHttpSession',
 //			'connectionID' => 'db',

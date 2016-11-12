@@ -1,5 +1,5 @@
 <?php
-/* @var $this PanelController */
+/* @var $this PublishersPanelController */
 /* @var $form CActiveForm */
 /* @var $userDetailsModel UserDetails */
 /* @var $helpText string */
@@ -30,14 +30,14 @@
 
     <label>مبلغ قابل تسویه این ماه :</label><span><?php echo number_format($userDetailsModel->getSettlementAmount(), 0);?> تومان</span>
     <div class="form-row">
-        <?php echo $form->checkBox($userDetailsModel, 'monthly_settlement', array(
-            'onchange'=>"$('#UserDetails_iban').prop('disabled', function(i, v){return !v;});",
-            'disabled'=>$formDisabled,
-        ));?>
+<!--        --><?php //echo $form->checkBox($userDetailsModel, 'monthly_settlement', array(
+//            'onchange'=>"$('#UserDetails_iban').prop('disabled', function(i, v){return !v;});",
+//            'disabled'=>$formDisabled,
+//        ));?>
         <?php echo $form->label($userDetailsModel, 'monthly_settlement', array(
             'style'=>'display:inline-block;margin:15px 0;',
         ));?>
-        <span>: مبلغ قابل تسویه 20اُم هر ماه به این شبا واریز شود.</span>
+        <span>: مبلغ قابل تسویه حداقل <?= Controller::parseNumbers(number_format($min_credit)) ?> تومان است که 20اُم هر ماه به شماره شبای زیر واریز می شود.</span>
     </div>
     <div class="form-row">
         <div class="iban-container">
@@ -51,9 +51,10 @@
                 ?>
                 <?php echo $form->textField($userDetailsModel, 'iban', array(
                     'class'=>'form-control',
+                    'maxLength' => 24,
                     'aria-describedby'=>'basic-addon1',
                     'style'=>'direction: ltr;',
-                    'placeholder'=>'10002000300040005000607:مثال',
+                    'placeholder'=>'100020003000400050006047:مثال',
                     'disabled'=>$disabled,
                 ));?>
                 <span id="basic-addon1" class="input-group-addon">IR</span>
@@ -66,7 +67,7 @@
                 'id'=>'settlement-button',
                 'disabled'=>$formDisabled,
             ));?>
-            <a data-toggle="collapse" href="#help-box" class="btn btn-danger pull-left">راهنما</a>
+<!--            <a data-toggle="collapse" href="#help-box" class="btn btn-danger pull-left">راهنما</a>-->
         </div>
     </div>
     <?php $this->endWidget();?>
@@ -85,6 +86,7 @@
                 <tr>
                     <td>مبلغ</td>
                     <td>تاریخ</td>
+                    <td>کد رهگیری</td>
                     <td>شماره شبا</td>
                 </tr>
             </thead>
@@ -95,6 +97,12 @@
                     'template'=>'{items}'
                 ));?>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">جمع کل درآمد</td>
+                    <td colspan="2"><?= Controller::parseNumbers(number_format($this::$sumSettlement)).' تومان' ?></td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
