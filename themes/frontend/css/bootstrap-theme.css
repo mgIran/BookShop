@@ -2753,6 +2753,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .search-suggest-box .search-entries .thumbnail-container .thumbnail{
     padding: 10px 5px;
+    width: 100%;
 }
 .search-suggest-box .search-entries .thumbnail-container:focus .thumbnail,
 .search-suggest-box .search-entries .thumbnail-container:active .thumbnail,
