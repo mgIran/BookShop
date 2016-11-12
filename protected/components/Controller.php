@@ -212,6 +212,7 @@ class Controller extends CController
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
+                        array('label' => 'افزودن ناشر', 'url' => Yii::app()->createUrl('/publishers/panel/create')),
                         array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/users/manage')),
                     )
                 ),

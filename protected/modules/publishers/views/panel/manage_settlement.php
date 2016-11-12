@@ -6,21 +6,6 @@
 
 <?php $this->renderPartial('//layouts/_flashMessage');?>
 
-<h3>تاریخچه تسویه حساب ها</h3>
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-    'id'=>'settlements-grid',
-    'dataProvider'=>$settlementHistory,
-    'columns'=>array(
-        'date'=>array(
-            'name'=>'date',
-            'value'=>'JalaliDate::date("d F Y", $data->date)'
-        ),
-        'amount'=>array(
-            'name'=>'amount',
-            'value'=>'number_format($data->amount, 0)." تومان"'
-        ),
-    ),
-));?>
 <h3>کاربرانی که درخواست تسویه حساب دارند</h3>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'required-settlements-grid',
@@ -58,3 +43,19 @@
     margin-left:3px;
 }
 ');?>
+
+<h3>تاریخچه تسویه حساب ها</h3>
+<?php $this->widget('zii.widgets.grid.CGridView', array(
+    'id'=>'settlements-grid',
+    'dataProvider'=>$settlementHistory,
+    'columns'=>array(
+        'date'=>array(
+            'name'=>'date',
+            'value'=>'JalaliDate::date("d F Y", $data->date)'
+        ),
+        'amount'=>array(
+            'name'=>'amount',
+            'value'=>'number_format($data->amount, 0)." تومان"'
+        ),
+    ),
+));?>
