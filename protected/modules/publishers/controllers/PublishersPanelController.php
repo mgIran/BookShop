@@ -28,6 +28,7 @@ class PublishersPanelController extends Controller
                 'manageSettlement',
                 'uploadNationalCardImage',
                 'uploadRegistrationCertificateImage',
+                'update',
                 'create'
             )
         );
