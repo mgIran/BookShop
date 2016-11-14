@@ -401,7 +401,6 @@ class UsersPublicController extends Controller
                 Yii::app()->end();
             }
         }
-
         // collect user input data
         if (isset($_POST['UserLoginForm'])) {
             $model->attributes = $_POST['UserLoginForm'];
@@ -416,12 +415,7 @@ class UsersPublicController extends Controller
                     Yii::app()->end();
                 } else
                     $this->redirect($redirect);
-            } else
-                if(isset($_POST['ajax'])) {
-                    echo CJSON::encode(array('status' => false , 'errors' => $this->implodeErrors($model)));
-                    Yii::app()->end();
-                } else
-                    $this->redirect(array('//'));
+            }
         }
         // display the login form
         $this->render('login', array('model' => $model));

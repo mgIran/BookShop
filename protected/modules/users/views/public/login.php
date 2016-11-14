@@ -29,7 +29,7 @@
                 return true;
             }",
             'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
-                if(data.UserLoginForm_authenticate_field != undefined)
+                if(typeof data.UserLoginForm_authenticate_field != "undefined")
                     $("#validate-message").text(data.UserLoginForm_authenticate_field[0]).removeClass("hidden");
                 else
                     $("#validate-message").addClass("hidden");

@@ -1229,6 +1229,11 @@ a:active{
     border-color: #e74e40;
     color: #fff;
 }
+.login-form .alert-danger .errorMessage{
+    color: #fff !important;
+    margin: 0;
+    font-size: 14px !important;
+}
 .white-form{
     margin: 0 -30px 50px;
     background: #fff;
