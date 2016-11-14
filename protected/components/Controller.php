@@ -29,6 +29,7 @@ class Controller extends CController
     public $pageTitle;
     public $sideRender = null;
     public $categories;
+    public $navbarCategories;
     public $userDetails;
     public $userNotifications;
     public $aboutFooter;
@@ -69,7 +70,9 @@ class Controller extends CController
             ->from('ym_site_setting')
             ->where('name = "default_title"')
             ->queryScalar();
-        $this->categories = BookCategories::model()->findAll();
+        $bookCategories = BookCategories::model()->findAll();
+        $this->categories = $bookCategories;
+        $this->navbarCategories = $bookCategories;
         $criteria=new CDbCriteria();
         $criteria->select='COUNT(id) as id';
         $criteria->addCondition('status = :status');

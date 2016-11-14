@@ -8,12 +8,12 @@ $parentsID=array();
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><i class="close-icon"></i></button>
-                <h4 class="modal-title">موضوعات<small><?php echo number_format(count($this->categories), 0, '.', '.');?> موضوع / <?php echo number_format($this->booksCount, 0, '.', '.');?> عنوان کتاب</small></h4>
+                <h4 class="modal-title">موضوعات<small><?php echo number_format(count($this->navbarCategories), 0, '.', '.');?> موضوع / <?php echo number_format($this->booksCount, 0, '.', '.');?> عنوان کتاب</small></h4>
             </div>
             <div class="modal-body">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 cats-list">
                     <ul class="nav nav-pills nav-stacked row">
-                        <?php $i=0;foreach($this->categories as $category):?>
+                        <?php $i=0;foreach($this->navbarCategories as $category):?>
                             <?php if(is_null($category->parent_id)):$parentsID['cat-'.$category->id]=$category->id;?>
                                 <li role="presentation"<?php echo ($i==0)?' class="active"':'';?>><a data-toggle="tab" href="#cat-<?php echo $category->id;?>"><?php echo CHtml::encode($category->title)?></a></li>
                             <?php endif;?>
@@ -25,7 +25,7 @@ $parentsID=array();
                         <?php $i=0;foreach($parentsID as $key=>$id):?>
                             <div id="<?php echo $key;?>" class="tab-pane fade<?php echo ($i==0)?' in active':'';$i++;?>">
                                 <?php $subCategories=array();
-                                foreach($this->categories as $category)
+                                foreach($this->navbarCategories as $category)
                                     if($category->parent_id==$id)
                                         $subCategories[]=$category;
                                 ?>

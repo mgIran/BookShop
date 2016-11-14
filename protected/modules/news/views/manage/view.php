@@ -99,8 +99,11 @@
                         </div>
                         <div class="tags">
                             <?php
-                            foreach ($model->tags as $tag)
-                                echo '<a href="'.$this->createUrl('/news/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>'; ?>
+                            foreach ($model->tags as $tag):
+                                if(!empty($tag->title))
+                                    echo '<a href="'.$this->createUrl('/news/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
+                            endforeach;
+                            ?>
                         </div>
                     </div>
                 <?php endif;?>

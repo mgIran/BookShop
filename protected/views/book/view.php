@@ -156,8 +156,11 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                                 <div class="small-info">
                                     <p>دسته بندی: <span><a href="<?= $this->createUrl('/category/'.$model->category_id.'/'.urldecode($model->category->title)) ?>" ><?= CHtml::encode($model->category->title) ?></a></span></p>
                                     <?php if($model->showTags): ?><p>بر چسب ها: <span><?php
-                                            foreach ($model->showTags as $tag)
-                                                echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>'; ?></span></p>
+                                            foreach ($model->showTags as $tag):
+                                                if(!empty($tag->title))
+                                                    echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
+                                            endforeach;
+                                            ?></span></p>
                                     <?php endif;?>
                                 </div>
                             </div>
@@ -243,8 +246,11 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                     </div>
                     <div class="tags">
                     <?php
-                        foreach ($model->seoTags as $tag)
-                            echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>'; ?>
+                        foreach ($model->seoTags as $tag):
+                            if(!empty($tag->title))
+                                echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
+                        endforeach;
+                        ?>
                     </div>
                 </div>
                 <?php endif;?>

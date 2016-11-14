@@ -2670,7 +2670,7 @@ input[type="checkbox"] + label:hover::before {
     margin-top: 5px;
     position: relative;
     text-align: justify;
-    direction: ltr;
+    direction: rtl;
     overflow: hidden;
 }
 
