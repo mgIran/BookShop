@@ -42,7 +42,7 @@ function submitAjaxForm(form ,url ,loading ,callback) {
         success: function (html) {
             if(loading)
                 loading.hide();
-            if (typeof html === "object" && typeof html.state === 'undefined') {
+            if (typeof html === "object" && (typeof html.status === 'undefined' || typeof html.state === 'undefined')) {
                 $.each(html, function (key, value) {
                     $("#" + key + "_em_").show().html(value.toString());
                 });

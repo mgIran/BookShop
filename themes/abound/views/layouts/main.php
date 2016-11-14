@@ -22,12 +22,15 @@
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
       $cs->registerCssFile($baseUrl.'/css/bootstrap-reset.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
+      $cs->registerCssFile($baseUrl.'/css/persian-datepicker-0.4.5.min.css');
+      $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
       $cs->registerCssFile($baseUrl.'/css/rtl.css');
 	  $cs->registerCssFile($baseUrl.'/css/style-blue.css');
       $cs->registerCssFile($baseUrl.'/css/font-awesome.css');
-
       $cs->registerCoreScript('jquery.ui');
+      $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
+      $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
       $cs->registerScriptFile($baseUrl.'/js/scripts.js');
 	?>

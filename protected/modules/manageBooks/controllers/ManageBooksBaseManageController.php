@@ -34,6 +34,10 @@ class ManageBooksBaseManageController extends Controller
                 'download' ,
                 'updatePackage' ,
                 'downloadPackage' ,
+                'discount' ,
+                'createDiscount' ,
+                'updateDiscount' ,
+                'deleteDiscount' ,
             )
         );
     }
@@ -87,14 +91,14 @@ class ManageBooksBaseManageController extends Controller
                 'attribute' => 'icon' ,
                 'uploadDir' => '/uploads/books/icons' ,
                 'storedMode' => 'field'
-            ),
+            ) ,
             'deleteUploadFile' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
                 'modelName' => 'BookPackages' ,
                 'attribute' => 'file_name' ,
                 'uploadDir' => '/uploads/books/files' ,
                 'storedMode' => 'record'
-            ),
+            ) ,
             'deleteFile' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
                 'modelName' => 'BookPackages' ,
@@ -361,7 +365,7 @@ class ManageBooksBaseManageController extends Controller
             ));
         }else
             echo CJSON::encode(array(
-                'status' => false,
+                'status' => false ,
                 'message' => $this->implodeErrors($model)
             ));
     }
@@ -417,7 +421,7 @@ class ManageBooksBaseManageController extends Controller
             $model->attributes = $_POST;
             $model->status = 'accepted';
             $model->publish_date = time();
-            if (!isset($_POST['sale_printed']))
+            if(!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;
             if($model->save()){
                 $response = ['status' => true ,'fileName' => $model->file_name];
@@ -543,10 +547,10 @@ class ManageBooksBaseManageController extends Controller
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
                 $model->status = $model::STATUS_ACCEPTED;
-                if (!isset($_POST['BookPackages']['sale_printed']))
+                if(!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
                 if($model->save()){
-                    if($model->file_name && file_exists($tempDir .DIRECTORY_SEPARATOR. $model->file_name))
+                    if($model->file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->file_name))
                         @rename($tempDir . DIRECTORY_SEPARATOR . $model->file_name ,$uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
                     Yii::app()->user->setFlash('success' ,'اطلاعات با موفقیت ثبت شد.');
                     $this->redirect('update/' . $model->book_id . '/?step=2');
@@ -559,5 +563,80 @@ class ManageBooksBaseManageController extends Controller
             ));
         }else
             $this->redirect(array('/manageBooks/baseManage/admin'));
+    }
+
+    public function actionDiscount()
+    {
+        $model = new BookDiscounts();
+
+        if(isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form'){
+            $model->attributes = $_POST['BookDiscounts'];
+            $errors = CActiveForm::validate($model);
+            if(CJSON::decode($errors)){
+                echo $errors;
+                Yii::app()->end();
+            }
+        }
+        $this->render('discount' ,array(
+            'model' => $model
+        ));
+    }
+
+    public function actionCreateDiscount()
+    {
+        $model = new BookDiscounts();
+        if(isset($_POST['BookDiscounts'])){
+            $model->attributes = $_POST['BookDiscounts'];
+            if($model->save()){
+                if(isset($_GET['ajax'])){
+                    echo CJSON::encode(array('status' => true ,'msg' => 'تخفیف با موفقیت اعمال شد.'));
+                    Yii::app()->end();
+                }else{
+                    Yii::app()->user->setFlash('discount-success' ,'اعمال تخفیف با موفقیت اعمال شد.');
+                    $this->redirect(array('discount'));
+                }
+            }else
+                Yii::app()->user->setFlash('discount-failed' ,'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
+        }
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('deleted = 0');
+        $criteria->addCondition('lastPackage.price != 0');
+        $criteria->addCondition('title != ""');
+        $criteria->with[] = 'discount';
+        $criteria->with[] = 'lastPackage';
+        $criteria->addCondition('discount.book_id IS NULL');
+        $books = CHtml::listData(Books::model()->findAll($criteria) ,'id' ,'title');
+        $this->render('_discount_form' ,array('model' => $model,'books' => $books));
+    }
+
+    public function actionUpdateDiscount($id)
+    {
+        $model = BookDiscounts::model()->findByPk($id);
+        if(isset($_POST['BookDiscounts'])){
+            $model->attributes = $_POST['BookDiscounts'];
+            if($model->save()){
+                if(isset($_GET['ajax'])){
+                    echo CJSON::encode(array('status' => true ,'msg' => 'تخفیف با موفقیت اعمال شد.'));
+                    Yii::app()->end();
+                }else{
+                    Yii::app()->user->setFlash('discount-success' ,'اعمال تخفیف با موفقیت اعمال شد.');
+                    $this->redirect(array('discount'));
+                }
+            }else
+                Yii::app()->user->setFlash('discount-failed' ,'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
+        }
+        $this->render('_discount_form' ,array('model' => $model));
+    }
+
+    public function actionDeleteDiscount($id)
+    {
+        $model = BookDiscounts::model()->findByPk($id);
+        if($model->book->publisher_id)
+            $this->createLog('تخفیف کتاب ' . $model->book->title . ' توسط مدیر سیستم حذف شد.' ,$model->book->publisher_id);
+        $model->delete();
+
+        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+        if(!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
 }

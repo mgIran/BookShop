@@ -98,6 +98,32 @@ class BookDiscounts extends CActiveRecord
 		));
 	}
 
+	public function searchDiscount()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+		
+		// delete expire discounts
+		$criteria=new CDbCriteria();
+		$criteria->addCondition('end_date < :now');
+		$criteria->params=array(
+			':now' => time()
+		);
+		BookDiscounts::model()->deleteAll($criteria);
+
+		$criteria=new CDbCriteria();
+		$criteria->with[] = 'book';
+		$criteria->addCondition('book.deleted = 0');
+		$criteria->addCondition('book.title != ""');
+		$criteria->addCondition('end_date > :now');
+		$criteria->params=array(
+			':now' => time()
+		);
+
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria
+		));
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
