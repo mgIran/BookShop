@@ -361,13 +361,7 @@ class Controller extends CController
             file_put_contents($file . '.sql', $dumper->getDump());
             rename($file . '.sql', $file);
         }
-        $result = Mailer::mail('app.mobasheri@gmail.com', 'Hyper Books Sql Dump And Home Directory Backup', 'Backup File form database', 'no-reply@hyperbooks.ir', array(
-            //            'Host' => 'mail.hyperbooks.ir',
-            //            'Port' => 587,
-            //            'Secure' => 'tls',
-            //            'Username' => 'hyperbooks@hyperbooks.ir',
-            //            'Password' => '!@hyperbooks1395',
-        ), array($file, $protected_archive_name));
+        $result = Mailer::mail('yusef.mobasheri@gmail.com', 'Hyper Books Sql Dump And Home Directory Backup', 'Backup File form database', Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP'], array($file, $protected_archive_name));
         if ($result) {
             echo 'Mail sent.';
         }

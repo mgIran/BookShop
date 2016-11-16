@@ -203,11 +203,11 @@ return array(
 		'adminEmail'=>'webmaster@ketabic.ir',
         'noReplyEmail' => 'noreply@ketabic.ir',
 		'SMTP' => array(
-            'Host' => 'mail.ketabic.ir',
-            'Secure' => 'ssl',
-            'Port' => '465',
-            'Username' => 'noreply@ketabic.ir',
-            'Password' => '!@ketabic1395',
+			'Host' => 'mail.ketabic.ir',
+			'Port' => 587,
+			'Secure' => 'tls',
+			'Username' => 'noreply@ketabic.ir',
+			'Password' => '!@ketabic1395',
         ),
         'mailTheme'=>
             '<h2 style="margin-bottom:0;box-sizing:border-box;display: block;width: 100%;background-color: #77c159;line-height:60px;color:#fff;font-size: 24px;text-align: right;padding-right: 50px">کتابیک<span style="font-size: 14px;color:#f0f0f0"> - مرجع خرید و فروش و کتابخوانی آنلاین</span></h2>

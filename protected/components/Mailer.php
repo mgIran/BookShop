@@ -9,13 +9,13 @@ class Mailer
      * @param  $message string
      * @param $from string
      * @param $SMTP array
-     * @param $attachment array
+     * @param $attachments array
      *
      * @throws CException if type of attachment not is set.
      *
      * @return bool
      */
-    public static function mail($to, $subject, $message, $from, $SMTP = array(), $attachment = array())
+    public static function mail($to, $subject, $message, $from, $SMTP = array(), $attachments = array())
     {
         $mailTheme = Yii::app()->params['mailTheme'];
         $mailTheme = str_replace('{CurrentYear}', JalaliDate::date('Y'), $mailTheme);
@@ -35,15 +35,18 @@ class Mailer
         $mail->Subject = $subject;
         $mail->MsgHTML($message);
         $mail->AddAddress($to);
-        if ($attachment) {
-            if (!isset($attachment['method']))
-                throw new CException('attachment method must be set.', 500);
-            $encoding=(isset($attachment['encoding']))?$attachment['encoding']:'base64';
-            $type=(isset($attachment['type']))?$attachment['type']:'application/octet-stream';
-            if ($attachment['method'] == 'string')
-                $mail->AddStringAttachment($attachment['string'], $attachment['filename'],$encoding,$type);
-            else
-                $mail->AddAttachment($attachment['path'], $attachment['name'],$encoding,$type);
+        foreach($attachments as $attachment)
+        {
+            if ($attachment) {
+                if (!isset($attachment['method']))
+                    throw new CException('attachment method must be set.', 500);
+                $encoding=(isset($attachment['encoding']))?$attachment['encoding']:'base64';
+                $type=(isset($attachment['type']))?$attachment['type']:'application/octet-stream';
+                if ($attachment['method'] == 'string')
+                    $mail->AddStringAttachment($attachment['string'], $attachment['filename'],$encoding,$type);
+                else
+                    $mail->AddAttachment($attachment['path'], $attachment['name'],$encoding,$type);
+            }
         }
         return $mail->Send();
     }
