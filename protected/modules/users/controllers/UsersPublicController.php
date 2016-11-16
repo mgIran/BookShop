@@ -54,7 +54,7 @@ class UsersPublicController extends Controller
             $model->attributes = $_POST['Users'];
             $model->status = 'pending';
             $model->create_date = time();
-            Yii::import('users.components.*');
+//            Yii::import('users.components.*');
             if ($model->save()) {
                 $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date);
                 $model->updateByPk($model->id, array('verification_token' => $token));

@@ -22,8 +22,7 @@ class Mailer
         $message = str_replace('{MessageBody}', $message, $mailTheme);
         Yii::import('application.extensions.phpmailer.JPhpMailer');
         $mail = new JPhpMailer;
-        $mail->SetFrom($from, Yii::app()->name);
-        if ($SMTP && isset($SMTP['Host']) && isset($SMTP['Secure']) && isset($SMTP['Username']) && isset($SMTP['Password']) && isset($SMTP['Port'])) {
+        if ($SMTP && isset($SMTP['Host']) && isset($SMTP['Secure']) && isset($SMTP['Username']) && isset($SMTP['Password']) && isset($SMTP['Port'])){
             $mail->IsSMTP();
             $mail->SMTPAuth = true;
             $mail->Host = $SMTP['Host'];
@@ -31,10 +30,14 @@ class Mailer
             $mail->Username = $SMTP['Username'];
             $mail->Password = $SMTP['Password'];
             $mail->Port = (int)$SMTP['Port'];
-        }
-        $mail->Subject = $subject;
-        $mail->MsgHTML($message);
+            $mail->SetFrom($SMTP['Username'], Yii::app()->name);
+        }else
+            $mail->SetFrom($from, Yii::app()->name);
+
         $mail->AddAddress($to);
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->Body    = $message;
+        $mail->Subject = $subject;
         foreach($attachments as $attachment)
         {
             if ($attachment) {
