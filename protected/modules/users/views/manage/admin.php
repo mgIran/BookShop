@@ -34,7 +34,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'header' => 'اعتبار',
-            'value' => '$data->userDetails->credit',
+            'value' => 'Controller::parseNumbers(number_format($data->userDetails->credit))." تومان"',
             'filter' => false
         ),
         array(
