@@ -48,7 +48,6 @@ class UserBons extends CActiveRecord
             array('amount' ,'length' ,'max' => 12) ,
             array('start_date, end_date' ,'length' ,'max' => 20) ,
             array('amount' ,'compare' ,'operator' => '!=' ,'compareValue' => 0 ,'message' => 'مبلغ نمی تواند 0 تومان باشد.') ,
-            array('start_date' ,'compare' ,'operator' => '>=' ,'compareValue' => time() - 60 * 60 ,'message' => 'تاریخ شروع کمتر از حال حاضر است.') ,
             array('end_date' ,'compare' ,'operator' => '>' ,'compareAttribute' => 'start_date' ,'message' => 'تاریخ پایان باید از تاریخ شروع بیشتر باشد.') ,
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
