@@ -14,18 +14,7 @@ class RowsManageController extends Controller
     public static function actionsType()
     {
         return array(
-            'backend' => array(
-                'admin',
-                'const',
-                'index',
-                'view',
-                'delete',
-                'create',
-                'update',
-                'updateConst',
-                'add',
-                'remove',
-            )
+            'backend' => array('admin', 'const', 'index', 'view', 'delete', 'create', 'update', 'updateConst', 'add', 'remove')
         );
     }
 

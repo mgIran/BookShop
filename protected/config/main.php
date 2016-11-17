@@ -39,6 +39,7 @@ return array(
 		'advertises',
 		'news',
 		'rows',
+		'places',
 		'comments'=>array(
 			//you may override default config for all connecting models
 			'defaultModelConfig' => array(

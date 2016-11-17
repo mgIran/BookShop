@@ -1,18 +1,19 @@
 <?php
 /* @var $this UsersManageController */
 /* @var $model Users */
+/* @var $role string */
 
 $this->breadcrumbs=array(
-    'کاربران'=>array('manage'),
+    $role==1?'کاربران':'ناشران'=>array($role==1?'admin':'adminPublishers'),
     'مدیریت',
 );
 
 $this->menu=array(
-    array('label'=>'افزودن', 'url'=>array('create')),
+    array('label'=>'افزودن', 'url'=>array($role==1?'create':'/publishers/panel/create')),
 );
 ?>
 <? $this->renderPartial('//layouts/_flashMessage'); ?>
-<h1>مدیریت کاربران</h1>
+<h1>مدیریت <?= $role==1?'کاربران':'ناشران' ?></h1>
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
@@ -32,8 +33,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'filter' => CHtml::activeDropDownList($model,'statusFilter',$model->statusLabels,array('prompt' => 'همه'))
         ),
         array(
-            'header' => 'امتیاز',
-            'value' => '$data->userDetails->score',
+            'header' => 'اعتبار',
+            'value' => '$data->userDetails->credit',
             'filter' => false
         ),
         array(
