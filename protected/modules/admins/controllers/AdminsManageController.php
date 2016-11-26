@@ -9,20 +9,20 @@ class AdminsManageController extends Controller
 	public $layout='//layouts/column2';
 
     public $pageTitle = 'مدیریت مدیران سیستم';
-
 	/**
-	 * @return array actions type list
+	 * @return array action filters
 	 */
 	public static function actionsType()
 	{
 		return array(
 			'backend' => array(
-                'index',
-                'views',
-                'create',
-                'update',
-                'admin',
-                'delete'
+				'index',
+				'views',
+				'create',
+				'update',
+				'admin',
+				'changePass',
+				'delete'
 			)
 		);
 	}
@@ -58,16 +58,15 @@ class AdminsManageController extends Controller
         $this->pageTitle = 'افزودن مدیر جدید';
 		$model=new Admins('create');
 
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
 		if(isset($_POST['Admins'])) {
             $model->attributes = $_POST[ 'Admins' ];
             if ( $model->save() )
-                echo json_encode( ['result' => 'success','msg' => 'با موفقیت انجام شد' ]);
+			{
+				Yii::app()->user->setFlash('success','با موفقیت انجام شد');
+				$this->redirect(array('admin'));
+			}
             else
-                echo json_encode( ['result' => 'failed','msg' => $this->implodeErrors($model) ]);
-            Yii::app()->end();
+				Yii::app()->user->setFlash('failed','درخواست با خطا مواجه است. لطفا مجددا سعی نمایید.');
         }
 
 		$this->render('create',array(
@@ -86,25 +85,47 @@ class AdminsManageController extends Controller
         $this->pageTitle = 'ویرایش مدیر';
         $model = $this->loadModel( $id );
         $model->setScenario('update');
-        // Uncomment the following line if AJAX validation is needed
 
-        $this->performAjaxValidation( $model );
+        if ( isset( $_POST[ 'Admins' ] ) ) {
+            $model->attributes = $_POST[ 'Admins' ];
+			if ( $model->save() )
+			{
+				Yii::app()->user->setFlash('success','با موفقیت انجام شد');
+				$this->redirect(array('admin'));
+			}
+			else
+				Yii::app()->user->setFlash('failed','درخواست با خطا مواجه است. لطفا مجددا سعی نمایید.');
+        }
+
+        $this->render( 'update', array(
+            'model' => $model,
+        ) );
+    }
+
+	public function actionChangePass()
+    {
+		$id = Yii::app()->user->getId();
+        $this->pageTitle = 'تغییر کلمه عبور';
+        $model = $this->loadModel( $id );
+        $model->setScenario('changePassword');
 
         if ( isset( $_POST[ 'Admins' ] ) ) {
             $model->attributes = $_POST[ 'Admins' ];
             if($model->validate() ) {
                 $model->password = $_POST[ 'Admins' ][ 'newPassword' ];
-                if ( $model->save() )
-                    echo json_encode( [ 'result' => 'success', 'msg' => 'با موفقیت انجام شد' ] );
-                else
-                    echo json_encode( [ 'result' => 'failed', 'msg' => 'متاسفانه مشکلی رخ داده است!' ] );
+				if ( $model->save() )
+				{
+					Yii::app()->user->setFlash('success','با موفقیت انجام شد');
+					$this->redirect(array('admin'));
+				}
+				else
+					Yii::app()->user->setFlash('failed','درخواست با خطا مواجه است. لطفا مجددا سعی نمایید.');
             }
             else
-                echo json_encode( [ 'result' => 'failed', 'msg' => $this->implodeErrors($model)] );
-            Yii::app()->end();
+				Yii::app()->user->setFlash('failed','درخواست با خطا مواجه است. لطفا مجددا سعی نمایید.');
         }
 
-        $this->render( 'update', array(
+        $this->render( '_change_password_form', array(
             'model' => $model,
         ) );
     }
