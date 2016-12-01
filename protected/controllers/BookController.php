@@ -287,7 +287,7 @@ class BookController extends Controller
                     <td>' . JalaliDate::date('d F Y - H:i', $buy->date) . '</td>
                 </tr>
             </table>';
-        Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+        Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail']);
     }
 
     /**
