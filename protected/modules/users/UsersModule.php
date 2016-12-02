@@ -20,7 +20,7 @@ class UsersModule extends CWebModule
         'roles' => 'users.controllers.UsersRolesController',
         'credit' => 'users.controllers.UsersCreditController',
         'public' => 'users.controllers.UsersPublicController',
-        'bon' => 'users.controllers.UserBonsManageController',
+        'bon' => 'users.controllers.UsersBonController',
     );
 
 	public function beforeControllerAction($controller, $action)
