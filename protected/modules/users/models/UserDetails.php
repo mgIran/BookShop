@@ -27,6 +27,9 @@
  * @property string $registration_certificate_image
  * @property integer $score
  * @property string $avatar
+ * @property string $account_owner
+ * @property string $account_number
+ * @property string $bank_name
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -76,6 +79,8 @@ class UserDetails extends CActiveRecord
             array('publisher_id', 'unique'),
             array('credit, national_code, phone, zip_code, score', 'numerical'),
             array('user_id, national_code, zip_code', 'length', 'max' => 10),
+            array('account_owner', 'length', 'max' => 100),
+            array('bank_name, account_number', 'length', 'max' => 50),
             array('national_code, zip_code', 'length', 'min' => 10),
             array('phone', 'length', 'min' => 8),
             array('fa_name, en_name, national_card_image, company_name, registration_number, registration_certificate_image', 'length', 'max' => 50),
@@ -85,12 +90,12 @@ class UserDetails extends CActiveRecord
             array('address', 'length', 'max' => 1000),
             array('details_status', 'length', 'max' => 8),
             array('type, post', 'length', 'max' => 5),
-            array('iban', 'length', 'is' => 24, 'on' => 'update-settlement', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
+            array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
             array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar', 'safe', 'on' => 'search'),
+            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name', 'safe', 'on' => 'search'),
         );
     }
 
@@ -143,6 +148,9 @@ class UserDetails extends CActiveRecord
             'registration_certificate_image' => 'تصویر گواهی ثبت شرکت',
             'score' => 'امتیاز',
             'avatar' => 'آواتار',
+            'account_owner' => 'نام صاحب حساب',
+            'account_number' => 'شماره حساب',
+            'bank_name' => 'نام بانک',
         );
     }
 

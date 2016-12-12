@@ -89,7 +89,7 @@
 
             <div class="form-group">
                 <?php echo $form->labelEx($model,'credit'); ?>
-                <?php echo $form->textField($model,'credit',array('placeholder'=>$model->getAttributeLabel('credit').' *','class'=>'form-control')); ?>
+                <?php echo $form->textField($model,'credit',array('placeholder'=>$model->getAttributeLabel('credit').' *','class'=>'form-control')); ?>تومان
                 <?php echo $form->error($model,'credit'); ?>
             </div>
 
@@ -124,6 +124,29 @@
                     ',
                 ));?>
                 <div class="uploader-message error" id="national_card_image_error"></div>
+            </div>
+            <h3>اطلاعات مالی ناشر</h3>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_owner'); ?>
+                <?php echo $form->textField($model,'account_owner',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_owner'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'bank_name'); ?>
+                <?php echo $form->textField($model,'bank_name',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'bank_name'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'iban'); ?>
+                <?php echo $form->textField($model,'iban',array('maxlength'=>24,'class'=>'form-control')); ?>
+                <small class="description">شماره شبا بدون IR وارد شود.</small>
+                <?php echo $form->error($model,'iban'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_number'); ?>
+                <?php echo $form->textField($model,'account_number',array('maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_number'); ?>
             </div>
 
             <div class="buttons">
@@ -244,6 +267,30 @@
                     ',
                 ));?>
                 <div class="uploader-message error" id="registration_certificate_image_error"></div>
+            </div>
+
+            <h3>اطلاعات مالی ناشر</h3>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_owner'); ?>
+                <?php echo $form->textField($model,'account_owner',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_owner'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'bank_name'); ?>
+                <?php echo $form->textField($model,'bank_name',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'bank_name'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'iban'); ?>
+                <?php echo $form->textField($model,'iban',array('maxlength'=>24,'class'=>'form-control')); ?>
+                <small class="description">شماره شبا بدون IR وارد شود.</small>
+                <?php echo $form->error($model,'iban'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_number'); ?>
+                <?php echo $form->textField($model,'account_number',array('maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_number'); ?>
             </div>
 
             <div class="buttons">

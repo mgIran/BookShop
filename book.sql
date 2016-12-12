@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2016-11-17 03:42:35
+Date: 2016-12-12 13:07:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1365,6 +1365,9 @@ CREATE TABLE `ym_user_details` (
   `registration_certificate_image` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT 'تصویر گواهی ثبت شرکت',
   `score` int(10) unsigned DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'آواتار',
+  `account_owner` varchar(100) COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'نام صاحب حساب',
+  `account_number` varchar(50) COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'شماره حساب',
+  `bank_name` varchar(50) COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'نام بانک',
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `ym_user_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ym_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
@@ -1373,14 +1376,15 @@ CREATE TABLE `ym_user_details` (
 -- ----------------------------
 -- Records of ym_user_details
 -- ----------------------------
-INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null);
-INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '108500', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '4', null);
-INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
-INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
-INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
-INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '3400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
-INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
-INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '108500', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '4', null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '3400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, null, null);
+INSERT INTO `ym_user_details` VALUES ('60', 'یوسف مبشری', 'Yusef Mobasher', '', '', '0370544651', 'OgWb61481529493.jpg', '02536574422', '3718146164', 'قم', '150000', 'Salar', 'accepted', '0', '123456789123456789123456', 'یوزارسیف', 'real', '', '', '', null, null, null, 'یوسف مبشری', '00388561516', 'بانک ملی');
 
 -- ----------------------------
 -- Table structure for ym_user_dev_id_requests
