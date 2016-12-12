@@ -11,6 +11,14 @@ $this->breadcrumbs=array(
 $this->menu=array(
     array('label'=>'افزودن', 'url'=>array($role==1?'create':'/publishers/panel/create')),
 );
+
+$buttons = array();
+if($role == 2)
+    $buttons = array(
+        'update' => array(
+            'url' => 'Yii::app()->createUrl("/publishers/panel/update",array("id" => $data->id))'
+        )
+    );
 ?>
 <? $this->renderPartial('//layouts/_flashMessage'); ?>
 <h1>مدیریت <?= $role==1?'کاربران':'ناشران' ?></h1>
@@ -39,7 +47,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class'=>'CButtonColumn',
-            'template' => '{view}{update}{delete}'
+            'template' => '{view}{update}{delete}',
+            'buttons' => $buttons
         ),
     ),
 )); ?>

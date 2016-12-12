@@ -27,6 +27,7 @@ body {
     color: #555;
     font-family: 'IRANSans';
     font-size: 14px;
+    overflow-x: hidden;
 }
 a,
 a:hover,
