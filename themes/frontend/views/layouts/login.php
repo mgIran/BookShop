@@ -33,7 +33,8 @@
 </head>
 <body class="login-page">
 <div class="container">
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-2  login-box">
+<!--    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-2  login-box">-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 login-box">
         <a class="login-logo" href="<?php echo Yii::app()->createUrl('/site');?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1></a>
         <?php echo $content;?>
         <div class="copyright">© 2016 Ketabic</div>

@@ -49,7 +49,7 @@ echo CHtml::endForm();
     'columns'=>array(
         'fa_name'=>array(
             'name'=>'fa_name',
-            'value'=>'CHtml::link($data->user->userDetails->fa_name, Yii::app()->createUrl("/users/manage/views/".$data->user->id))',
+            'value'=>'CHtml::link($data->fa_name, Yii::app()->createUrl("/users/manage/view/".$data->user_id))',
             'type'=>'raw'
         ),
         'iban'=>array(

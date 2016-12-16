@@ -1057,7 +1057,7 @@ a:active{
     color: #fff;
 }
 .login-box{
-    margin-top: 100px;
+    margin-top: 50px;
     padding: 0 60px;
 }
 .login-logo{
@@ -1095,7 +1095,7 @@ a:active{
     transition: all 0.4s ease 0s;
 }
 .welcome-text{
-    margin: 50px 0 20px;
+    margin: 20px 0;
 }
 .welcome-text small{
     color: #fff;
@@ -1215,6 +1215,9 @@ a:active{
     text-align: center;
     font-size: 12px;
     margin-top: 50px;
+    display: block;
+    width: 100%;
+    overflow: hidden;
 }
 .login-form .errorMessage{
     font-size: 12px;
@@ -1710,9 +1713,9 @@ ul.tagit li{
 .or-text{
     display: block;
     overflow: hidden;
-    line-height: 50px;
-    border-top: 4px double rgba(255, 255, 255, 0.1);
-    width: 70%;
+    line-height: 26px;
+    padding: 15px 0;
+    border-bottom: 4px double rgba(255, 255, 255, 0.1);
     margin: 20px auto 0;
 }
 .google-icon {
@@ -1891,4 +1894,39 @@ input[type="checkbox"]:checked + label::before {
     height: 16px;
     width: 14px;
     background-size: 16px;
+}
+.divider{
+    position: relative;
+}
+.register-button {
+    padding: 40px 0;
+}
+.divider:before{
+    content: "";
+    position: absolute;
+    width: 4px;
+    top: 100px;
+    bottom: 30px;
+    left: 0;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    display: inline-block;
+}
+.float-none{
+    float: none !important;
+    display: inline-block;
+}
+.title{
+    margin-top: 30px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px;
+    color: rgba(255, 255, 255, 0.6);
+}
+.title:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-bottom: 4px double rgba(255, 255, 255, 0.1);
+    width: 80%;
 }

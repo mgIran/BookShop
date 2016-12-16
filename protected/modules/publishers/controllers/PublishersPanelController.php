@@ -29,7 +29,8 @@ class PublishersPanelController extends Controller
                 'uploadNationalCardImage',
                 'uploadRegistrationCertificateImage',
                 'update',
-                'create'
+                'create',
+                'excel'
             )
         );
     }
@@ -546,7 +547,6 @@ class PublishersPanelController extends Controller
         $settlementRequiredUsers=new CActiveDataProvider('UserDetails', array(
             'criteria'=>$criteria,
         ));
-
         $this->render('manage_settlement', array(
             'settlementHistory'=>$settlementHistory,
             'settlementRequiredUsers'=>$settlementRequiredUsers,
