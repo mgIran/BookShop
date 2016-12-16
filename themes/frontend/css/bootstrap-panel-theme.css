@@ -1096,6 +1096,7 @@ a:active{
 }
 .welcome-text{
     margin: 20px 0;
+    font-size: 16px;
 }
 .welcome-text small{
     color: #fff;
@@ -1919,14 +1920,5 @@ input[type="checkbox"]:checked + label::before {
     margin-top: 30px;
     position: relative;
     display: inline-block;
-    padding-bottom: 15px;
     color: rgba(255, 255, 255, 0.6);
-}
-.title:after{
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    border-bottom: 4px double rgba(255, 255, 255, 0.1);
-    width: 80%;
 }
