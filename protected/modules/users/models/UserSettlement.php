@@ -8,6 +8,9 @@
  * @property string $user_id
  * @property string $amount
  * @property string $date
+ * @property string $account_owner
+ * @property string $account_number
+ * @property string $bank_name
  * @property string $iban
  * @property string $token
  *
@@ -37,6 +40,8 @@ class UserSettlement extends CActiveRecord
 			array('date', 'length', 'max'=>20),
 			array('iban', 'length', 'max'=>24),
 			array('token', 'length', 'max'=>255),
+			array('account_owner', 'length', 'max' => 100),
+			array('bank_name, account_number', 'length', 'max' => 50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, user_id, amount, date, iban, token', 'safe', 'on'=>'search'),
@@ -66,6 +71,9 @@ class UserSettlement extends CActiveRecord
 			'amount' => 'مبلغ',
 			'date' => 'تاریخ',
 			'iban' => 'شماره شبا',
+			'account_owner' => 'نام صاحب حساب',
+			'account_number' => 'شماره حساب',
+			'bank_name' => 'نام بانک',
 			'token' => 'کد رهگیری',
 		);
 	}

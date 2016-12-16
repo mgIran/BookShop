@@ -1,7 +1,16 @@
 <?php
-/* @var $this PublicController */
+/* @var $this UsersPublicController */
 /* @var $model Users */
 /* @var $suggestedDataProvider CActiveDataProvider */
+/* @var $messages CArrayDataProvider */
+?>
+<?php
+$this->widget('zii.widgets.CListView', array(
+    'id' => 'messages-list',
+    'dataProvider' => $messages,
+    'itemView' => '_message',
+    'template' => '{items}'
+));
 ?>
 <div class="statistics">
     <div>

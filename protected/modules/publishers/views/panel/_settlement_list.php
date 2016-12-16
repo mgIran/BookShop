@@ -8,5 +8,8 @@ $this::$sumSettlement += $data->amount;
     <td><?php echo CHtml::encode(Controller::parseNumbers(number_format($data->amount, 0)));?> تومان</td>
     <td><?php echo JalaliDate::date('d F Y - H:i', $data->date);?></td>
     <td><?php echo CHtml::encode($data->token) ?></td>
+    <td><?php echo CHtml::encode($data->account_owner) ?></td>
+    <td><?php echo CHtml::encode($data->account_number) ?></td>
+    <td><?php echo CHtml::encode($data->bank_name) ?></td>
     <td>IR<?php echo CHtml::encode($data->iban);?></td>
 </tr>

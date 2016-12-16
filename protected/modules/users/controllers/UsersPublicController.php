@@ -60,9 +60,29 @@ class UsersPublicController extends Controller
         $visitedCats = CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
         $suggestedDataProvider = new CActiveDataProvider('Books', array('criteria' => Books::model()->getValidBooks($visitedCats)));
 
+        $messages = array();
+        if($model->role_id == 2)
+        {
+            $credit = $model->userDetails->getSettlementAmount();
+            if($credit)
+            {
+                $messages[0]['type'] = 'info';
+                $messages[0]['message'] = 'مبلغ قابل تسویه شما: '.Controller::parseNumbers(number_format($credit)).' تومان';
+            }
+            if($credit && !$model->userDetails->validateAccountingInformation())
+            {
+                $link = CHtml::link('اینجا',array('/publishers/panel/settlement'));
+                $messages[1]['type'] = 'danger';
+                $messages[1]['message'] = 'اطلاعات بانکی شما به منظور انجام تسویه حساب ناقص است و تا زمانی که این اطلاعات تکمیل نشود تسویه حساب برای شما انجام نمی شود. برای تکیمل اطلاعات '.
+                    $link.
+                ' کلیک کنید.';
+            }
+        }
+
         $this->render('dashboard', array(
             'model' => $model,
             'suggestedDataProvider' => $suggestedDataProvider,
+            'messages' => new CArrayDataProvider($messages,array('keyField' =>'type')),
         ));
     }
 

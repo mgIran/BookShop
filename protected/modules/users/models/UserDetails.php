@@ -93,16 +93,17 @@ class UserDetails extends CActiveRecord
             array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
             array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
+            array('monthly_settlement', 'default', 'value' => 1),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name', 'safe', 'on' => 'search'),
         );
     }
 
-    public function ibanRequiredConditional()
+    public function ibanRequiredConditional($attribute, $params)
     {
-        if ($this->monthly_settlement == 1 and ($this->iban == '' or empty($this->iban) or is_null($this->iban)))
-            $this->addError('iban', $this->getAttributeLabel('iban') . ' نمی تواند خالی باشد.');
+        if (!$this->{$attribute} || empty($this->{$attribute}) || !preg_match('/^[0-9]{24}/',$this->{$attribute}))
+            $this->addError($attribute, $this->getAttributeLabel($attribute) . ' نامعتبر است.');
 
     }
 
@@ -233,5 +234,29 @@ class UserDetails extends CActiveRecord
             return !empty($this->en_name) ? $this->en_name : $this->user->email;
         else
             return $this->user->email;
+    }
+
+    public function validateAccountingInformation(){
+        if(
+            !$this->iban || empty($this->iban) ||
+            !$this->account_owner || empty($this->account_owner) ||
+            !$this->account_number || empty($this->account_number) ||
+            !$this->bank_name || empty($this->bank_name)
+        )
+            return false;
+        return true;
+    }
+
+    public static function SettlementCriteria(){
+        Yii::app()->getModule('setting');
+        $setting=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
+        $criteria=new CDbCriteria();
+        $criteria->addCondition('iban IS NOT NULL AND iban != ""');
+        $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
+        $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
+        $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
+        $criteria->addCondition('credit>:credit');
+        $criteria->params=array(':credit'=>$setting->value);
+        return $criteria;
     }
 }
