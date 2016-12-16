@@ -594,19 +594,25 @@ class PublishersPanelController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()
             ->setCellValue('A1', 'نام انتشارات')
             ->setCellValue('B1', 'نام صاحب حساب')
-            ->setCellValue('C1', 'شماره شبا')
-            ->setCellValue('D1', 'مبلغ قابل تسویه (تومان)');
+            ->setCellValue('C1', 'شماره حساب')
+            ->setCellValue('D1', 'نام بانک')
+            ->setCellValue('E1', 'شماره شبا')
+            ->setCellValue('F1', 'مبلغ قابل تسویه (تومان)');
 
         foreach ($settlementUsers as $key => $settlementUser){
             $row = $key+2;
             $objPHPExcel->getActiveSheet()
                 ->setCellValue('A'.$row, $settlementUser->publisher_id)
-                ->setCellValue('B'.$row, $settlementUser->fa_name)
-                ->setCellValue('C'.$row, "IR".$settlementUser->iban)
-                ->setCellValue('D'.$row, number_format($settlementUser->getSettlementAmount()));
+                ->setCellValue('B'.$row, $settlementUser->account_owner)
+                ->setCellValue('C'.$row, '"'.$settlementUser->account_number.'"')
+                ->setCellValue('D'.$row, $settlementUser->bank_name)
+                ->setCellValue('E'.$row, "IR".$settlementUser->iban)
+                ->setCellValue('F'.$row, number_format($settlementUser->getSettlementAmount()));
         }
         // Save a xls file
         $filename = 'Settlement Publishers';
