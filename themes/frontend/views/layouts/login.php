@@ -23,17 +23,18 @@
     $cs->registerCssFile($baseUrl.'/css/bootstrap-rtl.min.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?3');
-    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?3');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?3.1');
+    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?3.1');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3.1', CClientScript::POS_END);
     ?>
 </head>
 <body class="login-page">
 <div class="container">
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-2  login-box">
+<!--    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-2  login-box">-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 login-box">
         <a class="login-logo" href="<?php echo Yii::app()->createUrl('/site');?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1></a>
         <?php echo $content;?>
         <div class="copyright">© 2016 Ketabic</div>

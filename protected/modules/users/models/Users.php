@@ -149,18 +149,11 @@ class Users extends CActiveRecord
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->id, true);
         $criteria->compare('username', $this->username, true);
-        $criteria->compare('password', $this->password, true);
-        $criteria->compare('create_date', $this->create_date, true);
         $criteria->compare('status', $this->statusFilter, true);
-        $criteria->compare('verification_token', $this->verification_token, true);
-        $criteria->compare('change_password_request_count', $this->change_password_request_count);
-        $criteria->addSearchCondition('role.id', $this->roleId);
+        $criteria->compare('role_id', $this->role_id);
         $criteria->addSearchCondition('userDetails.fa_name', $this->fa_name);
-        $criteria->addCondition('status!=:status');
-        $criteria->params[':status'] = 'deleted';
-        $criteria->with = array('role', 'userDetails');
+        $criteria->with = array('userDetails');
         $criteria->order = 'status ,t.id DESC';
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

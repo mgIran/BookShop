@@ -15,6 +15,7 @@ class UsersCreditController extends Controller
             'frontend' => array(
                 'buy',
                 'bill',
+                'captcha',
                 'verify'
             )
         );
@@ -26,10 +27,23 @@ class UsersCreditController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess', // perform access control for CRUD operations
+            'checkAccess - captcha', // perform access control for CRUD operations
         );
     }
 
+    /**
+     * Declares class-based actions.
+     */
+    public function actions()
+    {
+        return array(
+            // captcha action renders the CAPTCHA image displayed on the contact page
+            'captcha' => array(
+                'class' => 'CCaptchaAction',
+                'backColor' => 0xFFFFFF,
+            )
+        );
+    }
     /**
      * Buy Credit
      */
@@ -43,9 +57,45 @@ class UsersCreditController extends Controller
         $amounts = array();
         foreach (CJSON::decode($buyCreditOptions->value) as $amount)
             $amounts[$amount] = Controller::parseNumbers(number_format($amount, 0)) . ' تومان';
-
+        
+        // بن خرید
+        $voucherForm = new VoucherForm();
+        if(Yii::app()->user->getState('attempts-voucher') > 2)
+            $voucherForm->scenario = 'withCaptcha';
+        $voucherForm->user_id = Yii::app()->user->getId();
+        if(isset($_POST['VoucherForm']))
+        {
+            $voucherForm->attributes =$_POST['VoucherForm'];
+            if($voucherForm->validate())
+            {
+                $bon = $voucherForm->getBon();
+                $bonRelModel = new UserBonRel();
+                $bonRelModel->user_id= $model->id;
+                $bonRelModel->bon_id = $bon->id;
+                $bonRelModel->date = time();
+                $bonRelModel->amount = $bon->amount;
+                if($bonRelModel->save()){
+                    $creditModel = UserDetails::model()->findByPk($model->id);
+                    $creditModel->credit += $bon->amount;
+                    $creditModel->save();
+                    Yii::app()->user->setState('attempts-voucher', 0);
+                    Yii::app()->user->setFlash('voucher-success', CHtml::encode($bon->title).' با موفقیت اعمال گردید و مبلغ '.
+                        Controller::parseNumbers(number_format($bon->amount))
+                        .' تومان به اعتبار شما اضافه شد.'
+                    );
+                    $this->refresh();
+                }
+            }else
+            {
+                Yii::app()->user->setState('attempts-voucher', Yii::app()->user->getState('attempts-voucher', 0) + 1);
+                if (Yii::app()->user->getState('attempts-voucher') > 2) {
+                    $voucherForm->scenario = 'withCaptcha';
+                }
+            }
+        }
         $this->render('buy', array(
             'model' => $model,
+            'voucherForm' => $voucherForm,
             'amounts' => $amounts,
         ));
     }

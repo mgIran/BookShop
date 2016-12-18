@@ -12,15 +12,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule . index.php
 
-RewriteCond %{HTTP_HOST} ^www\.tablo\.ws$
-RewriteRule ^/?$ "http\:\/\/tablo\.ws\/" [R=301,L]
-
-RewriteCond %{HTTP_HOST} ^5\.144\.130\.40
-RewriteRule (.*) http://tablo.ws/$1 [R=301,L]
-
-RewriteCond %{HTTP_USER_AGENT} libwww-perl.*
-RewriteRule .* ? [F,L]
-
 <IfModule mod_expires.c>
     ExpiresActive on
 

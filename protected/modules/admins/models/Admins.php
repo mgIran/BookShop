@@ -48,10 +48,11 @@ class Admins extends CActiveRecord
             array('email' , 'filter' , 'filter' => 'trim'),
             array('username, password', 'length', 'max'=>100),
             array('username', 'checkExist' , 'on'=>'create'),
-            array('oldPassword ,newPassword ,repeatPassword, email', 'required' , 'on'=>'update'),
-            array('oldPassword', 'oldPass' , 'on'=>'update'),
-            array('repeatPassword', 'compare', 'compareAttribute'=>'newPassword' ,'operator'=>'==', 'message' => 'رمز های عبور همخوانی ندارند' , 'on'=>'update'),
-            array('repeatPassword', 'compare', 'compareAttribute'=>'password' ,'operator'=>'==', 'message' => 'رمز های عبور همخوانی ندارند' , 'on'=>'create'),
+            array('email, role_id', 'required' , 'on'=>'update'),
+            array('oldPassword ,newPassword ,repeatPassword, email, role_id', 'required' , 'on'=>'changePassword'),
+            array('oldPassword', 'oldPass' , 'on'=>'changePassword'),
+            array('repeatPassword', 'compare', 'compareAttribute'=>'newPassword' ,'operator'=>'==', 'message' => 'کلمه های عبور همخوانی ندارند' , 'on'=>'changePassword'),
+            array('repeatPassword', 'compare', 'compareAttribute'=>'password' ,'operator'=>'==', 'message' => 'کلمه های عبور همخوانی ندارند' , 'on'=>'create'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('id, username, password,role_id,email ,roleId', 'safe', 'on'=>'search'),
@@ -99,7 +100,8 @@ class Admins extends CActiveRecord
 
     protected function afterValidate()
     {
-        $this->password = $this->encrypt($this->password);
+        if($this->scenario=='create' || $this->scenario=='changePassword')
+			$this->password = $this->encrypt($this->password);
         return parent::afterValidate();
     }
 

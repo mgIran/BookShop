@@ -21,6 +21,7 @@ class UsersManageController extends Controller
 				'create',
 				'update',
 				'admin',
+				'adminPublishers',
 				'delete',
 				'confirmDevID',
 				'deleteDevID',
@@ -144,9 +145,26 @@ class UsersManageController extends Controller
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Users']))
 			$model->attributes=$_GET['Users'];
-
+		$model->role_id = 1;
 		$this->render('admin',array(
 			'model'=>$model,
+			'role' => 1
+		));
+	}
+
+	/**
+	 * Manages all models.
+	 */
+	public function actionAdminPublishers()
+	{
+		$model=new Users('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Users']))
+			$model->attributes=$_GET['Users'];
+		$model->role_id = 2;
+		$this->render('admin',array(
+			'model'=>$model,
+			'role' => 2
 		));
 	}
 

@@ -6,13 +6,20 @@
 /* @var $registrationCertificateImage array */
 ?>
 <h5>لطفا بر اساس نوع اطلاعات فرم های زیر را پر کنید.</h5>
-
+<?php
+if(!$model->type):
+?>
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#real">شخص حقیقی</a></li>
     <li><a data-toggle="tab" href="#legal">شخص حقوقی</a></li>
 </ul>
-
+<?
+endif;
+?>
 <div class="tab-content">
+    <?php
+    if(!$model->type || $model->type == 'real'):
+    ?>
     <div id="real" class="tab-pane fade in active">
         <div class="form">
 
@@ -89,7 +96,7 @@
 
             <div class="form-group">
                 <?php echo $form->labelEx($model,'credit'); ?>
-                <?php echo $form->textField($model,'credit',array('placeholder'=>$model->getAttributeLabel('credit').' *','class'=>'form-control')); ?>
+                <?php echo $form->textField($model,'credit',array('placeholder'=>$model->getAttributeLabel('credit').' *','class'=>'form-control')); ?>تومان
                 <?php echo $form->error($model,'credit'); ?>
             </div>
 
@@ -125,6 +132,29 @@
                 ));?>
                 <div class="uploader-message error" id="national_card_image_error"></div>
             </div>
+            <h3>اطلاعات مالی ناشر</h3>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_owner'); ?>
+                <?php echo $form->textField($model,'account_owner',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_owner'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'bank_name'); ?>
+                <?php echo $form->textField($model,'bank_name',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'bank_name'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'iban'); ?>
+                <?php echo $form->textField($model,'iban',array('maxlength'=>24,'class'=>'form-control')); ?>
+
+                <?php echo $form->error($model,'iban'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_number'); ?>
+                <?php echo $form->textField($model,'account_number',array('maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_number'); ?>
+            </div>
 
             <div class="buttons">
                 <?php echo CHtml::submitButton('ذخیره',array('class'=>'btn btn-success')); ?>
@@ -134,7 +164,11 @@
 
         </div><!-- form -->
     </div>
-    <div id="legal" class="tab-pane fade">
+    <?php
+    endif;
+    if(!$model->type || $model->type == 'legal'):
+        ?>
+    <div id="legal" class="tab-pane fade <?= $model->type == 'legal'?'in active':'' ?>">
         <div class="form">
 
             <?php $form=$this->beginWidget('CActiveForm', array(
@@ -246,6 +280,30 @@
                 <div class="uploader-message error" id="registration_certificate_image_error"></div>
             </div>
 
+            <h3>اطلاعات مالی ناشر</h3>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_owner'); ?>
+                <?php echo $form->textField($model,'account_owner',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_owner'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'bank_name'); ?>
+                <?php echo $form->textField($model,'bank_name',array('maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'bank_name'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'iban'); ?>
+                <?php echo $form->textField($model,'iban',array('maxlength'=>24,'class'=>'form-control')); ?>
+                <small class="description">شماره شبا بدون IR وارد شود.</small>
+                <?php echo $form->error($model,'iban'); ?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'account_number'); ?>
+                <?php echo $form->textField($model,'account_number',array('maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'account_number'); ?>
+            </div>
+
             <div class="buttons">
                 <?php echo CHtml::submitButton('ذخیره',array('class'=>'btn btn-success')); ?>
             </div>
@@ -254,4 +312,7 @@
 
         </div><!-- form -->
     </div>
+    <?php
+    endif;
+    ?>
 </div>

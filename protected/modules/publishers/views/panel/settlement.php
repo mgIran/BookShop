@@ -7,6 +7,16 @@
 /* @var $formDisabled boolean */
 ?>
 <div class="white-form">
+
+    <?php
+    if(!$userDetailsModel->validateAccountingInformation()){
+        $message['type'] = 'danger';
+        $message['message'] = 'اطلاعات بانکی شما به منظور انجام تسویه حساب ناقص است و تا زمانی که این اطلاعات تکمیل نشود تسویه حساب برای شما انجام نمی شود.';
+        $this->renderPartial('users.views.public._message' ,array(
+            'data' => $message
+        ));
+    }
+    ?>
     <h3>تسویه حساب</h3>
     <p class="description">می توانید ماهیانه با کتابیک تسویه حساب کنید.</p>
 
@@ -28,7 +38,7 @@
         )
     ));?>
 
-    <label>مبلغ قابل تسویه این ماه :</label><span><?php echo number_format($userDetailsModel->getSettlementAmount(), 0);?> تومان</span>
+    <label>مبلغ قابل تسویه این ماه :</label><span><?php echo Controller::parseNumbers(number_format($userDetailsModel->getSettlementAmount(), 0));?> تومان</span>
     <div class="form-row">
 <!--        --><?php //echo $form->checkBox($userDetailsModel, 'monthly_settlement', array(
 //            'onchange'=>"$('#UserDetails_iban').prop('disabled', function(i, v){return !v;});",
@@ -40,22 +50,40 @@
         <span>: مبلغ قابل تسویه حداقل <?= Controller::parseNumbers(number_format($min_credit)) ?> تومان است که 20اُم هر ماه به شماره شبای زیر واریز می شود.</span>
     </div>
     <div class="form-row">
+        <h4>اطلاعات حساب بانکی</h4>
+        <div class="iban-container">
+            <?php echo $form->labelEx($userDetailsModel, 'account_owner');?>
+            <?php echo $form->textField($userDetailsModel, 'account_owner', array(
+                'class'=>'form-control',
+                'maxLength' => 100,
+            ));?>
+            <?php echo $form->error($userDetailsModel, 'account_owner');?>
+        </div>
+        <div class="iban-container">
+            <?php echo $form->labelEx($userDetailsModel, 'account_number');?>
+            <?php echo $form->textField($userDetailsModel, 'account_number', array(
+                'class'=>'form-control',
+                'maxLength' => 50,
+            ));?>
+            <?php echo $form->error($userDetailsModel, 'account_number');?>
+        </div>
+        <div class="iban-container">
+            <?php echo $form->labelEx($userDetailsModel, 'bank_name');?>
+            <?php echo $form->textField($userDetailsModel, 'bank_name', array(
+                'class'=>'form-control',
+                'maxLength' => 50,
+            ));?>
+            <?php echo $form->error($userDetailsModel, 'bank_name');?>
+        </div>
         <div class="iban-container">
             <?php echo $form->label($userDetailsModel, 'iban');?>
             <div class="input-group">
-                <?php
-                if(!$formDisabled)
-                    $disabled=(!is_null($userDetailsModel->iban))?false:true;
-                else
-                    $disabled=true;
-                ?>
                 <?php echo $form->textField($userDetailsModel, 'iban', array(
                     'class'=>'form-control',
                     'maxLength' => 24,
                     'aria-describedby'=>'basic-addon1',
                     'style'=>'direction: ltr;',
                     'placeholder'=>'100020003000400050006047:مثال',
-                    'disabled'=>$disabled,
                 ));?>
                 <span id="basic-addon1" class="input-group-addon">IR</span>
             </div>
@@ -67,16 +95,9 @@
                 'id'=>'settlement-button',
                 'disabled'=>$formDisabled,
             ));?>
-<!--            <a data-toggle="collapse" href="#help-box" class="btn btn-danger pull-left">راهنما</a>-->
         </div>
     </div>
     <?php $this->endWidget();?>
-
-    <div class="panel panel-warning settlement-help">
-        <div id="help-box" class="panel-collapse collapse">
-            <div class="panel-body"><?php echo $helpText;?></div>
-        </div>
-    </div>
 
     <div class="settlement-history">
         <h3>تاریخچه تسویه حساب</h3>
@@ -87,6 +108,9 @@
                     <td>مبلغ</td>
                     <td>تاریخ</td>
                     <td>کد رهگیری</td>
+                    <td>صاحب حساب</td>
+                    <td>شماره حساب</td>
+                    <td>نام بانک</td>
                     <td>شماره شبا</td>
                 </tr>
             </thead>

@@ -40,9 +40,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(function () {
-        $("#yw0_button").click();
-    });
-</script>
+<?php
+Yii::app()->clientScript->registerScript('click-on-captcha', '$("#yw0_button").click();',CClientScript::POS_READY);

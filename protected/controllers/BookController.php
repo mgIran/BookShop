@@ -287,7 +287,7 @@ class BookController extends Controller
                     <td>' . JalaliDate::date('d F Y - H:i', $buy->date) . '</td>
                 </tr>
             </table>';
-        Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+        Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail']);
     }
 
     /**
@@ -705,6 +705,8 @@ class BookController extends Controller
                     else
                         $sql .= " OR (";
                     $sql .= "t.title regexp :term$key OR t.description regexp :term$key OR t.publisher_name regexp :term$key OR userDetails.publisher_id regexp :term$key OR userDetails.fa_name regexp :term$key OR category.title regexp :term$key OR persons.name_family regexp :term$key)";
+                    // with correction
+                    //$sql .= "t.title sounds like :term$key OR t.description sounds like :term$key OR t.publisher_name sounds like :term$key OR userDetails.publisher_id sounds like :term$key OR userDetails.fa_name sounds like :term$key OR category.title sounds like :term$key OR persons.name_family sounds like :term$key)";
                     $criteria->params[":term$key"] = $term;
                 }
             $criteria->together = true;

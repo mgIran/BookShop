@@ -29,7 +29,8 @@ class PublishersPanelController extends Controller
                 'uploadNationalCardImage',
                 'uploadRegistrationCertificateImage',
                 'update',
-                'create'
+                'create',
+                'excel'
             )
         );
     }
@@ -378,7 +379,6 @@ class PublishersPanelController extends Controller
         Yii::app()->getModule('users');
         Yii::app()->getModule('pages');
         $userDetailsModel=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
-        $helpText=Pages::model()->findByPk(6);
         $userDetailsModel->setScenario('update-settlement');
         // Get history of settlements
         $criteria=new CDbCriteria();
@@ -391,13 +391,15 @@ class PublishersPanelController extends Controller
         $this->performAjaxValidation($userDetailsModel);
 
         if(isset($_POST['UserDetails'])) {
-//            $userDetailsModel->monthly_settlement=$_POST['UserDetails']['monthly_settlement'];
-//            if($_POST['UserDetails']['monthly_settlement']==1)
             $userDetailsModel->iban=$_POST['UserDetails']['iban'];
-//            else
-//                $userDetailsModel->iban=null;
+            $userDetailsModel->account_owner=$_POST['UserDetails']['account_owner'];
+            $userDetailsModel->account_number=$_POST['UserDetails']['account_number'];
+            $userDetailsModel->bank_name=$_POST['UserDetails']['bank_name'];
             if($userDetailsModel->save())
+            {
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                $this->refresh();
+            }
             else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
         }
@@ -406,7 +408,6 @@ class PublishersPanelController extends Controller
 
         $this->render('settlement', array(
             'userDetailsModel'=>$userDetailsModel,
-            'helpText'=>$purifier->purify($helpText->summary),
             'settlementHistory'=>$settlementHistory,
             'min_credit' => $setting->value,
             'formDisabled'=>false,
@@ -510,20 +511,34 @@ class PublishersPanelController extends Controller
                 Yii::app()->user->setFlash('failed', 'کد رهگیری نمی تواند خالی باشد.');
                 $this->refresh();
             }
+            if(!isset($_POST['amount']) or $_POST['amount']==''){
+                Yii::app()->user->setFlash('failed', 'مبلغ تسویه نمی تواند خالی باشد.');
+                $this->refresh();
+            }
+            $amount = doubleval($_POST['amount']);
+            if(!$amount){
+                Yii::app()->user->setFlash('failed', 'مبلغ تسویه نامعتبر است. لطفا مبلغ را با دقت وارد کنید.');
+                $this->refresh();
+            }
+
             $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>$_POST['user_id']));
             $model=new UserSettlement();
             $model->user_id=$userDetails->user_id;
             $model->token=$_POST['token'];
-            $model->amount=$userDetails->getSettlementAmount();
-            $model->date=time();
+            $model->account_owner= $userDetails->account_owner;
+            $model->account_number= $userDetails->account_number;
+            $model->bank_name= $userDetails->bank_name;
             $model->iban=$userDetails->iban;
+            $model->amount= $amount;
+            $model->date=time();
             if($model->save()) {
-                $userDetails->credit=$userDetails->credit-$userDetails->getSettlementAmount();
+                $userDetails->credit=$userDetails->credit-$amount;
                 $userDetails->save();
                 $this->createLog('مبلغ '.Controller::parseNumbers(number_format($model->amount)).' تومان در تاریخ '.
                     JalaliDate::date('Y/m/d - H:i',$model->date).
                     ' با کد رهگیری '.$model->token.' به شماره شبای IR'.$model->iban.' واریز شد.',$userDetails->user_id);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                $this->refresh();
             }
             else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
@@ -536,17 +551,11 @@ class PublishersPanelController extends Controller
             'criteria'=>$criteria,
             'pagination' => array('pageSize'=>20)
         ));
-        Yii::app()->getModule('setting');
-        $setting=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
-        $criteria=new CDbCriteria();
-//        $criteria->addCondition('monthly_settlement=1');
-        $criteria->addCondition('iban IS NOT NULL AND iban != ""');
-        $criteria->addCondition('credit>:credit');
-        $criteria->params=array(':credit'=>$setting->value);
+        
+        $criteria=UserDetails::SettlementCriteria();
         $settlementRequiredUsers=new CActiveDataProvider('UserDetails', array(
             'criteria'=>$criteria,
         ));
-
         $this->render('manage_settlement', array(
             'settlementHistory'=>$settlementHistory,
             'settlementRequiredUsers'=>$settlementRequiredUsers,
@@ -570,18 +579,7 @@ class PublishersPanelController extends Controller
      * export excel
      */
     public function actionExcel(){
-        Yii::app()->getModule('setting');
-        $setting=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
-        $criteria=new CDbCriteria();
-        $criteria->addCondition('iban IS NOT NULL AND iban != ""');
-        $criteria->addCondition('credit>:credit');
-        $criteria->params[':credit']=$setting->value;
-        if(isset($_POST['Settlement'])){
-            $criteria->addCondition('date > :from_date');
-            $criteria->addCondition('date < :to_date');
-            $criteria->params[':from_date'] = $_POST['from_date_altField'];
-            $criteria->params[':to_date'] = $_POST['to_date_altField'];
-        }
+        $criteria=UserDetails::SettlementCriteria();
         $settlementUsers=UserDetails::model()->findAll($criteria);
 
         $objPHPExcel = Yii::app()->yexcel->createPHPExcel();
@@ -592,24 +590,29 @@ class PublishersPanelController extends Controller
             ->setTitle("YiiExcel Test Document")
             ->setSubject("Settlement Users Detail");
         $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setRightToLeft(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()
             ->setCellValue('A1', 'نام انتشارات')
             ->setCellValue('B1', 'نام صاحب حساب')
-            ->setCellValue('C1', 'شماره شبا')
-            ->setCellValue('D1', 'مبلغ قابل تسویه (تومان)');
+            ->setCellValue('C1', 'شماره حساب')
+            ->setCellValue('D1', 'نام بانک')
+            ->setCellValue('E1', 'شماره شبا')
+            ->setCellValue('F1', 'مبلغ قابل تسویه (تومان)');
 
         foreach ($settlementUsers as $key => $settlementUser){
             $row = $key+2;
             $objPHPExcel->getActiveSheet()
                 ->setCellValue('A'.$row, $settlementUser->publisher_id)
-                ->setCellValue('B'.$row, $settlementUser->fa_name)
-                ->setCellValue('C'.$row, "IR".$settlementUser->iban)
-                ->setCellValue('D'.$row, number_format($settlementUser->getSettlementAmount()));
+                ->setCellValue('B'.$row, $settlementUser->account_owner)
+                ->setCellValue('C'.$row, '"'.$settlementUser->account_number.'"')
+                ->setCellValue('D'.$row, $settlementUser->bank_name)
+                ->setCellValue('E'.$row, "IR".$settlementUser->iban)
+                ->setCellValue('F'.$row, number_format($settlementUser->getSettlementAmount()));
         }
         // Save a xls file
         $filename = 'Settlement Publishers';
