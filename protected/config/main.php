@@ -1,21 +1,21 @@
 <?php
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 return array(
-    //'onBeginRequest'=>create_function('$event', 'return ob_start("ob_gzhandler");'),
-    //'onEndRequest'=>create_function('$event', 'return ob_end_flush();'),
+	//'onBeginRequest'=>create_function('$event', 'return ob_start("ob_gzhandler");'),
+	//'onEndRequest'=>create_function('$event', 'return ob_end_flush();'),
 	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'کتابیک',
-    'timeZone' => 'Asia/Tehran',
-    'theme' => 'abound',
+	'timeZone' => 'Asia/Tehran',
+	'theme' => 'abound',
 	'sourceLanguage' => '00',
-    'language' => 'fa_ir',
-		// preloading 'log' component
+	'language' => 'fa_ir',
+	// preloading 'log' component
 	'preload'=>array('log','userCounter','chartjs'),
 
 	// autoloading model and component classes
 	'import'=>array(
-        'application.vendor.*',
-        'application.models.*',
+		'application.vendor.*',
+		'application.models.*',
 		'application.components.*',
 		'ext.yiiSortableModel.models.*',
 	),
@@ -29,12 +29,12 @@ return array(
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
-        'admins',
-        'users',
-        'setting',
-        'pages',
-        'publishers',
-        'manageBooks',
+		'admins',
+		'users',
+		'setting',
+		'pages',
+		'publishers',
+		'manageBooks',
 		'tickets',
 		'advertises',
 		'news',
@@ -102,33 +102,34 @@ return array(
 //		'assetManager' => array(
 //			'linkAssets' => true
 //		),
-        'userCounter' => array(
-            'class' => 'application.components.UserCounter',
-            'tableUsers' => 'ym_counter_users',
-            'tableSave' => 'ym_counter_save',
-            'autoInstallTables' => true,
-            'onlineTime' => 5, // min
-        ),
+		'userCounter' => array(
+			'class' => 'application.components.UserCounter',
+			'tableUsers' => 'ym_counter_users',
+			'tableSave' => 'ym_counter_save',
+			'autoInstallTables' => true,
+			'onlineTime' => 5, // min
+		),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
-            'class' => 'WebUser',
+			'class' => 'WebUser',
 			'loginUrl'=>array('/login'),
 		),
-        'authManager'=>array(
-            'class'=>'CDbAuthManager',
-            'connectionID'=>'db',
-        ),
+		'authManager'=>array(
+			'class'=>'CDbAuthManager',
+			'connectionID'=>'db',
+		),
 		'chartjs' => array('class' => 'chartjs.components.ChartJs'),
 		// uncomment the following to enable URLs in path-format
-        // @todo change rules in projects
+		// @todo change rules in projects
 		'urlManager'=>array(
 			'urlFormat'=>'path',
-            'showScriptName'=>false,
-            'appendParams'=>true,
+			'showScriptName'=>false,
+			'appendParams'=>true,
 			'rules'=>array(
 				'<action:(about|contactus|help|publishers)>' => 'site/<action>',
-				'<action:(logout|login|register|dashboard|googleLogin)>' => 'users/public/<action>',
+				'login' => 'users/public/index',
+				'<action:(logout|register|dashboard|googleLogin)>' => 'users/public/<action>',
 				'/help'=>'site/help',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
@@ -140,18 +141,18 @@ return array(
 				'category/<action:\w+>'=>'bookCategories/<action>',
 				'news/category/<action:\w+>'=>'news/categoriesManage/<action>',
 				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
-                '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
-                '<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
-                '<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/view',
-                '<module:\w+>/<controller:\w+>/<id:\d+>/<title:\w+>'=>'<module>/<controller>/view',
+				'<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
+				'<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
+				'<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/view',
+				'<module:\w+>/<controller:\w+>/<id:\d+>/<title:\w+>'=>'<module>/<controller>/view',
 				'<module:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<module>/manage/<action>',
-                '<controller:\w+>/<id:\d+>'=>'<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-                '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action>/view',
-                '<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>',
-                '<module:\w+>/<controller:\w+>/<id:\d+>'=>'<module>/<controller>/view',
-            ),
+				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				'<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action>/view',
+				'<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>',
+				'<module:\w+>/<controller:\w+>/<id:\d+>'=>'<module>/<controller>/view',
+			),
 		),
 
 		// database settings are configured in database.php
@@ -165,53 +166,53 @@ return array(
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
-                array(
-                    'class' => 'CFileLogRoute',
-                    'levels'=>'error, warning, trace, info',
-                    'categories'=>'application.*',
-                ),
-                // uncomment the following to show log messages on web pages
-                array(
-                    'class' => 'CWebLogRoute',
-                    'enabled' => YII_DEBUG,
-                    'levels'=>'error, warning, trace, info',
-                    'categories'=>'application.*',
-                    'showInFireBug' => true,
-                ),
+				array(
+					'class' => 'CFileLogRoute',
+					'levels'=>'error, warning, trace, info',
+					'categories'=>'application.*',
+				),
+				// uncomment the following to show log messages on web pages
+				array(
+					'class' => 'CWebLogRoute',
+					'enabled' => YII_DEBUG,
+					'levels'=>'error, warning, trace, info',
+					'categories'=>'application.*',
+					'showInFireBug' => true,
+				),
 			),
 		),
-        'clientScript'=>array(
-            //'class'=>'ext.minScript.components.ExtMinScript',
-            'coreScriptPosition' => CClientScript::POS_HEAD,
-            'defaultScriptFilePosition' => CClientScript::POS_END,
-        ),
-    ),
-    'controllerMap' => array(
-        'min' => array(
-            'class' =>'ext.minScript.controllers.ExtMinScriptController',
-        ),
+		'clientScript'=>array(
+			//'class'=>'ext.minScript.components.ExtMinScript',
+			'coreScriptPosition' => CClientScript::POS_HEAD,
+			'defaultScriptFilePosition' => CClientScript::POS_END,
+		),
+	),
+	'controllerMap' => array(
+		'min' => array(
+			'class' =>'ext.minScript.controllers.ExtMinScriptController',
+		),
 		'category' => array(
-            'class' =>'application.controllers.BookCategoriesController',
-        ),
+			'class' =>'application.controllers.BookCategoriesController',
+		),
 //		'news.category' => array(
 //            'class' =>'application.modules.news.controllers.NewsCategoriesManageController',
 //        ),
-    ),
+	),
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// @todo change webmail of emails
 		'adminEmail'=>'webmaster@ketabic.ir',
-        'noReplyEmail' => 'noreply@ketabic.ir',
+		'noReplyEmail' => 'noreply@ketabic.ir',
 		'SMTP' => array(
 			'Host' => 'mail.ketabic.ir',
 			'Port' => 587,
 			'Secure' => 'tls',
 			'Username' => 'noreply@ketabic.ir',
 			'Password' => '!@ketabic1395',
-        ),
-        'mailTheme'=>
-            '<h2 style="margin-bottom:0;box-sizing:border-box;display: block;width: 100%;background-color: #77c159;line-height:60px;color:#fff;font-size: 24px;text-align: right;padding-right: 50px">کتابیک<span style="font-size: 14px;color:#f0f0f0"> - مرجع خرید و فروش و کتابخوانی آنلاین</span></h2>
+		),
+		'mailTheme'=>
+			'<h2 style="margin-bottom:0;box-sizing:border-box;display: block;width: 100%;background-color: #77c159;line-height:60px;color:#fff;font-size: 24px;text-align: right;padding-right: 50px">کتابیک<span style="font-size: 14px;color:#f0f0f0"> - مرجع خرید و فروش و کتابخوانی آنلاین</span></h2>
              <div style="display: inline-block;width: 100%;font-family:tahoma;line-height: 28px;">
                 <div style="direction:rtl;display:block;overflow:hidden;border:1px solid #efefef;text-align: center;padding:15px;">{MessageBody}</div>
              </div>
