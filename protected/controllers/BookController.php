@@ -84,85 +84,88 @@ class BookController extends Controller
     {
         Yii::app()->theme = 'frontend';
         $this->layout = 'panel';
-
+        $userID = Yii::app()->user->getId();
         $model = $this->loadModel($id);
         $price = $model->hasDiscount() ? $model->offPrice : $model->price;
-        $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
+        $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID ,'book_id' => $id));
 
         Yii::app()->getModule('users');
-        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        $user = Users::model()->findByPk($userID);
         /* @var $user Users */
+        if($model->publisher_id != $userID){
+            $buyResult = false;
+            if(isset($_POST['Buy'])){
+                if(isset($_POST['Buy']['credit'])){
+                    if($user->userDetails->credit < $model->price){
+                        Yii::app()->user->setFlash('credit-failed' ,'اعتبار فعلی شما کافی نیست!');
+                        Yii::app()->user->setFlash('failReason' ,'min_credit');
+                        $this->refresh();
+                    }
 
-        $buyResult = false;
-        if (isset($_POST['Buy'])) {
-            if (isset($_POST['Buy']['credit'])) {
-                if ($user->userDetails->credit < $model->price) {
-                    Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
-                    Yii::app()->user->setFlash('failReason', 'min_credit');
+                    $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $userID));
+                    $userDetails->setScenario('update-credit');
+                    $userDetails->credit = $userDetails->credit - $price;
+                    $userDetails->score = $userDetails->score + 1;
+                    if($userDetails->save())
+                        $buyResult = true;
+                }elseif(isset($_POST['Buy']['gateway'])){
+                    // Save payment
+                    $transaction = new UserTransactions();
+                    $transaction->user_id = $userID;
+                    $transaction->amount = $price;
+                    $transaction->date = time();
+                    $transaction->gateway_name = 'زرین پال';
+                    $transaction->type = 'book';
+
+                    if($transaction->save()){
+                        // Redirect to payment gateway
+                        $MerchantID = $this->merchantID;  //Required
+                        $Amount = intval($price); //Amount will be based on Toman  - Required
+                        $Description = 'خرید کتاب از ' . Yii::app()->name;  // Required
+                        $Email = Yii::app()->user->email; // Optional
+                        $Mobile = '0'; // Optional
+
+                        $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);  // Required
+
+                        include("lib/nusoap.php");
+                        $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl' ,'wsdl');
+                        $client->soap_defencoding = 'UTF-8';
+                        $result = $client->call('PaymentRequest' ,array(
+                            array(
+                                'MerchantID' => $MerchantID ,
+                                'Amount' => $Amount ,
+                                'Description' => $Description ,
+                                'Email' => $Email ,
+                                'Mobile' => $Mobile ,
+                                'CallbackURL' => $CallbackURL
+                            )
+                        ));
+
+                        //Redirect to URL You can do it also by creating a form
+                        if($result['Status'] == 100)
+                            $this->redirect('https://www.zarinpal.com/pg/StartPay/' . $result['Authority']);
+                        else
+                            echo 'ERR: ' . $result['Status'];
+                    }
+                }
+
+                if($buyResult){
+                    $this->saveBuyInfo($model ,$user ,'credit');
+                    Yii::app()->user->setFlash('success' ,'خرید شما با موفقیت انجام شد.');
                     $this->refresh();
-                }
-
-                $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
-                $userDetails->setScenario('update-credit');
-                $userDetails->credit = $userDetails->credit - $price;
-                $userDetails->score = $userDetails->score + 1;
-                if ($userDetails->save())
-                    $buyResult = true;
-            } elseif (isset($_POST['Buy']['gateway'])) {
-                // Save payment
-                $transaction = new UserTransactions();
-                $transaction->user_id = Yii::app()->user->getId();
-                $transaction->amount = $price;
-                $transaction->date = time();
-                $transaction->gateway_name = 'زرین پال';
-                $transaction->type = 'book';
-
-                if ($transaction->save()) {
-                    // Redirect to payment gateway
-                    $MerchantID = $this->merchantID;  //Required
-                    $Amount = intval($price); //Amount will be based on Toman  - Required
-                    $Description = 'خرید کتاب از ' . Yii::app()->name;  // Required
-                    $Email = Yii::app()->user->email; // Optional
-                    $Mobile = '0'; // Optional
-
-                    $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);  // Required
-
-                    include("lib/nusoap.php");
-                    $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
-                    $client->soap_defencoding = 'UTF-8';
-                    $result = $client->call('PaymentRequest', array(
-                        array(
-                            'MerchantID' => $MerchantID,
-                            'Amount' => $Amount,
-                            'Description' => $Description,
-                            'Email' => $Email,
-                            'Mobile' => $Mobile,
-                            'CallbackURL' => $CallbackURL
-                        )
-                    ));
-
-                    //Redirect to URL You can do it also by creating a form
-                    if ($result['Status'] == 100)
-                        $this->redirect('https://www.zarinpal.com/pg/StartPay/' . $result['Authority']);
-                    else
-                        echo 'ERR: ' . $result['Status'];
-                }
+                }else
+                    Yii::app()->user->setFlash('failed' ,'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
             }
-
-            if ($buyResult) {
-                $this->saveBuyInfo($model, $user, 'credit');
-                Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-            } else
-                Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+            $user->refresh();
+        }else{
+            Yii::app()->user->setFlash('success' ,'شما ناشر این کتاب هستید ');
         }
 
-        $user->refresh();
-
-        $this->render('buy', array(
-            'model' => $model,
-            'price' => $price,
-            'user' => $user,
-            'bought' => ($buy) ? true : false,
+        $this->render('buy' ,array(
+            'model' => $model ,
+            'price' => $price ,
+            'user' => $user ,
+            'bought' => ($buy) ? true : false ,
         ));
     }
 

@@ -94,7 +94,7 @@ class AjaxUploadAction extends CAction
 
             if (isset($_FILES[$this->attribute])) {
                 $file = $_FILES[$this->attribute];
-                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
                 switch ($this->rename) {
                     case 'random':
                         $filename = Controller::generateRandomString($this->randomLength).time();

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "ym_users".
+ * This is the model class for table "{{users}}".
  *
- * The followings are the available columns in table 'ym_users':
+ * The followings are the available columns in table '{{users}}':
  * @property string $id
  * @property string $username
  * @property string $password
@@ -34,7 +34,7 @@ class Users extends CActiveRecord
      */
     public function tableName()
     {
-        return 'ym_users';
+        return '{{users}}';
     }
 
     public $statusLabels = array(

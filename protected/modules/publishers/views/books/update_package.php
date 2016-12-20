@@ -72,15 +72,15 @@ $this->menu = array(
                 <?php echo $form->textField($model , 'price', array('class'=>'form-control' , 'size'=>60));?>
                 <?php echo $form->error($model , 'price'); ?>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group clearfix" style="margin-top: 15px;">
-                <?php echo $form->checkBox($model,'sale_printed', array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
-                <?php echo CHtml::label('میخواهم نسخه چاپی این کتاب را هم بفروشم.', 'sale_printed');?>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group <?= $model->sale_printed?'collapsed':'collapse' ?> clearfix" id="printed-price">
-                <?php echo $form->labelEx($model , 'printed_price'); ?>
-                <?php echo $form->textField($model , 'printed_price', array('class'=>'form-control' , 'size'=>60));?>
-                <?php echo $form->error($model , 'printed_price'); ?>
-            </div>
+<!--            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group clearfix" style="margin-top: 15px;">-->
+<!--                --><?php //echo $form->checkBox($model,'sale_printed', array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
+<!--                --><?php //echo CHtml::label('میخواهم نسخه چاپی این کتاب را هم بفروشم.', 'sale_printed');?>
+<!--            </div>-->
+<!--            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group --><?//= $model->sale_printed?'collapsed':'collapse' ?><!-- clearfix" id="printed-price">-->
+<!--                --><?php //echo $form->labelEx($model , 'printed_price'); ?>
+<!--                --><?php //echo $form->textField($model , 'printed_price', array('class'=>'form-control' , 'size'=>60));?>
+<!--                --><?php //echo $form->error($model , 'printed_price'); ?>
+<!--            </div>-->
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group buttons">
                 <?php echo $form->hiddenField($model ,'book_id');?>
                 <?php echo CHtml::submitButton('ویرایش',array('class' => 'btn btn-success')); ?>

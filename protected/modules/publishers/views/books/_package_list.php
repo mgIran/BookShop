@@ -8,7 +8,7 @@
     <td><?php echo JalaliDate::date('d F Y', $data->create_date);?></td>
     <td><?php if($data->status=='accepted')echo JalaliDate::date('d F Y', $data->publish_date);else echo '-';?></td>
     <td><?php echo Controller::parseNumbers(number_format($data->price)).' تومان'?></td>
-    <td><?php echo Controller::parseNumbers(number_format($data->printed_price)).' تومان'?></td>
+<!--    <td>--><?php //echo Controller::parseNumbers(number_format($data->printed_price)).' تومان'?><!--</td>-->
     <td>
         <span style="margin-right: 6px;font-size: 17px">
             <a class="icon-pencil text-info" href="<?php echo $this->createUrl('/publishers/books/updatePackage/'.$data->id);?>"></a>

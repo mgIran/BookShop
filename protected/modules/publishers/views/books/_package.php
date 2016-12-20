@@ -18,7 +18,7 @@ Yii::app()->clientScript->registerCss('inline',"
                 <th>تاریخ بارگذاری</th>
                 <th>تاریخ انتشار</th>
                 <th>قیمت نسخه دیجیتال</th>
-                <th>قیمت نسخه چاپی</th>
+<!--                <th>قیمت نسخه چاپی</th>-->
                 <th>عملیات</th>
                 <th>وضعیت</th>
             </tr>
@@ -86,13 +86,13 @@ Yii::app()->clientScript->registerCss('inline',"
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال * (تومان)'));?>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-top: 15px;">
-                                        <?php echo CHtml::checkBox('sale_printed', false, array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
-                                        <?php echo CHtml::label('میخواهم نسخه چاپی این کتاب را هم بفروشم.', 'sale_printed');?>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse" id="printed-price">
-                                        <?php echo CHtml::textField('printed_price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه چاپی * (تومان)'));?>
-                                    </div>
+<!--                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-top: 15px;">-->
+<!--                                        --><?php //echo CHtml::checkBox('sale_printed', false, array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
+<!--                                        --><?php //echo CHtml::label('میخواهم نسخه چاپی این کتاب را هم بفروشم.', 'sale_printed');?>
+<!--                                    </div>-->
+<!--                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse" id="printed-price">-->
+<!--                                        --><?php //echo CHtml::textField('printed_price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه چاپی * (تومان)'));?>
+<!--                                    </div>-->
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">

@@ -343,10 +343,20 @@ class UsersPublicController extends Controller
         $boughtBooks=array();
         foreach($user->bookBuys as $bookBuy)
             array_push($boughtBooks, $bookBuy->book);
+        $myBooks = false;
+        if($user->role_id == 2){
+            $criteria = Books::model()->getValidBooks();
+            $criteria->addCondition('publisher_id = :publisher_id');
+            $criteria->params[':publisher_id'] = $user->id;
+            $myBooks = new CActiveDataProvider("Books",array(
+                'criteria' => $criteria
+            ));
+        }
 
         $this->render('library', array(
             'user' => $user,
             'boughtBooks' => $boughtBooks,
+            'myBooks' => $myBooks,
         ));
     }
 
