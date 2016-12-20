@@ -8,7 +8,7 @@
         <div class="container">
             <h1><?= CHtml::encode($model->title) ?></h1>
             <div class="page-info">
-                <div>تاریخ انتشار<a><?= JalaliDate::date('Y F d - h:i') ?></a></div>
+                <div>تاریخ انتشار<a><?= JalaliDate::date('d F Y - h:i') ?></a></div>
                 <div>دسته بندی<a href="<?php echo $this->createUrl('/news/category/'.$model->category_id.'/'.urlencode($model->category->title));?>"
                     ><?= CHtml::encode($model->category->title) ?></a></div>
             </div>
