@@ -4,6 +4,7 @@
 /* @var $similar CActiveDataProvider */
 /* @var $bookmarked boolean */
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
+$previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
 ?>
 <svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -186,6 +187,11 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                                     <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                 <?
                                 endif;
+                                ?>
+                                <?php
+                                if($model->preview_file && file_exists($previewPath.$model->preview_file)){
+                                    echo '<a href="'.Yii::app()->baseUrl.'/uploads/books/previews/'.$model->preview_file.'" class="btn-blue" style="color: #fff;display: block;margin-top: 4px;overflow: hidden;width: 100%;"><i class="add-to-library-icon"></i>دریافت پیش نمایش</a>';
+                                }
                                 ?>
                                 <div class="small-info">
                                     <p>دسته بندی: <span><a href="<?= $this->createUrl('/category/'.$model->category_id.'/'.urldecode($model->category->title)) ?>" ><?= CHtml::encode($model->category->title) ?></a></span></p>
