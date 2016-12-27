@@ -15,32 +15,8 @@ class ManageBooksBaseManageController extends Controller
     public static function actionsType()
     {
         return array(
-            'backend' => array(
-                'index' ,
-                'view' ,
-                'create' ,
-                'update' ,
-                'admin' ,
-                'delete' ,
-                'upload' ,
-                'deleteUpload' ,
-                'uploadFile' ,
-                'deleteUploadFile' ,
-                'changeConfirm' ,
-                'changePackageStatus' ,
-                'deletePackage' ,
-                'savePackage' ,
-                'images' ,
-                'download' ,
-                'updatePackage' ,
-                'downloadPackage' ,
-                'discount' ,
-                'createDiscount' ,
-                'updateDiscount' ,
-                'deleteDiscount' ,
-                'uploadPreview',
-                'deleteUploadedPreview',
-            )
+            'backend' => array('index' , 'view' , 'create' , 'update' , 'admin' , 'delete' , 'upload' , 'deleteUpload' , 'uploadFile' , 'deleteUploadFile' ,
+                'changeConfirm' , 'changePackageStatus' , 'deletePackage' , 'savePackage' , 'images' , 'download' , 'updatePackage' , 'downloadPackage' , 'discount' , 'createDiscount' , 'updateDiscount' , 'deleteDiscount' , 'uploadPreview', 'deleteUploadedPreview')
         );
     }
 

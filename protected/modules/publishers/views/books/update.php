@@ -30,6 +30,7 @@
                 <?php $this->renderPartial('_form', array(
                     'model'=>$model,
                     'icon' => $icon,
+                    'previewFile' => $previewFile,
                     'tax'=>$tax,
                     'commission'=>$commission,
                 ));?>

@@ -264,6 +264,7 @@ class PublishersBooksController extends Controller
         if (!is_dir($bookFilesDIR))
             mkdir($bookFilesDIR);
         $bookIconsUrl = Yii::app()->createAbsoluteUrl('/uploads/books/icons');
+        $bookPreviewUrl = Yii::app()->createAbsoluteUrl('/uploads/books/previews');
         $bookImagesUrl = Yii::app()->createAbsoluteUrl('/uploads/books/images');
 
         // Uncomment the following line if AJAX validation is needed
@@ -281,7 +282,7 @@ class PublishersBooksController extends Controller
         if (!is_null($model->preview_file))
             $previewFile = array(
                 'name' => $model->preview_file,
-                'src' => $bookPreviewDIR . '/' . $model->preview_file,
+                'src' => $bookPreviewUrl . '/' . $model->preview_file,
                 'size' => filesize($bookPreviewDIR . $model->preview_file),
                 'serverName' => $model->preview_file
             );
@@ -319,6 +320,11 @@ class PublishersBooksController extends Controller
                 $file = $_POST['Books']['icon'];
                 $icon = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
                 $iconFlag = true;
+            }
+            if (isset($_POST['Books']['preview_file']) && file_exists($tmpDIR . $_POST['Books']['preview_file'])) {
+                $file = $_POST['Books']['preview_file'];
+                $previewFile = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
+                $previewFileFlag = true;
             }
             $model->attributes = $_POST['Books'];
             $model->confirm = 'pending';
