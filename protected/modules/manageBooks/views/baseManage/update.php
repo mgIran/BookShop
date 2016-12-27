@@ -30,6 +30,7 @@ if(isset($_GET['step']))
     <div id="general" class="tab-pane fade <?= ($step == 1?'in active':''); ?>">
         <?php $this->renderPartial('_form', array(
             'model'=>$model,'icon'=>$icon,
+            'previewFile'=>$previewFile,
             'tax'=>$tax,
             'commission'=>$commission,
         )); ?>

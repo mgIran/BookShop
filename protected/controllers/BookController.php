@@ -12,22 +12,8 @@ class BookController extends Controller
     public static function actionsType()
     {
         return array(
-            'frontend' => array(
-                'discount',
-                'tag',
-                'search',
-                'view',
-                'download',
-                'publisher',
-                'buy',
-                'bookmark',
-                'rate',
-                'verify'
-            ),
-            'backend' => array(
-                'reportSales',
-                'reportIncome'
-            )
+            'frontend' => array('discount' ,'tag' ,'search' ,'view' ,'download' ,'publisher' ,'buy' ,'bookmark' ,'rate' ,'verify' ,'updateVersion') ,
+            'backend' => array('reportSales' ,'reportIncome')
         );
     }
 
@@ -37,8 +23,8 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + reportSales, reportIncome, buy, bookmark, rate, verify',
-            'postOnly + bookmark',
+            'checkAccess + reportSales, reportIncome, buy, bookmark, rate, verify, updateVersion' ,
+            'postOnly + bookmark' ,
         );
     }
 
@@ -49,15 +35,15 @@ class BookController extends Controller
         $this->layout = "//layouts/index";
         $model = $this->loadModel($id);
         $this->keywords = $model->getKeywords();
-        $this->description = mb_substr(strip_tags($model->description), 0, 160, 'utf-8');
+        $this->description = mb_substr(strip_tags($model->description) ,0 ,160 ,'utf-8');
         $model->seen = $model->seen + 1;
         $model->save();
         $this->saveInCookie($model->category_id);
         // Has bookmarked this books by user
         $bookmarked = false;
-        if (!Yii::app()->user->isGuest) {
-            $hasRecord = UserBookBookmark::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
-            if ($hasRecord)
+        if(!Yii::app()->user->isGuest){
+            $hasRecord = UserBookBookmark::model()->findByAttributes(array('user_id' => Yii::app()->user->getId() ,'book_id' => $id));
+            if($hasRecord)
                 $bookmarked = true;
         }
         // Get similar books
@@ -65,14 +51,14 @@ class BookController extends Controller
         $criteria->addCondition('id!=:id');
         $criteria->params[':id'] = $model->id;
         $criteria->limit = 10;
-        $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
+        $similar = new CActiveDataProvider('Books' ,array('criteria' => $criteria));
 
         Yii::import('pages.models.*');
         $about = Pages::model()->findByPk(3);
-        $this->render('view', array(
-            'model' => $model,
-            'similar' => $similar,
-            'bookmarked' => $bookmarked,
+        $this->render('view' ,array(
+            'model' => $model ,
+            'similar' => $similar ,
+            'bookmarked' => $bookmarked ,
             'about' => $about
         ));
     }
@@ -80,7 +66,7 @@ class BookController extends Controller
     /**
      * Buy book
      */
-    public function actionBuy($id, $title)
+    public function actionBuy($id ,$title)
     {
         Yii::app()->theme = 'frontend';
         $this->layout = 'panel';
@@ -169,17 +155,17 @@ class BookController extends Controller
         ));
     }
 
-    public function actionVerify($id, $title)
+    public function actionVerify($id ,$title)
     {
-        if (!isset($_GET['Authority']))
-            $this->redirect(array('/book/buy', 'id' => $id, 'title' => $title));
+        if(!isset($_GET['Authority']))
+            $this->redirect(array('/book/buy' ,'id' => $id ,'title' => $title));
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $criteria = new CDbCriteria();
         $criteria->addCondition('user_id = :user_id');
         $criteria->addCondition('status = :status');
         $criteria->order = 'id DESC';
-        $criteria->params = array(':user_id' => Yii::app()->user->getId(), ':status' => 'unpaid');
+        $criteria->params = array(':user_id' => Yii::app()->user->getId() ,':status' => 'unpaid');
         $model = UserTransactions::model()->find($criteria);
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
@@ -188,57 +174,57 @@ class BookController extends Controller
         $Authority = $_GET['Authority'];
 
         $transactionResult = false;
-        if ($_GET['Status'] == 'OK') {
+        if($_GET['Status'] == 'OK'){
             include("lib/nusoap.php");
-            $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
+            $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl' ,'wsdl');
             $client->soap_defencoding = 'UTF-8';
-            $result = $client->call('PaymentVerification', array(
+            $result = $client->call('PaymentVerification' ,array(
                     array(
-                        'MerchantID' => $MerchantID,
-                        'Authority' => $Authority,
+                        'MerchantID' => $MerchantID ,
+                        'Authority' => $Authority ,
                         'Amount' => $Amount
                     )
                 )
             );
 
-            if ($result['Status'] == 100) {
+            if($result['Status'] == 100){
                 $model->status = 'paid';
                 $model->token = $result['RefID'];
                 $model->description = 'خرید کتاب "' . CHtml::encode($book->title) . '" از طریق درگاه زرین پال';
                 $model->save();
 
                 $transactionResult = true;
-                $this->saveBuyInfo($book, $user, 'gateway', $model->id);
-                Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
-            } else {
+                $this->saveBuyInfo($book ,$user ,'gateway' ,$model->id);
+                Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
+            }else{
                 $errors = array(
-                    '-1' => 'اطلاعات ارسال شده ناقص است.',
-                    '-2' => 'IP یا کد پذیرنده صحیح نیست.',
-                    '-3' => 'با توجه به محدودیت ها امکان پرداخت رقم درخواست شده میسر نمی باشد.',
-                    '-4' => 'سطح تایید پذیرنده پایین تر از سطح نقره ای است.',
-                    '-11' => 'درخواست مورد نظر یافت نشد.',
-                    '-12' => 'امکان ویرایش درخواست میسر نمی باشد.',
-                    '-21' => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد.',
-                    '-22' => 'تراکنش ناموفق بود.',
-                    '-33' => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد.',
-                    '-34' => 'سقف تقسیم تراکنش از لحاظ تعداد یا رقم عبور نموده است.',
-                    '-40' => 'اجازه دسترسی به متد مربوطه وجود ندارد.',
-                    '-41' => 'اطلاعات ارسال شده مربوط به AdditionalData غیر معتبر می باشد.',
-                    '-42' => 'مدت زمان معتبر طول عمر شناسه پرداخت باید بین 30 دقیقه تا 45 روز باشد.',
-                    '-54' => 'درخواست مورد نظر آرشیو شده است.',
-                    '101' => 'عملیات پرداخت موفق بوده و قبلا بررسی تراکنش انجام شده است.',
+                    '-1' => 'اطلاعات ارسال شده ناقص است.' ,
+                    '-2' => 'IP یا کد پذیرنده صحیح نیست.' ,
+                    '-3' => 'با توجه به محدودیت ها امکان پرداخت رقم درخواست شده میسر نمی باشد.' ,
+                    '-4' => 'سطح تایید پذیرنده پایین تر از سطح نقره ای است.' ,
+                    '-11' => 'درخواست مورد نظر یافت نشد.' ,
+                    '-12' => 'امکان ویرایش درخواست میسر نمی باشد.' ,
+                    '-21' => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد.' ,
+                    '-22' => 'تراکنش ناموفق بود.' ,
+                    '-33' => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد.' ,
+                    '-34' => 'سقف تقسیم تراکنش از لحاظ تعداد یا رقم عبور نموده است.' ,
+                    '-40' => 'اجازه دسترسی به متد مربوطه وجود ندارد.' ,
+                    '-41' => 'اطلاعات ارسال شده مربوط به AdditionalData غیر معتبر می باشد.' ,
+                    '-42' => 'مدت زمان معتبر طول عمر شناسه پرداخت باید بین 30 دقیقه تا 45 روز باشد.' ,
+                    '-54' => 'درخواست مورد نظر آرشیو شده است.' ,
+                    '101' => 'عملیات پرداخت موفق بوده و قبلا بررسی تراکنش انجام شده است.' ,
                 );
-                Yii::app()->user->setFlash('failed', isset($errors[$result['Status']]) ? $errors[$result['Status']] : 'در انجام عملیات پرداخت خطایی رخ داده است.');
+                Yii::app()->user->setFlash('failed' ,isset($errors[$result['Status']]) ? $errors[$result['Status']] : 'در انجام عملیات پرداخت خطایی رخ داده است.');
             }
-        } else
-            Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+        }else
+            Yii::app()->user->setFlash('failed' ,'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
 
-        $this->render('verify', array(
-            'transaction' => $model,
-            'book' => $book,
-            'user' => $user,
-            'price' => $model->amount,
-            'transactionResult' => $transactionResult,
+        $this->render('verify' ,array(
+            'transaction' => $model ,
+            'book' => $book ,
+            'user' => $user ,
+            'price' => $model->amount ,
+            'transactionResult' => $transactionResult ,
         ));
     }
 
@@ -250,7 +236,7 @@ class BookController extends Controller
      * @param $method string
      * @param $transactionID string
      */
-    private function saveBuyInfo($book, $user, $method, $transactionID = null)
+    private function saveBuyInfo($book ,$user ,$method ,$transactionID = null)
     {
         $price = $book->hasDiscount() ? $book->offPrice : $book->price;
 
@@ -263,12 +249,12 @@ class BookController extends Controller
         $buy->user_id = $user->id;
         $buy->method = $method;
         $buy->package_id = $book->lastPackage->id;
-        $buy->price=$price;
-        if ($method == 'gateway')
+        $buy->price = $price;
+        if($method == 'gateway')
             $buy->rel_id = $transactionID;
         $buy->save();
 
-        if ($book->publisher) {
+        if($book->publisher){
             $book->publisher->userDetails->credit = $book->publisher->userDetails->credit + $book->getPublisherPortion();
             $book->publisher->userDetails->save();
         }
@@ -283,14 +269,14 @@ class BookController extends Controller
                 </tr>
                 <tr>
                     <td style="font-weight: bold;width: 120px;">قیمت</td>
-                    <td>' . Controller::parseNumbers(number_format($price, 0)) . ' تومان</td>
+                    <td>' . Controller::parseNumbers(number_format($price ,0)) . ' تومان</td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;width: 120px;">تاریخ</td>
-                    <td>' . JalaliDate::date('d F Y - H:i', $buy->date) . '</td>
+                    <td>' . JalaliDate::date('d F Y - H:i' ,$buy->date) . '</td>
                 </tr>
             </table>';
-        Mailer::mail($user->email, 'اطلاعات خرید کتاب', $message, Yii::app()->params['noReplyEmail']);
+        Mailer::mail($user->email ,'اطلاعات خرید کتاب' ,$message ,Yii::app()->params['noReplyEmail']);
     }
 
     /**
@@ -352,32 +338,32 @@ class BookController extends Controller
     /**
      * Show programs list
      */
-    public function actionPublisher($title, $id = null)
+    public function actionPublisher($title ,$id = null)
     {
         Yii::app()->theme = 'frontend';
         $this->layout = 'index';
         $criteria = Books::model()->getValidBooks();
-        if (isset($_GET['t']) and $_GET['t'] == 1) {
+        if(isset($_GET['t']) and $_GET['t'] == 1){
             $criteria->addCondition('publisher_name=:publisher');
             $publisher_id = $title;
-        } else {
+        }else{
             $criteria->addCondition('publisher_id=:publisher');
             $publisher_id = $id;
         }
         $criteria->params[':publisher'] = $publisher_id;
-        $dataProvider = new CActiveDataProvider('Books', array(
-            'criteria' => $criteria,
+        $dataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $criteria ,
             'pagination' => array('pageSize' => 8)
         ));
 
-        if ($id) {
+        if($id){
             $user = UserDetails::model()->findByAttributes(array('user_id' => $id));
             $pageTitle = 'کتاب های ' . ($user->publisher_id ? $user->publisher_id : $user->fa_name);
-        } else
+        }else
             $pageTitle = $title;
-        $this->render('books_list', array(
-            'dataProvider' => $dataProvider,
-            'title' => $pageTitle,
+        $this->render('books_list' ,array(
+            'dataProvider' => $dataProvider ,
+            'title' => $pageTitle ,
             'pageTitle' => 'کتاب ها'
         ));
     }
@@ -385,13 +371,13 @@ class BookController extends Controller
     /**
      * show person books list
      */
-    public function actionPerson($id, $title = null)
+    public function actionPerson($id ,$title = null)
     {
         Yii::app()->theme = 'frontend';
         $this->layout = 'index';
         $person = BookPersons::model()->findByPk((int)$id);
-        if (!$person)
-            throw new CHttpException(404, 'The requested page does not exist.');
+        if(!$person)
+            throw new CHttpException(404 ,'The requested page does not exist.');
         else
             $pageTitle = 'کتاب های ' . $person->name_family;
         $criteria = Books::model()->getValidBooks();
@@ -399,14 +385,14 @@ class BookController extends Controller
         $criteria->with[] = 'personRel';
         $criteria->addCondition('personRel.person_id =:person_id');
         $criteria->params[':person_id'] = $id;
-        $dataProvider = new CActiveDataProvider('Books', array(
-            'criteria' => $criteria,
+        $dataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $criteria ,
             'pagination' => array('pageSize' => 8)
         ));
 
-        $this->render('books_list', array(
-            'dataProvider' => $dataProvider,
-            'title' => $pageTitle,
+        $this->render('books_list' ,array(
+            'dataProvider' => $dataProvider ,
+            'title' => $pageTitle ,
             'pageTitle' => 'کتاب ها'
         ));
     }
@@ -416,11 +402,11 @@ class BookController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $criteria = Books::model()->getValidBooks();
-        $dataProvider = new CActiveDataProvider("Books", array(
-            'criteria' => $criteria,
+        $dataProvider = new CActiveDataProvider("Books" ,array(
+            'criteria' => $criteria ,
             'pagination' => array('pageSize' => 8)
         ));
-        $this->render('books_list', array(
+        $this->render('books_list' ,array(
             'dataProvider' => $dataProvider
         ));
     }
@@ -431,12 +417,12 @@ class BookController extends Controller
     public function actionBookmark()
     {
         Yii::app()->getModule('users');
-        $model = UserBookBookmark::model()->find('user_id=:user_id AND book_id=:book_id', array(':user_id' => Yii::app()->user->getId(), ':book_id' => $_POST['bookId']));
-        if (!$model) {
+        $model = UserBookBookmark::model()->find('user_id=:user_id AND book_id=:book_id' ,array(':user_id' => Yii::app()->user->getId() ,':book_id' => $_POST['bookId']));
+        if(!$model){
             $model = new UserBookBookmark();
             $model->book_id = $_POST['bookId'];
             $model->user_id = Yii::app()->user->getId();
-            if ($model->save())
+            if($model->save())
                 echo CJSON::encode(array(
                     'status' => true
                 ));
@@ -444,8 +430,8 @@ class BookController extends Controller
                 echo CJSON::encode(array(
                     'status' => false
                 ));
-        } else {
-            if (UserBookBookmark::model()->deleteAllByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $_POST['bookId'])))
+        }else{
+            if(UserBookBookmark::model()->deleteAllByAttributes(array('user_id' => Yii::app()->user->getId() ,'book_id' => $_POST['bookId'])))
                 echo CJSON::encode(array(
                     'status' => true
                 ));
@@ -467,13 +453,13 @@ class BookController extends Controller
         $labels = $values = array();
         $showChart = false;
         $activeTab = 'monthly';
-        $sumSales=0;
-        if (isset($_POST['show-chart-monthly'])) {
+        $sumSales = 0;
+        if(isset($_POST['show-chart-monthly'])){
             $activeTab = 'monthly';
-            $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $_POST['month_altField'], false), JalaliDate::date('m', $_POST['month_altField'], false), 1);
+            $startDate = JalaliDate::toGregorian(JalaliDate::date('Y' ,$_POST['month_altField'] ,false) ,JalaliDate::date('m' ,$_POST['month_altField'] ,false) ,1);
             $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
             $endTime = '';
-            if (JalaliDate::date('m', $_POST['month_altField'], false) <= 6)
+            if(JalaliDate::date('m' ,$_POST['month_altField'] ,false) <= 6)
                 $endTime = $startTime + (60 * 60 * 24 * 31);
             else
                 $endTime = $startTime + (60 * 60 * 24 * 30);
@@ -482,26 +468,26 @@ class BookController extends Controller
             $criteria->addCondition('date >= :start_date');
             $criteria->addCondition('date <= :end_date');
             $criteria->params = array(
-                ':start_date' => $startTime,
-                ':end_date' => $endTime,
+                ':start_date' => $startTime ,
+                ':end_date' => $endTime ,
             );
             $report = BookBuys::model()->findAll($criteria);
             // show daily report
-            $daysCount = (JalaliDate::date('m', $_POST['month_altField'], false) <= 6) ? 31 : 30;
-            for ($i = 0; $i < $daysCount; $i++) {
-                $labels[] = JalaliDate::date('d F Y', $startTime + (60 * 60 * (24 * $i)));
+            $daysCount = (JalaliDate::date('m' ,$_POST['month_altField'] ,false) <= 6) ? 31 : 30;
+            for($i = 0;$i < $daysCount;$i++){
+                $labels[] = JalaliDate::date('d F Y' ,$startTime + (60 * 60 * (24 * $i)));
                 $count = 0;
-                foreach ($report as $model) {
-                    if ($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1)))) {
+                foreach($report as $model){
+                    if($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1)))){
                         $count++;
-                        $sumSales+=$model->price;
+                        $sumSales += $model->price;
                     }
                 }
                 $values[] = $count;
             }
-        } elseif (isset($_POST['show-chart-yearly'])) {
+        }elseif(isset($_POST['show-chart-yearly'])){
             $activeTab = 'yearly';
-            $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $_POST['year_altField'], false), 1, 1);
+            $startDate = JalaliDate::toGregorian(JalaliDate::date('Y' ,$_POST['year_altField'] ,false) ,1 ,1);
             $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
             $endTime = $startTime + (60 * 60 * 24 * 365);
             $showChart = true;
@@ -509,29 +495,29 @@ class BookController extends Controller
             $criteria->addCondition('date >= :start_date');
             $criteria->addCondition('date <= :end_date');
             $criteria->params = array(
-                ':start_date' => $startTime,
-                ':end_date' => $endTime,
+                ':start_date' => $startTime ,
+                ':end_date' => $endTime ,
             );
             $report = BookBuys::model()->findAll($criteria);
             // show monthly report
             $tempDate = $startTime;
-            for ($i = 0; $i < 12; $i++) {
-                if ($i < 6)
+            for($i = 0;$i < 12;$i++){
+                if($i < 6)
                     $monthDaysCount = 31;
                 else
                     $monthDaysCount = 30;
-                $labels[] = JalaliDate::date('F', $tempDate);
+                $labels[] = JalaliDate::date('F' ,$tempDate);
                 $tempDate = $tempDate + (60 * 60 * 24 * ($monthDaysCount));
                 $count = 0;
-                foreach ($report as $model) {
-                    if ($model->date >= $startTime + (60 * 60 * 24 * ($monthDaysCount * $i)) and $model->date < $startTime + (60 * 60 * 24 * ($monthDaysCount * ($i + 1)))) {
+                foreach($report as $model){
+                    if($model->date >= $startTime + (60 * 60 * 24 * ($monthDaysCount * $i)) and $model->date < $startTime + (60 * 60 * 24 * ($monthDaysCount * ($i + 1)))){
                         $count++;
                         $sumSales += $model->price;
                     }
                 }
                 $values[] = $count;
             }
-        } elseif (isset($_POST['show-chart-by-program'])) {
+        }elseif(isset($_POST['show-chart-by-program'])){
             $activeTab = 'by-program';
             $showChart = true;
             $criteria = new CDbCriteria();
@@ -539,35 +525,35 @@ class BookController extends Controller
             $criteria->addCondition('date < :to_date');
             $criteria->addCondition('book_id=:book_id');
             $criteria->params = array(
-                ':from_date' => $_POST['from_date_altField'],
-                ':to_date' => $_POST['to_date_altField'],
-                ':book_id' => $_POST['book_id'],
+                ':from_date' => $_POST['from_date_altField'] ,
+                ':to_date' => $_POST['to_date_altField'] ,
+                ':book_id' => $_POST['book_id'] ,
             );
             $report = BookBuys::model()->findAll($criteria);
-            if ($_POST['to_date_altField'] - $_POST['from_date_altField'] < (60 * 60 * 24 * 30)) {
+            if($_POST['to_date_altField'] - $_POST['from_date_altField'] < (60 * 60 * 24 * 30)){
                 // show daily report
                 $datesDiff = $_POST['to_date_altField'] - $_POST['from_date_altField'];
                 $daysCount = ($datesDiff / (60 * 60 * 24));
-                for ($i = 0; $i < $daysCount; $i++) {
-                    $labels[] = JalaliDate::date('d F Y', $_POST['from_date_altField'] + (60 * 60 * (24 * $i)));
+                for($i = 0;$i < $daysCount;$i++){
+                    $labels[] = JalaliDate::date('d F Y' ,$_POST['from_date_altField'] + (60 * 60 * (24 * $i)));
                     $count = 0;
-                    foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1)))) {
+                    foreach($report as $model){
+                        if($model->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1)))){
                             $count++;
                             $sumSales += $model->price;
                         }
                     }
                     $values[] = $count;
                 }
-            } else {
+            }else{
                 // show monthly report
                 $datesDiff = $_POST['to_date_altField'] - $_POST['from_date_altField'];
                 $monthCount = ceil($datesDiff / (60 * 60 * 24 * 30));
-                for ($i = 0; $i < $monthCount; $i++) {
-                    $labels[] = JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
+                for($i = 0;$i < $monthCount;$i++){
+                    $labels[] = JalaliDate::date('d F' ,$_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F' ,$_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
                     $count = 0;
-                    foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1)))) {
+                    foreach($report as $model){
+                        if($model->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1)))){
                             $count++;
                             $sumSales += $model->price;
                         }
@@ -575,40 +561,40 @@ class BookController extends Controller
                     $values[] = $count;
                 }
             }
-        } elseif (isset($_POST['show-chart-by-publisher'])) {
+        }elseif(isset($_POST['show-chart-by-publisher'])){
             $activeTab = 'by-publisher';
             $showChart = true;
             $criteria = new CDbCriteria();
             $criteria->addCondition('date > :from_date');
             $criteria->addCondition('date < :to_date');
-            $criteria->addInCondition('book_id', CHtml::listData(Books::model()->findAllByAttributes(array('publisher_id' => $_POST['publisher'])), 'id', 'id'));
+            $criteria->addInCondition('book_id' ,CHtml::listData(Books::model()->findAllByAttributes(array('publisher_id' => $_POST['publisher'])) ,'id' ,'id'));
             $criteria->params[':from_date'] = $_POST['from_date_publisher_altField'];
             $criteria->params[':to_date'] = $_POST['to_date_publisher_altField'];
             $report = BookBuys::model()->findAll($criteria);
-            if ($_POST['to_date_publisher_altField'] - $_POST['from_date_publisher_altField'] < (60 * 60 * 24 * 30)) {
+            if($_POST['to_date_publisher_altField'] - $_POST['from_date_publisher_altField'] < (60 * 60 * 24 * 30)){
                 // show daily report
                 $datesDiff = $_POST['to_date_publisher_altField'] - $_POST['from_date_publisher_altField'];
                 $daysCount = ($datesDiff / (60 * 60 * 24));
-                for ($i = 0; $i < $daysCount; $i++) {
-                    $labels[] = JalaliDate::date('d F Y', $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)));
+                for($i = 0;$i < $daysCount;$i++){
+                    $labels[] = JalaliDate::date('d F Y' ,$_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)));
                     $count = 0;
-                    foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * ($i + 1)))) {
+                    foreach($report as $model){
+                        if($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * (24 * ($i + 1)))){
                             $count++;
                             $sumSales += $model->price;
                         }
                     }
                     $values[] = $count;
                 }
-            } else {
+            }else{
                 // show monthly report
                 $datesDiff = $_POST['to_date_publisher_altField'] - $_POST['from_date_publisher_altField'];
                 $monthCount = ceil($datesDiff / (60 * 60 * 24 * 30));
-                for ($i = 0; $i < $monthCount; $i++) {
-                    $labels[] = JalaliDate::date('d F', $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F', $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
+                for($i = 0;$i < $monthCount;$i++){
+                    $labels[] = JalaliDate::date('d F' ,$_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F' ,$_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
                     $count = 0;
-                    foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1)))) {
+                    foreach($report as $model){
+                        if($model->date >= $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_publisher_altField'] + (60 * 60 * 24 * (30 * ($i + 1)))){
                             $count++;
                             $sumSales += $model->price;
                         }
@@ -618,12 +604,12 @@ class BookController extends Controller
             }
         }
 
-        $this->render('report_sales', array(
-            'labels' => $labels,
-            'values' => $values,
-            'showChart' => $showChart,
-            'activeTab' => $activeTab,
-            'sumSales' => $sumSales,
+        $this->render('report_sales' ,array(
+            'labels' => $labels ,
+            'values' => $values ,
+            'showChart' => $showChart ,
+            'activeTab' => $activeTab ,
+            'sumSales' => $sumSales ,
         ));
     }
 
@@ -640,11 +626,11 @@ class BookController extends Controller
         $showChart = false;
         $sumCredit = UserDetails::model()->find(array('select' => 'SUM(credit) AS credit'));
         $sumCredit = $sumCredit->credit;
-        if (isset($_POST['show-chart-monthly'])) {
-            $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $_POST['month_altField'], false), JalaliDate::date('m', $_POST['month_altField'], false), 1);
+        if(isset($_POST['show-chart-monthly'])){
+            $startDate = JalaliDate::toGregorian(JalaliDate::date('Y' ,$_POST['month_altField'] ,false) ,JalaliDate::date('m' ,$_POST['month_altField'] ,false) ,1);
             $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
             $endTime = '';
-            if (JalaliDate::date('m', $_POST['month_altField'], false) <= 6)
+            if(JalaliDate::date('m' ,$_POST['month_altField'] ,false) <= 6)
                 $endTime = $startTime + (60 * 60 * 24 * 31);
             else
                 $endTime = $startTime + (60 * 60 * 24 * 30);
@@ -653,20 +639,20 @@ class BookController extends Controller
             $criteria->addCondition('date >= :start_date');
             $criteria->addCondition('date <= :end_date');
             $criteria->params = array(
-                ':start_date' => $startTime,
-                ':end_date' => $endTime,
+                ':start_date' => $startTime ,
+                ':end_date' => $endTime ,
             );
             $report = BookBuys::model()->findAll($criteria);
             Yii::app()->getModule('setting');
             $commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'));
             $commission = $commission->value;
             // show daily report
-            $daysCount = (JalaliDate::date('m', $_POST['month_altField'], false) <= 6) ? 31 : 30;
-            for ($i = 0; $i < $daysCount; $i++) {
-                $labels[] = JalaliDate::date('d F Y', $startTime + (60 * 60 * (24 * $i)));
+            $daysCount = (JalaliDate::date('m' ,$_POST['month_altField'] ,false) <= 6) ? 31 : 30;
+            for($i = 0;$i < $daysCount;$i++){
+                $labels[] = JalaliDate::date('d F Y' ,$startTime + (60 * 60 * (24 * $i)));
                 $amount = 0;
-                foreach ($report as $model) {
-                    if ($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1))))
+                foreach($report as $model){
+                    if($model->date >= $startTime + (60 * 60 * (24 * $i)) and $model->date < $startTime + (60 * 60 * (24 * ($i + 1))))
                         $amount = $model->book->price;
                 }
                 $values[] = ($amount * $commission) / 100;
@@ -674,12 +660,12 @@ class BookController extends Controller
             }
         }
 
-        $this->render('report_income', array(
-            'labels' => $labels,
-            'values' => $values,
-            'showChart' => $showChart,
-            'sumIncome' => $sumIncome,
-            'sumCredit' => $sumCredit,
+        $this->render('report_income' ,array(
+            'labels' => $labels ,
+            'values' => $values ,
+            'showChart' => $showChart ,
+            'sumIncome' => $sumIncome ,
+            'sumCredit' => $sumCredit ,
         ));
     }
 
@@ -721,22 +707,21 @@ class BookController extends Controller
         }
         $pagination = new CPagination();
         $pagination->pageSize = 8;
-        if(Yii::app()->request->isAjaxRequest)
-        {
-            $criteria->limit=6;
+        if(Yii::app()->request->isAjaxRequest){
+            $criteria->limit = 6;
             $pagination->pageSize = 6;
         }
         $dataProvider = new CActiveDataProvider('Books' ,array(
-            'criteria' => $criteria,
+            'criteria' => $criteria ,
             'pagination' => $pagination
         ));
         if(Yii::app()->request->isAjaxRequest){
             $this->beginClip('book-list');
-            $this->widget('zii.widgets.CListView',array(
-                'id' => 'search-book-list',
-                'dataProvider' => $dataProvider,
-                'itemView' => '//site/_search_book_item',
-                'template' => '{items}',
+            $this->widget('zii.widgets.CListView' ,array(
+                'id' => 'search-book-list' ,
+                'dataProvider' => $dataProvider ,
+                'itemView' => '//site/_search_book_item' ,
+                'template' => '{items}' ,
             ));
             $this->endClip();
             $response['html'] = $this->clips['book-list'];
@@ -758,12 +743,12 @@ class BookController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $criteria = Books::model()->getValidBooks();
-        $criteria->compare('tagsRel.tag_id', $id);
+        $criteria->compare('tagsRel.tag_id' ,$id);
         $criteria->with[] = 'tagsRel';
         $criteria->together = true;
-        $dataProvider = new CActiveDataProvider('Books', array('criteria' => $criteria, 'pagination' => array('pageSize' => 8)));
-        $this->render('tag', array(
-            'model' => Tags::model()->findByPk($id),
+        $dataProvider = new CActiveDataProvider('Books' ,array('criteria' => $criteria ,'pagination' => array('pageSize' => 8)));
+        $this->render('tag' ,array(
+            'model' => Tags::model()->findByPk($id) ,
             'dataProvider' => $dataProvider
         ));
     }
@@ -785,18 +770,18 @@ class BookController extends Controller
         $criteria->addCondition('start_date < :now AND end_date > :now');
         $criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=book.id) != 0');
         $criteria->params = array(
-            ':confirm' => 'accepted',
-            ':deleted' => 0,
-            ':status' => 'enable',
+            ':confirm' => 'accepted' ,
+            ':deleted' => 0 ,
+            ':status' => 'enable' ,
             ':now' => time()
         );
         $criteria->order = 'book.id DESC';
-        $dataProvider = new CActiveDataProvider('BookDiscounts', array(
-            'criteria' => $criteria,
+        $dataProvider = new CActiveDataProvider('BookDiscounts' ,array(
+            'criteria' => $criteria ,
         ));
 
-        $this->render('books_discounts_list', array(
-            'dataProvider' => $dataProvider,
+        $this->render('books_discounts_list' ,array(
+            'dataProvider' => $dataProvider ,
             'pageTitle' => 'تخفیفات'
         ));
     }
@@ -807,33 +792,33 @@ class BookController extends Controller
      * @throws CException
      * @throws CHttpException
      */
-    public function actionRate($book_id, $rate)
+    public function actionRate($book_id ,$rate)
     {
         $model = $this->loadModel($book_id);
-        if ($model) {
+        if($model){
             $rateModel = new BookRatings();
             $rateModel->rate = (int)$rate;
             $rateModel->book_id = $model->id;
             $rateModel->user_id = Yii::app()->user->getId();
-            if ($rateModel->save()) {
+            if($rateModel->save()){
                 $this->beginClip('rate-view');
-                $this->renderPartial('_rating', array(
+                $this->renderPartial('_rating' ,array(
                     'model' => $model
                 ));
                 $this->endClip();
-                if (isset($_GET['ajax'])) {
-                    echo CJSON::encode(array('status' => true, 'rate' => $rateModel->rate, 'rate_wrapper' => $this->clips['rate-view']));
+                if(isset($_GET['ajax'])){
+                    echo CJSON::encode(array('status' => true ,'rate' => $rateModel->rate ,'rate_wrapper' => $this->clips['rate-view']));
                     Yii::app()->end();
                 }
-            } else {
-                if (isset($_GET['ajax'])) {
-                    echo CJSON::encode(array('status' => false, 'msg' => 'متاسفانه عملیات با خطا مواجه است! لطفا مجددا سعی فرمایید.'));
+            }else{
+                if(isset($_GET['ajax'])){
+                    echo CJSON::encode(array('status' => false ,'msg' => 'متاسفانه عملیات با خطا مواجه است! لطفا مجددا سعی فرمایید.'));
                     Yii::app()->end();
                 }
             }
-        } else {
-            if (isset($_GET['ajax'])) {
-                echo CJSON::encode(array('status' => false, 'msg' => 'مقادیر ارسالی صحیح نیست.'));
+        }else{
+            if(isset($_GET['ajax'])){
+                echo CJSON::encode(array('status' => false ,'msg' => 'مقادیر ارسالی صحیح نیست.'));
                 Yii::app()->end();
             }
         }
@@ -849,8 +834,37 @@ class BookController extends Controller
     public function loadModel($id)
     {
         $model = Books::model()->findByPk($id);
-        if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+        if($model === null)
+            throw new CHttpException(404 ,'The requested page does not exist.');
         return $model;
+    }
+
+    /**
+     * Update Version of bought book
+     */
+    public function actionUpdateVersion($id)
+    {
+        $userID = Yii::app()->user->getId();
+        $book = $this->loadModel($id);
+        if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'){
+            if(!$book->publisher_id || $book->publisher_id != $userID){
+                $bought = BookBuys::model()->findByAttributes(array(
+                    'book_id' => $book->id ,
+                    'user_id' => $userID ,
+                ) ,array('order' => 'date DESC'));
+                if($bought && $bought->package_id != $book->lastPackage->id){
+                    $bought->package_id = $book->lastPackage->id;
+                    $bought->date = time();
+                    if($bought->save())
+                        Yii::app()->user->setFlash('success' ,'<i class="icon-check" ></i>  کتاب شما با موفقیت به روز رسانی شد.');
+                    else
+                        Yii::app()->user->setFlash('failed' ,'متاسفانه مشکلی در به روز رسانی بوجود آمده است! لطفا مجددا اقدام فرمایید.');
+                }else
+                    Yii::app()->user->setFlash('success' ,'<i class="icon-check" ></i>  نسخه کتاب شما به روز است.');
+            }elseif($book->publisher_id && $book->publisher_id == $userID)
+                Yii::app()->user->setFlash('warning' ,'متاسفانه شما ناشر این کتاب هستید و امکان به روز رسانی برای شما وجود ندارد.');
+
+        }
+        $this->redirect(array('/book/' . $id . '/' . urlencode($book->title)));
     }
 }

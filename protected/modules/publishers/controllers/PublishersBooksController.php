@@ -32,7 +32,9 @@ class PublishersBooksController extends Controller
                 'savePackage',
                 'deletePackage',
                 'getPackages',
-                'updatePackage'
+                'updatePackage',
+                'uploadPreview',
+                'deleteUploadedPreview'
             ),
         );
     }
@@ -43,7 +45,7 @@ class PublishersBooksController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadFile, images, savePackage, getPackages', // perform access control for CRUD operations
+            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadFile, images, savePackage, getPackages, uploadPreview, deleteUploadedPreview', // perform access control for CRUD operations
             'ajaxOnly + getPackages'
         );
     }
@@ -81,6 +83,14 @@ class PublishersBooksController extends Controller
                     'acceptedTypes' => array('epub')
                 )
             ),
+            'uploadPreview' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'preview_file' ,
+                'rename' => 'random' ,
+                'validateOptions' => array(
+                    'acceptedTypes' => array('epub' ,'pdf')
+                )
+            ) ,
             'uploadImage' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
                 'attribute' => 'image',
@@ -124,6 +134,13 @@ class PublishersBooksController extends Controller
                 'uploadDir' => '/uploads/books/files',
                 'storedMode' => 'field'
             ),
+            'deleteUploadPreview' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
+                'modelName' => 'Books' ,
+                'attribute' => 'preview_file' ,
+                'uploadDir' => '/uploads/books/previews' ,
+                'storedMode' => 'field'
+            ),
             'deleteImage' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
                 'modelName' => 'BookImages',
@@ -164,6 +181,10 @@ class PublishersBooksController extends Controller
             $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
             if (!is_dir($bookIconsDIR))
                 mkdir($bookIconsDIR);
+            $bookPreviewDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
+            if(!is_dir($bookPreviewDIR))
+                mkdir($bookPreviewDIR);
+            
             $tmpUrl = Yii::app()->baseUrl . '/uploads/temp/';
 
             Yii::app()->theme = 'frontend';
@@ -172,12 +193,19 @@ class PublishersBooksController extends Controller
             // Uncomment the following line if AJAX validation is needed
             $this->performAjaxValidation($model);
             $icon = array();
+            $previewFile = array();
             if (isset($_POST['Books'])) {
                 $iconFlag = false;
+                $previewFileFlag = false;
                 if (isset($_POST['Books']['icon']) && file_exists($tmpDIR . $_POST['Books']['icon'])) {
                     $file = $_POST['Books']['icon'];
                     $icon = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
                     $iconFlag = true;
+                }
+                if (isset($_POST['Books']['previewFile']) && file_exists($tmpDIR . $_POST['Books']['previewFile'])) {
+                    $file = $_POST['Books']['previewFile'];
+                    $previewFile = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
+                    $previewFileFlag = true;
                 }
                 $model->attributes = $_POST['Books'];
                 $model->publisher_id = $user->user_id;
@@ -189,6 +217,8 @@ class PublishersBooksController extends Controller
                 if ($model->save()) {
                     if ($iconFlag)
                         @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
+                    if ($previewFileFlag)
+                        @rename($tmpDIR . $model->preview_file, $bookPreviewDIR . $model->preview_file);
                     Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد. لطفا مراحل بعدی را نیز انجام دهید.');
                     $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
                 } else {
@@ -198,6 +228,7 @@ class PublishersBooksController extends Controller
             $this->render('create', array(
                 'model' => $model,
                 'icon' => $icon,
+                'previewFile' => $previewFile,
                 'tax' => SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value,
                 'commission' => SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value,
             ));
@@ -227,6 +258,7 @@ class PublishersBooksController extends Controller
             mkdir($tmpDIR);
         $tmpUrl = Yii::app()->createAbsoluteUrl('/uploads/temp/');
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
+        $bookPreviewDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
         $bookImagesDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
         $bookFilesDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
         if (!is_dir($bookFilesDIR))
@@ -244,6 +276,14 @@ class PublishersBooksController extends Controller
                 'src' => $bookIconsUrl . '/' . $model->icon,
                 'size' => filesize($bookIconsDIR . $model->icon),
                 'serverName' => $model->icon
+            );
+        $previewFile = array();
+        if (!is_null($model->preview_file))
+            $previewFile = array(
+                'name' => $model->preview_file,
+                'src' => $bookPreviewDIR . '/' . $model->preview_file,
+                'size' => filesize($bookPreviewDIR . $model->preview_file),
+                'serverName' => $model->preview_file
             );
         $images = array();
         if ($model->images)
@@ -274,6 +314,7 @@ class PublishersBooksController extends Controller
 
         if (isset($_POST['Books'])) {
             $iconFlag = false;
+            $previewFileFlag = false;
             if (isset($_POST['Books']['icon']) && file_exists($tmpDIR . $_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon) {
                 $file = $_POST['Books']['icon'];
                 $icon = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
@@ -288,6 +329,8 @@ class PublishersBooksController extends Controller
             if ($model->save()) {
                 if ($iconFlag)
                     @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
+                if ($previewFileFlag)
+                    @rename($tmpDIR . $model->preview_file, $bookPreviewDIR . $model->preview_file);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
                 $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
             } else {
@@ -311,6 +354,7 @@ class PublishersBooksController extends Controller
             'imageModel' => new BookImages(),
             'images' => $images,
             'icon' => $icon,
+            'previewFile' => $previewFile,
             'packagesDataProvider' => $packagesDataProvider,
             'step' => $step,
             'tax' => SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value,

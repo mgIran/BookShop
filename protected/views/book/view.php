@@ -44,6 +44,7 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
         </div>
     </div>
     <div class="container page-content book-view">
+        <?php $this->renderPartial('//partial-views/_flashMessage') ?>
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="row">
@@ -154,9 +155,32 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                                 ?>
                                 <?php
                                 if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
-                                ?>
-                                    <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
-                                <?php
+                                    if(!$model->publisher_id || $model->publisher_id != Yii::app()->user->getId()):
+                                        $user = Users::model()->findByPk(Yii::app()->user->getId());
+                                        $criteria = new CDbCriteria(array('condition' => 'book_id = :id', 'order' => 'date DESC', 'limit' => 1,'params' => array(':id'=>$model->id)));
+                                        $bought = $user->bookBuys($criteria);
+                                        if(!$bought):
+                                            ?>
+                                            <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                            <?php
+                                        else:
+                                            if($bought[0]->package_id):
+                                                if($bought[0]->package_id != $model->lastPackage->id):
+                                                    ?>
+                                                    <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
+                                                    <?php
+                                                else:
+                                                    ?>
+                                                    <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>
+                                                    <?php
+                                                endif;
+                                            else:
+                                                ?>
+                                                <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
+                                                <?php
+                                            endif;
+                                        endif;
+                                    endif;
                                 else:
                                 ?>
                                     <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>

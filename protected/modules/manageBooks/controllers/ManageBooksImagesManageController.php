@@ -40,30 +40,14 @@ class ManageBooksImagesManageController extends Controller
 				'validateOptions' => array(
 					'acceptedTypes' => array('jpg','jpeg','png')
 				)
-			)
+			),
+			'deleteUpload' => array(
+				'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+				'modelName' => 'Books',
+				'attribute' => 'image',
+				'uploadDir' => '/uploads/books/images',
+				'storedMode' => 'field'
+			),
 		);
-	}
-
-	/**
-	 * Delete book images
-	 */
-	public function actionDeleteUploaded()
-	{
-		if (isset($_POST['fileName'])) {
-			$fileName = $_POST['fileName'];
-			$uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
-
-			$model = BookImages::model()->findByAttributes(array('image' => $fileName));
-			$response = null;
-			if (!is_null($model)) {
-				if (@unlink($uploadDir . $fileName)) {
-					$response = ['state' => 'ok', 'msg' => 'حذف شد.'];
-					$model->delete();
-				} else
-					$response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-			}
-			echo CJSON::encode($response);
-			Yii::app()->end();
-		}
 	}
 }
