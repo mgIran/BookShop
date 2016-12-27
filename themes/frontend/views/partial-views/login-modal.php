@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <?php $this->renderPartial('//partial-views/_loading')?>
                 <div class="tab-content">
-                    <div class="tab-pane fade " id="login-modal-login-tab">
+                    <div class="tab-pane fade active in" id="login-modal-login-tab">
                         <?php
                         /* @var $formL CActiveForm */
                         Yii::import('users.models.UserLoginForm');
@@ -57,11 +57,11 @@
                             <?= CHtml::submitButton('ورود',array('class'=>"btn-blue")); ?>
                         </div>
                         <div class="form-group">
-                            <a href="#" data-target="#login-modal-login-tab" data-toggle="tab">ثبت نام کنید</a>
+                            <a href="#" data-target="#login-modal-register-tab" data-toggle="tab">حساب کاربری ندارید؟ ثبت نام کنید</a>
                         </div>
                         <? $this->endWidget(); ?>
                     </div>
-                    <div class="tab-pane fade active in" id="login-modal-register-tab">
+                    <div class="tab-pane fade" id="login-modal-register-tab">
                     <?php
                     /* @var $formR CActiveForm */
                     Yii::import('users.models.Users');

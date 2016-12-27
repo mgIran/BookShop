@@ -6,7 +6,6 @@
     <td><a target="_blank" href="<?= $this->createUrl('/book/'.$data->id.'/'.urlencode($data->title)) ?>"><?php echo $data->title;?></a></td>
     <td><?php echo ($data->status=='enable')?'فعال':'غیر فعال';?></td>
     <td><?php echo ($data->price==0)?'رایگان':Controller::parseNumbers(number_format($data->price,0,',','.')).' تومان';?></td>
-    <td class="hidden-xs"><?php echo ($data->printed_price==0)?'رایگان':Controller::parseNumbers(number_format($data->printed_price,0,',','.')).' تومان';?></td>
     <td class="hidden-xs"><?= Controller::parseNumbers(number_format($data->download)) ?></td>
     <td>
         <span style="margin-right: 6px;font-size: 17px">

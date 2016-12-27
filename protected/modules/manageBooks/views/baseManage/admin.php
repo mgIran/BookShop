@@ -35,18 +35,12 @@ $this->menu=array(
 		),
 		array(
 			'name' => 'lastPackage.price',
-			'value' => '$data->price != 0?$data->price:"رایگان"'
+			'value' => '$data->price != 0?$data->price." تومان":"رایگان"'
 		),
-		/*
-		'file_name',
-		'icon',
-		'description',
-		'change_log',
-		'permissions',
-		'size',
-		'version',
-		'confirm',
-		*/
+		array(
+			'name' => 'lastPackage.printed_price',
+			'value' => '$data->printed_price?$data->printed_price." تومان":"غیرقابل فروش"'
+		),
 		array(
 			'class'=>'CButtonColumn',
             'buttons' => array(

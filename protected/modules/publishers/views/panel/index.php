@@ -18,7 +18,6 @@
             <th>عنوان کتاب</th>
             <th>وضعیت</th>
             <th>قیمت</th>
-            <th class="hidden-xs">قیمت نسخه چاپی</th>
             <th class="hidden-xs">تعداد نصب شده</th>
             <th>عملیات</th>
             <th>تاییدیه</th>

@@ -473,7 +473,9 @@ class Books extends CActiveRecord
 		return $this->lastPackage?$this->lastPackage->price:0;
 	}
 	public function getPrinted_price(){
-		return $this->lastPackage?$this->lastPackage->printed_price:0;
+		if($this->lastPackage && $this->lastPackage->sale_printed)
+			return $this->lastPackage->printed_price;
+		return false;
 	}
 	public function getOffPrice()
 	{
