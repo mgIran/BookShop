@@ -74,12 +74,18 @@ if(!isset($buy))
                     <?php endif;?>
             </span>
             <?php
-            if($buy):
-                if(!isset($itemClass) || (isset($itemClass) && ($itemClass != 'small' && $itemClass != 'smallest'))):
-                    ?>
-                    <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$data->id, 'title'=>$data->title));?>" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
-                    <?php
+            if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
+                if($buy):
+                    if(!isset($itemClass) || (isset($itemClass) && ($itemClass != 'small' && $itemClass != 'smallest'))):
+                        ?>
+                        <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$data->id, 'title'=>$data->title));?>" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                        <?php
+                    endif;
                 endif;
+            else:
+            ?>
+                <a href="#" data-target="#login-modal" data-toggle="modal" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+            <?
             endif;
             ?>
         </div>
