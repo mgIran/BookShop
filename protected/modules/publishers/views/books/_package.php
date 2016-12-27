@@ -3,9 +3,6 @@
 /* @var $model Books */
 /* @var $dataProvider CActiveDataProvider */
 /* @var $for string */
-Yii::app()->clientScript->registerCss('inline',"
-.dropzone.single{width:100%;}
-");
 ?>
 
 <div class="packages-list-container">
@@ -23,18 +20,18 @@ Yii::app()->clientScript->registerCss('inline',"
                 <th>وضعیت</th>
             </tr>
         </thead>
-    <?php $this->widget('zii.widgets.CListView', array(
-        'id'=>'packages-list',
-        'dataProvider'=>$dataProvider,
-        'itemView'=>'_package_list',
-        'ajaxUrl'=>array('/publishers/books/update/'.$model->id),
-        'itemsTagName'=>'tr',
-        'tagName'=>'tbody',
-        'emptyTagName'=>'td colspan="8"',
-        'emptyCssClass'=>'text-center',
-        'template'=>'{items}',
-        'htmlOptions'=>array('class'=>'table'),
-    ));?>
+        <?php $this->widget('zii.widgets.CListView', array(
+            'id'=>'packages-list',
+            'dataProvider'=>$dataProvider,
+            'itemView'=>'_package_list',
+            'ajaxUrl'=>array('/publishers/books/update/'.$model->id),
+            'itemsTagName'=>'tr',
+            'tagName'=>'tbody',
+            'emptyTagName'=>'td colspan="8"',
+            'emptyCssClass'=>'text-center',
+            'template'=>'{items}',
+            'htmlOptions'=>array('class'=>'table'),
+        ));?>
     </table>
 <!---->
 <!--    --><?php //echo CHtml::beginForm();?>
@@ -52,27 +49,54 @@ Yii::app()->clientScript->registerCss('inline',"
                     <div class="form">
                         <div class="form-group">
                             <?php echo CHtml::beginForm('','post',array('id'=>'package-info-form'));?>
-                                <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-                                    'id' => 'uploaderFile',
-                                    'name' => 'file_name',
-                                    'maxFileSize' => 1024,
-                                    'maxFiles' => false,
-                                    'url' => Yii::app()->createUrl('/publishers/books/uploadFile'),
-                                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadFile'),
-                                    'acceptedFiles' => $this->formats,
-                                    'serverFiles' => array(),
-                                    'onSuccess' => '
-                                        var responseObj = JSON.parse(res);
-                                        if(responseObj.status){
-                                            {serverName} = responseObj.fileName;
-                                            $(".uploader-message").html("");
-                                        }
-                                        else{
-                                            $(".uploader-message").html(responseObj.message).addClass("error");
-                                            this.removeFile(file);
-                                        }
-                                    ',
-                                ));?>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <?php echo CHtml::label('فایل PDF', ''); ?>
+                                    <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                                        'id' => 'uploaderPdfFile',
+                                        'name' => 'pdf_file_name',
+                                        'maxFileSize' => 1024,
+                                        'maxFiles' => false,
+                                        'url' => Yii::app()->createUrl('/publishers/books/uploadPdfFile'),
+                                        'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadPdfFile'),
+                                        'acceptedFiles' => '.pdf',
+                                        'serverFiles' => array(),
+                                        'onSuccess' => '
+                                            var responseObj = JSON.parse(res);
+                                            if(responseObj.status){
+                                                {serverName} = responseObj.fileName;
+                                                $(".uploader-message").html("");
+                                            }
+                                            else{
+                                                $(".uploader-message").html(responseObj.message).addClass("error");
+                                                this.removeFile(file);
+                                            }
+                                        ',
+                                    ));?>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <?php echo CHtml::label('فایل EPUB', ''); ?>
+                                    <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                                        'id' => 'uploaderEpubFile',
+                                        'name' => 'epub_file_name',
+                                        'maxFileSize' => 1024,
+                                        'maxFiles' => false,
+                                        'url' => Yii::app()->createUrl('/publishers/books/uploadEpubFile'),
+                                        'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadEpubFile'),
+                                        'acceptedFiles' => '.epub',
+                                        'serverFiles' => array(),
+                                        'onSuccess' => '
+                                            var responseObj = JSON.parse(res);
+                                            if(responseObj.status){
+                                                {serverName} = responseObj.fileName;
+                                                $(".uploader-message").html("");
+                                            }
+                                            else{
+                                                $(".uploader-message").html(responseObj.message).addClass("error");
+                                                this.removeFile(file);
+                                            }
+                                        ',
+                                    ));?>
+                                </div>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <?php echo CHtml::textField('version', '', array('class'=>'form-control', 'placeholder'=>'نسخه چاپ *'));?>
@@ -106,7 +130,7 @@ Yii::app()->clientScript->registerCss('inline',"
                                                 if($('#package-info-form #version').val()=='' || $('#package-info-form #package_name').val()==''){
                                                     $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.').addClass('error');
                                                     return false;
-                                                }else if($('input[type=\"hidden\"][name=\"file_name\"]').length==0){
+                                                }else if($('input[type=\"hidden\"][name=\"pdf_file_name\"]').length==0 && $('input[type=\"hidden\"][name=\"epub_file_name\"]').length==0){
                                                     $('.uploader-message').text('لطفا نوبت چاپ جدید را آپلود کنید.').addClass('error');
                                                     return false;
                                                 }else

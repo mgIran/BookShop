@@ -24,7 +24,7 @@
                                     {
                                         var form = $("#login-form");
                                         var loading = $(".modal .loading-container");
-                                        var url = \''.Yii::app()->createUrl('/login').'\';
+                                        var url = \''.Yii::app()->createUrl('/users/public/login').'\';
                                         submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
                                     }
                                 }'

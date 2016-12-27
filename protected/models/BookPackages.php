@@ -9,7 +9,8 @@
  * @property string $version
  * @property string $package_name
  * @property string $isbn
- * @property string $file_name
+ * @property string $pdf_file_name
+ * @property string $epub_file_name
  * @property string $create_date
  * @property string $publish_date
  * @property string $status
@@ -32,7 +33,7 @@ class BookPackages extends CActiveRecord
     const STATUS_REFUSED = 'refused';
     const STATUS_CHANGE_REQUIRED = 'change_required';
 
-    
+
     public $statusLabels = array(
         'pending' => 'بارگذاری شده',
         'accepted' => 'تایید شده',
@@ -41,8 +42,8 @@ class BookPackages extends CActiveRecord
     );
 
     public $forLabels = array(
-        'new_book'=>'<span class="label label-success">کتاب جدید</span>',
-        'old_book'=>'<span class="label label-warning">کتاب تغییر داده شده</span>',
+        'new_book' => '<span class="label label-success">کتاب جدید</span>',
+        'old_book' => '<span class="label label-warning">کتاب تغییر داده شده</span>',
     );
 
     /**
@@ -61,53 +62,55 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('book_id, version, isbn, price, file_name, print_year', 'required'),
-            array('book_id, price, printed_price', 'length', 'max'=>10),
-            array('print_year', 'length', 'max'=>8),
-            array('version, isbn, create_date, publish_date', 'length', 'max'=>20),
-            array('version ,sale_printed, price, printed_price, print_year', 'numerical', 'integerOnly'=>true),
-            array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter'=>'strip_tags'),
-            array('package_name', 'length', 'max'=>100),
-            array('file_name', 'length', 'max'=>255),
-            array('status', 'length', 'max'=>15),
-            array('for', 'length', 'max'=>8),
-            array('create_date', 'default', 'value'=>time()),
+            array('book_id, version, isbn, price, print_year', 'required'),
+            array('pdf_file_name', 'orRequired', 'other'=>'epub_file_name'),
+            array('book_id, price, printed_price', 'length', 'max' => 10),
+            array('print_year', 'length', 'max' => 8),
+            array('version, isbn, create_date, publish_date', 'length', 'max' => 20),
+            array('version ,sale_printed, price, printed_price, print_year', 'numerical', 'integerOnly' => true),
+            array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter' => 'strip_tags'),
+            array('package_name', 'length', 'max' => 100),
+            array('pdf_file_name, epub_file_name', 'length', 'max' => 255),
+            array('status', 'length', 'max' => 15),
+            array('for', 'length', 'max' => 8),
+            array('create_date', 'default', 'value' => time()),
             array('isbn', 'isbnChecker'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, book_id, version, package_name, isbn, file_name, create_date, publish_date, status, reason, for, price, sale_printed, printed_price', 'safe', 'on'=>'search'),
+            array('id, book_id, version, package_name, isbn, pdf_file_name, epub_file_name, create_date, publish_date, status, reason, for, price, sale_printed, printed_price', 'safe', 'on' => 'search'),
         );
     }
 
-    public function isbnChecker($attribute ,$params)
+    public function orRequired($attribute, $params)
     {
-        $isbn = str_ireplace('-','',$this->$attribute);
-        if(strlen($isbn) !== 10 && strlen($isbn) !== 13)
-                $this->addError($attribute ,'طول رشته شابک اشتباه است.');
+        if(is_null($this->$attribute) and is_null($this->$params['other']))
+            $this->addError($attribute, '"'.$this->getAttributeLabel($attribute).'" و "'.$this->getAttributeLabel($params['other']).'" نمی توانند خالی باشند. لطفا یکی از آنها را پر کنید.');
+    }
+
+    public function isbnChecker($attribute, $params)
+    {
+        $isbn = str_ireplace('-', '', $this->$attribute);
+        if (strlen($isbn) !== 10 && strlen($isbn) !== 13)
+            $this->addError($attribute, 'طول رشته شابک اشتباه است.');
         $numbers = str_split($isbn);
         $sum = 0;
-        if(strlen($isbn) === 13)
-        {
-            foreach($numbers as $key => $number)
-            {
+        if (strlen($isbn) === 13) {
+            foreach ($numbers as $key => $number) {
                 $z = 1;
-                if($key % 2)
+                if ($key % 2)
                     $z = 3;
                 $sum += $number * $z;
             }
-            if($sum%10 !== 0)
-                $this->addError($attribute ,'شابک نامعتبر است.');
-        }
-        elseif(strlen($isbn) === 10)
-        {
+            if ($sum % 10 !== 0)
+                $this->addError($attribute, 'شابک نامعتبر است.');
+        } elseif (strlen($isbn) === 10) {
             $z = 10;
-            foreach($numbers as $key => $number)
-            {
+            foreach ($numbers as $key => $number) {
                 $sum += $number * $z;
                 $z--;
             }
-            if($sum%11 !== 0)
-                $this->addError($attribute ,'شابک نامعتبر است.');
+            if ($sum % 11 !== 0)
+                $this->addError($attribute, 'شابک نامعتبر است.');
         }
     }
 
@@ -133,7 +136,8 @@ class BookPackages extends CActiveRecord
             'book_id' => 'کتاب',
             'version' => 'نسخه',
             'package_name' => 'نام نوبت چاپ',
-            'file_name' => 'فایل',
+            'pdf_file_name' => 'فایل PDF',
+            'epub_file_name' => 'فایل EPUB',
             'create_date' => 'تاریخ بارگذاری',
             'publish_date' => 'تاریخ انتشار',
             'status' => 'وضعیت',
@@ -169,9 +173,10 @@ class BookPackages extends CActiveRecord
         $criteria->compare('book_id', $this->book_id, true);
         $criteria->compare('version', $this->version, true);
         $criteria->compare('package_name', $this->package_name, true);
-        $criteria->compare('file_name', $this->file_name, true);
+        $criteria->compare('pdf_file_name', $this->pdf_file_name, true);
+        $criteria->compare('epub_file_name', $this->epub_file_name, true);
         $criteria->compare('status', $this->status, true);
-        $criteria->compare('isbn',$this->isbn,true);
+        $criteria->compare('isbn', $this->isbn, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -191,7 +196,7 @@ class BookPackages extends CActiveRecord
 
     public function getOffPrice()
     {
-        if($this->book->discount)
+        if ($this->book->discount)
             return $this->price - $this->price * $this->book->discount->percent / 100;
         else
             return $this->price;

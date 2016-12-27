@@ -4,14 +4,14 @@
 /* @var $suggestedDataProvider CActiveDataProvider */
 /* @var $messages CArrayDataProvider */
 ?>
-<?php
-$this->widget('zii.widgets.CListView', array(
-    'id' => 'messages-list',
-    'dataProvider' => $messages,
-    'itemView' => '_message',
-    'template' => '{items}'
-));
-?>
+<?php if($messages->totalItemCount > 0):?>
+    <?php $this->widget('zii.widgets.CListView', array(
+        'id' => 'messages-list',
+        'dataProvider' => $messages,
+        'itemView' => '_message',
+        'template' => '{items}'
+    )); ?>
+<?php endif;?>
 <div class="statistics">
     <div>
         <div class="green">

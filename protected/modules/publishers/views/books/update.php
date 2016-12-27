@@ -16,7 +16,7 @@
         <li <?= !isset($step) || $step == 1 ?'class="active"':''; ?>>
             <a data-toggle="tab" href="#info">اطلاعات کتاب</a>
         </li>
-        <li>
+        <li <?= isset($step) && $step == 2 ?'class="active"':''; ?>>
             <a data-toggle="tab" href="#packages">نوبت های چاپ کتاب</a>
         </li>
 <!--        <li class="--><?// if($step == 3)echo 'active';elseif($step<3)echo 'disabled';?><!--">-->

@@ -1,8 +1,8 @@
 <div class="loading-container">
     <div class="overly"></div>
-    <div class="spinner">
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
+    <div class="spinners">
+        <div class="spinner"></div>
+        <div class="spinner-2"></div>
+        <div class="spinner-3"></div>
     </div>
 </div>

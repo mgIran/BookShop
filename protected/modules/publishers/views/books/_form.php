@@ -42,7 +42,7 @@
                     'model' => $model,
                     'attribute' => 'formAuthor',
                     'suggestType' => 'json',
-                    'placeholder' => 'نام نویسنده را وارد کرده و اینتر بزنید...',
+                    'placeholder' => 'نام نویسنده را وارد کرده و Enter بزنید...',
                     'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
                     'data' => $model->formAuthor
                 ));
@@ -55,7 +55,7 @@
                     'model' => $model,
                     'attribute' => 'formTranslator',
                     'suggestType' => 'json',
-                    'placeholder' => 'نام مترجم را وارد کرده و اینتر بزنید...',
+                    'placeholder' => 'نام مترجم را وارد کرده و Enter بزنید...',
                     'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
                     'data' => $model->formTranslator
                 ));

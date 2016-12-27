@@ -1,10 +1,26 @@
 <?php
 /* @var $data BookPackages*/
+$pdfSize=$epubSize=null;
+if(!is_null($data->pdf_file_name))
+    $pdfSize=Controller::fileSize(Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$data->pdf_file_name);
+if(!is_null($data->epub_file_name))
+    $epubSize=Controller::fileSize(Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$data->epub_file_name);
+$sizeString='';
+if(!is_null($pdfSize)) {
+    $sizeString .= 'PDF: '.$pdfSize;
+    if (!is_null($epubSize))
+        $sizeString .= '<br>EPUB:' . $epubSize;
+}elseif(!is_null($epubSize)){
+    $sizeString .= 'EPUB:'.$epubSize;
+    if (!is_null($pdfSize))
+        $sizeString .= '<br>PDF:' . $pdfSize;
+}
+
 ?>
 
 <tr>
     <td><?php echo CHtml::encode($data->version);?></td>
-    <td><?php echo Controller::fileSize(Yii::getPathOfAlias("webroot") . '/uploads/books/files/'.$data->file_name);?></td>
+    <td style="direction: ltr;text-align: right;"><?php echo $sizeString;?></td>
     <td><?php echo JalaliDate::date('d F Y', $data->create_date);?></td>
     <td><?php if($data->status=='accepted')echo JalaliDate::date('d F Y', $data->publish_date);else echo '-';?></td>
     <td><?php echo Controller::parseNumbers(number_format($data->price)).' تومان'?></td>

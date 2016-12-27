@@ -1,7 +1,8 @@
 <?php
 /* @var $this ManageBooksBaseManageController */
 /* @var $model BookPackages */
-/* @var $package [] */
+/* @var $pdfPackage [] */
+/* @var $epubPackage [] */
 $this->breadcrumbs = array(
     'مدیریت کتاب ها' => array('admin'),
     'نوبت های چاپ کتاب '.$model->book->title => array('update?id='.$model->book_id.'&step=2'),
@@ -10,7 +11,10 @@ $this->breadcrumbs = array(
 );
 $this->menu = array(
     array('label' => 'بازگشت','url' => array('update?id='.$model->book_id.'&step=2'))
-)
+);
+Yii::app()->clientScript->registerCss('inline',"
+.dropzone.single{width:100%;}
+");
 ?>
 <div class="white-form">
     <h3>ویرایش نوبت چاپ <?= $model->version ?> کتاب <?= $model->book->title ?></h3>
@@ -26,31 +30,57 @@ $this->menu = array(
                 'validateOnSubmit' => true
             )
         )); ?>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
                 <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-                    'id' => 'uploaderFile',
+                    'id' => 'uploaderPdfFile',
                     'model' => $model,
-                    'name' => 'file_name',
+                    'name' => 'pdf_file_name',
                     'maxFileSize' => 1024,
                     'maxFiles' => 1,
-                    'url' => Yii::app()->createUrl('/publishers/books/uploadFile'),
-                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteFile'),
-                    'acceptedFiles' => $this->formats,
-                    'serverFiles' => $package,
+                    'url' => Yii::app()->createUrl('/publishers/books/uploadPdfFile'),
+                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deletePdfFile'),
+                    'acceptedFiles' => '.pdf',
+                    'serverFiles' => $pdfPackage,
                     'onSuccess' => '
                         var responseObj = JSON.parse(res);
                         if(responseObj.status){
                             {serverName} = responseObj.fileName;
-                            $(".uploader-message").html("");
+                            $(".pdf-uploader-message").html("");
                         }
                         else{
-                            $(".uploader-message").html(responseObj.message).addClass("error");
+                            $(".pdf-uploader-message").html(responseObj.message).addClass("error");
                             this.removeFile(file);
                         }
                     ',
                 ));?>
                 <?php echo $form->error($model , 'file_name'); ?>
-                <div class="uploader-message"></div>
+                <div class="pdf-uploader-message"></div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                    'id' => 'uploaderEpubFile',
+                    'model' => $model,
+                    'name' => 'epub_file_name',
+                    'maxFileSize' => 1024,
+                    'maxFiles' => 1,
+                    'url' => Yii::app()->createUrl('/publishers/books/uploadEpubFile'),
+                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteEpubFile'),
+                    'acceptedFiles' => '.epub',
+                    'serverFiles' => $epubPackage,
+                    'onSuccess' => '
+                        var responseObj = JSON.parse(res);
+                        if(responseObj.status){
+                            {serverName} = responseObj.fileName;
+                            $(".epub-uploader-message").html("");
+                        }
+                        else{
+                            $(".epub-uploader-message").html(responseObj.message).addClass("error");
+                            this.removeFile(file);
+                        }
+                    ',
+                ));?>
+                <?php echo $form->error($model , 'file_name'); ?>
+                <div class="epub-uploader-message"></div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
                 <?php echo $form->labelEx($model , 'version'); ?>
