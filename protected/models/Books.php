@@ -364,10 +364,10 @@ class Books extends CActiveRecord
 	/**
 	 * Return url of book file
 	 */
-	public function getBookFileUrl()
+	public function getBookFileUrl($type = 'pdf')
 	{
 		if(!empty($this->packages))
-			return Yii::app()->createUrl("/uploads/books/files/".$this->lastPackage->file_name);
+			return Yii::app()->createUrl("/uploads/books/files/".$this->lastPackage->{$type.'_file_name'});
 		return '';
 	}
 

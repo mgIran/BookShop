@@ -27,7 +27,7 @@ $this->menu=array(
 		'category_id',
 		'status',
 		'price',
-		'file_name',
+		'pdf_file_name',
 		'icon',
 		'description',
 		'change_log',

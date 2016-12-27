@@ -64,11 +64,11 @@ $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="file-icon"></i></div>
-                                        <div class="meta-body">نوع فایل<div class="meta-heading"><?= CHtml::encode(pathinfo($model->lastPackage->file_name,PATHINFO_EXTENSION)) ?></div></div>
+                                        <div class="meta-body">نوع فایل<div class="meta-heading"><?= CHtml::encode(pathinfo($model->lastPackage->pdf_file_name,PATHINFO_EXTENSION)) ?></div></div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="download-icon"></i></div>
-                                        <div class="meta-body">حجم فایل<div class="meta-heading"><?= CHtml::encode(Controller::fileSize($filePath.$model->lastPackage->file_name)) ?></div></div>
+                                        <div class="meta-body">حجم فایل<div class="meta-heading"><?= CHtml::encode(Controller::fileSize($filePath.$model->lastPackage->pdf_file_name)) ?></div></div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="earth-icon"></i></div>
