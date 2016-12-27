@@ -158,6 +158,33 @@
                 <?php echo $form->error($model,'icon'); ?>
                 <div class="uploader-message error"></div>
             </div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <?php echo $form->labelEx($model,'icon',array('class'=> 'block')); ?>
+                <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                    'id' => 'uploaderPreview',
+                    'model' => $model,
+                    'name' => 'preview_file',
+                    'maxFiles' => 1,
+                    'maxFileSize' => 5, //MB
+                    'url' => Yii::app()->createUrl('/publishers/books/uploadPreview'),
+                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadPreview'),
+                    'acceptedFiles' => '.jpg, .jpeg, .png',
+                    'serverFiles' => $icon,
+                    'onSuccess' => '
+                        var responseObj = JSON.parse(res);
+                        if(responseObj.status){
+                            {serverName} = responseObj.fileName;
+                            $(".uploader-message").html("");
+                        }
+                        else{
+                            $(".uploader-message").html(responseObj.message);
+                            this.removeFile(file);
+                        }
+                    ',
+                )); ?>
+                <?php echo $form->error($model,'icon'); ?>
+                <div class="uploader-message error"></div>
+            </div>
 
         </div>
 

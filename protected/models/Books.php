@@ -6,6 +6,7 @@
  * The followings are the available columns in table '{{books}}':
  * @property string $id
  * @property string $title
+ * @property string $preview_file
  * @property string $icon
  * @property string $description
  * @property integer $number_of_pages
@@ -91,9 +92,10 @@ class Books extends CActiveRecord
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
 			array('language, confirm_date', 'length' ,'max'=>20),
-			array('language', 'filter' ,'filter'=>'strip_tags'),
+			array('language, preview_file', 'filter' ,'filter'=>'strip_tags'),
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
+			array('preview_file', 'length', 'max' => 255),
 			array('description, change_log, publisher_name, _purifier, formAuthor, formTranslator', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -133,12 +135,6 @@ class Books extends CActiveRecord
 		);
 	}
 
-//	public function getSortPersons(){
-//		$criteria = new CDbCriteria();
-//		$criteria->order = 'roles.order';
-//		var_dump($this->persons($criteria));exit;
-//	}
-
     public function getPerson($role=NUlL){
         $criteria = new CDbCriteria();
         if($role)
@@ -174,6 +170,7 @@ class Books extends CActiveRecord
 		return array(
             'id' => 'شناسه',
             'title' => 'عنوان',
+            'preview_file' => 'پیش نمایش کتاب',
             'icon' => 'تصویر جلد',
             'description' => 'توضیحات',
             'number_of_pages' => 'تعداد صفحات',

@@ -25,7 +25,9 @@ $this->menu=array(
 <div class="tab-content">
     <div id="info" class="tab-pane fade in active">
         <?php $this->renderPartial('_form', array(
-            'model'=>$model,'icon'=>$icon,
+            'model'=>$model,
+            'icon'=>$icon,
+            'previewFile'=>$previewFile,
             'tax'=>$tax,
             'commission'=>$commission,
         )); ?>

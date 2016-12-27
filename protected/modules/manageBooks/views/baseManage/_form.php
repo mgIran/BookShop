@@ -50,6 +50,36 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'preview_file'); ?>
+		<?php
+		$this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+			'id' => 'uploaderPreview',
+			'model' => $model,
+			'name' => 'preview_file',
+			'maxFiles' => 1,
+			'maxFileSize' => 5, //MB
+			'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadPreview'),
+			'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadedPreview'),
+			'acceptedFiles' => '.pdf, .epub',
+			'serverFiles' => $previewFile,
+			'onSuccess' => '
+				var responseObj = JSON.parse(res);
+				if(responseObj.status){
+					{serverName} = responseObj.fileName;
+					$(".uploader-preview-message").html("");
+				}
+				else{
+					$(".uploader-preview-message").html(responseObj.message);
+                    this.removeFile(file);
+                }
+            ',
+		));
+		?>
+		<?php echo $form->error($model,'preview_file'); ?>
+		<div class="uploader-preview-message error"></div>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'title'); ?>
 		<?php echo $form->textField($model,'title',array('size'=>50,'maxlength'=>50)); ?>
 		<?php echo $form->error($model,'title'); ?>
