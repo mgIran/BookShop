@@ -30,6 +30,7 @@ class ManageBooksBaseManageController extends Controller
                 'deleteUploadEpubFile',
                 'changeConfirm',
                 'changePackageStatus',
+                'changeFinanceStatus',
                 'deletePackage',
                 'savePackage',
                 'images',
@@ -468,6 +469,25 @@ class ManageBooksBaseManageController extends Controller
                     $this->createLog('نوبت چاپ ' . $model->package_name . ' توسط مدیر سیستم رد شد.' ,$model->book->publisher_id);
                 elseif($_POST['value'] == 'change_required')
                     $this->createLog('نوبت چاپ ' . $model->package_name . ' نیاز به تغییر دارد.' ,$model->book->publisher_id);
+                echo CJSON::encode(array('status' => true));
+            }else
+                echo CJSON::encode(array('status' => false));
+        }
+    }
+
+    public function actionChangeFinanceStatus()
+    {
+        if(isset($_POST['user_id'])){
+            $model = UserDetails::model()->findByPk($_POST['user_id']);
+            $model->financial_info_status = $_POST['value'];
+            $model->setScenario('change-finance-info');
+
+            if($model->save()){
+                if($_POST['value'] == 'accepted')
+                    $this->createLog('اطلاعات حساب بانکی شما توسط تیم مدیریت تایید شد.' ,$model->user_id);
+                elseif($_POST['value'] == 'refused')
+                    $this->createLog('اطلاعات حساب بانکی شما توسط تیم مدیریت تایید نشد. لطفا اطلاعات حساب بانکی خود را تغییر دهید.' ,$model->user_id);
+
                 echo CJSON::encode(array('status' => true));
             }else
                 echo CJSON::encode(array('status' => false));

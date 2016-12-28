@@ -30,6 +30,7 @@
  * @property string $account_owner
  * @property string $account_number
  * @property string $bank_name
+ * @property string $financial_info_status
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -88,7 +89,7 @@ class UserDetails extends CActiveRecord
             array('phone', 'length', 'max' => 11),
             array('publisher_id, nickname', 'length', 'max' => 20, 'min' => 5),
             array('address', 'length', 'max' => 1000),
-            array('details_status', 'length', 'max' => 8),
+            array('details_status, financial_info_status', 'length', 'max' => 8),
             array('type, post', 'length', 'max' => 5),
             array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
             array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
@@ -96,7 +97,7 @@ class UserDetails extends CActiveRecord
             array('monthly_settlement', 'default', 'value' => 1),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name', 'safe', 'on' => 'search'),
+            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name, financial_info_status', 'safe', 'on' => 'search'),
         );
     }
 
@@ -152,6 +153,7 @@ class UserDetails extends CActiveRecord
             'account_owner' => 'نام صاحب حساب',
             'account_number' => 'شماره حساب',
             'bank_name' => 'نام بانک',
+            'financial_info_status' => 'وضعیت اطلاعات مالی',
         );
     }
 
@@ -196,6 +198,7 @@ class UserDetails extends CActiveRecord
         $criteria->compare('registration_certificate_image', $this->registration_certificate_image, true);
         $criteria->compare('score',$this->score);
         $criteria->compare('avatar',$this->avatar,true);
+        $criteria->compare('financial_info_status',$this->financial_info_status,true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -257,6 +260,16 @@ class UserDetails extends CActiveRecord
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
         $criteria->addCondition('credit>:credit');
         $criteria->params=array(':credit'=>$setting->value);
+        return $criteria;
+    }
+
+    public static function PendingFinanceUsersCriteria(){
+        $criteria=new CDbCriteria();
+        $criteria->addCondition('iban IS NOT NULL AND iban != ""');
+        $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
+        $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
+        $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
+        $criteria->addCondition('financial_info_status = "pending"');
         return $criteria;
     }
 }

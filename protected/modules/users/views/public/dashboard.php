@@ -20,16 +20,14 @@
             <h3><?php echo number_format($model->userDetails->credit, 0, ',', '.');?> تومان</h3>
             <a href="<?php echo $this->createUrl('/users/credit/buy');?>">خرید اعتبار<i class="arrow-icon"></i></a>
         </div>
-    </div>
-    <div>
+    </div><div>
         <div class="red">
             <h4>نشان شده ها</h4>
             <span>کتاب هایی که مایلید مطالعه کنید</span>
             <h3><?php echo number_format(count($model->bookmarkedBooks), 0, ',', '.');?> کتاب</h3>
             <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>">نشان شده ها<i class="arrow-icon"></i></a>
         </div>
-    </div>
-    <div>
+    </div><div>
         <div class="blue">
             <h4>کتابخانه من</h4>
             <span>کتابخانه مجازی خود را بسازید</span>

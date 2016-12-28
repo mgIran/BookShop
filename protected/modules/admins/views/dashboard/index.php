@@ -4,6 +4,7 @@
 /* @var $newestPrograms CActiveDataProvider*/
 /* @var $newestPublishers CActiveDataProvider*/
 /* @var $newestPackages CActiveDataProvider*/
+/* @var $newestFinanceInfo CActiveDataProvider*/
 /* @var $tickets []*/
 ?>
 <?php if(Yii::app()->user->hasFlash('success')):?>
@@ -220,7 +221,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
     </div>
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="panel-heading">
-            اطلاعات ناشران جدید<small>(تایید نشده)</small>
+            اطلاعات ناشران<small>(تایید نشده)</small>
         </div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -254,6 +255,50 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                     ),
                 ),
             ));?>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="panel-heading">اطلاعات مالی ناشران<small>(تایید نشده)</small></div>
+        <div class="panel-body">
+            <?php $this->widget('zii.widgets.grid.CGridView', array(
+                'id'=>'newest-finance-info-grid',
+                'dataProvider'=>$newestFinanceInfo,
+                'columns'=>array(
+                    'fa_name'=>array(
+                        'name'=>'fa_name',
+                        'value'=>'CHtml::link($data->fa_name, Yii::app()->createUrl("/users/".$data->user_id))',
+                        'type'=>'raw'
+                    ),
+                    'account_owner',
+                    'account_number',
+                    'bank_name',
+                    array(
+                        'name'=>'iban',
+                        'value'=>'"IR".$data->iban'
+                    ),
+                    'financial_info_status'=>array(
+                        'name'=>'financial_info_status',
+                        'value'=>'CHtml::dropDownList("financial_info_status", "pending", $data->detailsStatusLabels, array("class"=>"change-finance-status", "data-id"=>$data->user_id))',
+                        'type'=>'raw'
+                    ),
+                ),
+            ));?>
+            <?php Yii::app()->clientScript->registerScript('changeFinanceStatus', "
+                $('body').on('change', '.change-finance-status', function(){
+                    $.ajax({
+                        url:'".$this->createUrl('/manageBooks/baseManage/changeFinanceStatus')."',
+                        type:'POST',
+                        dataType:'JSON',
+                        data:{user_id:$(this).data('id'), value:$(this).val()},
+                        success:function(data){
+                            if(data.status)
+                                $.fn.yiiGridView.update('newest-finance-info-grid');
+                            else
+                                alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+                        }
+                    });
+                });
+            ");?>
         </div>
     </div>
 </div>

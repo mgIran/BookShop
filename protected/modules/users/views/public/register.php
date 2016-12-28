@@ -2,7 +2,7 @@
 /* @var $model Users */
 /* @var $form CActiveForm */
 ?>
-<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 box">
     <h4 class="title"><strong>ایجاد حساب کاربری</strong></h4>
     <h4 class="welcome-text">کاربر گرامی<small> ، لطفا فرم زیر را پر کنید.</small></h4>
     <div class="login-form signup">
