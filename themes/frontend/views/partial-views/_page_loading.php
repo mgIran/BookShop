@@ -1,6 +1,6 @@
 <div class="page-loading">
     <div class="logo">
-        <img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>بــــــوک شــــــاپ<small>نزدیکترین کتابفروشی شهر</small></h1>
+        <img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo.svg';?>" alt="<?php echo Yii::app()->name;?>"><h1>کــــــــتابیــــــــــک<small>نزدیکترین کتابفروشی شهر</small></h1>
     </div>
     <div class="spinners">
         <div class="spinner"></div>

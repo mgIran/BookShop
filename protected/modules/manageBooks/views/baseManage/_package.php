@@ -9,27 +9,52 @@ Yii::app()->clientScript->registerCss('inline',"
 ?>
 <?php echo CHtml::beginForm('','post',array('id'=>'package-info-form'));?>
     <div class="row">
-        <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-            'id' => 'uploaderFile',
-            'name' => 'file_name',
-            'maxFileSize' => 1024,
-            'maxFiles' => false,
-            'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadFile'),
-            'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadFile'),
-            'acceptedFiles' => $this->formats,
-            'serverFiles' => array(),
-            'onSuccess' => '
-                var responseObj = JSON.parse(res);
-                if(responseObj.status){
-                    {serverName} = responseObj.fileName;
-                    $(".uploader-message").html("");
-                }
-                else{
-                    $(".uploader-message").html(responseObj.message).addClass("error");
-                    this.removeFile(file);
-                }
-            ',
-        ));?>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                'id' => 'uploaderPdfFile',
+                'name' => 'pdf_file_name',
+                'maxFileSize' => 1024,
+                'maxFiles' => false,
+                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadPdfFile'),
+                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadPdfFile'),
+                'acceptedFiles' => '.pdf',
+                'serverFiles' => array(),
+                'onSuccess' => '
+                    var responseObj = JSON.parse(res);
+                    if(responseObj.status){
+                        {serverName} = responseObj.fileName;
+                        $(".uploader-message").html("");
+                    }
+                    else{
+                        $(".uploader-message").html(responseObj.message).addClass("error");
+                        this.removeFile(file);
+                    }
+                ',
+            ));?>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+                'id' => 'uploaderEpubFile',
+                'name' => 'epub_file_name',
+                'maxFileSize' => 1024,
+                'maxFiles' => false,
+                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadEpubFile'),
+                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadEpubFile'),
+                'acceptedFiles' => '.epub',
+                'serverFiles' => array(),
+                'onSuccess' => '
+                    var responseObj = JSON.parse(res);
+                    if(responseObj.status){
+                        {serverName} = responseObj.fileName;
+                        $(".uploader-message").html("");
+                    }
+                    else{
+                        $(".uploader-message").html(responseObj.message).addClass("error");
+                        this.removeFile(file);
+                    }
+                ',
+            ));?>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -63,7 +88,7 @@ Yii::app()->clientScript->registerCss('inline',"
                     if($('#package-info-form #version').val()=='' || $('#package-info-form #package_name').val()==''){
                         $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.');
                         return false;
-                    }else if($('input[type=\"hidden\"][name=\"file_name\"]').length==0){
+                    }else if($('input[type=\"hidden\"][name=\"pdf_file_name\"]').length==0 && $('input[type=\"hidden\"][name=\"epub_file_name\"]').length==0){
                         $('.uploader-message').text('لطفا فایل چاپ جدید را آپلود کنید.');
                         return false;
                     }else

@@ -363,6 +363,9 @@ class Books extends CActiveRecord
 
 	/**
 	 * Return url of book file
+	 *
+	 * @param string $type is type of file
+	 * @return string
 	 */
 	public function getBookFileUrl($type = 'pdf')
 	{

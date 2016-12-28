@@ -22,9 +22,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
 ?>
 <div class="row">
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <div class="panel-heading">
-            جدیدترین کتاب ها
-        </div>
+        <div class="panel-heading">جدیدترین کتاب ها</div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
                 'id'=>'newest-books-grid',
@@ -100,7 +98,6 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'type'=>'raw'
                     ),
                     'version',
-                    'package_name',
                     'status'=>array(
                         'name'=>'status',
                         'value'=>'CHtml::dropDownList("confirm", "pending", $data->statusLabels, array("class"=>"change-package-status", "data-id"=>$data->id))',
@@ -108,15 +105,28 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                     ),
                     array(
                         'class'=>'CButtonColumn',
-                        'template' => '{delete}{download}',
+                        'template' => '{delete}{downloadPdf} {downloadEpub}',
                         'buttons'=>array(
                             'delete'=>array(
                                 'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/deletePackage/".$data->id)',
                             ),
-                            'download'=>array(
-                                'label'=>'دانلود',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id)',
-                                'imageUrl'=>Yii::app()->theme->baseUrl.'/img/download.png',
+                            'downloadPdf'=>array(
+                                'label'=>'دانلود PDF',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id."?title=pdf")',
+                                'visible'=>function($data,$model){
+                                    if(is_null($model->pdf_file_name))
+                                        return false;
+                                    return true;
+                                },
+                            ),
+                            'downloadEpub'=>array(
+                                'label'=>'دانلود EPUB',
+                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id."?title=epub")',
+                                'visible'=>function($data,$model){
+                                    if(is_null($model->epub_file_name))
+                                        return false;
+                                    return true;
+                                },
                             ),
                         ),
                     ),
