@@ -136,9 +136,10 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                 <?
                                 if($model->hasDiscount()):
                                     ?>
-                                    <h5 class="price text-line-through text-danger">
-                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
-                                        <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                    <h5 class="price text-danger">
+                                        <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>">
+                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?></span>
+                                        <small> / <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
                                     </h5>
                                     <h5 class="price">
                                         <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
@@ -181,6 +182,11 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                                 <?php
                                             endif;
                                         endif;
+                                    else:
+                                    ?>
+                                        <h6>شما ناشر این کتاب هستید.</h6>
+                                        <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>
+                                    <?
                                     endif;
                                 else:
                                 ?>

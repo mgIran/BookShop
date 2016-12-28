@@ -383,7 +383,7 @@ class Books extends CActiveRecord
 
 	public function hasDiscount()
 	{
-		if($this->discount && $this->discount->percent && $this->discount->start_date < time() && $this->discount->end_date > time())
+		if($this->discount && $this->discount->start_date < time() && $this->discount->end_date > time())
 			return true;
 		else
 			return false;
@@ -467,7 +467,9 @@ class Books extends CActiveRecord
 	}
 
 	public function getPrice(){
-		return $this->lastPackage?$this->lastPackage->price:0;
+		if($this->lastPackage)
+			return $this->lastPackage->price;
+		return false;
 	}
 	public function getPrinted_price(){
 		if($this->lastPackage && $this->lastPackage->sale_printed)
@@ -477,16 +479,16 @@ class Books extends CActiveRecord
 	public function getOffPrice()
 	{
 		if($this->lastPackage && $this->discount)
-			return $this->lastPackage->price - $this->lastPackage->price * $this->discount->percent / 100;
+			return $this->discount->getOffPrice();
 		else
-			return $this->lastPackage?$this->lastPackage->price:0;
+			return $this->getPrice();
 	}
 	public function getOff_printed_price()
 	{
 		if($this->lastPackage && $this->discount)
-			return $this->lastPackage->printed_price - $this->lastPackage->printed_price * $this->discount->percent / 100;
+			return $this->discount->getOff_printed_price();
 		else
-			return $this->lastPackage?$this->lastPackage->printed_price:0;
+			return $this->getPrinted_price();
 	}
 
 	public function getComments(){

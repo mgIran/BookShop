@@ -22,8 +22,7 @@
             'clientOptions' => array(
                 'validateOnSubmit' => true,
                 'afterValidate' => 'js:function(form ,data ,hasError){
-                    if(!hasError)
-                    {
+                    if(!hasError){
                         var loading = $("#books-discount-form-parent .loading-container");
                         var url = \''.Yii::app()->createUrl('/publishers/panel/discount/?ajax=books-discount-form').'\';
                         submitAjaxForm(form ,url ,loading ,"if(html.status) location.reload();");
@@ -53,9 +52,19 @@
         </div>
 
         <div class="form-group">
+            <?php echo $form->labelEx($model, 'discount_type', array('class' => 'control-label')); ?>
+            <?php echo $form->dropDownList($model, 'discount_type', $model->discountTypeLabels, array('class' => 'form-control', 'maxLength' => 2)); ?>
+            <?php echo $form->error($model, 'discount_type'); ?>
+        </div>
+        <div class="form-group fade hidden" id="percent-field">
             <?php echo $form->labelEx($model, 'percent', array('class' => 'control-label')); ?>
             <?php echo $form->textField($model, 'percent', array('class' => 'form-control', 'maxLength' => 2)); ?>
             <?php echo $form->error($model, 'percent'); ?>
+        </div>
+        <div class="form-group fade hidden" id="amount-field">
+            <?php echo $form->labelEx($model, 'amount', array('class' => 'control-label')); ?>
+            <?php echo $form->textField($model, 'amount', array('class' => 'form-control', 'maxLength' => 12)); ?>تومان
+            <?php echo $form->error($model, 'amount'); ?>
         </div>
 
         <div class="form-group buttons">
@@ -66,6 +75,26 @@
 
     </div><!-- form -->
     <?
+    Yii::app()->clientScript->registerScript('change-discount-type', '
+        var $type = $("#BookDiscounts_discount_type").val();
+        if($type == 1){
+            $("#percent-field").removeClass("hidden").addClass("in");
+            $("#amount-field").removeClass("in").addClass("hidden");
+        }else{
+            $("#amount-field").removeClass("hidden").addClass("in");
+            $("#percent-field").removeClass("in").addClass("hidden");
+        }
+        $("body").on("change", "#BookDiscounts_discount_type", function(){
+            var $type = $("#BookDiscounts_discount_type").val();
+            if($type == 1){
+                $("#percent-field").removeClass("hidden").addClass("in");
+                $("#amount-field").removeClass("in").addClass("hidden");
+            }else{
+                $("#amount-field").removeClass("hidden").addClass("in");
+                $("#percent-field").removeClass("in").addClass("hidden");
+            }
+        });
+    ');
     Yii::app()->clientScript->registerScript('datesScript', '
         $(\'#start_date\').persianDatepicker({
             altField: \'#start_date_alt\',

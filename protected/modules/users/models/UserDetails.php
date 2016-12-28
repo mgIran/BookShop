@@ -255,6 +255,7 @@ class UserDetails extends CActiveRecord
         $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
         $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
+        $criteria->addCondition('financial_info_status = "accepted"');
         $criteria->addCondition('credit>:credit');
         $criteria->params=array(':credit'=>$setting->value);
         return $criteria;
