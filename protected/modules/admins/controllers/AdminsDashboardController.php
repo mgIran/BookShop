@@ -55,6 +55,10 @@ class AdminsDashboardController extends Controller
             'criteria' => $criteria,
         ));
 
+        $newestFinanceInfo = new CActiveDataProvider('UserDetails', array(
+            'criteria' => UserDetails::PendingFinanceUsersCriteria(),
+        ));
+
         $criteria = new CDbCriteria();
         $criteria->with = 'book';
         $criteria->alias = 'package';
@@ -78,6 +82,7 @@ class AdminsDashboardController extends Controller
             'newestPrograms' => $newestPrograms,
             'devIDRequests' => $newestDevIdRequests,
             'newestPublishers' => $newestPublishers,
+            'newestFinanceInfo' => $newestFinanceInfo,
             'tickets' => $tickets,
         ));
     }

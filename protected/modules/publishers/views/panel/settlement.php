@@ -9,13 +9,21 @@
 <div class="white-form">
 
     <?php
+    $message=array();
     if(!$userDetailsModel->validateAccountingInformation()){
         $message['type'] = 'danger';
         $message['message'] = 'اطلاعات بانکی شما به منظور انجام تسویه حساب ناقص است و تا زمانی که این اطلاعات تکمیل نشود تسویه حساب برای شما انجام نمی شود.';
+    }elseif($userDetailsModel->financial_info_status == 'pending'){
+        $message['type'] = 'warning';
+        $message['message'] = 'اطلاعات حساب بانکی شما باید توسط تیم مدیریت تایید گردد.';
+    }elseif($userDetailsModel->financial_info_status == 'refused'){
+        $message['type'] = 'danger';
+        $message['message'] = 'اطلاعات حساب بانکی شما مورد تایید نمی باشد! لطفا اطلاعات حساب بانکی خود را تغییر دهید.';
+    }
+    if(!empty($message))
         $this->renderPartial('users.views.public._message' ,array(
             'data' => $message
         ));
-    }
     ?>
     <h3>تسویه حساب</h3>
     <p class="description">می توانید ماهیانه با کتابیک تسویه حساب کنید.</p>

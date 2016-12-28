@@ -90,6 +90,26 @@ $this->menu=array(
 				'name'=>'وضعیت اطلاعات',
 				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->details_status],
 			),
+			array(
+				'name'=>'نام صاحب حساب',
+				'value'=>$model->userDetails->account_owner,
+			),
+			array(
+				'name'=>'شماره حساب',
+				'value'=>$model->userDetails->account_number,
+			),
+			array(
+				'name'=>'نام بانک',
+				'value'=>$model->userDetails->bank_name,
+			),
+			array(
+				'name'=>'شماره شبا',
+				'value'=>'IR'.$model->userDetails->iban,
+			),
+			array(
+				'name'=>'وضعیت اطلاعات مالی',
+				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->financial_info_status],
+			),
 		),
 	)); ?>
 <?php else:?>
@@ -160,6 +180,26 @@ $this->menu=array(
 			array(
 				'name'=>'وضعیت اطلاعات',
 				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->details_status],
+			),
+			array(
+				'name'=>'نام صاحب حساب',
+				'value'=>$model->userDetails->account_owner,
+			),
+			array(
+				'name'=>'شماره حساب',
+				'value'=>$model->userDetails->account_number,
+			),
+			array(
+				'name'=>'نام بانک',
+				'value'=>$model->userDetails->bank_name,
+			),
+			array(
+				'name'=>'شماره شبا',
+				'value'=>'IR'.$model->userDetails->iban,
+			),
+			array(
+				'name'=>'وضعیت اطلاعات مالی',
+				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->financial_info_status],
 			),
 		),
 	)); ?>

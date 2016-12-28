@@ -2,7 +2,7 @@
 /* @var $model Users */
 /* @var $form CActiveForm */
 ?>
-<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 divider">
+<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 divider box">
     <h4 class="title"><strong>ورود به حساب کاربری</strong></h4>
     <h4 class="welcome-text">خوش آمدید<small> ، لطفا وارد شوید.</small></h4>
     <div class="login-form">

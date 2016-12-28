@@ -63,11 +63,11 @@ class BookPackages extends CActiveRecord
         // will receive user inputs.
         return array(
             array('book_id, version, isbn, price, print_year', 'required'),
-            array('pdf_file_name', 'orRequired', 'other'=>'epub_file_name'),
+            array('pdf_file_name', 'orRequired', 'other' => 'epub_file_name'),
             array('book_id, price, printed_price', 'length', 'max' => 10),
             array('print_year', 'length', 'max' => 8),
             array('version, isbn, create_date, publish_date', 'length', 'max' => 20),
-            array('version ,sale_printed, price, printed_price, print_year', 'numerical', 'integerOnly' => true),
+            array('sale_printed, price, printed_price, print_year', 'numerical', 'integerOnly' => true),
             array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter' => 'strip_tags'),
             array('package_name', 'length', 'max' => 100),
             array('pdf_file_name, epub_file_name', 'length', 'max' => 255),
@@ -83,8 +83,8 @@ class BookPackages extends CActiveRecord
 
     public function orRequired($attribute, $params)
     {
-        if(is_null($this->$attribute) and is_null($this->$params['other']))
-            $this->addError($attribute, '"'.$this->getAttributeLabel($attribute).'" و "'.$this->getAttributeLabel($params['other']).'" نمی توانند خالی باشند. لطفا یکی از آنها را پر کنید.');
+        if (is_null($this->$attribute) and is_null($this->$params['other']))
+            $this->addError($attribute, '"' . $this->getAttributeLabel($attribute) . '" و "' . $this->getAttributeLabel($params['other']) . '" نمی توانند خالی باشند. لطفا یکی از آنها را پر کنید.');
     }
 
     public function isbnChecker($attribute, $params)
@@ -214,5 +214,26 @@ class BookPackages extends CActiveRecord
         $tax = ($price * $tax) / 100;
         $commission = ($price * $commission) / 100;
         return $price - $tax - $commission;
+    }
+
+    public function getUploadedFilesType()
+    {
+        $types = array();
+        if (!is_null($this->pdf_file_name))
+            $types[] = 'PDF';
+        if (!is_null($this->epub_file_name))
+            $types[] = 'EPUB';
+        return implode(', ', $types);
+    }
+
+    public function getUploadedFilesSize()
+    {
+        $types = array();
+        $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
+        if (!is_null($this->pdf_file_name))
+            $types[] = 'PDF: '.Controller::fileSize($filePath.$this->pdf_file_name);
+        if (!is_null($this->epub_file_name))
+            $types[] = 'EPUB: '.Controller::fileSize($filePath.$this->epub_file_name);
+        return implode(' | ', $types);
     }
 }

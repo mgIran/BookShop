@@ -15,8 +15,37 @@ class ManageBooksBaseManageController extends Controller
     public static function actionsType()
     {
         return array(
-            'backend' => array('index' , 'view' , 'create' , 'update' , 'admin' , 'delete' , 'upload' , 'deleteUpload' , 'uploadFile' , 'deleteUploadFile' ,
-                'changeConfirm' , 'changePackageStatus' , 'deletePackage' , 'savePackage' , 'images' , 'download' , 'updatePackage' , 'downloadPackage' , 'discount' , 'createDiscount' , 'updateDiscount' , 'deleteDiscount' , 'uploadPreview', 'deleteUploadedPreview')
+            'backend' => array(
+                'index',
+                'view',
+                'create',
+                'update',
+                'admin',
+                'delete',
+                'upload',
+                'deleteUpload',
+                'uploadPdfFile',
+                'uploadEpubFile',
+                'deleteUploadPdfFile',
+                'deleteUploadEpubFile',
+                'changeConfirm',
+                'changePackageStatus',
+                'changeFinanceStatus',
+                'deletePackage',
+                'savePackage',
+                'images',
+                'download',
+                'updatePackage',
+                'downloadPackage',
+                'discount',
+                'createDiscount',
+                'updateDiscount',
+                'deleteDiscount',
+                'uploadPreview',
+                'deleteUploadedPreview',
+                'deletePdfFile',
+                'deleteEpubFile',
+            )
         );
     }
 
@@ -57,12 +86,20 @@ class ManageBooksBaseManageController extends Controller
                     'acceptedTypes' => array('jpg' ,'jpeg' ,'png')
                 )
             ) ,
-            'uploadFile' => array(
+            'uploadPdfFile' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction' ,
-                'attribute' => 'file_name' ,
+                'attribute' => 'pdf_file_name' ,
                 'rename' => 'random' ,
                 'validateOptions' => array(
-                    'acceptedTypes' => array('epub' ,'pdf')
+                    'acceptedTypes' => array('pdf')
+                )
+            ) ,
+            'uploadEpubFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction' ,
+                'attribute' => 'epub_file_name' ,
+                'rename' => 'random' ,
+                'validateOptions' => array(
+                    'acceptedTypes' => array('epub')
                 )
             ) ,
             'uploadPreview' => array(
@@ -80,10 +117,31 @@ class ManageBooksBaseManageController extends Controller
                 'uploadDir' => '/uploads/books/icons' ,
                 'storedMode' => 'field'
             ) ,
-            'deleteUploadFile' => array(
+            'deleteUploadPdfFile' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
                 'modelName' => 'BookPackages' ,
-                'attribute' => 'file_name' ,
+                'attribute' => 'pdf_file_name' ,
+                'uploadDir' => '/uploads/books/files' ,
+                'storedMode' => 'record'
+            ) ,
+            'deletePdfFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
+                'modelName' => 'BookPackages' ,
+                'attribute' => 'pdf_file_name' ,
+                'uploadDir' => '/uploads/books/files' ,
+                'storedMode' => 'field'
+            ) ,
+            'deleteEpubFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
+                'modelName' => 'BookPackages' ,
+                'attribute' => 'epub_file_name' ,
+                'uploadDir' => '/uploads/books/files' ,
+                'storedMode' => 'field'
+            ) ,
+            'deleteUploadEpubFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction' ,
+                'modelName' => 'BookPackages' ,
+                'attribute' => 'epub_file_name' ,
                 'uploadDir' => '/uploads/books/files' ,
                 'storedMode' => 'record'
             ) ,
@@ -417,12 +475,31 @@ class ManageBooksBaseManageController extends Controller
         }
     }
 
+    public function actionChangeFinanceStatus()
+    {
+        if(isset($_POST['user_id'])){
+            $model = UserDetails::model()->findByPk($_POST['user_id']);
+            $model->financial_info_status = $_POST['value'];
+            $model->setScenario('change-finance-info');
+
+            if($model->save()){
+                if($_POST['value'] == 'accepted')
+                    $this->createLog('اطلاعات حساب بانکی شما توسط تیم مدیریت تایید شد.' ,$model->user_id);
+                elseif($_POST['value'] == 'refused')
+                    $this->createLog('اطلاعات حساب بانکی شما توسط تیم مدیریت تایید نشد. لطفا اطلاعات حساب بانکی خود را تغییر دهید.' ,$model->user_id);
+
+                echo CJSON::encode(array('status' => true));
+            }else
+                echo CJSON::encode(array('status' => false));
+        }
+    }
+
     public function actionDeletePackage($id)
     {
         $model = BookPackages::model()->findByPk($id);
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if(file_exists($uploadDir . '/' . $model->file_name))
-            if(unlink($uploadDir . '/' . $model->file_name))
+        if(file_exists($uploadDir . '/' . $model->pdf_file_name))
+            if(unlink($uploadDir . '/' . $model->pdf_file_name))
                 if($model->delete())
                     $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.' ,$model->book->publisher_id);
 
@@ -448,11 +525,18 @@ class ManageBooksBaseManageController extends Controller
             if(!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;
             if($model->save()){
-                $response = ['status' => true ,'fileName' => $model->file_name];
-                @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
+                $response = ['status' => true ,'pdfFileName' => $model->pdf_file_name,'epubFileName' => $model->epub_file_name];
+                if(isset($_POST['pdf_file_name']))
+                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                if(isset($_POST['epub_file_name']))
+                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
             }else{
                 $response = ['status' => false ,'message' => $this->implodeErrors($model)];
-                @unlink($tempDir . '/' . $_POST['file_name']);
+                if(isset($_POST['pdf_file_name']))
+                    @unlink($tempDir . '/' . $_POST['pdf_file_name']);
+
+                if(isset($_POST['epub_file_name']))
+                    @unlink($tempDir . '/' . $_POST['epub_file_name']);
             }
 
             echo CJSON::encode($response);
@@ -499,11 +583,12 @@ class ManageBooksBaseManageController extends Controller
     /**
      * Download book package
      * @param $id
+     * @param $title
      */
-    public function actionDownloadPackage($id)
+    public function actionDownloadPackage($id, $title)
     {
         $model = BookPackages::model()->findByPk($id);
-        $this->download($model->file_name ,Yii::getPathOfAlias("webroot") . '/uploads/books/files/');
+        $this->download($model->{$title.'_file_name'} ,Yii::getPathOfAlias("webroot") . '/uploads/books/files/');
     }
 
     protected function download($fileName ,$filePath)
@@ -516,19 +601,12 @@ class ManageBooksBaseManageController extends Controller
 
         $mimeType = '';
         switch(pathinfo($fileName ,PATHINFO_EXTENSION)){
-            case 'apk':
-                $mimeType = 'application/vnd.android.package-archive';
+            case 'pdf':
+                $mimeType = 'application/pdf';
                 break;
 
-            case 'xap':
-                $mimeType = 'application/x-silverlight-app';
-                break;
-
-            case 'ipa':
-                $mimeType = 'application/octet-stream';
-                break;
-            default:
-                $mimeType = 'application/octet-stream';
+            case 'epub':
+                $mimeType = 'application/epub+zip';
                 break;
         }
 
@@ -559,13 +637,21 @@ class ManageBooksBaseManageController extends Controller
             if(!is_dir($uploadDir))
                 mkdir($uploadDir);
 
-            $package = array();
-            if($model->file_name && file_exists($uploadDir . $model->file_name))
-                $package = array(
-                    'name' => $model->file_name ,
-                    'src' => $uploadUrl . '/' . $model->file_name ,
-                    'size' => filesize($uploadDir . $model->file_name) ,
-                    'serverName' => $model->file_name ,
+            $pdfPackage =$epubPackage = array();
+            if($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
+                $pdfPackage = array(
+                    'name' => $model->pdf_file_name,
+                    'src' => $uploadUrl . '/' . $model->pdf_file_name,
+                    'size' => filesize($uploadDir . $model->pdf_file_name) ,
+                    'serverName' => $model->pdf_file_name,
+                );
+
+            if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
+                $epubPackage = array(
+                    'name' => $model->epub_file_name,
+                    'src' => $uploadUrl . '/' . $model->epub_file_name,
+                    'size' => filesize($uploadDir . $model->epub_file_name) ,
+                    'serverName' => $model->epub_file_name,
                 );
             if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
@@ -574,8 +660,10 @@ class ManageBooksBaseManageController extends Controller
                 if(!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
                 if($model->save()){
-                    if($model->file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->file_name ,$uploadDir . DIRECTORY_SEPARATOR . $model->file_name);
+                    if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name ,$uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                    if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name ,$uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
                     Yii::app()->user->setFlash('success' ,'اطلاعات با موفقیت ثبت شد.');
                     $this->redirect('update/' . $model->book_id . '/?step=2');
                 }else
@@ -583,7 +671,8 @@ class ManageBooksBaseManageController extends Controller
             }
             $this->render('update_package' ,array(
                 'model' => $model ,
-                'package' => $package
+                'pdfPackage' => $pdfPackage,
+                'epubPackage' => $epubPackage,
             ));
         }else
             $this->redirect(array('/manageBooks/baseManage/admin'));

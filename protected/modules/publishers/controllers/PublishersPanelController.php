@@ -395,6 +395,7 @@ class PublishersPanelController extends Controller
             $userDetailsModel->account_owner=$_POST['UserDetails']['account_owner'];
             $userDetailsModel->account_number=$_POST['UserDetails']['account_number'];
             $userDetailsModel->bank_name=$_POST['UserDetails']['bank_name'];
+            $userDetailsModel->financial_info_status='pending';
             if($userDetailsModel->save())
             {
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
