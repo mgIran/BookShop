@@ -524,6 +524,8 @@ class ManageBooksBaseManageController extends Controller
             $model->publish_date = time();
             if(!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;
+            if(!$model->printed_price || empty($model->printed_price))
+                $model->printed_price = $model->price;
             if($model->save()){
                 $response = ['status' => true ,'pdfFileName' => $model->pdf_file_name,'epubFileName' => $model->epub_file_name];
                 if(isset($_POST['pdf_file_name']))

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2016-12-29 20:27:42
+Date: 2016-12-29 20:56:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -447,7 +447,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1483029040');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1483031915');
 
 -- ----------------------------
 -- Table structure for ym_library
@@ -1394,7 +1394,7 @@ CREATE TABLE `ym_user_details` (
   `bank_name` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `financial_info_status` enum('pending','accepted','refused') COLLATE utf8_persian_ci DEFAULT 'pending' COMMENT 'وضعیت اطلاعات مالی',
   `commission` decimal(3,0) unsigned DEFAULT NULL COMMENT 'کمیسیون ناشر',
-  `tax_exempt` decimal(1,0) unsigned DEFAULT NULL COMMENT 'معاف از مالیات',
+  `tax_exempt` decimal(1,0) unsigned DEFAULT '0' COMMENT 'معاف از مالیات',
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
@@ -1402,25 +1402,25 @@ CREATE TABLE `ym_user_details` (
 -- ----------------------------
 -- Records of ym_user_details
 -- ----------------------------
-INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '117000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '6', null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '500', null, 'pending', '0', null, null, 'real', null, null, null, null, '1', null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '8400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('60', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('61', ' ', null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=200', '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('63', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('64', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('65', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('66', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('67', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('68', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('69', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('70', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('71', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
+INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '117000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '6', null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '500', null, 'pending', '0', null, null, 'real', null, null, null, null, '1', null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '8400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('60', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('61', ' ', null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=200', '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('63', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('64', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('65', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('66', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('67', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('68', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('69', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('70', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('71', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
 
 -- ----------------------------
 -- Table structure for ym_user_dev_id_requests
