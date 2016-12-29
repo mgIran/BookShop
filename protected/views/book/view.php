@@ -139,7 +139,7 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                     <h5 class="price text-danger">
                                         <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>">
                                         <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?></span>
-                                        <small> / <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
+                                        <small> / <span class="<?= $model->discount->hasPrintedPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
                                     </h5>
                                     <h5 class="price">
                                         <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>

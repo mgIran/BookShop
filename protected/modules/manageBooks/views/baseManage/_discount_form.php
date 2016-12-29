@@ -127,7 +127,7 @@ Yii::app()->clientScript->registerScript('change-discount-type', '
 Yii::app()->clientScript->registerScript('datesScript', '
     $(\'#start_date\').persianDatepicker({
         altField: \'#start_date_alt\',
-        maxDate:'.(time()*1000).',
+        maxDate:'.(time()*100).',
         altFormat: \'X\',
         observer: true,
         format: \'DD MMMM YYYY  -  h:mm a\',
@@ -153,7 +153,7 @@ Yii::app()->clientScript->registerScript('datesScript', '
     
     $(\'#printed_start_date\').persianDatepicker({
         altField: \'#printed_start_date_alt\',
-        maxDate:'.(time()*1000).',
+        maxDate:'.(time()*100).',
         altFormat: \'X\',
         observer: true,
         format: \'DD MMMM YYYY  -  h:mm a\',

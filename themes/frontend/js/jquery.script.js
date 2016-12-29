@@ -1,4 +1,5 @@
-$(document).ready(function() {
+var $body = $("body");
+$(function() {
     $(window).scroll(function () {
         if ($(window).scrollTop() > 85)
             $(".navbar.navbar-default").addClass('scroll-mode');
@@ -6,15 +7,27 @@ $(document).ready(function() {
             $(".navbar.navbar-default").removeClass('scroll-mode');
     });
 
+    var ajaxGridUpdateTimeout;
+    $body.on("keyup", ".ajax-grid-search", function(){
+        var $this = $(this),
+            $form = $this.parents("form"),
+            $url = $form.attr("action"),
+            $formData = $form.serialize(),
+            $gridView = $form.find(".grid-view");
+        clearTimeout(ajaxGridUpdateTimeout);
+        ajaxGridUpdateTimeout = setTimeout(function () {
+            $.fn.yiiGridView.update($gridView.attr("id"), {data: $formData});
+        },300);
+    });
     // ajax search
-    $("body").on("keyup","#search-term",function(e){
+    $body.on("keyup","#search-term",function(e){
         var $this = $(this),
             $form = $this.parents('form');
         if($.inArray(e.keyCode,[37,38,39,40]) === -1)
             return searchNavbarKeydown($this);
     });
 
-    $("body").on("focus","#search-term",function(){
+    $body.on("focus","#search-term",function(){
         var $this = $(this),
             $form = $this.parents('form');
         if($this.val().length > 0)
@@ -46,7 +59,7 @@ $(document).ready(function() {
             });
         }
     }
-    $("body").on("click",function(event){
+    $body.on("click",function(event){
         var $target = $(event.target),
             close = true;
         if($target.is(".navbar-form, .navbar-form *"))
@@ -99,11 +112,6 @@ $(document).ready(function() {
         var owlClasses = $(thisTabId).find('.is-carousel');
         owlClasses.trigger('destroy.owl.carousel');
         owlClasses.removeClass('owl-loaded');
-        // owlClasses.owlCarousel({
-        //     dots: true,
-        //     nav: false,
-        //     rtl: true
-        // });
         initCarousel(owlClasses);
     });
 

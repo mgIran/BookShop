@@ -1926,3 +1926,85 @@ input[type="checkbox"]:checked + label::before {
 .login-box .box{
     padding: 0 70px;
 }
+.transform-form .form-inline .grid-view{
+    margin-bottom: 30px;
+}
+
+
+
+.thumbnail.smallest{
+    position: relative;
+}
+.thumbnail.smallest .thumb{
+    width: 70px;
+    height: 100px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+.thumbnail.smallest .caption{
+    padding-right: 80px;
+    padding-left: 0;
+}
+.thumbnail.smallest .caption h4{
+    margin-top: 0;
+}
+.thumbnail.smallest .caption h4 a{
+    font-size: 14px;
+}
+.thumbnail.smallest .caption::before{
+    display: none;
+}
+.thumbnail.smallest .stars .icon {
+    background: rgba(0, 0, 0, 0) url("../svg/star.svg") no-repeat scroll center center / 16px auto;
+    float: right;
+    height: 16px;
+    width: 14px;
+    margin: 10px 0;
+}
+
+
+.thumbnail.smallest:hover .thumb .thumbnail-overlay {
+    opacity: .5;
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    -ms-transform: rotateX(0deg);
+    -o-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+}
+
+.thumbnail.smallest:hover .thumb .thumbnail-overlay-icon {
+    opacity: 1;
+    -webkit-transform: translateY(0px) scale(1);
+    -moz-transform: translateY(0px) scale(1);
+    -ms-transform: translateY(0px) scale(1);
+    -o-transform: translateY(0px) scale(1);
+    transform: translateY(0px) scale(1);
+}
+
+.thumbnail.smallest .thumbnail-overlay-icon .icon {
+    background-size: 10px;
+    width: 10px;
+    height: 10px;
+}
+
+.thumbnail.smallest .thumbnail-overlay-icon .icon::before {
+    width: 20px;
+    height: 20px;
+    top: -5px;
+    right: -5px;
+}
+
+.thumbnail.smallest .caption h4 a {
+    color: #3f3f3f;
+    margin-top: 15px;
+}
+
+.my-library .description{
+    margin-bottom: 15px;
+}
+.my-library .table{
+    margin: 0;
+}

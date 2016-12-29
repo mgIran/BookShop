@@ -73,6 +73,11 @@ class BookController extends Controller
         $userID = Yii::app()->user->getId();
         $model = $this->loadModel($id);
         $price = $model->hasDiscount() ? $model->offPrice : $model->price;
+        if($price === 0){
+            Library::AddToLib($model->id ,$model->lastPackage->id ,$userID);
+            $this->redirect(array('/library'));
+        }
+
         $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID ,'book_id' => $id));
 
         Yii::app()->getModule('users');
@@ -82,7 +87,7 @@ class BookController extends Controller
             $buyResult = false;
             if(isset($_POST['Buy'])){
                 if(isset($_POST['Buy']['credit'])){
-                    if($user->userDetails->credit < $model->price){
+                    if($user->userDetails->credit < $price){
                         Yii::app()->user->setFlash('credit-failed' ,'اعتبار فعلی شما کافی نیست!');
                         Yii::app()->user->setFlash('failReason' ,'min_credit');
                         $this->refresh();
@@ -126,7 +131,6 @@ class BookController extends Controller
                                 'CallbackURL' => $CallbackURL
                             )
                         ));
-
                         //Redirect to URL You can do it also by creating a form
                         if($result['Status'] == 100)
                             $this->redirect('https://www.zarinpal.com/pg/StartPay/' . $result['Authority']);
@@ -195,6 +199,7 @@ class BookController extends Controller
 
                 $transactionResult = true;
                 $this->saveBuyInfo($book ,$user ,'gateway' ,$model->id);
+                Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
                 Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
             }else{
                 $errors = array(
@@ -247,8 +252,8 @@ class BookController extends Controller
         $buy = new BookBuys();
         $buy->book_id = $book->id;
         $buy->user_id = $user->id;
-        $buy->method = $method;
         $buy->package_id = $book->lastPackage->id;
+        $buy->method = $method;
         $buy->price = $price;
         if($method == 'gateway')
             $buy->rel_id = $transactionID;

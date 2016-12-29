@@ -382,16 +382,6 @@ class Books extends CActiveRecord
 			return $this->publisher_name;
 	}
 
-
-
-	public function hasDiscount()
-	{
-		if($this->discount && $this->discount->start_date < time() && $this->discount->end_date > time())
-			return true;
-		else
-			return false;
-	}
-
 	public function calculateRating()
 	{
 		$criteria = new CDbCriteria;
@@ -469,6 +459,15 @@ class Books extends CActiveRecord
 		return $criteria;
 	}
 
+
+
+	public function hasDiscount()
+	{
+		if($this->discount && ($this->discount->hasPriceDiscount() || $this->discount->hasPrintedPriceDiscount()))
+			return true;
+		else
+			return false;
+	}
 	public function getPrice(){
 		if($this->lastPackage)
 			return $this->lastPackage->price;
