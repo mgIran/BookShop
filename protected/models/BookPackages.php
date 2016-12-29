@@ -67,7 +67,7 @@ class BookPackages extends CActiveRecord
             array('book_id, price, printed_price', 'length', 'max' => 10),
             array('print_year', 'length', 'max' => 8),
             array('version, isbn, create_date, publish_date', 'length', 'max' => 20),
-            array('sale_printed, price, printed_price, print_year', 'numerical', 'integerOnly' => true),
+            array('sale_printed, price, printed_price, print_year, version', 'numerical', 'integerOnly' => true),
             array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter' => 'strip_tags'),
             array('package_name', 'length', 'max' => 100),
             array('pdf_file_name, epub_file_name', 'length', 'max' => 255),
@@ -234,6 +234,6 @@ class BookPackages extends CActiveRecord
             $types[] = 'PDF: '.Controller::fileSize($filePath.$this->pdf_file_name);
         if (!is_null($this->epub_file_name))
             $types[] = 'EPUB: '.Controller::fileSize($filePath.$this->epub_file_name);
-        return implode(' | ', $types);
+        return implode('<br>', $types);
     }
 }

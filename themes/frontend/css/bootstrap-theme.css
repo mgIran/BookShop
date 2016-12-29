@@ -1886,8 +1886,18 @@ input[type="checkbox"] + label:hover::before {
 .book-view .info h4{
     color: #444;
     border-bottom: 4px double #eee;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
     margin-bottom: 30px;
+}
+.book-view .info h4 small{
+    display: block;
+    margin-top: 15px;
+    color: #aaa;
+    font-size: 12px;
+}
+.book-view .info h4 small span{
+    display: inline-block;
+    margin-left: 40px;
 }
 .book-view .book-meta{
     overflow: hidden;
@@ -1907,8 +1917,12 @@ input[type="checkbox"] + label:hover::before {
     margin-top: 5px;
     direction: rtl;
 }
+.book-meta .meta-heading.file-size{
+    direction: ltr;
+    text-align: right;
+}
 .book-meta .col-lg-6{
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 .page-count-icon{
     background: url("../svg/agenda.svg") no-repeat center;
@@ -2002,12 +2016,23 @@ input[type="checkbox"] + label:hover::before {
 .sidebar-col .categories{
     padding: 0;
     list-style: none;
+    position: relative;
 }
 .sidebar-col .categories li:last-child{
     border-bottom: none;
 }
 .sidebar-col .categories li{
     border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+.sidebar-col .categories li ul{
+    padding-right: 20px;
+    font-size: 12px;
+}
+.sidebar-col .categories li .whole-row{
+    position: absolute;
+    right: 0;
+    width: 100%;
+    border-top: 1px solid rgba(0,0,0,0.15);
 }
 .sidebar-col .categories a::before{
     position: absolute;

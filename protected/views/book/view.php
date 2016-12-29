@@ -3,6 +3,7 @@
 /* @var $model Books */
 /* @var $similar CActiveDataProvider */
 /* @var $bookmarked boolean */
+/* @var $categories array */
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
 $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
 ?>
@@ -52,7 +53,7 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                     <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb"><img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon ?>" alt="<?= CHtml::encode($model->title) ?>" ></div>
                     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 book-info">
                         <div class="info">
-                            <h4><?= CHtml::encode($model->title)?></h4>
+                            <h4><?= CHtml::encode($model->title)?><small><span>ویرایش: <?php echo CHtml::encode($this->parseNumbers($model->lastPackage->version));?></span><span>سال چاپ: <?php echo CHtml::encode($this->parseNumbers($model->lastPackage->print_year));?></span></small></h4>
                             <div class="book-meta">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -69,7 +70,7 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="download-icon"></i></div>
-                                        <div class="meta-body">حجم فایل<div class="meta-heading"><?= $model->lastPackage->getUploadedFilesSize(); ?></div></div>
+                                        <div class="meta-body">حجم فایل<div class="meta-heading file-size"><?= $this->parseNumbers($model->lastPackage->getUploadedFilesSize()); ?></div></div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="earth-icon"></i></div>
@@ -202,10 +203,12 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                 <div class="small-info">
                                     <p>دسته بندی: <span><a href="<?= $this->createUrl('/category/'.$model->category_id.'/'.urldecode($model->category->title)) ?>" ><?= CHtml::encode($model->category->title) ?></a></span></p>
                                     <?php if($model->showTags): ?><p>بر چسب ها: <span><?php
+                                            $links=array();
                                             foreach ($model->showTags as $tag):
                                                 if(!empty($tag->title))
-                                                    echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
+                                                    $links[]='<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
                                             endforeach;
+                                            echo implode(', ', $links);
                                             ?></span></p>
                                     <?php endif;?>
                                 </div>
@@ -277,26 +280,17 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                         <h4>دسته بندی ها</h4>
                     </div>
                     <ul class="categories">
-                        <?php
-                        foreach($this->categories as $category):
-                            ?>
-                            <li class="<?= $category->id===$model->category_id?'active':'' ?>"><a href="<?= $this->createUrl('/category/'.$category->id.'/'.urlencode($category->title)) ?>"><?= $category->title ?>
-                                    <small>(<?= $category->getBooksCount() ?>)</small></a></li>
-                            <?php
-                        endforeach;
-                        ?>
+                        <?php echo $categories; ?>
                     </ul>
                 </div><?php if($model->seoTags): ?><div class="boxed">
                     <div class="heading">
                         <h4>برچسب ها</h4>
                     </div>
                     <div class="tags">
-                    <?php
-                        foreach ($model->seoTags as $tag):
-                            if(!empty($tag->title))
-                                echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
-                        endforeach;
-                        ?>
+                    <?php foreach ($model->seoTags as $tag):
+                        if(!empty($tag->title))
+                            echo '<a href="'.$this->createUrl('/book/tag/'.$tag->id.'/'.urldecode($tag->title)).'">'.$tag->title.'</a>';
+                    endforeach; ?>
                     </div>
                 </div>
                 <?php endif;?>

@@ -7,36 +7,38 @@
 ?>
 
 <div class="form">
-	<div class="row">
-		<?php echo CHtml::activeLabelEx($model,'image')?>
-		<span class="clearfix"></span>
-		<span class="description">حداقل اندازه مجاز تصویر 500 در 280 پیکسل است.</span>
-        <span class="clearfix"></span>
-		<?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-			'id' => 'image-uploader',
-			'model' => $model,
-			'name' => 'image',
-			'maxFiles' => 1,
-			'maxFileSize' => 0.2, //MB
-			'data'=>array('model_id'=>$model->id),
-			'url' => $this->createUrl('/category/upload'),
-			'deleteUrl' => $this->createUrl('/category/deleteUpload'),
-			'acceptedFiles' => 'image/jpeg , image/png',
-			'serverFiles' => $image,
-			'onSuccess' => '
-				var responseObj = JSON.parse(res);
-				if(responseObj.status){
-					{serverName} = responseObj.fileName;
-					$(".uploader-message#image_error").html("");
-				}
-				else{
-					$(".uploader-message#image_error").html(responseObj.message);
-					this.removeFile(file);
-				}
-			',
-		));?>
-		<div class="uploader-message error" id="image_error"></div>
-	</div>
+	<?php if($model->parent_id==null):?>
+		<div class="row">
+			<?php echo CHtml::activeLabelEx($model,'image')?>
+			<span class="clearfix"></span>
+			<span class="description">حداقل اندازه مجاز تصویر 500 در 280 پیکسل است.</span>
+			<span class="clearfix"></span>
+			<?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+				'id' => 'image-uploader',
+				'model' => $model,
+				'name' => 'image',
+				'maxFiles' => 1,
+				'maxFileSize' => 0.2, //MB
+				'data'=>array('model_id'=>$model->id),
+				'url' => $this->createUrl('/category/upload'),
+				'deleteUrl' => $this->createUrl('/category/deleteUpload'),
+				'acceptedFiles' => 'image/jpeg , image/png',
+				'serverFiles' => $image,
+				'onSuccess' => '
+					var responseObj = JSON.parse(res);
+					if(responseObj.status){
+						{serverName} = responseObj.fileName;
+						$(".uploader-message#image_error").html("");
+					}
+					else{
+						$(".uploader-message#image_error").html(responseObj.message);
+						this.removeFile(file);
+					}
+				',
+			));?>
+			<div class="uploader-message error" id="image_error"></div>
+		</div>
+	<?php endif;?>
 	<div class="row">
 		<?php echo CHtml::activeLabelEx($model,'icon')?>
         <span class="clearfix"></span>
