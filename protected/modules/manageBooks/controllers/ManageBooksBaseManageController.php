@@ -680,7 +680,7 @@ class ManageBooksBaseManageController extends Controller
 
     public function actionDiscount()
     {
-        $model = new BookDiscounts();
+        $model = new BookDiscounts('admin_side');
 
         if(isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form'){
             $model->attributes = $_POST['BookDiscounts'];

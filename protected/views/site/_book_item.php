@@ -60,7 +60,7 @@ if(!isset($buy))
                 <a href="<?php echo Yii::app()->createUrl('/book/free')?>">رایگان</a>
                 <?php else:?>
                     <?
-                    if($data->hasDiscount()):
+                    if($data->hasDiscount() && $data->discount->hasPriceDiscount()):
                         ?>
                         <span class="text-danger text-line-through center-block"><?= Controller::parseNumbers(number_format($data->price, 0)).' تومان'; ?></span>
                         <span ><?= Controller::parseNumbers(number_format($data->offPrice, 0)).' تومان' ; ?></span>

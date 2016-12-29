@@ -1,37 +1,69 @@
 <?php
-/* @var $this PublicController */
-/* @var $transactions[] UserTransactions */
-/* @var $transaction UserTransactions */
+/* @var $this UsersPublicController */
+/* @var $model UserTransactions */
 ?>
 
 <div class="transparent-form">
     <h3>تراکنش ها</h3>
     <p class="description">لیست تراکنش هایی که انجام داده اید.</p>
+    <?php
+    echo CHtml::beginForm($this->route,'GET',array('class' => 'form-inline form'));
+    ?>
+    <div class="filters">
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>زمان</th>
-            <th>مبلغ</th>
-            <th>توضیحات</th>
-            <th>کد رهگیری</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php if(empty($transactions)):?>
-            <tr>
-                <td colspan="4" class="text-center">نتیجه ای یافت نشد.</td>
-            </tr>
-        <?php else:?>
-            <?php foreach($transactions as $transaction):?>
-                <tr>
-                    <td><?php echo JalaliDate::date('d F Y - H:i', $transaction->date);?></td>
-                    <td><?php echo number_format($transaction->amount, 0).' تومان';?></td>
-                    <td><?php echo CHtml::encode($transaction->description);?></td>
-                    <td><?php echo CHtml::encode($transaction->token);?></td>
-                </tr>
-            <?php endforeach;?>
-        <?php endif;?>
-        </tbody>
-    </table>
+        <div class="form-group">
+            <?php echo CHtml::activeTextField($model, 'id', array('class' => 'form-control ajax-grid-search', 'placeholder' => 'شناسه تراکنش را جستجو کنید'));?>
+        </div>
+        <div class="form-group">
+            <?php echo CHtml::activeTextField($model, 'token', array('class' => 'form-control ajax-grid-search', 'placeholder' => 'کدرهگیری را جستجو کنید'));?>
+        </div>
+    </div>
+    <?php
+    $this->widget('zii.widgets.grid.CGridView', array(
+        'id' => 'bookmarked-grid',
+        'dataProvider' => $model->search(20),
+        'template' => '{items} {pager}',
+        'rowHtmlOptionsExpression'=>'array("data-book-id" => $data->id)',
+        'ajaxUpdate' => true,
+        'afterAjaxUpdate' => "function(id, data){
+            $('html, body').animate({
+                scrollTop: ($('#'+id).offset().top-130)
+            },1000);
+        }",
+        'pager' => array(
+            'header' => '',
+            'firstPageLabel' => '<<',
+            'lastPageLabel' => '>>',
+            'prevPageLabel' => '<',
+            'nextPageLabel' => '>',
+            'cssFile' => false,
+            'htmlOptions' => array(
+                'class' => 'pagination pagination-sm',
+            ),
+        ),
+        'pagerCssClass' => 'blank',
+        'itemsCssClass' => 'table',
+        'columns' => array(
+            'id',
+            array(
+                'header' => 'تاریخ تراکنش',
+                'value' => 'JalaliDate::date(\'d F Y - H:i\', $data->date)',
+            ),
+            array(
+                'header' => 'مبلغ',
+                'value' => 'Controller::parseNumbers(number_format($data->amount)).\' تومان\'',
+            ),
+            'description',
+            'gateway_name',
+            array(
+                'name' => 'token',
+                'value' => '$data->token',
+                'htmlOptions' => array('style' => 'font-weight:bold;letter-spacing:4px')
+            ),
+        )
+    ));
+    ?>
+    <?php
+    echo CHtml::endForm();
+    ?>
 </div>

@@ -23,7 +23,7 @@ if($book && $book->hasDiscount()) {
                 <div class="book-any">
                     <span class="book-price">
                         <?
-                        if($book->hasDiscount()):
+                        if($data->hasDiscount() && $data->discount->hasPriceDiscount()):
                             ?>
                             <span class="text-danger text-line-through center-block"><?= Controller::parseNumbers(number_format($book->price, 0)).' تومان'; ?></span>
                             <span ><?= Controller::parseNumbers(number_format($book->offPrice, 0)).' تومان' ; ?></span>

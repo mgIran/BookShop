@@ -31,12 +31,17 @@
  * @property string $account_number
  * @property string $bank_name
  * @property string $financial_info_status
+ * @property string $commission
+ * @property string $tax_exempt
  *
  * The followings are the available model relations:
  * @property Users $user
  */
 class UserDetails extends CActiveRecord
 {
+    const TAX_EXEMPT_NOT = 0;
+    const TAX_EXEMPT = 1;
+
     /**
      * @return string the associated database table name
      */
@@ -91,6 +96,8 @@ class UserDetails extends CActiveRecord
             array('address', 'length', 'max' => 1000),
             array('details_status, financial_info_status', 'length', 'max' => 8),
             array('type, post', 'length', 'max' => 5),
+            array('commission', 'length', 'max' => 3),
+            array('tax_exempt', 'length', 'max' => 1),
             array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
             array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
@@ -154,6 +161,8 @@ class UserDetails extends CActiveRecord
             'account_number' => 'شماره حساب',
             'bank_name' => 'نام بانک',
             'financial_info_status' => 'وضعیت اطلاعات مالی',
+            'commission' => 'کمیسیون ناشر',
+            'tax_exempt' => 'معاف از مالیات',
         );
     }
 
@@ -258,6 +267,7 @@ class UserDetails extends CActiveRecord
         $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
         $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
+        $criteria->addCondition('financial_info_status = "accepted"');
         $criteria->addCondition('credit>:credit');
         $criteria->params=array(':credit'=>$setting->value);
         return $criteria;

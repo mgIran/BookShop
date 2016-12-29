@@ -15,9 +15,26 @@ $this->menu=array(
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'books-grid',
     'dataProvider'=>$model->searchDiscount(),
-    'filter'=>$model,
     'columns'=>array(
         'book.title',
+        array(
+            'name' => 'book.lastPackage.price',
+            'header' => 'قیمت آخرین نسخه دیجیتال',
+            'value' => 'Controller::parseNumbers(number_format($data->book->lastPackage->price))." تومان"'
+        ),
+        array(
+            'header' => 'قیمت دیجیتال با تخفیف',
+            'value' => 'Controller::parseNumbers(number_format($data->book->offPrice))." تومان"'
+        ),
+        array(
+            'name' => 'book.lastPackage.printed_price',
+            'header' => 'قیمت آخرین نسخه چاپی',
+            'value' => 'Controller::parseNumbers(number_format($data->book->lastPackage->printed_price))." تومان"'
+        ),
+        array(
+            'header' => 'قیمت چاپی با تخفیف',
+            'value' => 'Controller::parseNumbers(number_format($data->book->off_printed_price))." تومان"'
+        ),
         array(
             'class'=>'CButtonColumn',
             'template' => '{update} {delete}',

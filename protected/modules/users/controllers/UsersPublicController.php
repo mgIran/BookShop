@@ -305,27 +305,15 @@ class UsersPublicController extends Controller
         Yii::app()->theme='frontend';
         $this->layout='//layouts/panel';
 
-        $user = Users::model()->findByPk(Yii::app()->user->getId());
-        /* @var $user Users */
+        $model =new UserTransactions('search');
+        $model->unsetAttributes();
+        if(isset($_GET['UserTransactions']))
+            $model->attributes = $_GET['UserTransactions'];
+        $model->user_id = Yii::app()->user->getId();
+        //
 
         $this->render('transactions', array(
-            'transactions' => $user->transactions
-        ));
-    }
-
-    /**
-     * List all bought books
-     */
-    public function actionDownloaded()
-    {
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
-
-        $user = Users::model()->findByPk(Yii::app()->user->getId());
-        /* @var $user Users */
-
-        $this->render('downloaded', array(
-            'downloaded' => $user->bookBuys
+            'model' => $model
         ));
     }
 
@@ -336,13 +324,26 @@ class UsersPublicController extends Controller
     {
         Yii::app()->theme='frontend';
         $this->layout='//layouts/panel';
-
-        $user = Users::model()->findByPk(Yii::app()->user->getId());
+        $userID = Yii::app()->user->getId();
+        $user = Users::model()->findByPk($userID);
         /* @var $user Users */
-
-        $boughtBooks=array();
-        foreach($user->bookBuys as $bookBuy)
-            array_push($boughtBooks, $bookBuy->book);
+        // create downloaded model from Library for search in grid view
+        $downloadBooks =new Library('search');
+        $downloadBooks->unsetAttributes();
+        if(isset($_GET['Library']) && isset($_GET['ajax']) && $_GET['ajax']=='downloaded-list')
+            $downloadBooks->attributes = $_GET['Library'];
+        $downloadBooks->user_id = $userID;
+        $downloadBooks->download_status = Library::STATUS_DOWNLOADED;
+        //
+        // create bought model from Library for search in grid view
+        $boughtBooks =new Library('search');
+        $boughtBooks->unsetAttributes();
+        if(isset($_GET['Library']) && isset($_GET['ajax']) && $_GET['ajax']=='bought-list')
+            $boughtBooks->attributes = $_GET['Library'];
+        $boughtBooks->user_id = $userID;
+        $boughtBooks->download_status = Library::STATUS_DOWNLOADED_NOT;
+        //
+        // get my book
         $myBooks = false;
         if($user->role_id == 2){
             $criteria = Books::model()->getValidBooks();
@@ -352,10 +353,12 @@ class UsersPublicController extends Controller
                 'criteria' => $criteria
             ));
         }
+        ///
 
         $this->render('library', array(
             'user' => $user,
             'boughtBooks' => $boughtBooks,
+            'downloadBooks' => $downloadBooks,
             'myBooks' => $myBooks,
         ));
     }

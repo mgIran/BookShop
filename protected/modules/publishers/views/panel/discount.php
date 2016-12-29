@@ -16,7 +16,7 @@
             <th>عنوان کتاب</th>
             <th>وضعیت</th>
             <th class="hidden-xs">قیمت آخرین نسخه</th>
-            <th>درصد</th>
+            <th>درصد یا مبلغ</th>
             <th class="hidden-xs">قیمت با تخفیف</th>
             <th>مدت تخفیف</th>
         </tr>
