@@ -39,6 +39,11 @@
         <?php echo $form->error($model,'status'); ?>
     </div>
 
+    <div class="row">
+        <?php echo CHtml::label('نوع کاربری','type'); ?>
+        <?php echo CHtml::dropDownList('type', 'real', array('real' => 'حقیقی', 'legal' => 'حقوقی')); ?>
+    </div>
+
     <div class="row buttons">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'افزودن' : 'ویرایش' ,array('class' => 'btn btn-success')); ?>
     </div>

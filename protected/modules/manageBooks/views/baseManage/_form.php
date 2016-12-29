@@ -21,8 +21,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'icon'); ?>
-		<?php
-		$this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+		<?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
 			'id' => 'uploaderIcon',
 			'model' => $model,
 			'name' => 'icon',
@@ -43,8 +42,7 @@
                     this.removeFile(file);
                 }
             ',
-		));
-		?>
+		)); ?>
 		<?php echo $form->error($model,'icon'); ?>
 		<div class="uploader-message error"></div>
 	</div>
@@ -86,9 +84,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'publisher_name'); ?>
-		<?php echo $form->textField($model,'publisher_name',array('size'=>50,'maxlength'=>50)); ?>
-		<?php echo $form->error($model,'publisher_name'); ?>
+		<?php echo $form->labelEx($model,'publisher_id'); ?>
+		<?php echo $form->dropDownList($model, 'publisher_id', CHtml::listData(Users::model()->getPublishers()->getData(), 'id', 'userDetails.fa_name')); ?>
+		<?php echo $form->error($model,'publisher_id'); ?>
 	</div>
 
 	<div class="row">
@@ -98,15 +96,13 @@
 	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'formAuthor'); ?>
-		<?php
-		$this->widget("ext.tagIt.tagIt",array(
+		<?php $this->widget("ext.tagIt.tagIt",array(
 			'model' => $model,
 			'attribute' => 'formAuthor',
 			'suggestType' => 'json',
 			'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
 			'data' => $model->formAuthor
-		));
-		?>
+		)); ?>
 		<?php echo $form->error($model,'formAuthor'); ?>
 	</div>
 

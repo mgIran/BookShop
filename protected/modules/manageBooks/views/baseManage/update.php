@@ -19,7 +19,7 @@ if(isset($_GET['step']))
     $step = (int)$_GET['step'];
 ?>
 
-<h1>ویرایش کتاب <?php echo $model->id; ?></h1>
+<h1>ویرایش کتاب <?php echo $model->title; ?></h1>
     <ul class="nav nav-tabs">
         <li class="<?= ($step == 1?'active':''); ?>"><a data-toggle="tab" href="#general">عمومی</a></li>
         <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 2?'active':''); ?>"><a data-toggle="tab" href="#packages">نوبت های چاپ</a></li>

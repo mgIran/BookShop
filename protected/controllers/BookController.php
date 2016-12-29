@@ -35,15 +35,15 @@ class BookController extends Controller
         $this->layout = "//layouts/index";
         $model = $this->loadModel($id);
         $this->keywords = $model->getKeywords();
-        $this->description = mb_substr(strip_tags($model->description) ,0 ,160 ,'utf-8');
+        $this->description = mb_substr(strip_tags($model->description), 0, 160, 'utf-8');
         $model->seen = $model->seen + 1;
         $model->save();
         $this->saveInCookie($model->category_id);
         // Has bookmarked this books by user
         $bookmarked = false;
-        if(!Yii::app()->user->isGuest){
-            $hasRecord = UserBookBookmark::model()->findByAttributes(array('user_id' => Yii::app()->user->getId() ,'book_id' => $id));
-            if($hasRecord)
+        if (!Yii::app()->user->isGuest) {
+            $hasRecord = UserBookBookmark::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
+            if ($hasRecord)
                 $bookmarked = true;
         }
         // Get similar books
@@ -51,15 +51,19 @@ class BookController extends Controller
         $criteria->addCondition('id!=:id');
         $criteria->params[':id'] = $model->id;
         $criteria->limit = 10;
-        $similar = new CActiveDataProvider('Books' ,array('criteria' => $criteria));
+        $similar = new CActiveDataProvider('Books', array('criteria' => $criteria));
 
         Yii::import('pages.models.*');
         $about = Pages::model()->findByPk(3);
-        $this->render('view' ,array(
-            'model' => $model ,
-            'similar' => $similar ,
-            'bookmarked' => $bookmarked ,
-            'about' => $about
+
+        $categories = BookCategories::model()->getCategoriesAsHtml(false, array('tagName' => 'li', 'content' => '<a href="{url}">{title}<small>({booksCount})</small></a>'), array('tagName' => 'ul', 'htmlOptions' => array('class' => 'categories')));
+
+        $this->render('view', array(
+            'model' => $model,
+            'similar' => $similar,
+            'bookmarked' => $bookmarked,
+            'about' => $about,
+            'categories' => $categories,
         ));
     }
 

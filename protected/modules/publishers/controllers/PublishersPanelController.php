@@ -645,6 +645,7 @@ class PublishersPanelController extends Controller
             $model->create_date=time();
 
             if($model->save()){
+                $userDetails=UserDetails::model()->updateByPk($model->id, array('type'=>$_POST['type']));
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect(array('update', 'id'=>$model->id));
             }else

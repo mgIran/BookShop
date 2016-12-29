@@ -200,6 +200,7 @@ class Users extends CActiveRecord
         $criteria = new CDbCriteria;
 
         $criteria->addCondition('role_id=2');
+        $criteria->addCondition('userDetails.fa_name!="" OR userDetails.fa_name IS NOT NULL');
         $criteria->with = 'userDetails';
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
