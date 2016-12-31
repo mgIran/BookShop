@@ -17,6 +17,7 @@
  * @property Books $book
  * @property Users $user
  * @property BookPackages $package
+ * @property UserTransactions $transaction
  */
 class BookBuys extends CActiveRecord
 {
@@ -57,6 +58,7 @@ class BookBuys extends CActiveRecord
 			'book' => array(self::BELONGS_TO, 'Books', 'book_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'package' => array(self::BELONGS_TO, 'BookPackages', 'package_id'),
+			'transaction' => array(self::BELONGS_TO, 'UserTransactions', 'rel_id'),
 		);
 	}
 

@@ -281,6 +281,10 @@ class BookController extends Controller
                     <td>' . Controller::parseNumbers(number_format($price ,0)) . ' تومان</td>
                 </tr>
                 <tr>
+                    <td style="font-weight: bold;width: 120px;">کد رهگیری</td>
+                    <td style="font-weight: bold;letter-spacing:4px">' . CHtml::encode($buy->transaction->token) . ' </td>
+                </tr>
+                <tr>
                     <td style="font-weight: bold;width: 120px;">تاریخ</td>
                     <td>' . JalaliDate::date('d F Y - H:i' ,$buy->date) . '</td>
                 </tr>
