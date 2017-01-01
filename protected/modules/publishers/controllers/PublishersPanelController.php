@@ -582,12 +582,14 @@ class PublishersPanelController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()
-            ->setCellValue('A1', 'نام انتشارات')
-            ->setCellValue('B1', 'نام صاحب حساب')
-            ->setCellValue('C1', 'شماره حساب')
-            ->setCellValue('D1', 'نام بانک')
-            ->setCellValue('E1', 'شماره شبا')
-            ->setCellValue('F1', 'مبلغ قابل تسویه (تومان)');
+            ->setCellValue('A1', 'شماره شبا')
+            ->setCellValue('B1', 'مبلغ قابل تسویه (تومان)')
+            ->setCellValue('F1', 'نام انتشارات')
+            ->setCellValue('E1', 'نام صاحب حساب/شخص حقوقی')
+            ->setCellValue('D1', 'شماره حساب')
+            ->setCellValue('C1', 'نام بانک')
+
+            ;
 
         foreach ($settlementUsers as $key => $settlementUser) {
             $row = $key + 2;

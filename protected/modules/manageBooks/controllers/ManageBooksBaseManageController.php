@@ -529,15 +529,17 @@ class ManageBooksBaseManageController extends Controller
             $model->publish_date = time();
             if (!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;
-            if ($model->save()) {
-                $response = ['status' => true, 'pdfFileName' => $model->pdf_file_name, 'epubFileName' => $model->epub_file_name];
-                if (isset($_POST['pdf_file_name']))
-                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                if (isset($_POST['epub_file_name']))
-                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-            } else {
-                $response = ['status' => false, 'message' => $this->implodeErrors($model)];
-                if (isset($_POST['pdf_file_name']))
+            if(!$model->printed_price || empty($model->printed_price))
+                $model->printed_price = $model->price;
+            if($model->save()){
+                $response = ['status' => true ,'pdfFileName' => $model->pdf_file_name,'epubFileName' => $model->epub_file_name];
+                if(isset($_POST['pdf_file_name']))
+                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                if(isset($_POST['epub_file_name']))
+                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+            }else{
+                $response = ['status' => false ,'message' => $this->implodeErrors($model)];
+                if(isset($_POST['pdf_file_name']))
                     @unlink($tempDir . '/' . $_POST['pdf_file_name']);
 
                 if (isset($_POST['epub_file_name']))

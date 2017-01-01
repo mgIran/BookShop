@@ -158,7 +158,7 @@ class UserDetails extends CActiveRecord
             'registration_certificate_image' => 'تصویر گواهی ثبت شرکت',
             'score' => 'امتیاز',
             'avatar' => 'آواتار',
-            'account_owner' => 'نام صاحب حساب',
+            'account_owner' => 'نام صاحب حساب / شخص حقوقی',
             'account_number' => 'شماره حساب',
             'bank_name' => 'نام بانک',
             'financial_info_status' => 'وضعیت اطلاعات مالی',
