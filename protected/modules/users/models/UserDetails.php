@@ -33,6 +33,7 @@
  * @property string $financial_info_status
  * @property string $commission
  * @property string $tax_exempt
+ * @property string $earning
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -84,7 +85,7 @@ class UserDetails extends CActiveRecord
             array('publisher_id', 'required', 'on' => 'confirmDev'),
             array('publisher_id', 'unique'),
             array('credit, national_code, phone, zip_code, score', 'numerical'),
-            array('user_id, national_code, zip_code', 'length', 'max' => 10),
+            array('user_id, national_code, zip_code, earning', 'length', 'max' => 10),
             array('account_owner', 'length', 'max' => 100),
             array('bank_name, account_number', 'length', 'max' => 50),
             array('national_code, zip_code', 'length', 'min' => 10),
@@ -104,13 +105,13 @@ class UserDetails extends CActiveRecord
             array('monthly_settlement', 'default', 'value' => 1),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name, financial_info_status', 'safe', 'on' => 'search'),
+            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name, financial_info_status, earning', 'safe', 'on' => 'search'),
         );
     }
 
     public function ibanRequiredConditional($attribute, $params)
     {
-        if (!$this->{$attribute} || empty($this->{$attribute}) || !preg_match('/^[0-9]{24}/',$this->{$attribute}))
+        if (!$this->{$attribute} || empty($this->{$attribute}) || !preg_match('/^[0-9]{24}/', $this->{$attribute}))
             $this->addError($attribute, $this->getAttributeLabel($attribute) . ' نامعتبر است.');
 
     }
@@ -163,6 +164,7 @@ class UserDetails extends CActiveRecord
             'financial_info_status' => 'وضعیت اطلاعات مالی',
             'commission' => 'کمیسیون ناشر',
             'tax_exempt' => 'معاف از مالیات',
+            'earning' => 'درآمد',
         );
     }
 
@@ -205,9 +207,12 @@ class UserDetails extends CActiveRecord
         $criteria->compare('company_name', $this->company_name, true);
         $criteria->compare('registration_number', $this->registration_number, true);
         $criteria->compare('registration_certificate_image', $this->registration_certificate_image, true);
-        $criteria->compare('score',$this->score);
-        $criteria->compare('avatar',$this->avatar,true);
-        $criteria->compare('financial_info_status',$this->financial_info_status,true);
+        $criteria->compare('score', $this->score);
+        $criteria->compare('avatar', $this->avatar, true);
+        $criteria->compare('financial_info_status', $this->financial_info_status, true);
+        $criteria->compare('commission', $this->commission, true);
+        $criteria->compare('tax_exempt', $this->tax_exempt, true);
+        $criteria->compare('earning', $this->earning, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -232,7 +237,7 @@ class UserDetails extends CActiveRecord
     {
         Yii::app()->getModule('setting');
         $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
-        return ($this->credit - $setting->value < 0) ? 0 : $this->credit - $setting->value;
+        return ($this->earning - $setting->value < 0) ? 0 : $this->earning - $setting->value;
     }
 
     /**
@@ -248,8 +253,9 @@ class UserDetails extends CActiveRecord
             return $this->user->email;
     }
 
-    public function validateAccountingInformation(){
-        if(
+    public function validateAccountingInformation()
+    {
+        if (
             !$this->iban || empty($this->iban) ||
             !$this->account_owner || empty($this->account_owner) ||
             !$this->account_number || empty($this->account_number) ||
@@ -259,22 +265,24 @@ class UserDetails extends CActiveRecord
         return true;
     }
 
-    public static function SettlementCriteria(){
+    public static function SettlementCriteria()
+    {
         Yii::app()->getModule('setting');
-        $setting=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
-        $criteria=new CDbCriteria();
+        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
+        $criteria = new CDbCriteria();
         $criteria->addCondition('iban IS NOT NULL AND iban != ""');
         $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
         $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
         $criteria->addCondition('financial_info_status = "accepted"');
-        $criteria->addCondition('credit>:credit');
-        $criteria->params=array(':credit'=>$setting->value);
+        $criteria->addCondition('earning > :earning');
+        $criteria->params = array(':earning' => $setting->value);
         return $criteria;
     }
 
-    public static function PendingFinanceUsersCriteria(){
-        $criteria=new CDbCriteria();
+    public static function PendingFinanceUsersCriteria()
+    {
+        $criteria = new CDbCriteria();
         $criteria->addCondition('iban IS NOT NULL AND iban != ""');
         $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
         $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');

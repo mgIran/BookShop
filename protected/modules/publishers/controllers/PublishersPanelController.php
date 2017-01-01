@@ -6,9 +6,10 @@ class PublishersPanelController extends Controller
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout='//layouts/panel';
+    public $layout = '//layouts/panel';
 
     public static $sumSettlement = 0;
+
     /**
      * @return array actions type list
      */
@@ -24,7 +25,7 @@ class PublishersPanelController extends Controller
                 'documents',
                 'signup',
             ),
-            'backend'=>array(
+            'backend' => array(
                 'manageSettlement',
                 'uploadNationalCardImage',
                 'uploadRegistrationCertificateImage',
@@ -34,7 +35,7 @@ class PublishersPanelController extends Controller
             )
         );
     }
-    
+
     /**
      * @return array action filters
      */
@@ -45,7 +46,8 @@ class PublishersPanelController extends Controller
         );
     }
 
-    public function actions(){
+    public function actions()
+    {
         return array(
             'uploadNationalCardImage' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
@@ -53,7 +55,7 @@ class PublishersPanelController extends Controller
                 'attribute' => 'national_card_image',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('jpg','jpeg','png')
+                    'acceptedTypes' => array('jpg', 'jpeg', 'png')
                 ),
                 'insert' => true,
                 'module' => 'users',
@@ -62,7 +64,7 @@ class PublishersPanelController extends Controller
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(
-                    'resize' => array('width'=>500,'height'=>500)
+                    'resize' => array('width' => 500, 'height' => 500)
                 )
             ),
             'uploadRegistrationCertificateImage' => array(
@@ -71,7 +73,7 @@ class PublishersPanelController extends Controller
                 'attribute' => 'registration_certificate_image',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('jpg','jpeg','png')
+                    'acceptedTypes' => array('jpg', 'jpeg', 'png')
                 ),
                 'insert' => true,
                 'module' => 'users',
@@ -80,102 +82,99 @@ class PublishersPanelController extends Controller
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(
-                    'resize' => array('width'=>500,'height'=>500)
+                    'resize' => array('width' => 500, 'height' => 500)
                 )
             )
         );
     }
-    
-	public function actionIndex()
-	{
-        Yii::app()->theme='frontend';
-        $criteria=new CDbCriteria();
+
+    public function actionIndex()
+    {
+        Yii::app()->theme = 'frontend';
+        $criteria = new CDbCriteria();
         $criteria->addCondition('publisher_id = :user_id');
         $criteria->addCondition('deleted = 0');
         $criteria->addCondition('title != ""');
-        $criteria->params=array(':user_id'=>Yii::app()->user->getId());
-        $booksDataProvider=new CActiveDataProvider('Books', array(
-            'criteria'=>$criteria,
+        $criteria->params = array(':user_id' => Yii::app()->user->getId());
+        $booksDataProvider = new CActiveDataProvider('Books', array(
+            'criteria' => $criteria,
         ));
         Yii::app()->getModule('users');
 
-		$this->render('index', array(
-            'booksDataProvider'=>$booksDataProvider,
+        $this->render('index', array(
+            'booksDataProvider' => $booksDataProvider,
         ));
-	}
+    }
 
 
-	public function actionDocuments()
-	{
-        Yii::app()->theme='market';
+    public function actionDocuments()
+    {
+        Yii::app()->theme = 'market';
         Yii::app()->getModule("pages");
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('category_id = 2');
-        $documentsProvider=new CActiveDataProvider('Pages', array(
-            'criteria'=>$criteria,
+        $documentsProvider = new CActiveDataProvider('Pages', array(
+            'criteria' => $criteria,
         ));
-		$this->render('documents', array(
-            'documentsProvider'=>$documentsProvider,
+        $this->render('documents', array(
+            'documentsProvider' => $documentsProvider,
         ));
-	}
+    }
 
     public function actionDiscount()
-	{
-        Yii::app()->theme='frontend';
+    {
+        Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $model = new BookDiscounts();
 
-        if(isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form') {
+        if (isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form') {
             $model->attributes = $_POST['BookDiscounts'];
             $errors = CActiveForm::validate($model);
-            if(CJSON::decode($errors)) {
+            if (CJSON::decode($errors)) {
                 echo $errors;
                 Yii::app()->end();
             }
         }
 
-        if(isset($_POST['BookDiscounts']))
-        {
-            $model->attributes =$_POST['BookDiscounts'];
-            if($model->save())
-            {
-                if(isset($_GET['ajax'])) {
-                    echo CJSON::encode(array('status' => true,'msg' => 'تخفیف با موفقیت اعمال شد.'));
+        if (isset($_POST['BookDiscounts'])) {
+            $model->attributes = $_POST['BookDiscounts'];
+            if ($model->save()) {
+                if (isset($_GET['ajax'])) {
+                    echo CJSON::encode(array('status' => true, 'msg' => 'تخفیف با موفقیت اعمال شد.'));
                     Yii::app()->end();
                 } else {
-                    Yii::app()->user->setFlash('discount-success','اعمال تخفیف با موفقیت اعمال شد.');
+                    Yii::app()->user->setFlash('discount-success', 'اعمال تخفیف با موفقیت اعمال شد.');
                     $this->refresh();
                 }
-            }
-            else
-                Yii::app()->user->setFlash('discount-failed','متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
+            } else
+                Yii::app()->user->setFlash('discount-failed', 'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
         }
 
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->with[] = 'book';
         $criteria->addCondition('book.publisher_id = :user_id');
         $criteria->addCondition('book.deleted = 0');
         $criteria->addCondition('book.title != ""');
         $criteria->addCondition('end_date > :now');
-        $criteria->params=array(
-            ':user_id'=>Yii::app()->user->getId(),
+        $criteria->params = array(
+            ':user_id' => Yii::app()->user->getId(),
             ':now' => time()
         );
-        $booksDataProvider=new CActiveDataProvider('BookDiscounts', array(
-            'criteria'=>$criteria,
+        $booksDataProvider = new CActiveDataProvider('BookDiscounts', array(
+            'criteria' => $criteria,
         ));
 
         // delete expire discounts
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('end_date < :now');
-        $criteria->params=array(
+        $criteria->params = array(
             ':now' => time()
         );
         BookDiscounts::model()->deleteAll($criteria);
 
         Yii::app()->getModule('users');
 
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('publisher_id = :user_id');
         $criteria->addCondition('deleted = 0');
         $criteria->addCondition('lastPackage.price != 0');
@@ -183,93 +182,87 @@ class PublishersPanelController extends Controller
         $criteria->with[] = 'discount';
         $criteria->with[] = 'lastPackage';
         $criteria->addCondition('discount.book_id IS NULL');
-        $criteria->params=array(':user_id'=>Yii::app()->user->getId());
+        $criteria->params = array(':user_id' => Yii::app()->user->getId());
 
-        $books = CHtml::listData(Books::model()->findAll($criteria),'id' ,'title');
+        $books = CHtml::listData(Books::model()->findAll($criteria), 'id', 'title');
         $this->render('discount', array(
-            'booksDataProvider'=>$booksDataProvider,
+            'booksDataProvider' => $booksDataProvider,
             'books' => $books
         ));
-	}
+    }
 
     /**
      * Update account
      */
     public function actionAccount()
     {
-        Yii::app()->theme='frontend';
+        Yii::app()->theme = 'frontend';
         Yii::import('application.modules.users.models.*');
 
-        $detailsModel=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
-        $devIdRequestModel=UserDevIdRequests::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
-        if($detailsModel->publisher_id=='' && is_null($devIdRequestModel))
-            $devIdRequestModel=new UserDevIdRequests;
+        $detailsModel = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
+        $devIdRequestModel = UserDevIdRequests::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
+        if ($detailsModel->publisher_id == '' && is_null($devIdRequestModel))
+            $devIdRequestModel = new UserDevIdRequests;
 
-        $detailsModel->scenario='update_'.$detailsModel->type.'_profile';
+        $detailsModel->scenario = 'update_' . $detailsModel->type . '_profile';
 
-        if(isset($_POST['ajax']) && $_POST['ajax']==='change-publisher-id-form')
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'change-publisher-id-form')
             $this->performAjaxValidation($devIdRequestModel);
         else
             $this->performAjaxValidation($detailsModel);
 
         // Save publisher profile
-        if(isset($_POST['UserDetails']))
-        {
+        if (isset($_POST['UserDetails'])) {
             unset($_POST['UserDetails']['credit']);
             unset($_POST['UserDetails']['publisher_id']);
             unset($_POST['UserDetails']['details_status']);
-            $detailsModel->attributes=$_POST['UserDetails'];
-            $detailsModel->details_status='pending';
-            if($detailsModel->save())
-            {
-                Yii::app()->user->setFlash('success' , 'اطلاعات با موفقیت ثبت شد.');
+            $detailsModel->attributes = $_POST['UserDetails'];
+            $detailsModel->details_status = 'pending';
+            if ($detailsModel->save()) {
+                Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->refresh();
-            }
-            else
-                Yii::app()->user->setFlash('failed' , 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+            } else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
         }
 
         // Save the change request publisherID
-        if(isset($_POST['UserDevIdRequests']))
-        {
-            $devIdRequestModel->user_id=Yii::app()->user->getId();
-            $devIdRequestModel->requested_id=$_POST['UserDevIdRequests']['requested_id'];
-            if($devIdRequestModel->save())
-            {
-                Yii::app()->user->setFlash('success' , 'شناسه درخواستی ثبت گردید و در انتظار تایید می باشد.');
+        if (isset($_POST['UserDevIdRequests'])) {
+            $devIdRequestModel->user_id = Yii::app()->user->getId();
+            $devIdRequestModel->requested_id = $_POST['UserDevIdRequests']['requested_id'];
+            if ($devIdRequestModel->save()) {
+                Yii::app()->user->setFlash('success', 'شناسه درخواستی ثبت گردید و در انتظار تایید می باشد.');
                 $this->refresh();
-            }
-            else
-                Yii::app()->user->setFlash('failed' , 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+            } else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
         }
 
-        $nationalCardImageUrl=$this->createUrl('/uploads/users/national_cards');
-        $nationalCardImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/national_cards';
-        $nationalCardImage=array();
-        if($detailsModel->national_card_image!='')
-            $nationalCardImage=array(
+        $nationalCardImageUrl = $this->createUrl('/uploads/users/national_cards');
+        $nationalCardImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/national_cards';
+        $nationalCardImage = array();
+        if ($detailsModel->national_card_image != '')
+            $nationalCardImage = array(
                 'name' => $detailsModel->national_card_image,
-                'src' => $nationalCardImageUrl.'/'.$detailsModel->national_card_image,
-                'size' => (file_exists($nationalCardImagePath.'/'.$detailsModel->national_card_image))?filesize($nationalCardImagePath.'/'.$detailsModel->national_card_image):0,
+                'src' => $nationalCardImageUrl . '/' . $detailsModel->national_card_image,
+                'size' => (file_exists($nationalCardImagePath . '/' . $detailsModel->national_card_image)) ? filesize($nationalCardImagePath . '/' . $detailsModel->national_card_image) : 0,
                 'serverName' => $detailsModel->national_card_image,
             );
 
-        $registrationCertificateImageUrl=$this->createUrl('/uploads/users/registration_certificate');
-        $registrationCertificateImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/registration_certificate';
-        $registrationCertificateImage=array();
-        if($detailsModel->registration_certificate_image!='')
-            $registrationCertificateImage=array(
+        $registrationCertificateImageUrl = $this->createUrl('/uploads/users/registration_certificate');
+        $registrationCertificateImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/registration_certificate';
+        $registrationCertificateImage = array();
+        if ($detailsModel->registration_certificate_image != '')
+            $registrationCertificateImage = array(
                 'name' => $detailsModel->registration_certificate_image,
-                'src' => $registrationCertificateImageUrl.'/'.$detailsModel->registration_certificate_image,
-                'size' => (file_exists($registrationCertificateImagePath.'/'.$detailsModel->registration_certificate_image))?filesize($registrationCertificateImagePath.'/'.$detailsModel->registration_certificate_image):0,
+                'src' => $registrationCertificateImageUrl . '/' . $detailsModel->registration_certificate_image,
+                'size' => (file_exists($registrationCertificateImagePath . '/' . $detailsModel->registration_certificate_image)) ? filesize($registrationCertificateImagePath . '/' . $detailsModel->registration_certificate_image) : 0,
                 'serverName' => $detailsModel->registration_certificate_image,
             );
 
         $this->render('account', array(
-            'detailsModel'=>$detailsModel,
-            'devIdRequestModel'=>$devIdRequestModel,
-            'nationalCardImage'=>$nationalCardImage,
-            'registrationCertificateImage'=>$registrationCertificateImage,
+            'detailsModel' => $detailsModel,
+            'devIdRequestModel' => $devIdRequestModel,
+            'nationalCardImage' => $nationalCardImage,
+            'registrationCertificateImage' => $registrationCertificateImage,
         ));
     }
 
@@ -278,92 +271,86 @@ class PublishersPanelController extends Controller
      */
     public function actionSignup()
     {
-        Yii::app()->theme='frontend';
-        $data=array();
+        Yii::app()->theme = 'frontend';
+        $data = array();
 
-        switch(Yii::app()->request->getQuery('step'))
-        {
+        switch (Yii::app()->request->getQuery('step')) {
             case 'agreement':
                 Yii::import('application.modules.pages.models.*');
-                $data['agreementText']=Pages::model()->find('title=:title', array(':title'=>'قرارداد ناشران'));
+                $data['agreementText'] = Pages::model()->find('title=:title', array(':title' => 'قرارداد ناشران'));
                 break;
 
             case 'profile':
                 Yii::import('application.modules.users.models.*');
                 Yii::import('application.modules.setting.models.*');
-                $data['detailsModel']=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
-                $minCredit=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
+                $data['detailsModel'] = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
+                $minCredit = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
 
-                if(is_null($data['detailsModel']->credit))
-                    $data['detailsModel']->credit=0;
+                if (is_null($data['detailsModel']->credit))
+                    $data['detailsModel']->credit = 0;
 
-                if($data['detailsModel']->credit < $minCredit['value'])
-                {
-                    Yii::app()->user->setFlash('min_credit_fail' , 'برای ثبت نام به عنوان ناشر باید حداقل '.number_format($minCredit['value'], 0).' تومان اعتبار داشته باشید.');
+                if ($data['detailsModel']->credit < $minCredit['value']) {
+                    Yii::app()->user->setFlash('min_credit_fail', 'برای ثبت نام به عنوان ناشر باید حداقل ' . number_format($minCredit['value'], 0) . ' تومان اعتبار داشته باشید.');
                     $this->redirect($this->createUrl('/users/credit/buy'));
                 }
 
-                if(isset($_POST['ajax']) && ($_POST['ajax']==='update-real-profile-form' || $_POST['ajax']==='update-legal-profile-form')) {
-                    $data['detailsModel']->scenario='update_'.$_POST['UserDetails']['type'].'_profile';
+                if (isset($_POST['ajax']) && ($_POST['ajax'] === 'update-real-profile-form' || $_POST['ajax'] === 'update-legal-profile-form')) {
+                    $data['detailsModel']->scenario = 'update_' . $_POST['UserDetails']['type'] . '_profile';
                     $this->performAjaxValidation($data['detailsModel']);
                 }
 
                 // Save publisher profile
-                if(isset($_POST['UserDetails']))
-                {
-                    $data['detailsModel']->scenario='update_'.$_POST['UserDetails']['type'].'_profile';
+                if (isset($_POST['UserDetails'])) {
+                    $data['detailsModel']->scenario = 'update_' . $_POST['UserDetails']['type'] . '_profile';
                     unset($_POST['UserDetails']['credit']);
                     unset($_POST['UserDetails']['publisher_id']);
                     unset($_POST['UserDetails']['details_status']);
-                    $data['detailsModel']->attributes=$_POST['UserDetails'];
-                    $data['detailsModel']->details_status='pending';
-                    if($data['detailsModel']->save())
-                    {
-                        $data['detailsModel']->user->role_id=2;
-                        $data['detailsModel']->user->scenario='change_role';
+                    $data['detailsModel']->attributes = $_POST['UserDetails'];
+                    $data['detailsModel']->details_status = 'pending';
+                    if ($data['detailsModel']->save()) {
+                        $data['detailsModel']->user->role_id = 2;
+                        $data['detailsModel']->user->scenario = 'change_role';
                         $data['detailsModel']->user->save(false);
-                        Yii::app()->user->setFlash('success' , 'اطلاعات با موفقیت ثبت شد.');
+                        Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                         $this->redirect($this->createUrl('/publishers/panel/signup/step/finish'));
-                    }
-                    else
-                        Yii::app()->user->setFlash('failed' , 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+                    } else
+                        Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
                 }
-                $nationalCardImageUrl=$this->createUrl('/uploads/users/national_cards');
-                $nationalCardImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/national_cards';
-                $data['nationalCardImage']=array();
-                if($data['detailsModel']->national_card_image!='')
-                    $data['nationalCardImage']=array(
+                $nationalCardImageUrl = $this->createUrl('/uploads/users/national_cards');
+                $nationalCardImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/national_cards';
+                $data['nationalCardImage'] = array();
+                if ($data['detailsModel']->national_card_image != '')
+                    $data['nationalCardImage'] = array(
                         'name' => $data['detailsModel']->national_card_image,
-                        'src' => $nationalCardImageUrl.'/'.$data['detailsModel']->national_card_image,
-                        'size' => (file_exists($nationalCardImagePath.'/'.$data['detailsModel']->national_card_image))?filesize($nationalCardImagePath.'/'.$data['detailsModel']->national_card_image):0,
+                        'src' => $nationalCardImageUrl . '/' . $data['detailsModel']->national_card_image,
+                        'size' => (file_exists($nationalCardImagePath . '/' . $data['detailsModel']->national_card_image)) ? filesize($nationalCardImagePath . '/' . $data['detailsModel']->national_card_image) : 0,
                         'serverName' => $data['detailsModel']->national_card_image,
                     );
-                $registrationCertificateImageUrl=$this->createUrl('/uploads/users/registration_certificate');
-                $registrationCertificateImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/registration_certificate';
-                $data['registrationCertificateImage']=array();
-                if($data['detailsModel']->registration_certificate_image!='')
-                    $data['registrationCertificateImage']=array(
+                $registrationCertificateImageUrl = $this->createUrl('/uploads/users/registration_certificate');
+                $registrationCertificateImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/registration_certificate';
+                $data['registrationCertificateImage'] = array();
+                if ($data['detailsModel']->registration_certificate_image != '')
+                    $data['registrationCertificateImage'] = array(
                         'name' => $data['detailsModel']->registration_certificate_image,
-                        'src' => $registrationCertificateImageUrl.'/'.$data['detailsModel']->registration_certificate_image,
-                        'size' => (file_exists($registrationCertificateImagePath.'/'.$data['detailsModel']->registration_certificate_image))?filesize($registrationCertificateImagePath.'/'.$data['detailsModel']->registration_certificate_image):0,
+                        'src' => $registrationCertificateImageUrl . '/' . $data['detailsModel']->registration_certificate_image,
+                        'size' => (file_exists($registrationCertificateImagePath . '/' . $data['detailsModel']->registration_certificate_image)) ? filesize($registrationCertificateImagePath . '/' . $data['detailsModel']->registration_certificate_image) : 0,
                         'serverName' => $data['detailsModel']->registration_certificate_image,
                     );
                 break;
 
             case 'finish':
-                if(isset($_POST['goto_publisher_panel']))
-                {
+                if (isset($_POST['goto_publisher_panel'])) {
                     Yii::app()->user->setState('roles', 'publisher');
                     $this->redirect($this->createUrl('/publishers/panel'));
                 }
                 Yii::import('application.modules.users.models.*');
-                $data['userDetails']=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
+                $data['userDetails'] = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
                 break;
         }
 
         $this->render('signup', array(
-            'step'=>Yii::app()->request->getQuery('step'),
-            'data'=>$data,
+            'step' => Yii::app()->request->getQuery('step'),
+            'data' => $data,
         ));
     }
 
@@ -372,46 +359,44 @@ class PublishersPanelController extends Controller
      */
     public function actionSettlement()
     {
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
         Yii::app()->getModule('setting');
-        $setting=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
+        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
         Yii::app()->getModule('users');
         Yii::app()->getModule('pages');
-        $userDetailsModel=UserDetails::model()->findByAttributes(array('user_id'=>Yii::app()->user->getId()));
+        $userDetailsModel = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
         $userDetailsModel->setScenario('update-settlement');
         // Get history of settlements
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('user_id=:user_id');
-        $criteria->params=array(':user_id'=>Yii::app()->user->getId());
-        $settlementHistory=new CActiveDataProvider('UserSettlement', array(
-            'criteria'=>$criteria,
+        $criteria->params = array(':user_id' => Yii::app()->user->getId());
+        $settlementHistory = new CActiveDataProvider('UserSettlement', array(
+            'criteria' => $criteria,
         ));
 
         $this->performAjaxValidation($userDetailsModel);
 
-        if(isset($_POST['UserDetails'])) {
-            $userDetailsModel->iban=$_POST['UserDetails']['iban'];
-            $userDetailsModel->account_owner=$_POST['UserDetails']['account_owner'];
-            $userDetailsModel->account_number=$_POST['UserDetails']['account_number'];
-            $userDetailsModel->bank_name=$_POST['UserDetails']['bank_name'];
-            $userDetailsModel->financial_info_status='pending';
-            if($userDetailsModel->save())
-            {
+        if (isset($_POST['UserDetails'])) {
+            $userDetailsModel->iban = $_POST['UserDetails']['iban'];
+            $userDetailsModel->account_owner = $_POST['UserDetails']['account_owner'];
+            $userDetailsModel->account_number = $_POST['UserDetails']['account_number'];
+            $userDetailsModel->bank_name = $_POST['UserDetails']['bank_name'];
+            $userDetailsModel->financial_info_status = 'pending';
+            if ($userDetailsModel->save()) {
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->refresh();
-            }
-            else
+            } else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
         }
 
-        $purifier=new CHtmlPurifier();
+        $purifier = new CHtmlPurifier();
 
         $this->render('settlement', array(
-            'userDetailsModel'=>$userDetailsModel,
-            'settlementHistory'=>$settlementHistory,
+            'userDetailsModel' => $userDetailsModel,
+            'settlementHistory' => $settlementHistory,
             'min_credit' => $setting->value,
-            'formDisabled'=>false,
+            'formDisabled' => false,
         ));
     }
 
@@ -420,20 +405,20 @@ class PublishersPanelController extends Controller
      */
     public function actionSales()
     {
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
 
         // user's books
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
         $criteria->addCondition('publisher_id=:dev_id');
         $criteria->addCondition('title!=""');
-        $criteria->params=array(':dev_id'=>Yii::app()->user->getId());
-        $books=new CActiveDataProvider('Books', array(
-            'criteria'=>$criteria,
+        $criteria->params = array(':dev_id' => Yii::app()->user->getId());
+        $books = new CActiveDataProvider('Books', array(
+            'criteria' => $criteria,
         ));
 
         $labels = $values = array();
-        if(isset($_POST['show-chart'])) {
+        if (isset($_POST['show-chart'])) {
             $criteria = new CDbCriteria();
             $criteria->addCondition('date > :from_date');
             $criteria->addCondition('date < :to_date');
@@ -457,8 +442,7 @@ class PublishersPanelController extends Controller
                     }
                     $values[] = $count;
                 }
-            }
-            else {
+            } else {
                 // show monthly report
                 $datesDiff = $_POST['to_date_altField'] - $_POST['from_date_altField'];
                 $monthCount = ceil($datesDiff / (60 * 60 * 24 * 30));
@@ -472,12 +456,12 @@ class PublishersPanelController extends Controller
                     $values[] = $count;
                 }
             }
-        }else{
-            $userBooks=Books::model()->findAllByAttributes(array('publisher_id'=>Yii::app()->user->getId()));
+        } else {
+            $userBooks = Books::model()->findAllByAttributes(array('publisher_id' => Yii::app()->user->getId()));
             $criteria = new CDbCriteria();
             $criteria->addCondition('date > :from_date');
             $criteria->addCondition('date < :to_date');
-            $criteria->addInCondition('book_id',CHtml::listData($userBooks,'id','id'));
+            $criteria->addInCondition('book_id', CHtml::listData($userBooks, 'id', 'id'));
             $criteria->params[':from_date'] = strtotime(date('Y/m/d 00:00:01'));
             $criteria->params[':to_date'] = strtotime(date('Y/m/d 23:59:59'));
             $report = BookBuys::model()->findAll($criteria);
@@ -492,10 +476,10 @@ class PublishersPanelController extends Controller
             }
         }
 
-        $this->render('sales',array(
-            'books'=>$books,
-            'labels'=>$labels,
-            'values'=>$values,
+        $this->render('sales', array(
+            'books' => $books,
+            'labels' => $labels,
+            'values' => $values,
         ));
     }
 
@@ -504,62 +488,62 @@ class PublishersPanelController extends Controller
      */
     public function actionManageSettlement()
     {
-        Yii::app()->theme='abound';
-        $this->layout='//layouts/column2';
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column2';
 
-        if(isset($_POST['token'])) {
-            if(!isset($_POST['token']) or $_POST['token']==''){
+        if (isset($_POST['token'])) {
+            if (!isset($_POST['token']) or $_POST['token'] == '') {
                 Yii::app()->user->setFlash('failed', 'کد رهگیری نمی تواند خالی باشد.');
                 $this->refresh();
             }
-            if(!isset($_POST['amount']) or $_POST['amount']==''){
+            if (!isset($_POST['amount']) or $_POST['amount'] == '') {
                 Yii::app()->user->setFlash('failed', 'مبلغ تسویه نمی تواند خالی باشد.');
                 $this->refresh();
             }
             $amount = doubleval($_POST['amount']);
-            if(!$amount){
+            if (!$amount) {
                 Yii::app()->user->setFlash('failed', 'مبلغ تسویه نامعتبر است. لطفا مبلغ را با دقت وارد کنید.');
                 $this->refresh();
             }
 
-            $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>$_POST['user_id']));
-            $model=new UserSettlement();
-            $model->user_id=$userDetails->user_id;
-            $model->token=$_POST['token'];
-            $model->account_owner= $userDetails->account_owner;
-            $model->account_number= $userDetails->account_number;
-            $model->bank_name= $userDetails->bank_name;
-            $model->iban=$userDetails->iban;
-            $model->amount= $amount;
-            $model->date=time();
-            if($model->save()) {
-                $userDetails->credit=$userDetails->credit-$amount;
+            $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $_POST['user_id']));
+            /* @var $userDetails UserDetails */
+            $model = new UserSettlement();
+            $model->user_id = $userDetails->user_id;
+            $model->token = $_POST['token'];
+            $model->account_owner = $userDetails->account_owner;
+            $model->account_number = $userDetails->account_number;
+            $model->bank_name = $userDetails->bank_name;
+            $model->iban = $userDetails->iban;
+            $model->amount = $amount;
+            $model->date = time();
+            if ($model->save()) {
+                $userDetails->earning = $userDetails->earning - $amount;
                 $userDetails->save();
-                $this->createLog('مبلغ '.Controller::parseNumbers(number_format($model->amount)).' تومان در تاریخ '.
-                    JalaliDate::date('Y/m/d - H:i',$model->date).
-                    ' با کد رهگیری '.$model->token.' به شماره شبای IR'.$model->iban.' واریز شد.',$userDetails->user_id);
+                $this->createLog('مبلغ ' . Controller::parseNumbers(number_format($model->amount)) . ' تومان در تاریخ ' .
+                    JalaliDate::date('Y/m/d - H:i', $model->date) .
+                    ' با کد رهگیری ' . $model->token . ' به شماره شبای IR' . $model->iban . ' واریز شد.', $userDetails->user_id);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->refresh();
-            }
-            else
+            } else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
         }
 
-        $criteria=new CDbCriteria();
-        $criteria->select='SUM(amount) AS amount,date , DAY(FROM_UNIXTIME(date)) as order_day';
-        $criteria->group='order_day';
-        $settlementHistory=new CActiveDataProvider('UserSettlement', array(
-            'criteria'=>$criteria,
-            'pagination' => array('pageSize'=>20)
+        $criteria = new CDbCriteria();
+        $criteria->select = 'SUM(amount) AS amount,date , DAY(FROM_UNIXTIME(date)) as order_day';
+        $criteria->group = 'order_day';
+        $settlementHistory = new CActiveDataProvider('UserSettlement', array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 20)
         ));
-        
-        $criteria=UserDetails::SettlementCriteria();
-        $settlementRequiredUsers=new CActiveDataProvider('UserDetails', array(
-            'criteria'=>$criteria,
+
+        $criteria = UserDetails::SettlementCriteria();
+        $settlementRequiredUsers = new CActiveDataProvider('UserDetails', array(
+            'criteria' => $criteria,
         ));
         $this->render('manage_settlement', array(
-            'settlementHistory'=>$settlementHistory,
-            'settlementRequiredUsers'=>$settlementRequiredUsers,
+            'settlementHistory' => $settlementHistory,
+            'settlementRequiredUsers' => $settlementRequiredUsers,
         ));
     }
 
@@ -569,8 +553,7 @@ class PublishersPanelController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']))
-        {
+        if (isset($_POST['ajax'])) {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
@@ -579,9 +562,10 @@ class PublishersPanelController extends Controller
     /**
      * export excel
      */
-    public function actionExcel(){
-        $criteria=UserDetails::SettlementCriteria();
-        $settlementUsers=UserDetails::model()->findAll($criteria);
+    public function actionExcel()
+    {
+        $criteria = UserDetails::SettlementCriteria();
+        $settlementUsers = UserDetails::model()->findAll($criteria);
 
         $objPHPExcel = Yii::app()->yexcel->createPHPExcel();
         $objPHPExcel = new PHPExcel();
@@ -605,22 +589,22 @@ class PublishersPanelController extends Controller
             ->setCellValue('E1', 'شماره شبا')
             ->setCellValue('F1', 'مبلغ قابل تسویه (تومان)');
 
-        foreach ($settlementUsers as $key => $settlementUser){
-            $row = $key+2;
+        foreach ($settlementUsers as $key => $settlementUser) {
+            $row = $key + 2;
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A'.$row, $settlementUser->publisher_id)
-                ->setCellValue('B'.$row, $settlementUser->account_owner)
-                ->setCellValue('C'.$row, '"'.$settlementUser->account_number.'"')
-                ->setCellValue('D'.$row, $settlementUser->bank_name)
-                ->setCellValue('E'.$row, "IR".$settlementUser->iban)
-                ->setCellValue('F'.$row, number_format($settlementUser->getSettlementAmount()));
+                ->setCellValue('A' . $row, $settlementUser->publisher_id)
+                ->setCellValue('B' . $row, $settlementUser->account_owner)
+                ->setCellValue('C' . $row, '"' . $settlementUser->account_number . '"')
+                ->setCellValue('D' . $row, $settlementUser->bank_name)
+                ->setCellValue('E' . $row, "IR" . $settlementUser->iban)
+                ->setCellValue('F' . $row, number_format($settlementUser->getSettlementAmount()));
         }
         // Save a xls file
         $filename = 'Settlement Publishers';
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
         header('Cache-Control: max-age=0');
-        $objWriter = Yii::app()->yexcel->createActiveSheet($objPHPExcel,'Excel5');
+        $objWriter = Yii::app()->yexcel->createActiveSheet($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         unset($this->objWriter);
         unset($this->objWorksheet);
@@ -631,86 +615,87 @@ class PublishersPanelController extends Controller
 
     public function actionCreate()
     {
-        Yii::app()->theme='abound';
-        $this->layout='//layouts/column2';
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column2';
 
-        $model=new Users();
+        $model = new Users();
         /* @var $model Users */
 
         $this->performAjaxValidation($model);
 
-        if(isset($_POST['Users'])){
-            $model->attributes=$_POST['Users'];
-            $model->role_id=2;
-            $model->create_date=time();
+        if (isset($_POST['Users'])) {
+            $model->attributes = $_POST['Users'];
+            $model->role_id = 2;
+            $model->create_date = time();
 
-            if($model->save()){
-                $userDetails=UserDetails::model()->updateByPk($model->id, array('type'=>$_POST['type']));
+            if ($model->save()) {
+                $userDetails = UserDetails::model()->updateByPk($model->id, array('type' => $_POST['type']));
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
-                $this->redirect(array('update', 'id'=>$model->id));
-            }else
+                $this->redirect(array('update', 'id' => $model->id));
+            } else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است لطفا مجددا تلاش کنید.');
         }
 
         $this->render('create', array(
-            'model'=>$model
+            'model' => $model
         ));
     }
 
     public function actionUpdate($id)
     {
-        Yii::app()->theme='abound';
-        $this->layout='//layouts/column2';
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column2';
 
-        $model=Users::model()->findByPk($id);
+        $model = Users::model()->findByPk($id);
         /* @var $model Users */
 
-        $model->userDetails->scenario='update_'.$model->userDetails->type.'_profile';
+        $model->userDetails->scenario = 'update_' . $model->userDetails->type . '_profile';
 
-        if(isset($_POST['Users']))
+        if (isset($_POST['Users']))
             $this->performAjaxValidation($model);
         else
             $this->performAjaxValidation($model->userDetails);
 
         // Save publisher profile
-        if(isset($_POST['UserDetails']))
-        {
-            $model->userDetails->attributes=$_POST['UserDetails'];
-            if($model->userDetails->save())
-            {
-                Yii::app()->user->setFlash('success' , 'اطلاعات با موفقیت ثبت شد.');
+        if (isset($_POST['UserDetails'])) {
+            $model->userDetails->attributes = $_POST['UserDetails'];
+
+            if (isset($_POST['default_commission']))
+                $model->userDetails->commission = null;
+
+            if ($model->userDetails->save()) {
+                Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->refresh();
-            }
-            else
-                Yii::app()->user->setFlash('failed' , 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+            } else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
         }
 
-        $nationalCardImageUrl=$this->createUrl('/uploads/users/national_cards');
-        $nationalCardImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/national_cards';
-        $nationalCardImage=array();
-        if($model->userDetails->national_card_image!='')
-            $nationalCardImage=array(
+        $nationalCardImageUrl = $this->createUrl('/uploads/users/national_cards');
+        $nationalCardImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/national_cards';
+        $nationalCardImage = array();
+        if ($model->userDetails->national_card_image != '')
+            $nationalCardImage = array(
                 'name' => $model->userDetails->national_card_image,
-                'src' => $nationalCardImageUrl.'/'.$model->userDetails->national_card_image,
-                'size' => (file_exists($nationalCardImagePath.'/'.$model->userDetails->national_card_image))?filesize($nationalCardImagePath.'/'.$model->userDetails->national_card_image):0,
+                'src' => $nationalCardImageUrl . '/' . $model->userDetails->national_card_image,
+                'size' => (file_exists($nationalCardImagePath . '/' . $model->userDetails->national_card_image)) ? filesize($nationalCardImagePath . '/' . $model->userDetails->national_card_image) : 0,
                 'serverName' => $model->userDetails->national_card_image,
             );
 
-        $registrationCertificateImageUrl=$this->createUrl('/uploads/users/registration_certificate');
-        $registrationCertificateImagePath=Yii::getPathOfAlias('webroot').'/uploads/users/registration_certificate';
-        $registrationCertificateImage=array();
-        if($model->userDetails->registration_certificate_image!='')
-            $registrationCertificateImage=array(
+        $registrationCertificateImageUrl = $this->createUrl('/uploads/users/registration_certificate');
+        $registrationCertificateImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/registration_certificate';
+        $registrationCertificateImage = array();
+        if ($model->userDetails->registration_certificate_image != '')
+            $registrationCertificateImage = array(
                 'name' => $model->userDetails->registration_certificate_image,
-                'src' => $registrationCertificateImageUrl.'/'.$model->userDetails->registration_certificate_image,
-                'size' => (file_exists($registrationCertificateImagePath.'/'.$model->userDetails->registration_certificate_image))?filesize($registrationCertificateImagePath.'/'.$model->userDetails->registration_certificate_image):0,
+                'src' => $registrationCertificateImageUrl . '/' . $model->userDetails->registration_certificate_image,
+                'size' => (file_exists($registrationCertificateImagePath . '/' . $model->userDetails->registration_certificate_image)) ? filesize($registrationCertificateImagePath . '/' . $model->userDetails->registration_certificate_image) : 0,
                 'serverName' => $model->userDetails->registration_certificate_image,
             );
 
         $this->render('update', array(
-            'model'=>$model,
-            'nationalCardImage'=>$nationalCardImage,
-            'registrationCertificateImage'=>$registrationCertificateImage,
+            'model' => $model,
+            'nationalCardImage' => $nationalCardImage,
+            'registrationCertificateImage' => $registrationCertificateImage,
         ));
     }
 }

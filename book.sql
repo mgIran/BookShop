@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50616
+Source Server         : localhost
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50616
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-12-29 20:27:42
+Date: 2017-01-01 10:27:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -67,38 +67,38 @@ CREATE TABLE `ym_admin_role_permissions` (
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `ym_admin_role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `ym_admin_roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=447 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_admin_role_permissions
 -- ----------------------------
-INSERT INTO `ym_admin_role_permissions` VALUES ('420', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
-INSERT INTO `ym_admin_role_permissions` VALUES ('421', '2', 'base', 'BookController', 'reportSales,reportIncome');
-INSERT INTO `ym_admin_role_permissions` VALUES ('422', '2', 'base', 'BookPersonsController', 'create,update,admin,delete,list');
-INSERT INTO `ym_admin_role_permissions` VALUES ('423', '2', 'base', 'SiteController', 'transactions');
-INSERT INTO `ym_admin_role_permissions` VALUES ('424', '2', 'base', 'TagsController', 'index,create,update,admin,delete,list');
-INSERT INTO `ym_admin_role_permissions` VALUES ('425', '2', 'admins', 'AdminsDashboardController', 'index');
-INSERT INTO `ym_admin_role_permissions` VALUES ('426', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,changePass,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('427', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('428', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
-INSERT INTO `ym_admin_role_permissions` VALUES ('429', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
-INSERT INTO `ym_admin_role_permissions` VALUES ('430', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,uploadFile,deleteUploadFile,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,updatePackage,downloadPackage,discount,createDiscount,updateDiscount,deleteDiscount,uploadPreview,deleteUploadedPreview');
-INSERT INTO `ym_admin_role_permissions` VALUES ('431', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
-INSERT INTO `ym_admin_role_permissions` VALUES ('432', '2', 'news', 'NewsCategoriesManageController', 'create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('433', '2', 'news', 'NewsManageController', 'create,update,admin,delete,upload,deleteUpload,order');
-INSERT INTO `ym_admin_role_permissions` VALUES ('434', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('435', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('436', '2', 'places', 'PlacesManageController', 'create,update,admin,delete,index,view');
-INSERT INTO `ym_admin_role_permissions` VALUES ('437', '2', 'places', 'TownsManageController', 'create,update,admin,delete,index,view');
-INSERT INTO `ym_admin_role_permissions` VALUES ('438', '2', 'publishers', 'PublishersPanelController', 'manageSettlement,uploadNationalCardImage,uploadRegistrationCertificateImage,update,create,excel');
-INSERT INTO `ym_admin_role_permissions` VALUES ('439', '2', 'rows', 'RowsManageController', 'admin,const,index,view,delete,create,update,updateConst,add,remove');
-INSERT INTO `ym_admin_role_permissions` VALUES ('440', '2', 'setting', 'SettingManageController', 'changeSetting,social_links');
-INSERT INTO `ym_admin_role_permissions` VALUES ('441', '2', 'tickets', 'TicketsDepartmentsController', 'admin,create,update,delete');
-INSERT INTO `ym_admin_role_permissions` VALUES ('442', '2', 'tickets', 'TicketsManageController', 'delete,pendingTicket,openTicket,admin,index,view,create,update,closeTicket,upload,deleteUploaded,send');
-INSERT INTO `ym_admin_role_permissions` VALUES ('443', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
-INSERT INTO `ym_admin_role_permissions` VALUES ('444', '2', 'users', 'UsersBonController', 'create,update,admin,delete,index,view');
-INSERT INTO `ym_admin_role_permissions` VALUES ('445', '2', 'users', 'UsersManageController', 'index,view,create,update,admin,adminPublishers,delete,confirmDevID,deleteDevID,confirmPublisher,refusePublisher');
-INSERT INTO `ym_admin_role_permissions` VALUES ('446', '2', 'users', 'UsersRolesController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('447', '2', 'base', 'BookCategoriesController', 'create,update,admin,delete,upload,deleteUpload,uploadIcon,deleteUploadIcon');
+INSERT INTO `ym_admin_role_permissions` VALUES ('448', '2', 'base', 'BookController', 'reportSales,reportIncome');
+INSERT INTO `ym_admin_role_permissions` VALUES ('449', '2', 'base', 'BookPersonsController', 'create,update,admin,delete,list');
+INSERT INTO `ym_admin_role_permissions` VALUES ('450', '2', 'base', 'SiteController', 'transactions');
+INSERT INTO `ym_admin_role_permissions` VALUES ('451', '2', 'base', 'TagsController', 'index,create,update,admin,delete,list');
+INSERT INTO `ym_admin_role_permissions` VALUES ('452', '2', 'admins', 'AdminsDashboardController', 'index');
+INSERT INTO `ym_admin_role_permissions` VALUES ('453', '2', 'admins', 'AdminsManageController', 'index,views,create,update,admin,changePass,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('454', '2', 'admins', 'AdminsRolesController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('455', '2', 'advertises', 'AdvertisesManageController', 'create,update,admin,delete,upload,deleteUpload');
+INSERT INTO `ym_admin_role_permissions` VALUES ('456', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_admin_role_permissions` VALUES ('457', '2', 'manageBooks', 'ManageBooksBaseManageController', 'index,view,create,update,admin,delete,upload,deleteUpload,changeConfirm,changePackageStatus,deletePackage,savePackage,images,download,updatePackage,downloadPackage,discount,createDiscount,updateDiscount,deleteDiscount,uploadPreview,deleteUploadedPreview,uploadPdfFile,uploadEpubFile,deleteUploadPdfFile,deleteUploadEpubFile,changeFinanceStatus,deletePdfFile,deleteEpubFile,changePublisherCommission');
+INSERT INTO `ym_admin_role_permissions` VALUES ('458', '2', 'manageBooks', 'ManageBooksImagesManageController', 'upload,deleteUploaded');
+INSERT INTO `ym_admin_role_permissions` VALUES ('459', '2', 'news', 'NewsCategoriesManageController', 'create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('460', '2', 'news', 'NewsManageController', 'create,update,admin,delete,upload,deleteUpload,order');
+INSERT INTO `ym_admin_role_permissions` VALUES ('461', '2', 'pages', 'PageCategoriesManageController', 'index,view,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('462', '2', 'pages', 'PagesManageController', 'index,create,update,admin,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('463', '2', 'places', 'PlacesManageController', 'create,update,admin,delete,index,view');
+INSERT INTO `ym_admin_role_permissions` VALUES ('464', '2', 'places', 'TownsManageController', 'create,update,admin,delete,index,view');
+INSERT INTO `ym_admin_role_permissions` VALUES ('465', '2', 'publishers', 'PublishersPanelController', 'manageSettlement,uploadNationalCardImage,uploadRegistrationCertificateImage,update,create,excel');
+INSERT INTO `ym_admin_role_permissions` VALUES ('466', '2', 'rows', 'RowsManageController', 'admin,const,index,view,delete,create,update,updateConst,add,remove');
+INSERT INTO `ym_admin_role_permissions` VALUES ('467', '2', 'setting', 'SettingManageController', 'changeSetting,social_links');
+INSERT INTO `ym_admin_role_permissions` VALUES ('468', '2', 'tickets', 'TicketsDepartmentsController', 'admin,create,update,delete');
+INSERT INTO `ym_admin_role_permissions` VALUES ('469', '2', 'tickets', 'TicketsManageController', 'delete,pendingTicket,openTicket,admin,index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_admin_role_permissions` VALUES ('470', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_admin_role_permissions` VALUES ('471', '2', 'users', 'UsersBonController', 'create,update,admin,delete,index,view');
+INSERT INTO `ym_admin_role_permissions` VALUES ('472', '2', 'users', 'UsersManageController', 'index,view,create,update,admin,adminPublishers,delete,confirmDevID,deleteDevID,confirmPublisher,refusePublisher');
+INSERT INTO `ym_admin_role_permissions` VALUES ('473', '2', 'users', 'UsersRolesController', 'create,update,admin,delete');
 
 -- ----------------------------
 -- Table structure for ym_books
@@ -118,6 +118,7 @@ CREATE TABLE `ym_books` (
   `category_id` int(10) unsigned NOT NULL,
   `publisher_name` varchar(50) DEFAULT NULL,
   `publisher_id` int(10) unsigned DEFAULT NULL,
+  `publisher_commission` decimal(3,0) unsigned DEFAULT NULL COMMENT 'کمیسیون ناشر',
   `confirm` enum('pending','refused','accepted','change_required') DEFAULT 'pending',
   `confirm_date` varchar(20) DEFAULT NULL,
   `seen` int(10) unsigned DEFAULT '0' COMMENT 'دیده شده',
@@ -133,9 +134,9 @@ CREATE TABLE `ym_books` (
 -- ----------------------------
 -- Records of ym_books
 -- ----------------------------
-INSERT INTO `ym_books` VALUES ('52', 'دختر شینا', '', 'JNSLy1477560156.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', '120', '', 'فارسی', 'enable', null, '54', null, '45', 'accepted', '1478818629', '113', '1', '0');
-INSERT INTO `ym_books` VALUES ('53', 'فتح خون', '', 'gvXUa1477582174.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', '150', '', 'فارسی', 'enable', null, '54', 'واحه', null, 'accepted', '1477687320', '93', '3', '0');
-INSERT INTO `ym_books` VALUES ('54', 'دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل', '', 'wD8Oc1477588685.jpg', '<p>دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل</p>\r\n', '150', '', 'فارسی', 'enable', null, '54', 'گلوری', null, 'accepted', '1477687323', '33', '6', '0');
+INSERT INTO `ym_books` VALUES ('52', 'دختر شینا', '', 'JNSLy1477560156.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', '120', '', 'فارسی', 'enable', null, '54', null, '45', '10', 'accepted', '1483176919', '115', '1', '0');
+INSERT INTO `ym_books` VALUES ('53', 'فتح خون', '', 'gvXUa1477582174.jpg', '<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n\r\n<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>\r\n', '150', '', 'فارسی', 'enable', null, '54', 'واحه', null, null, 'accepted', '1477687320', '93', '3', '0');
+INSERT INTO `ym_books` VALUES ('54', 'دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل', '', 'wD8Oc1477588685.jpg', '<p>دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل</p>\r\n', '150', '', 'فارسی', 'enable', null, '54', 'گلوری', null, null, 'accepted', '1477687323', '35', '6', '0');
 
 -- ----------------------------
 -- Table structure for ym_book_advertises
@@ -280,7 +281,7 @@ CREATE TABLE `ym_book_packages` (
 -- ----------------------------
 -- Records of ym_book_packages
 -- ----------------------------
-INSERT INTO `ym_book_packages` VALUES ('46', '52', '1', 'تیراژ اول', '978-3-16-148410-0', 'GJLsY1478819947.pdf', null, '1477566615', '1478822126', 'accepted', '', 'old_book', '10000', '1', '150000', '1394');
+INSERT INTO `ym_book_packages` VALUES ('46', '52', '1', 'تیراژ اول', '978-3-16-148410-0', 'GJLsY1478819947.pdf', null, '1477566615', '1483176919', 'accepted', '', 'old_book', '10000', '1', '150000', '1394');
 INSERT INTO `ym_book_packages` VALUES ('47', '53', '3', 'فتح خون جلد اول', '978-3-16-148410-0', 'ig6Xo1478814578.pdf', null, '1477582805', '1478817000', 'accepted', '', 'old_book', '1500', '1', '5000', '1370');
 INSERT INTO `ym_book_packages` VALUES ('48', '54', '1', 'جلد اول', '978-3-16-148410-0', 'kpg841477592881.docx', null, '1477592909', '1477687323', 'accepted', '', 'new_book', '100', '1', '1220', '1370');
 INSERT INTO `ym_book_packages` VALUES ('69', '53', '1', null, '978-3-16-148410-0', '5JAX91478815087.pdf', null, '1478811430', '1478816997', 'accepted', '', 'old_book', '10000', '1', '120000', '1395');
@@ -428,8 +429,8 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '464');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457752');
+INSERT INTO `ym_counter_save` VALUES ('counter', '466');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457755');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '23');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1481272200');
 INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
@@ -447,7 +448,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1483029040');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1483253859');
 
 -- ----------------------------
 -- Table structure for ym_library
@@ -1096,9 +1097,9 @@ INSERT INTO `ym_site_setting` VALUES ('2', 'default_title', 'عنوان پیش �
 INSERT INTO `ym_site_setting` VALUES ('3', 'keywords', 'کلمات کلیدی سایت', '');
 INSERT INTO `ym_site_setting` VALUES ('4', 'site_description', 'شرح وبسایت', '');
 INSERT INTO `ym_site_setting` VALUES ('5', 'buy_credit_options', 'گزینه های خرید اعتبار', '[\"5000\",\"10000\",\"20000\",\"30000\"]');
-INSERT INTO `ym_site_setting` VALUES ('6', 'min_credit', 'حداقل اعتبار جهت تبدیل عضویت', '5000');
+INSERT INTO `ym_site_setting` VALUES ('6', 'min_credit', 'حداقل درآمد برای تسویه حساب', '5000');
 INSERT INTO `ym_site_setting` VALUES ('7', 'tax', 'میزان مالیات (درصد)', '9');
-INSERT INTO `ym_site_setting` VALUES ('8', 'commission', 'حق کمیسیون (درصد)', '15');
+INSERT INTO `ym_site_setting` VALUES ('8', 'commission', 'کمیسیون ناشر (درصد)', '15');
 INSERT INTO `ym_site_setting` VALUES ('9', 'social_links', 'شبکه های اجتماعی', '{\"facebook\":\"http:\\/\\/facebook.com\",\"twitter\":\"http:\\/\\/twitter.com\"}');
 INSERT INTO `ym_site_setting` VALUES ('10', 'android_app_url', 'آدرس دانلود نرم افزار اندروید سایت', 'http://');
 INSERT INTO `ym_site_setting` VALUES ('11', 'windows_app_url', 'آدرس دانلود نرم افزار ویندوز سایت', 'http://');
@@ -1394,7 +1395,8 @@ CREATE TABLE `ym_user_details` (
   `bank_name` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `financial_info_status` enum('pending','accepted','refused') COLLATE utf8_persian_ci DEFAULT 'pending' COMMENT 'وضعیت اطلاعات مالی',
   `commission` decimal(3,0) unsigned DEFAULT NULL COMMENT 'کمیسیون ناشر',
-  `tax_exempt` decimal(1,0) unsigned DEFAULT NULL COMMENT 'معاف از مالیات',
+  `tax_exempt` decimal(1,0) unsigned DEFAULT '0' COMMENT 'معاف از مالیات',
+  `earning` decimal(10,0) unsigned DEFAULT '0' COMMENT 'درآمد',
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
@@ -1402,25 +1404,25 @@ CREATE TABLE `ym_user_details` (
 -- ----------------------------
 -- Records of ym_user_details
 -- ----------------------------
-INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '117000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '6', null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '500', null, 'pending', '0', null, null, 'real', null, null, null, null, '1', null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '8400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('60', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('61', ' ', null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=200', '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('63', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('64', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('65', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('66', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('67', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('68', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('69', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('70', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
-INSERT INTO `ym_user_details` VALUES ('71', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, null);
+INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, '', '', '', 'pending', '20', '1', '0');
+INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '117000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '6', null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '500', null, 'pending', '0', null, null, 'real', null, null, null, null, '1', null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '8400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('60', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('61', ' ', null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=200', '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('63', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('64', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('65', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('66', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('67', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('68', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('69', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('70', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
+INSERT INTO `ym_user_details` VALUES ('71', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0', '0');
 
 -- ----------------------------
 -- Table structure for ym_user_dev_id_requests
@@ -1448,7 +1450,7 @@ CREATE TABLE `ym_user_notifications` (
   `date` varchar(30) NOT NULL COMMENT 'زمان',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_user_notifications
@@ -1487,6 +1489,10 @@ INSERT INTO `ym_user_notifications` VALUES ('35', null, 'نوبت چاپ  توس
 INSERT INTO `ym_user_notifications` VALUES ('36', null, 'نوبت چاپ فتح خون جلد اول توسط مدیر سیستم تایید شد.', '0', '1478817000');
 INSERT INTO `ym_user_notifications` VALUES ('37', '45', 'کتاب دختر شینا تایید شده است.', '1', '1478818629');
 INSERT INTO `ym_user_notifications` VALUES ('38', '45', 'نوبت چاپ تیراژ اول توسط مدیر سیستم تایید شد.', '1', '1478822126');
+INSERT INTO `ym_user_notifications` VALUES ('39', '45', 'کتاب دختر شینا نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.', '0', '1483174420');
+INSERT INTO `ym_user_notifications` VALUES ('40', '45', 'کتاب دختر شینا نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.', '0', '1483176587');
+INSERT INTO `ym_user_notifications` VALUES ('41', '45', 'کتاب دختر شینا تایید شده است.', '0', '1483176837');
+INSERT INTO `ym_user_notifications` VALUES ('42', '45', 'کتاب دختر شینا تایید شده است.', '0', '1483176919');
 
 -- ----------------------------
 -- Table structure for ym_user_roles

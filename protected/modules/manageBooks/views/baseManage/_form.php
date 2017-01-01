@@ -94,6 +94,7 @@
 		<?php echo $form->textField($model,'language',array('size'=>50,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'language'); ?>
 	</div>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'formAuthor'); ?>
 		<?php $this->widget("ext.tagIt.tagIt",array(
@@ -119,6 +120,7 @@
 		?>
 		<?php echo $form->error($model,'formTranslator'); ?>
 	</div>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'number_of_pages'); ?>
 		<?php echo $form->textField($model,'number_of_pages',array('size'=>10,'maxlength'=>5)); ?>
@@ -132,6 +134,7 @@
         ?>
 		<?php echo $form->error($model,'category_id'); ?>
 	</div>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->dropDownList($model,'status',array(
@@ -142,6 +145,16 @@
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'publisher_commission'); ?>
+		<?php echo $form->textField($model,'publisher_commission',array('size'=>50,'maxlength'=>3,'disabled'=>is_null($model->publisher_commission)?true:false)); ?>درصد
+		<div>
+			<label></label>
+			<?php echo CHtml::checkBox('default_commission', (is_null($model->publisher_commission)?true:false), array('style'=>'margin-top:15px;'));?>
+			<?php echo CHtml::label('کمیسیون پیش فرض در نظر گرفته شود.', 'default_commission');?>
+		</div>
+		<?php echo $form->error($model,'publisher_commission'); ?>
+	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
@@ -202,3 +215,8 @@
 <?php  $this->endWidget(); ?>
 
 </div><!-- form -->
+<?php Yii::app()->clientScript->registerScript('inline-script', "
+$('body').on('change', '#default_commission', function(){
+	$('#Books_publisher_commission').prop('disabled', function(i, v) { return !v; }).val('');
+});
+");?>

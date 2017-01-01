@@ -79,6 +79,15 @@ select
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
     vertical-align: middle;
 }
+input[type='text']:disabled,
+input[type='password']:disabled,
+input[type='email']:disabled,
+input[type='url']:disabled,
+input[type='number']:disabled,
+select:disabled{
+    background: #eee;
+    cursor: not-allowed;
+}
 .navbar .nav  > li > a{
     height: 50px;
 }
