@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2016-12-29 20:56:22
+Date: 2017-01-01 12:58:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -428,8 +428,8 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '464');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457752');
+INSERT INTO `ym_counter_save` VALUES ('counter', '466');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457755');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '23');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1481272200');
 INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
@@ -447,7 +447,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1483031915');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1483262786');
 
 -- ----------------------------
 -- Table structure for ym_library
@@ -1250,7 +1250,7 @@ CREATE TABLE `ym_users` (
   `auth_mode` varchar(50) NOT NULL DEFAULT 'site',
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ym_users
@@ -1389,7 +1389,10 @@ CREATE TABLE `ym_user_details` (
   `registration_certificate_image` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT 'تصویر گواهی ثبت شرکت',
   `score` int(10) unsigned DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'آواتار',
-  `account_owner` varchar(10) COLLATE utf8_persian_ci NOT NULL,
+  `publication_name` varchar(100) COLLATE utf8_persian_ci DEFAULT NULL,
+  `account_owner_name` varchar(50) COLLATE utf8_persian_ci NOT NULL,
+  `account_owner_family` varchar(50) COLLATE utf8_persian_ci NOT NULL,
+  `account_type` enum('real','legal') CHARACTER SET latin1 DEFAULT 'real' COMMENT 'نوع حساب بانکی',
   `account_number` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `bank_name` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `financial_info_status` enum('pending','accepted','refused') COLLATE utf8_persian_ci DEFAULT 'pending' COMMENT 'وضعیت اطلاعات مالی',
@@ -1402,25 +1405,29 @@ CREATE TABLE `ym_user_details` (
 -- ----------------------------
 -- Records of ym_user_details
 -- ----------------------------
-INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '1460', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '117000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '6', null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '500', null, 'pending', '0', null, null, 'real', null, null, null, null, '1', null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '8400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('60', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('61', ' ', null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=200', '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('63', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('64', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('65', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('66', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('67', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('68', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('69', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('70', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
-INSERT INTO `ym_user_details` VALUES ('71', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, '', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('43', 'مسعود قراگوزلو', 'masoud', '', '', '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '10000', 'Masoud', 'accepted', '1', '123456789123456789123456', 'Masoud', 'real', null, null, null, null, '3', null, 'انتشارات نصر', 'مسعود', 'قراگوزلو', 'real', '123546848', 'انصار', 'accepted', null, '0');
+INSERT INTO `ym_user_details` VALUES ('45', 'یوسف مبشری', 'yusef', null, null, '0370518926', 'ULcy91460814012.jpg', '09373252746', '3718895691', 'بلوار سوم خرداد', '7000', 'Yusef', 'accepted', '1', '23423', null, 'real', null, null, null, null, '6', null, 'انتشارات رهگشا', 'یوسف', 'مبشری', 'real', '123545646', 'ملی', 'accepted', null, '0');
+INSERT INTO `ym_user_details` VALUES ('46', null, null, null, null, null, null, null, null, null, '500', null, 'pending', '0', null, null, 'real', null, null, null, null, '1', null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('51', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('56', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('57', null, null, null, null, null, null, null, null, null, '8400', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('58', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('59', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('60', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('61', ' ', null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=200', null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('63', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('64', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('65', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('66', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('67', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('68', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('69', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('70', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('71', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('72', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'legal', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('73', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'legal', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('74', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'real', '', '', 'pending', null, '0');
+INSERT INTO `ym_user_details` VALUES ('75', null, null, null, null, null, null, null, null, null, '0', null, 'pending', '0', null, null, 'real', null, null, null, null, null, null, null, '', '', 'legal', '', '', 'pending', null, '0');
 
 -- ----------------------------
 -- Table structure for ym_user_dev_id_requests
@@ -1448,7 +1455,7 @@ CREATE TABLE `ym_user_notifications` (
   `date` varchar(30) NOT NULL COMMENT 'زمان',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_user_notifications
@@ -1487,6 +1494,8 @@ INSERT INTO `ym_user_notifications` VALUES ('35', null, 'نوبت چاپ  توس
 INSERT INTO `ym_user_notifications` VALUES ('36', null, 'نوبت چاپ فتح خون جلد اول توسط مدیر سیستم تایید شد.', '0', '1478817000');
 INSERT INTO `ym_user_notifications` VALUES ('37', '45', 'کتاب دختر شینا تایید شده است.', '1', '1478818629');
 INSERT INTO `ym_user_notifications` VALUES ('38', '45', 'نوبت چاپ تیراژ اول توسط مدیر سیستم تایید شد.', '1', '1478822126');
+INSERT INTO `ym_user_notifications` VALUES ('39', '43', 'مبلغ ۹۰,۰۰۰ تومان در تاریخ ۱۳۹۵/۱۰/۱۱ - ۱۳:۰۶ با کد رهگیری 16515132 به شماره شبای IR123456789123456789123456 واریز شد.', '0', '1483176975');
+INSERT INTO `ym_user_notifications` VALUES ('40', '45', 'مبلغ ۱۱۰,۰۰۰ تومان در تاریخ ۱۳۹۵/۱۰/۱۱ - ۱۳:۱۵ با کد رهگیری 465616 به شماره شبای IR123456789123456789123456 واریز شد.', '1', '1483177513');
 
 -- ----------------------------
 -- Table structure for ym_user_roles
@@ -1517,29 +1526,29 @@ CREATE TABLE `ym_user_role_permissions` (
   `actions` text CHARACTER SET utf8 COMMENT 'اکشن ها',
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- ----------------------------
 -- Records of ym_user_role_permissions
 -- ----------------------------
-INSERT INTO `ym_user_role_permissions` VALUES ('121', '1', 'base', 'BookController', 'buy,bookmark,rate');
-INSERT INTO `ym_user_role_permissions` VALUES ('122', '1', 'publishers', 'PublishersPanelController', 'uploadNationalCardImage,uploadRegistrationCertificateImage,signup');
-INSERT INTO `ym_user_role_permissions` VALUES ('123', '1', 'tickets', 'TicketsDepartmentsController', 'create,update');
-INSERT INTO `ym_user_role_permissions` VALUES ('124', '1', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
-INSERT INTO `ym_user_role_permissions` VALUES ('125', '1', 'tickets', 'TicketsMessagesController', 'delete,create');
-INSERT INTO `ym_user_role_permissions` VALUES ('126', '1', 'users', 'UsersCreditController', 'buy,bill,verify,captcha');
-INSERT INTO `ym_user_role_permissions` VALUES ('127', '1', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications,changePassword,bookmarked,downloaded,transactions,library');
-INSERT INTO `ym_user_role_permissions` VALUES ('128', '2', 'base', 'BookController', 'buy,bookmark,rate');
-INSERT INTO `ym_user_role_permissions` VALUES ('129', '2', 'base', 'BookPersonsController', 'list');
-INSERT INTO `ym_user_role_permissions` VALUES ('130', '2', 'base', 'TagsController', 'list');
-INSERT INTO `ym_user_role_permissions` VALUES ('131', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
-INSERT INTO `ym_user_role_permissions` VALUES ('132', '2', 'publishers', 'PublishersPanelController', 'uploadNationalCardImage,uploadRegistrationCertificateImage,account,index,discount,settlement,sales,documents,manageSettlement,update,create,excel,signup');
-INSERT INTO `ym_user_role_permissions` VALUES ('133', '2', 'publishers', 'PublishersBooksController', 'create,update,delete,uploadImage,deleteImage,upload,deleteUpload,uploadFile,deleteUploadFile,deleteFile,images,savePackage,deletePackage,updatePackage,getPackages,uploadPreview,deleteUploadedPreview');
-INSERT INTO `ym_user_role_permissions` VALUES ('134', '2', 'tickets', 'TicketsDepartmentsController', 'create,update');
-INSERT INTO `ym_user_role_permissions` VALUES ('135', '2', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
-INSERT INTO `ym_user_role_permissions` VALUES ('136', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
-INSERT INTO `ym_user_role_permissions` VALUES ('137', '2', 'users', 'UsersCreditController', 'buy,bill,captcha,verify');
-INSERT INTO `ym_user_role_permissions` VALUES ('138', '2', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications,changePassword,bookmarked,downloaded,transactions,library');
+INSERT INTO `ym_user_role_permissions` VALUES ('139', '2', 'base', 'BookController', 'buy,bookmark,rate,verify,updateVersion');
+INSERT INTO `ym_user_role_permissions` VALUES ('140', '2', 'base', 'BookPersonsController', 'list');
+INSERT INTO `ym_user_role_permissions` VALUES ('141', '2', 'base', 'TagsController', 'list');
+INSERT INTO `ym_user_role_permissions` VALUES ('142', '2', 'comments', 'CommentsCommentController', 'admin,adminBooks,delete,approve');
+INSERT INTO `ym_user_role_permissions` VALUES ('143', '2', 'publishers', 'PublishersPanelController', 'manageSettlement,uploadNationalCardImage,uploadRegistrationCertificateImage,update,create,excel,account,index,discount,settlement,sales,documents,signup');
+INSERT INTO `ym_user_role_permissions` VALUES ('144', '2', 'publishers', 'PublishersBooksController', 'create,update,delete,uploadImage,deleteImage,upload,deleteUpload,deleteFile,images,savePackage,deletePackage,getPackages,updatePackage,uploadPreview,deleteUploadedPreview');
+INSERT INTO `ym_user_role_permissions` VALUES ('145', '2', 'tickets', 'TicketsDepartmentsController', 'create,update');
+INSERT INTO `ym_user_role_permissions` VALUES ('146', '2', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_user_role_permissions` VALUES ('147', '2', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_user_role_permissions` VALUES ('148', '2', 'users', 'UsersCreditController', 'buy,bill,captcha,verify');
+INSERT INTO `ym_user_role_permissions` VALUES ('149', '2', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications,changePassword,bookmarked,downloaded,transactions,library');
+INSERT INTO `ym_user_role_permissions` VALUES ('150', '1', 'base', 'BookController', 'buy,bookmark,rate,verify,updateVersion');
+INSERT INTO `ym_user_role_permissions` VALUES ('151', '1', 'publishers', 'PublishersPanelController', 'uploadNationalCardImage,uploadRegistrationCertificateImage,signup');
+INSERT INTO `ym_user_role_permissions` VALUES ('152', '1', 'tickets', 'TicketsDepartmentsController', 'create,update');
+INSERT INTO `ym_user_role_permissions` VALUES ('153', '1', 'tickets', 'TicketsManageController', 'index,view,create,update,closeTicket,upload,deleteUploaded,send');
+INSERT INTO `ym_user_role_permissions` VALUES ('154', '1', 'tickets', 'TicketsMessagesController', 'delete,create');
+INSERT INTO `ym_user_role_permissions` VALUES ('155', '1', 'users', 'UsersCreditController', 'buy,bill,captcha,verify');
+INSERT INTO `ym_user_role_permissions` VALUES ('156', '1', 'users', 'UsersPublicController', 'dashboard,logout,setting,notifications,changePassword,bookmarked,downloaded,transactions,library');
 
 -- ----------------------------
 -- Table structure for ym_user_settlement
@@ -1550,21 +1559,22 @@ CREATE TABLE `ym_user_settlement` (
   `user_id` int(10) unsigned DEFAULT NULL COMMENT 'کاربر',
   `amount` varchar(15) DEFAULT NULL COMMENT 'مبلغ',
   `date` varchar(20) DEFAULT NULL COMMENT 'تاریخ',
-  `account_owner` varchar(100) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL,
+  `account_owner_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL COMMENT 'نام صاحب حساب',
+  `account_owner_family` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL COMMENT 'نام خانوادگی صاحب حساب',
+  `account_type` enum('real','legal') DEFAULT 'real' COMMENT 'نوع حساب',
   `account_number` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL,
   `bank_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL,
   `iban` varchar(24) DEFAULT NULL COMMENT 'شماره شبا',
   `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'کد رهگیری',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ym_user_settlement
 -- ----------------------------
-INSERT INTO `ym_user_settlement` VALUES ('28', '43', '19000', '1462175546', '', '', '', '234242342', null);
-INSERT INTO `ym_user_settlement` VALUES ('29', '45', '4949900', '1478354499', '', '', '', '23423', null);
-INSERT INTO `ym_user_settlement` VALUES ('32', '43', '19000', '1478892568', '', '', '', '123456789123456789123456', '1234');
+INSERT INTO `ym_user_settlement` VALUES ('33', '43', '90000', '1483176975', 'مسعود', 'قراگوزلو', 'real', '123546848', 'انصار', '123456789123456789123456', '16515132');
+INSERT INTO `ym_user_settlement` VALUES ('34', '45', '110000', '1483177513', 'یوسف', 'مبشری', 'real', '123545646', 'ملی', '123456789123456789123456', '465616');
 
 -- ----------------------------
 -- Table structure for ym_user_transactions

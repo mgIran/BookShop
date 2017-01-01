@@ -392,7 +392,9 @@ class PublishersPanelController extends Controller
 
         if(isset($_POST['UserDetails'])) {
             $userDetailsModel->iban=$_POST['UserDetails']['iban'];
-            $userDetailsModel->account_owner=$_POST['UserDetails']['account_owner'];
+            $userDetailsModel->account_owner_name=$_POST['UserDetails']['account_owner_name'];
+            $userDetailsModel->account_owner_family=$_POST['UserDetails']['account_owner_family'];
+            $userDetailsModel->account_type=$_POST['UserDetails']['account_type'];
             $userDetailsModel->account_number=$_POST['UserDetails']['account_number'];
             $userDetailsModel->bank_name=$_POST['UserDetails']['bank_name'];
             $userDetailsModel->financial_info_status='pending';
@@ -521,15 +523,22 @@ class PublishersPanelController extends Controller
                 Yii::app()->user->setFlash('failed', 'مبلغ تسویه نامعتبر است. لطفا مبلغ را با دقت وارد کنید.');
                 $this->refresh();
             }
+            $iban = $_POST['iban'];
+            if(!$iban){
+                Yii::app()->user->setFlash('failed', 'شماره شبا نمی تواند خالی باشد.');
+                $this->refresh();
+            }
 
             $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>$_POST['user_id']));
             $model=new UserSettlement();
             $model->user_id=$userDetails->user_id;
             $model->token=$_POST['token'];
-            $model->account_owner= $userDetails->account_owner;
+            $model->account_type= $userDetails->account_type;
+            $model->account_owner_name= $userDetails->account_owner_name;
+            $model->account_owner_family= $userDetails->account_owner_family;
             $model->account_number= $userDetails->account_number;
             $model->bank_name= $userDetails->bank_name;
-            $model->iban=$userDetails->iban;
+            $model->iban=$iban;
             $model->amount= $amount;
             $model->date=time();
             if($model->save()) {
@@ -600,22 +609,31 @@ class PublishersPanelController extends Controller
         $objPHPExcel->getActiveSheet()
             ->setCellValue('A1', 'شماره شبا')
             ->setCellValue('B1', 'مبلغ قابل تسویه (تومان)')
-            ->setCellValue('F1', 'نام انتشارات')
-            ->setCellValue('E1', 'نام صاحب حساب/شخص حقوقی')
-            ->setCellValue('D1', 'شماره حساب')
-            ->setCellValue('C1', 'نام بانک')
-
-            ;
+            ->setCellValue('C1', 'نام صاحب حساب/نوع حساب')
+            ->setCellValue('D1', 'نام خانوادگی / نام حقوقی صاحب حساب')
+            ->setCellValue('E1', 'نام بانک')
+            ->setCellValue('F1', 'شماره حساب')
+            ->setCellValue('G1', 'نام انتشارات');
 
         foreach ($settlementUsers as $key => $settlementUser){
             $row = $key+2;
+            if($settlementUser->account_type == UserDetails::ACCOUNT_TYPE_REAL)
+            {
+                $name = $settlementUser->account_owner_name;
+                $family =  $settlementUser->account_owner_family;
+            }elseif($settlementUser->account_type == UserDetails::ACCOUNT_TYPE_LEGAL)
+            {
+                $name = $settlementUser->typeLabels[$settlementUser->account_type];
+                $family =  $settlementUser->account_owner_name;
+            }
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A'.$row, $settlementUser->publisher_id)
-                ->setCellValue('B'.$row, $settlementUser->account_owner)
-                ->setCellValue('C'.$row, '"'.$settlementUser->account_number.'"')
-                ->setCellValue('D'.$row, $settlementUser->bank_name)
-                ->setCellValue('E'.$row, "IR".$settlementUser->iban)
-                ->setCellValue('F'.$row, number_format($settlementUser->getSettlementAmount()));
+                ->setCellValue('A'.$row, "IR".$settlementUser->iban)
+                ->setCellValue('B'.$row, number_format($settlementUser->getSettlementAmount()))
+                ->setCellValue('C'.$row, $name)
+                ->setCellValue('D'.$row, $family)
+                ->setCellValue('E'.$row, $settlementUser->bank_name)
+                ->setCellValue('F'.$row, '"'.$settlementUser->account_number.'"')
+                ->setCellValue('G'.$row, $settlementUser->publication_name);
         }
         // Save a xls file
         $filename = 'Settlement Publishers';
@@ -647,7 +665,6 @@ class PublishersPanelController extends Controller
             $model->create_date=time();
 
             if($model->save()){
-                $userDetails=UserDetails::model()->updateByPk($model->id, array('type'=>$_POST['type']));
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect(array('update', 'id'=>$model->id));
             }else

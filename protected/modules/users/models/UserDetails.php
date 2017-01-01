@@ -27,7 +27,10 @@
  * @property string $registration_certificate_image
  * @property integer $score
  * @property string $avatar
- * @property string $account_owner
+ * @property string $publication_name
+ * @property string $account_type
+ * @property string $account_owner_name
+ * @property string $account_owner_family
  * @property string $account_number
  * @property string $bank_name
  * @property string $financial_info_status
@@ -39,6 +42,9 @@
  */
 class UserDetails extends CActiveRecord
 {
+    const ACCOUNT_TYPE_REAL = 'real';
+    const ACCOUNT_TYPE_LEGAL = 'legal';
+
     const TAX_EXEMPT_NOT = 0;
     const TAX_EXEMPT = 1;
 
@@ -79,13 +85,13 @@ class UserDetails extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('fa_name, en_name, national_code, phone, zip_code, address, national_card_image, nickname, publisher_id', 'required', 'on' => 'update_real_profile'),
-            array('fa_name, nickname, post, company_name, registration_number, phone, zip_code, address, registration_certificate_image, publisher_id', 'required', 'on' => 'update_legal_profile'),
+            array('fa_name, publication_name, national_code, phone, zip_code, address, national_card_image, nickname, publisher_id', 'required', 'on' => 'update_real_profile'),
+            array('fa_name, publication_name, nickname, post, company_name, registration_number, phone, zip_code, address, registration_certificate_image, publisher_id', 'required', 'on' => 'update_legal_profile'),
             array('publisher_id', 'required', 'on' => 'confirmDev'),
             array('publisher_id', 'unique'),
             array('credit, national_code, phone, zip_code, score', 'numerical'),
             array('user_id, national_code, zip_code', 'length', 'max' => 10),
-            array('account_owner', 'length', 'max' => 100),
+            array('account_owner_name, account_owner_family', 'length', 'max' => 50),
             array('bank_name, account_number', 'length', 'max' => 50),
             array('national_code, zip_code', 'length', 'min' => 10),
             array('phone', 'length', 'min' => 8),
@@ -94,8 +100,9 @@ class UserDetails extends CActiveRecord
             array('phone', 'length', 'max' => 11),
             array('publisher_id, nickname', 'length', 'max' => 20, 'min' => 5),
             array('address', 'length', 'max' => 1000),
+            array('publication_name', 'length', 'max' => 100),
             array('details_status, financial_info_status', 'length', 'max' => 8),
-            array('type, post', 'length', 'max' => 5),
+            array('account_type, type, post', 'length', 'max' => 5),
             array('commission', 'length', 'max' => 3),
             array('tax_exempt', 'length', 'max' => 1),
             array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
@@ -104,7 +111,7 @@ class UserDetails extends CActiveRecord
             array('monthly_settlement', 'default', 'value' => 1),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner, account_number, bank_name, financial_info_status', 'safe', 'on' => 'search'),
+            array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner_name, account_owner_family, account_number, bank_name, financial_info_status, publication_name', 'safe', 'on' => 'search'),
         );
     }
 
@@ -134,9 +141,9 @@ class UserDetails extends CActiveRecord
     {
         return array(
             'user_id' => 'کاربر',
-            'fa_name' => 'نام فارسی',
+            'fa_name' => 'نام و نام خانوادگی',
             'en_name' => 'نام انگلیسی',
-            'fa_web_url' => 'آدرس سایت فارسی',
+            'fa_web_url' => 'آدرس وبسایت',
             'en_web_url' => 'آدرس سایت انگلیسی',
             'national_code' => 'کد ملی',
             'national_card_image' => 'تصویر کارت ملی',
@@ -157,7 +164,10 @@ class UserDetails extends CActiveRecord
             'registration_certificate_image' => 'تصویر گواهی ثبت شرکت',
             'score' => 'امتیاز',
             'avatar' => 'آواتار',
-            'account_owner' => 'نام صاحب حساب / شخص حقوقی',
+            'publication_name' => 'نام انتشارات',
+            'account_owner_name' => 'نام صاحب حساب',
+            'account_owner_family' => 'نام خانوادگی صاحب حساب',
+            'account_type' => 'نوع حساب',
             'account_number' => 'شماره حساب',
             'bank_name' => 'نام بانک',
             'financial_info_status' => 'وضعیت اطلاعات مالی',
@@ -208,6 +218,7 @@ class UserDetails extends CActiveRecord
         $criteria->compare('score',$this->score);
         $criteria->compare('avatar',$this->avatar,true);
         $criteria->compare('financial_info_status',$this->financial_info_status,true);
+        $criteria->compare('publication_name',$this->publication_name,true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -251,7 +262,8 @@ class UserDetails extends CActiveRecord
     public function validateAccountingInformation(){
         if(
             !$this->iban || empty($this->iban) ||
-            !$this->account_owner || empty($this->account_owner) ||
+            !$this->account_owner_name || empty($this->account_owner_name) ||
+            !$this->account_owner_family || empty($this->account_owner_family) ||
             !$this->account_number || empty($this->account_number) ||
             !$this->bank_name || empty($this->bank_name)
         )
@@ -264,7 +276,7 @@ class UserDetails extends CActiveRecord
         $setting=SiteSetting::model()->find('name=:name', array(':name'=>'min_credit'));
         $criteria=new CDbCriteria();
         $criteria->addCondition('iban IS NOT NULL AND iban != ""');
-        $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
+        $criteria->addCondition('account_owner_name IS NOT NULL AND account_owner_name != ""');
         $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
         $criteria->addCondition('financial_info_status = "accepted"');
@@ -276,7 +288,7 @@ class UserDetails extends CActiveRecord
     public static function PendingFinanceUsersCriteria(){
         $criteria=new CDbCriteria();
         $criteria->addCondition('iban IS NOT NULL AND iban != ""');
-        $criteria->addCondition('account_owner IS NOT NULL AND account_owner != ""');
+        $criteria->addCondition('account_owner_name IS NOT NULL AND account_owner_name != ""');
         $criteria->addCondition('account_number IS NOT NULL AND account_number != ""');
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
         $criteria->addCondition('financial_info_status = "pending"');

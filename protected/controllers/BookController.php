@@ -79,7 +79,7 @@ class BookController extends Controller
         $price = $model->hasDiscount() ? $model->offPrice : $model->price;
         if($price === 0){
             Library::AddToLib($model->id ,$model->lastPackage->id ,$userID);
-            $this->redirect(array('/library'));
+            $this->redirect(array('/book/'.$id.'/'.$title));
         }
 
         $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID ,'book_id' => $id));

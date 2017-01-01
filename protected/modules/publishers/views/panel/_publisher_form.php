@@ -38,12 +38,16 @@
         <?php echo $form->dropDownList($model, 'status', $model->statusLabels, array('options' => array('active'=>array('selected'=>true)))); ?>
         <?php echo $form->error($model,'status'); ?>
     </div>
-
+    <?php
+    if($model->isNewRecord):
+    ?>
     <div class="row">
         <?php echo CHtml::label('نوع کاربری','type'); ?>
-        <?php echo CHtml::dropDownList('type', 'real', array('real' => 'حقیقی', 'legal' => 'حقوقی')); ?>
+        <?php echo $form->dropDownList($model, 'type', UserDetails::model()->typeLabels, array('real' => 'حقیقی', 'legal' => 'حقوقی')); ?>
     </div>
-
+    <?php
+    endif;
+    ?>
     <div class="row buttons">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'افزودن' : 'ویرایش' ,array('class' => 'btn btn-success')); ?>
     </div>

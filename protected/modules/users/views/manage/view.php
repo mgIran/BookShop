@@ -92,7 +92,11 @@ $this->menu=array(
 			),
 			array(
 				'name'=>'نام صاحب حساب',
-				'value'=>$model->userDetails->account_owner,
+				'value'=>$model->userDetails->account_owner_name,
+			),
+			array(
+				'name'=>'نام خانوادگی صاحب حساب',
+				'value'=>$model->userDetails->account_owner_family,
 			),
 			array(
 				'name'=>'شماره حساب',
@@ -180,10 +184,9 @@ $this->menu=array(
 			array(
 				'name'=>'وضعیت اطلاعات',
 				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->details_status],
-			),
-			array(
-				'name'=>'نام صاحب حساب',
-				'value'=>$model->userDetails->account_owner,
+			),array(
+				'name'=>'نام حقوقی صاحب حساب',
+				'value'=>$model->userDetails->account_owner_name,
 			),
 			array(
 				'name'=>'شماره حساب',

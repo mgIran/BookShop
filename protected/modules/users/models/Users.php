@@ -49,6 +49,7 @@ class Users extends CActiveRecord
     public $oldPassword;
     public $newPassword;
     public $roleId;
+    public $type;
 
     /**
      * @return array validation rules for model attributes.
@@ -74,9 +75,10 @@ class Users extends CActiveRecord
             array('role_id', 'length', 'max' => 10),
             array('status', 'length', 'max' => 8),
             array('create_date', 'length', 'max' => 20),
+            array('type', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('roleId, create_date, status, verification_token, change_password_request_count ,fa_name ,email ,statusFilter', 'safe', 'on' => 'search'),
+            array('type, roleId, create_date, status, verification_token, change_password_request_count ,fa_name ,email ,statusFilter', 'safe', 'on' => 'search'),
         );
     }
 
@@ -128,6 +130,7 @@ class Users extends CActiveRecord
             'status' => 'وضعیت کاربر',
             'verification_token' => 'Verification Token',
             'change_password_request_count' => 'تعداد درخواست تغییر کلمه عبور',
+            'type' => 'نوع کاربری',
         );
     }
 
@@ -189,6 +192,8 @@ class Users extends CActiveRecord
         if ($this->isNewRecord) {
             $model = new UserDetails;
             $model->user_id = $this->id;
+            if($this->type == UserDetails::ACCOUNT_TYPE_REAL || $this->type == UserDetails::ACCOUNT_TYPE_LEGAL)
+                $model->type = $this->type;
             $model->credit = 0;
             $model->save();
         }
