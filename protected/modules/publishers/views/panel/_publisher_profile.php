@@ -95,6 +95,22 @@ endif;
             </div>
 
             <div class="form-group">
+                <?php echo $form->labelEx($model,'commission'); ?>
+                <?php echo $form->textField($model,'commission',array('placeholder'=>$model->getAttributeLabel('commission').' (درصد)','class'=>'form-control','disabled'=>is_null($model->commission)?true:false)); ?>
+                <div>
+                    <?php echo CHtml::checkBox('default_commission', (is_null($model->commission)?true:false), array('style'=>'margin-top:15px;'));?>
+                    <?php echo CHtml::label('کمیسیون پیش فرض در نظر گرفته شود.', 'default_commission');?>
+                </div>
+                <?php echo $form->error($model,'commission'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'tax_exempt'); ?>
+                <div><?php echo $form->radioButtonList($model, 'tax_exempt', array(UserDetails::TAX_EXEMPT=>'بله', UserDetails::TAX_EXEMPT_NOT=>'خیر')); ?></div>
+                <?php echo $form->error($model,'tax_exempt'); ?>
+            </div>
+
+            <div class="form-group">
                 <?php echo $form->labelEx($model,'details_status'); ?>
                 <?php echo $form->dropDownList($model,'details_status',$model->detailsStatusLabels,array('options'=>array('accepted'=>array('selected'=>true)),'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'details_status'); ?>
@@ -259,8 +275,20 @@ endif;
 
             <div class="form-group">
                 <?php echo $form->labelEx($model,'credit'); ?>
-                <?php echo $form->textField($model,'credit',array('placeholder'=>$model->getAttributeLabel('credit').' *','class'=>'form-control')); ?>
+                <?php echo $form->textField($model,'credit',array('placeholder'=>$model->getAttributeLabel('credit').' *','class'=>'form-control')); ?>تومان
                 <?php echo $form->error($model,'credit'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'commission'); ?>
+                <?php echo $form->textField($model,'commission',array('placeholder'=>$model->getAttributeLabel('commission').' (درصد)','class'=>'form-control')); ?>
+                <?php echo $form->error($model,'commission'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'tax_exempt'); ?>
+                <div><?php echo $form->radioButtonList($model, 'tax_exempt', array(UserDetails::TAX_EXEMPT=>'بله', UserDetails::TAX_EXEMPT_NOT=>'خیر')); ?></div>
+                <?php echo $form->error($model,'tax_exempt'); ?>
             </div>
 
             <div class="form-group">
@@ -361,3 +389,9 @@ Yii::app()->clientScript->registerScript('account-type','
             $("#account_owner_family").fadeIn();
     });
 ', CClientScript::POS_READY);
+
+Yii::app()->clientScript->registerScript('inline-script', "
+$('body').on('change', '#default_commission', function(){
+	$('#UserDetails_commission').prop('disabled', function(i, v) { return !v; }).val('');
+});
+");?>

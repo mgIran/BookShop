@@ -264,7 +264,7 @@ class BookController extends Controller
         $buy->save();
 
         if($book->publisher){
-            $book->publisher->userDetails->credit = $book->publisher->userDetails->credit + $book->getPublisherPortion();
+            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion();
             $book->publisher->userDetails->save();
         }
 

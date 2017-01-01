@@ -16,6 +16,7 @@
  * @property string $category_id
  * @property string $publisher_name
  * @property string $publisher_id
+ * @property string $publisher_commission
  * @property string $confirm
  * @property string $confirm_date
  * @property integer $seen
@@ -56,14 +57,14 @@ class Books extends CActiveRecord
 
 	private $_purifier;
 	public $confirmLabels = array(
-			'pending' => 'در حال بررسی',
-			'refused' => 'رد شده',
-			'accepted' => 'تایید شده',
-			'change_required' => 'نیاز به تغییر',
+		'pending' => 'در حال بررسی',
+		'refused' => 'رد شده',
+		'accepted' => 'تایید شده',
+		'change_required' => 'نیاز به تغییر',
 	);
 	public $statusLabels = array(
-			'enable' => 'فعال',
-			'disable' => 'غیر فعال'
+		'enable' => 'فعال',
+		'disable' => 'غیر فعال'
 	);
 
 	/**
@@ -75,6 +76,7 @@ class Books extends CActiveRecord
 	public $formSeoTags = [];
 	public $formAuthor = [];
 	public $formTranslator = [];
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -91,15 +93,16 @@ class Books extends CActiveRecord
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
-			array('language, confirm_date', 'length' ,'max'=>20),
-			array('language, preview_file', 'filter' ,'filter'=>'strip_tags'),
+			array('publisher_commission', 'length', 'max' => 3),
+			array('language, confirm_date', 'length', 'max' => 20),
+			array('language, preview_file', 'filter', 'filter' => 'strip_tags'),
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
 			array('preview_file', 'length', 'max' => 255),
 			array('description, change_log, publisher_name, _purifier, formAuthor, formTranslator', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
+			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, publisher_commission, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -117,11 +120,11 @@ class Books extends CActiveRecord
 			'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
 			'discount' => array(self::HAS_ONE, 'BookDiscounts', 'book_id',
 				'on' => 'discount.start_date < :time AND discount.end_date > :time',
-				'params'=>array(':time' => time()),
-				'order'=>'discount.id DESC'
+				'params' => array(':time' => time()),
+				'order' => 'discount.id DESC'
 			),
 			'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
-			'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id' ,'on' => 'lastPackage.status = "accepted"','order'=>'lastPackage.publish_date DESC'),
+			'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'on' => 'lastPackage.status = "accepted"', 'order' => 'lastPackage.publish_date DESC'),
 			'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 			'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 			'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
@@ -135,32 +138,31 @@ class Books extends CActiveRecord
 		);
 	}
 
-    public function getPerson($role=NUlL){
-        $criteria = new CDbCriteria();
-        if($role)
-        {
-            $role = BookPersonRoles::model()->findByAttributes(array('title' => $role));
-            if(!$role)
-                return null;
-            $criteria->compare('role_id',$role->id);
-        }
-        return $this->persons($criteria);
-    }
+	public function getPerson($role = NUlL)
+	{
+		$criteria = new CDbCriteria();
+		if ($role) {
+			$role = BookPersonRoles::model()->findByAttributes(array('title' => $role));
+			if (!$role)
+				return null;
+			$criteria->compare('role_id', $role->id);
+		}
+		return $this->persons($criteria);
+	}
 
-    public function getPersonsTags($role=NULL , $personProperty = 'fullName',$implode = true ,$tag = 'a' ,$htmlOptions=array()){
-        $html=array();
-        foreach ($this->getPerson($role) as $person) {
-            if($tag == 'a')
-            {
-                $link = array('/book/person/'.$person->id.'/'.urldecode($person->fullName));
-                $htmlTag = CHtml::link($person->{$personProperty}, $link ,$htmlOptions);
-            }
-            else
-                $htmlTag = CHtml::tag($tag, $htmlOptions, $person->{$personProperty});
-            array_push($html, $htmlTag);
-        }
-        return $implode?implode(',',$html):$html;
-    }
+	public function getPersonsTags($role = NULL, $personProperty = 'fullName', $implode = true, $tag = 'a', $htmlOptions = array())
+	{
+		$html = array();
+		foreach ($this->getPerson($role) as $person) {
+			if ($tag == 'a') {
+				$link = array('/book/person/' . $person->id . '/' . urldecode($person->fullName));
+				$htmlTag = CHtml::link($person->{$personProperty}, $link, $htmlOptions);
+			} else
+				$htmlTag = CHtml::tag($tag, $htmlOptions, $person->{$personProperty});
+			array_push($html, $htmlTag);
+		}
+		return $implode ? implode(',', $html) : $html;
+	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -168,28 +170,29 @@ class Books extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-            'id' => 'شناسه',
-            'title' => 'عنوان',
-            'preview_file' => 'پیش نمایش کتاب',
-            'icon' => 'تصویر جلد',
-            'description' => 'توضیحات',
-            'number_of_pages' => 'تعداد صفحات',
-            'language' => 'زبان کتاب',
-            'publisher_id' => 'ناشر',
-            'category_id' => 'دسته',
-            'status' => 'وضعیت',
-            'change_log' => 'لیست تغییرات',
-            'confirm' => 'وضعیت انتشار',
-            'confirm_date' => 'تاریخ انتشار',
-            'publisher_name' => 'عنوان ناشر',
-            'seen' => 'دیده شده',
-            'download' => 'تعداد دریافت',
-            'deleted' => 'حذف شده',
-            'size' => 'حجم فایل',
-            'formTags' => 'برچسب های نمایشی',
-            'formSeoTags' => 'برچسب های سئو',
-            'formAuthor' => 'نویسندگان',
-            'formTranslator' => 'مترجمان',
+			'id' => 'شناسه',
+			'title' => 'عنوان',
+			'preview_file' => 'پیش نمایش کتاب',
+			'icon' => 'تصویر جلد',
+			'description' => 'توضیحات',
+			'number_of_pages' => 'تعداد صفحات',
+			'language' => 'زبان کتاب',
+			'publisher_id' => 'ناشر',
+			'publisher_commission' => 'کمیسیون ناشر',
+			'category_id' => 'دسته',
+			'status' => 'وضعیت',
+			'change_log' => 'لیست تغییرات',
+			'confirm' => 'وضعیت انتشار',
+			'confirm_date' => 'تاریخ انتشار',
+			'publisher_name' => 'عنوان ناشر',
+			'seen' => 'دیده شده',
+			'download' => 'تعداد دریافت',
+			'deleted' => 'حذف شده',
+			'size' => 'حجم فایل',
+			'formTags' => 'برچسب های نمایشی',
+			'formSeoTags' => 'برچسب های سئو',
+			'formAuthor' => 'نویسندگان',
+			'formTranslator' => 'مترجمان',
 		);
 	}
 
@@ -217,7 +220,7 @@ class Books extends CActiveRecord
 		$criteria->compare('t.status', $this->status);
 		$criteria->with = array('publisher', 'publisher.userDetails');
 		$criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
-		$criteria->params[':dev_filter'] = '%'.$this->devFilter.'%';
+		$criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
 
 		$criteria->addCondition('deleted=0');
 
@@ -225,7 +228,7 @@ class Books extends CActiveRecord
 		$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
-				'criteria' => $criteria,
+			'criteria' => $criteria,
 		));
 	}
 
@@ -245,20 +248,34 @@ class Books extends CActiveRecord
 	 */
 	public function getPublisherPortion()
 	{
-		Yii::app()->getModule('setting');
-		$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
-		$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
 		$price = $this->price;
-		$tax = ($price * $tax) / 100;
+		Yii::app()->getModule('setting');
+
+		// Get commission from book
+		$commission = $this->publisher_commission;
+
+		// Get commission from publisher
+		if (is_null($commission) or $commission == '')
+			$commission = $this->publisher->userDetails->commission;
+
+		// Get commission from setting
+		if (is_null($commission) or $commission == '')
+			$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
+
+		if (!$this->publisher->userDetails->tax_exempt) {
+			$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+			$tax = ($price * $tax) / 100;
+			$price = $price - $tax;
+		}
 		$commission = ($price * $commission) / 100;
-		return $price - $tax - $commission;
+		return $commission;
 	}
 
 	protected function afterSave()
 	{
 		if ($this->formTags && !empty($this->formTags)) {
 			if (!$this->IsNewRecord)
-				BookTagRel::model()->deleteAll('for_seo = 0 AND book_id='.$this->id);
+				BookTagRel::model()->deleteAll('for_seo = 0 AND book_id=' . $this->id);
 			foreach ($this->formTags as $tag) {
 				if (!empty($tag)) {
 					$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
@@ -282,7 +299,7 @@ class Books extends CActiveRecord
 		}
 		if ($this->formSeoTags && !empty($this->formSeoTags)) {
 			if (!$this->IsNewRecord)
-				BookTagRel::model()->deleteAll('for_seo = 1 AND book_id='.$this->id);
+				BookTagRel::model()->deleteAll('for_seo = 1 AND book_id=' . $this->id);
 			foreach ($this->formSeoTags as $tag) {
 				if (!empty($tag)) {
 					$tagModel = Tags::model()->findByAttributes(array('title' => $tag));
@@ -305,59 +322,59 @@ class Books extends CActiveRecord
 			}
 		}
 		if ($this->formAuthor && !empty($this->formAuthor)) {
-            $roleId = BookPersonRoles::model()->find('title = :title',array(':title' => 'نویسنده'))->id;
-            if (!$this->IsNewRecord)
-                BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id',array(':book_id'=>$this->id,':role_id'=>$roleId));
-            foreach ($this->formAuthor as $person) {
-                if (!empty($person)) {
-                    $personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
-                    if ($personModel) {
-                        $person_rel = new BookPersonRoleRel();
-                        $person_rel->book_id = $this->id;
-                        $person_rel->person_id = $personModel->id;
-                        $person_rel->role_id = $roleId;
-                        $person_rel->save();
-                    } else {
-                        $personModel = new BookPersons();
-                        $personModel->name_family = $person;
-                        if ($personModel->save()) {
-                            $person_rel = new BookPersonRoleRel();
-                            $person_rel->book_id = $this->id;
-                            $person_rel->person_id = $personModel->id;
-                            $person_rel->role_id = $roleId;
-                            $person_rel->save();
-                        }
-                    }
-                }
-            }
-        }
-        if ($this->formTranslator && !empty($this->formTranslator)) {
-            $roleId = BookPersonRoles::model()->find('title = :title',array(':title' => 'مترجم'))->id;
-            if (!$this->IsNewRecord)
-                BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id',array(':book_id'=>$this->id,':role_id'=>$roleId));
-            foreach ($this->formTranslator as $person) {
-                if (!empty($person)) {
-                    $personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
-                    if ($personModel) {
-                        $person_rel = new BookPersonRoleRel();
-                        $person_rel->book_id = $this->id;
-                        $person_rel->person_id = $personModel->id;
-                        $person_rel->role_id = $roleId;
-                        $person_rel->save();
-                    } else {
-                        $personModel = new BookPersons();
-                        $personModel->name_family = $person;
-                        if ($personModel->save()) {
-                            $person_rel = new BookPersonRoleRel();
-                            $person_rel->book_id = $this->id;
-                            $person_rel->person_id = $personModel->id;
-                            $person_rel->role_id = $roleId;
-                            $person_rel->save();
-                        }
-                    }
-                }
-            }
-        }
+			$roleId = BookPersonRoles::model()->find('title = :title', array(':title' => 'نویسنده'))->id;
+			if (!$this->IsNewRecord)
+				BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id', array(':book_id' => $this->id, ':role_id' => $roleId));
+			foreach ($this->formAuthor as $person) {
+				if (!empty($person)) {
+					$personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
+					if ($personModel) {
+						$person_rel = new BookPersonRoleRel();
+						$person_rel->book_id = $this->id;
+						$person_rel->person_id = $personModel->id;
+						$person_rel->role_id = $roleId;
+						$person_rel->save();
+					} else {
+						$personModel = new BookPersons();
+						$personModel->name_family = $person;
+						if ($personModel->save()) {
+							$person_rel = new BookPersonRoleRel();
+							$person_rel->book_id = $this->id;
+							$person_rel->person_id = $personModel->id;
+							$person_rel->role_id = $roleId;
+							$person_rel->save();
+						}
+					}
+				}
+			}
+		}
+		if ($this->formTranslator && !empty($this->formTranslator)) {
+			$roleId = BookPersonRoles::model()->find('title = :title', array(':title' => 'مترجم'))->id;
+			if (!$this->IsNewRecord)
+				BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id', array(':book_id' => $this->id, ':role_id' => $roleId));
+			foreach ($this->formTranslator as $person) {
+				if (!empty($person)) {
+					$personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
+					if ($personModel) {
+						$person_rel = new BookPersonRoleRel();
+						$person_rel->book_id = $this->id;
+						$person_rel->person_id = $personModel->id;
+						$person_rel->role_id = $roleId;
+						$person_rel->save();
+					} else {
+						$personModel = new BookPersons();
+						$personModel->name_family = $person;
+						if ($personModel->save()) {
+							$person_rel = new BookPersonRoleRel();
+							$person_rel->book_id = $this->id;
+							$person_rel->person_id = $personModel->id;
+							$person_rel->role_id = $roleId;
+							$person_rel->save();
+						}
+					}
+				}
+			}
+		}
 		parent::afterSave();
 	}
 
@@ -369,15 +386,15 @@ class Books extends CActiveRecord
 	 */
 	public function getBookFileUrl($type = 'pdf')
 	{
-		if(!empty($this->packages))
-			return Yii::app()->createUrl("/uploads/books/files/".$this->lastPackage->{$type.'_file_name'});
+		if (!empty($this->packages))
+			return Yii::app()->createUrl("/uploads/books/files/" . $this->lastPackage->{$type . '_file_name'});
 		return '';
 	}
 
 	public function getPublisherName()
 	{
-		if($this->publisher_id)
-			return $this->publisher->userDetails->nickname?$this->publisher->userDetails->nickname:$this->publisher->userDetails->fa_name;
+		if ($this->publisher_id)
+			return $this->publisher->userDetails->nickname ? $this->publisher->userDetails->nickname : $this->publisher->userDetails->fa_name;
 		else
 			return $this->publisher_name;
 	}
@@ -433,88 +450,95 @@ class Books extends CActiveRecord
 		return $result ? $result->rate : false;
 	}
 
-    /**
-     * Get criteria for valid books
-     *
-     * @param array $categoryIds
-     * @param string $order
-     * @param string $limit
-     * @return CDbCriteria
-     */
-	public function getValidBooks($categoryIds = array(),$order = 'confirm_date DESC',$limit = null ,$alias = 't')
+	/**
+	 * Get criteria for valid books
+	 *
+	 * @param array $categoryIds
+	 * @param string $order
+	 * @param string $limit
+	 * @return CDbCriteria
+	 */
+	public function getValidBooks($categoryIds = array(), $order = 'confirm_date DESC', $limit = null, $alias = 't')
 	{
 		$criteria = new CDbCriteria();
-		$criteria->addCondition($alias.'.'.'status=:status');
+		$criteria->addCondition($alias . '.' . 'status=:status');
 		$criteria->addCondition('confirm=:confirm');
 		$criteria->addCondition('deleted=:deleted');
-		$criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id='.$alias.'.id) != 0');
+		$criteria->addCondition('(SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=' . $alias . '.id) != 0');
 		$criteria->params[':status'] = 'enable';
 		$criteria->params[':confirm'] = 'accepted';
 		$criteria->params[':deleted'] = 0;
-		if($categoryIds)
+		if ($categoryIds)
 			$criteria->addInCondition('category_id', $categoryIds);
 		$criteria->order = $order;
-		if($limit)
+		if ($limit)
 			$criteria->limit = $limit;
 		return $criteria;
 	}
 
 
-
 	public function hasDiscount()
 	{
-		if($this->discount && ($this->discount->hasPriceDiscount() || $this->discount->hasPrintedPriceDiscount()))
+		if ($this->discount && ($this->discount->hasPriceDiscount() || $this->discount->hasPrintedPriceDiscount()))
 			return true;
 		else
 			return false;
 	}
-	public function getPrice(){
-		if($this->lastPackage)
+
+	public function getPrice()
+	{
+		if ($this->lastPackage)
 			return $this->lastPackage->price;
 		return false;
 	}
-	public function getPrinted_price(){
-		if($this->lastPackage && $this->lastPackage->sale_printed)
+
+	public function getPrinted_price()
+	{
+		if ($this->lastPackage && $this->lastPackage->sale_printed)
 			return $this->lastPackage->printed_price;
 		return false;
 	}
+
 	public function getOffPrice()
 	{
-		if($this->lastPackage && $this->discount)
+		if ($this->lastPackage && $this->discount)
 			return $this->discount->getOffPrice();
 		else
 			return $this->getPrice();
 	}
+
 	public function getOff_printed_price()
 	{
-		if($this->lastPackage && $this->discount)
+		if ($this->lastPackage && $this->discount)
 			return $this->discount->getOff_printed_price();
 		else
 			return $this->getPrinted_price();
 	}
 
-	public function getComments(){
+	public function getComments()
+	{
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('owner_name = :model AND owner_id = :id AND status = 1');
-		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+		$criteria->params = array(':model' => get_class($this), ':id' => $this->id);
 		return Comment::model()->findAll($criteria);
 	}
 
-	public function getCountComments(){
+	public function getCountComments()
+	{
 		Yii::app()->getModule('comments');
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('owner_name = :model AND owner_id = :id AND status = 1');
-		$criteria->params =array(':model' => get_class($this) ,':id'=>$this->id);
+		$criteria->params = array(':model' => get_class($this), ':id' => $this->id);
 		return Comment::model()->count($criteria);
 	}
 
 
-    public function getKeywords()
-    {
-        if($this->seoTags) {
-            $tags = CHtml::listData($this->seoTags, 'title', 'title');
-            return implode(',', $tags);
-        }
-        return false;
-    }
+	public function getKeywords()
+	{
+		if ($this->seoTags) {
+			$tags = CHtml::listData($this->seoTags, 'title', 'title');
+			return implode(',', $tags);
+		}
+		return false;
+	}
 }
