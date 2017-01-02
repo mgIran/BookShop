@@ -272,11 +272,11 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'buttons'=>array(
                             'confirm'=>array(
                                 'label'=>'تایید کردن',
-                                'url'=>"CHtml::normalizeUrl(array('/users/usersManage/confirmDevID', 'id'=>\$data->user_id))",
+                                'url'=>"CHtml::normalizeUrl(array('/users/manage/confirmDevID', 'id'=>\$data->user_id))",
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/confirm.png',
                             ),
                             'delete'=>array(
-                                'url'=>'CHtml::normalizeUrl(array(\'/users/usersManage/deleteDevID\', \'id\'=>$data->user_id))'
+                                'url'=>'CHtml::normalizeUrl(array(\'/users/manage/deleteDevID\', \'id\'=>$data->user_id))'
                             ),
                         ),
                     ),
@@ -305,12 +305,12 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'buttons'=>array(
                             'confirm'=>array(
                                 'label'=>'تایید کردن',
-                                'url'=>"CHtml::normalizeUrl(array('/users/usersManage/confirmPublisher', 'id'=>\$data->user_id))",
+                                'url'=>"CHtml::normalizeUrl(array('/users/manage/confirmPublisher', 'id'=>\$data->user_id))",
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/confirm.png',
                             ),
                             'refused'=>array(
                                 'label'=>'رد کردن',
-                                'url'=>'CHtml::normalizeUrl(array(\'/users/usersManage/refusePublisher\', \'id\'=>$data->user_id))',
+                                'url'=>'CHtml::normalizeUrl(array(\'/users/manage/refusePublisher\', \'id\'=>$data->user_id))',
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/refused.png',
                             ),
                             'view'=>array(
