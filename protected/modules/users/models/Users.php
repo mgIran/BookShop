@@ -230,4 +230,24 @@ class Users extends CActiveRecord
         $criteria->addCondition('messages.sender != "user"');
         return Tickets::model()->count($criteria);
     }
+
+    /**
+     * @return integer
+     */
+    public static function getCountBookmarkedBooks()
+    {
+        $criteria = new CDbCriteria();
+        $criteria->compare('user_id',Yii::app()->user->getId());
+        return UserBookBookmark::model()->count($criteria);
+    }
+    /**
+     * @return integer
+     */
+    public static function getCountLibraryBooks()
+    {
+        $criteria = new CDbCriteria();
+        $criteria->compare('user_id',Yii::app()->user->getId());
+        return Library::model()->count($criteria);
+    }
+
 }

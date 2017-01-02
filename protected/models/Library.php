@@ -130,18 +130,22 @@ class Library extends CActiveRecord
      */
     public static function AddToLib($book_id ,$package_id ,$user_id ,$setFlash = true)
     {
-        $model = new Library();
-        $model->book_id = $book_id;
-        $model->package_id = $package_id;
-        $model->user_id = $user_id;
-        $model->download_status = self::STATUS_DOWNLOADED_NOT;
-        $model->create_date = time();
-        $flag = $model->save() ? true : false;
-        if($setFlash){
-            if($flag)
-                Yii::app()->user->setFlash('success' ,'آخرین نسخه کتاب موردنظر به کتابخانه شما افزوده شد.');
-            else
-                Yii::app()->user->setFlash('failed' ,'با عرض پوزش! در افزودن کتاب کتاب مشکلی رخ داده است. لطفا مجددا اقدام فرمایید.');
+        $model = self::BookExists($book_id, $package_id, $user_id);
+        $flag = false;
+        if($model === null){
+            $model = new Library();
+            $model->book_id = $book_id;
+            $model->package_id = $package_id;
+            $model->user_id = $user_id;
+            $model->download_status = self::STATUS_DOWNLOADED_NOT;
+            $model->create_date = time();
+            $flag = $model->save()?true:false;
+            if($setFlash){
+                if($flag)
+                    Yii::app()->user->setFlash('success', 'کتاب موردنظر به کتابخانه شما افزوده شد.');
+                else
+                    Yii::app()->user->setFlash('failed', 'با عرض پوزش! در افزودن کتاب کتاب مشکلی رخ داده است. لطفا مجددا اقدام فرمایید.');
+            }
         }
         return $flag;
     }
@@ -163,6 +167,6 @@ class Library extends CActiveRecord
         if($model === null)
             return false;
         else
-            return true;
+            return $model;
     }
 }

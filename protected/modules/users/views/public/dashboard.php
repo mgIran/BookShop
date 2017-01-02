@@ -24,14 +24,14 @@
         <div class="red">
             <h4>نشان شده ها</h4>
             <span>کتاب هایی که مایلید مطالعه کنید</span>
-            <h3><?php echo number_format(count($model->bookmarkedBooks), 0, ',', '.');?> کتاب</h3>
+            <h3><?php echo Controller::parseNumbers(number_format($model->getCountBookmarkedBooks()));?> کتاب</h3>
             <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>">نشان شده ها<i class="arrow-icon"></i></a>
         </div>
     </div><div>
         <div class="blue">
             <h4>کتابخانه من</h4>
             <span>کتابخانه مجازی خود را بسازید</span>
-            <h3><?php echo number_format(count($model->bookmarkedBooks)+count($model->bookBuys), 0, ',', '.');?> کتاب</h3>
+            <h3><?php echo Controller::parseNumbers(number_format(($model->getCountBookmarkedBooks() + $model->getCountLibraryBooks())));?> کتاب</h3>
             <a href="<?php echo Yii::app()->createUrl('users/public/library');?>">کتابخانه من<i class="arrow-icon"></i></a>
         </div>
     </div>
