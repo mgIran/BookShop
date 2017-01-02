@@ -81,7 +81,26 @@
                     ),
                     array(
                         'class' => 'CButtonColumn',
-                        'template' =>''
+                        'template' =>'{download}',
+                        'buttons' => array(
+                            'download' => array(
+                                'label' => '<span class="icon icon-download-alt"></span>&nbsp;دانلود',
+                                'url' => 'array(\'/book/download\')',
+                                'options' => array('class' => 'btn btn-info btn-sm'),
+                                'click' => 'function(e){
+                                    e.preventDefault();
+//                                    $.ajax({
+//                                        url: $(this).attr("href"),
+//                                        dataType: "JSON",
+//                                        data: {bookId: $(this).parents("tr").data("book-id")},
+//                                        type: "POST",
+//                                        success: function(){
+//                                            $.fn.yiiGridView.update("bookmarked-grid");
+//                                        }
+//                                    });
+                                }'
+                            )
+                        )
                     )
                 )
             ));
@@ -146,7 +165,26 @@
                     ),
                     array(
                         'class' => 'CButtonColumn',
-                        'template' =>''
+                        'template' =>'{download}',
+                        'buttons' => array(
+                            'download' => array(
+                                'label' => '<span class="icon icon-download-alt"></span>&nbsp;دانلود',
+                                'url' => 'array(\'/book/download\')',
+                                'options' => array('class' => 'btn btn-info btn-sm'),
+                                'click' => 'function(e){
+                                    e.preventDefault();
+//                                    $.ajax({
+//                                        url: $(this).attr("href"),
+//                                        dataType: "JSON",
+//                                        data: {bookId: $(this).parents("tr").data("book-id")},
+//                                        type: "POST",
+//                                        success: function(){
+//                                            $.fn.yiiGridView.update("bookmarked-grid");
+//                                        }
+//                                    });
+                                }'
+                            )
+                        )
                     )
                 )
             ));

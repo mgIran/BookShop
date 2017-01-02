@@ -2011,3 +2011,7 @@ input[type="checkbox"]:checked + label::before {
 tfoot {
     border-top: 1px solid #dadada;
 }
+.table td{
+    line-height: normal !important;
+    vertical-align: middle !important;
+}
