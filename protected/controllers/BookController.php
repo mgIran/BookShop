@@ -74,7 +74,7 @@ class BookController extends Controller
         $userID = Yii::app()->user->getId();
         $model = $this->loadModel($id);
 
-        if(Library::BookExists($model->id, $model->lastPackage->id, $userID)){
+        if(Library::BookExistsInLib($model->id, $model->lastPackage->id, $userID)){
             Yii::app()->user->setFlash('warning', 'این کتاب در کتابخانه ی شما موجود است.');
             $this->redirect(array('/library'));
         }
@@ -104,8 +104,8 @@ class BookController extends Controller
                     $userDetails->credit = $userDetails->credit - $price;
                     $userDetails->score = $userDetails->score + 1;
                     if($userDetails->save()){
-                        Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
                         $this->saveBuyInfo($model, $price, $user, 'credit');
+                        Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
                         Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
                         $this->redirect(array('/library'));
                     }else
@@ -126,6 +126,7 @@ class BookController extends Controller
                         $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
                         $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
                         $transaction->scenario = 'set-authority';
+                        $transaction->description = $description;
                         $transaction->authority = $result->getAuthority();
                         $transaction->save();
                         //Redirect to URL You can do it also by creating a form
@@ -158,7 +159,6 @@ class BookController extends Controller
         $model = UserTransactions::model()->findByAttributes(array(
             'authority' => $Authority,
             'user_id' => Yii::app()->user->getId(),
-            'status' => 'unpaid',
             'type' => 'book'
         ));
         $book = Books::model()->findByPk($id);
@@ -169,16 +169,17 @@ class BookController extends Controller
             $gateway = new ZarinPal();
             $gateway->verify($Authority, $Amount);
             if ($gateway->getStatus() == 100) {
+                $model->scenario = 'update';
                 $model->status = 'paid';
                 $model->token = $gateway->getRefId();
                 $model->save();
                 $transactionResult = true;
-                $this->saveBuyInfo($book ,$user ,'gateway' ,$model->id);
+                $this->saveBuyInfo($book ,$Amount, $user ,'gateway' ,$model->id);
                 Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
                 Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
             } else {
                 Yii::app()->user->setFlash('failed', $gateway->getError());
-                $this->redirect(array('/orderPayment/'.$id));
+                $this->redirect(array('/book/buy/'.$id.'/'.urlencode($title)));
             }
         } else
             Yii::app()->user->setFlash('failed' ,'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
@@ -208,7 +209,6 @@ class BookController extends Controller
         $book->download += 1;
         $book->setScenario('update-download');
         $book->save();
-
         $buy = new BookBuys();
         $buy->book_id = $book->id;
         $buy->user_id = $user->id;
@@ -217,12 +217,11 @@ class BookController extends Controller
         $buy->price = $price;
         if($method == 'gateway')
             $buy->rel_id = $transactionID;
-        $buy->save();
-
         if($book->publisher){
             $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($price);
             $book->publisher->userDetails->save();
         }
+        $buy->save();
         $message =
             '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
             <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>

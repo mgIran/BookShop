@@ -130,7 +130,7 @@ class Library extends CActiveRecord
      */
     public static function AddToLib($book_id ,$package_id ,$user_id ,$setFlash = true)
     {
-        $model = self::BookExists($book_id, $package_id, $user_id);
+        $model = self::BookExistsInLib($book_id, $package_id, $user_id);
         $flag = false;
         if(!$model){
             $model = new Library();
@@ -140,6 +140,7 @@ class Library extends CActiveRecord
             $model->download_status = self::STATUS_DOWNLOADED_NOT;
             $model->create_date = time();
             $flag = $model->save()?true:false;
+
             if($setFlash){
                 if($flag)
                     Yii::app()->user->setFlash('success', 'کتاب موردنظر به کتابخانه شما افزوده شد.');
@@ -151,13 +152,13 @@ class Library extends CActiveRecord
     }
 
     /**
-     * Check specified book and package exists in library 
+     * Check specified book and package exists in library
      * @param $book_id
      * @param $package_id
      * @param $user_id
      * @return bool
      */
-    public static function BookExists($book_id ,$package_id ,$user_id)
+    public static function BookExistsInLib($book_id ,$package_id ,$user_id)
     {
         $model = Library::model()->findByAttributes(array(
             'book_id' => $book_id ,
