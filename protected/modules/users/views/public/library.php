@@ -5,6 +5,9 @@
 /* @var $downloadBooks Library */
 /* @var $myBooks CActiveDataProvider */
 ?>
+<?php
+$this->renderPartial('//partial-views/_flashMessage');
+?>
 <div class="my-library">
     <?php
     if($myBooks){

@@ -10,6 +10,7 @@
  * @property string $date
  * @property string $status
  * @property string $token
+ * @property string $authority
  * @property string $description
  * @property string $gateway_name
  * @property string $type
@@ -48,14 +49,16 @@ class UserTransactions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('authority', 'required', 'on'=>'set-authority'),
 			array('user_id, amount', 'length', 'max'=>10),
 			array('date, type', 'length', 'max'=>20),
 			array('status', 'length', 'max'=>6),
 			array('token, gateway_name', 'length', 'max'=>50),
 			array('description', 'length', 'max'=>200),
+			array('authority', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, amount, date, status, token, description, gateway_name, type, user_name', 'safe', 'on'=>'search'),
+			array('id, user_id, amount, date, status, token, authority, description, gateway_name, type, user_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +89,7 @@ class UserTransactions extends CActiveRecord
 			'description' => 'توضیحات',
 			'gateway_name' => 'نام درگاه',
 			'type' => 'نوع تراکنش',
+			'authority' => 'رشته احراز هویت بانک',
 		);
 	}
 
@@ -114,6 +118,7 @@ class UserTransactions extends CActiveRecord
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('token',$this->token,true);
+		$criteria->compare('authority',$this->token,true);
 		$criteria->compare('description',$this->description,true);
         $criteria->compare('gateway_name',$this->gateway_name,true);
         $criteria->compare('type',$this->type,true);

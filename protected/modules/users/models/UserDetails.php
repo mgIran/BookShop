@@ -246,9 +246,7 @@ class UserDetails extends CActiveRecord
      */
     public function getSettlementAmount()
     {
-        Yii::app()->getModule('setting');
-        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
-        return ($this->earning - $setting->value < 0) ? 0 : $this->earning - $setting->value;
+        return ($this->earning < 0) ? 0 : $this->earning;
     }
 
     /**
@@ -301,5 +299,9 @@ class UserDetails extends CActiveRecord
         $criteria->addCondition('bank_name IS NOT NULL AND bank_name != ""');
         $criteria->addCondition('financial_info_status = "pending"');
         return $criteria;
+    }
+
+    public function getDetailsStatus(){
+        return $this->detailsStatusLabels[$this->financial_info_status];
     }
 }

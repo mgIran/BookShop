@@ -132,7 +132,7 @@ class Library extends CActiveRecord
     {
         $model = self::BookExists($book_id, $package_id, $user_id);
         $flag = false;
-        if($model === null){
+        if(!$model){
             $model = new Library();
             $model->book_id = $book_id;
             $model->package_id = $package_id;

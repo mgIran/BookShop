@@ -245,10 +245,11 @@ class Books extends CActiveRecord
 
 	/**
 	 * Return developer portion
+	 * @param $price
+	 * @return float|string
 	 */
-	public function getPublisherPortion()
+	public function getPublisherPortion($price)
 	{
-		$price = $this->price;
 		Yii::app()->getModule('setting');
 
 		// Get commission from book

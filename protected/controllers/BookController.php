@@ -107,7 +107,7 @@ class BookController extends Controller
                         Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
                         $this->saveBuyInfo($model, $price, $user, 'credit');
                         Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-                        $this->refresh();
+                        $this->redirect(array('/library'));
                     }else
                         Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
                 }elseif(isset($_POST['Buy']['gateway'])){
@@ -124,12 +124,15 @@ class BookController extends Controller
                         $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);
                         $siteName = Yii::app()->name;
                         $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
-                        $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails->mobile?$this->userDetails->mobile:'0');
+                        $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+                        $transaction->scenario = 'set-authority';
+                        $transaction->authority = $result->getAuthority();
+                        $transaction->save();
                         //Redirect to URL You can do it also by creating a form
                         if($result->getStatus() == 100)
                             $this->redirect($gateway->getRedirectUrl());
                         else
-                            throw new CException('خطای بانکی: ' . $result->getError());
+                            throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
                     }
                 }
             }
@@ -149,18 +152,18 @@ class BookController extends Controller
     {
         if(!isset($_GET['Authority']))
             $this->redirect(array('/book/buy' ,'id' => $id ,'title' => $title));
+        $Authority = $_GET['Authority'];
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        $criteria = new CDbCriteria();
-        $criteria->addCondition('user_id = :user_id');
-        $criteria->addCondition('status = :status');
-        $criteria->order = 'id DESC';
-        $criteria->params = array(':user_id' => Yii::app()->user->getId() ,':status' => 'unpaid');
-        $model = UserTransactions::model()->find($criteria);
+        $model = UserTransactions::model()->findByAttributes(array(
+            'authority' => $Authority,
+            'user_id' => Yii::app()->user->getId(),
+            'status' => 'unpaid',
+            'type' => 'book'
+        ));
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
         $Amount = $model->amount; //Amount will be based on Toman
-        $Authority = $_GET['Authority'];
         $transactionResult = false;
         if ($_GET['Status'] == 'OK') {
             $gateway = new ZarinPal();
@@ -217,7 +220,7 @@ class BookController extends Controller
         $buy->save();
 
         if($book->publisher){
-            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion();
+            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($price);
             $book->publisher->userDetails->save();
         }
         $message =

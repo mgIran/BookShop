@@ -114,34 +114,19 @@ class UsersCreditController extends Controller
             $model->gateway_name='زرین پال';
             $model->type='credit';
             if ($model->save()) {
-                // Redirect to payment gateway
-                $MerchantID = $this->merchantID;  //Required
-                $Amount = intval($_POST['amount']); //Amount will be based on Toman  - Required
-                $Description = 'افزایش اعتبار در ' . Yii::app()->name;  // Required
-                $Email = Yii::app()->user->email; // Optional
-                $Mobile = '0'; // Optional
-
-                $CallbackURL = Yii::app()->getBaseUrl(true) . '/users/credit/verify';  // Required
-
-                include("lib/nusoap.php");
-                $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
-                $client->soap_defencoding = 'UTF-8';
-                $result = $client->call('PaymentRequest', array(
-                    array(
-                        'MerchantID' => $MerchantID,
-                        'Amount' => $Amount,
-                        'Description' => $Description,
-                        'Email' => $Email,
-                        'Mobile' => $Mobile,
-                        'CallbackURL' => $CallbackURL
-                    )
-                ));
-
+                $gateway = new ZarinPal();
+                $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/users/credit/verify';
+                $siteName = Yii::app()->name;
+                $description = "افزایش اعتبار در {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
+                $result = $gateway->request(doubleval($model->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+                $model->scenario = 'set-authority';
+                $model->authority = $result->getAuthority();
+                $model->save();
                 //Redirect to URL You can do it also by creating a form
-                if ($result['Status'] == 100)
-                    $this->redirect('https://www.zarinpal.com/pg/StartPay/' . $result['Authority']);
+                if($result->getStatus() == 100)
+                    $this->redirect($gateway->getRedirectUrl());
                 else
-                    echo 'ERR: ' . $result['Status'];
+                    throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
             }
         } elseif (isset($_POST['amount'])) {
             Yii::app()->theme = 'frontend';
@@ -159,59 +144,35 @@ class UsersCreditController extends Controller
     {
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        $model = UserTransactions::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'status' => 'unpaid'));
-        $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
-        $MerchantID = $this->merchantID;
-        $Amount = $model->amount; //Amount will be based on Toman
+        if(!isset($_GET['Authority']))
+            $this->redirect(array('/users/credit/buy'));
         $Authority = $_GET['Authority'];
+        $model = UserTransactions::model()->findByAttributes(array(
+            'authority' => $Authority,
+            'user_id' => Yii::app()->user->getId(),
+            'status' => 'unpaid',
+            'type' => 'credit'
+        ));
+        $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
+        $Amount = $model->amount;
 
         if ($_GET['Status'] == 'OK') {
-            include("lib/nusoap.php");
-            $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
-            $client->soap_defencoding = 'UTF-8';
-            $result = $client->call('PaymentVerification', array(
-                    array(
-                        'MerchantID' => $MerchantID,
-                        'Authority' => $Authority,
-                        'Amount' => $Amount
-                    )
-                )
-            );
-
-            if ($result['Status'] == 100) {
+            $gateway = new ZarinPal();
+            $gateway->verify($Authority, $Amount);
+            if ($gateway->getStatus() == 100) {
                 $model->status = 'paid';
-                $model->token = $result['RefID'];
-                $model->description = 'خرید اعتبار از طریق درگاه زرین پال';
+                $model->token = $gateway->getRefId();
                 $model->save();
-                // Increase credit
                 $userDetails->setScenario('update-credit');
-                $userDetails->credit = $userDetails->credit + $model->amount;
+                $userDetails->credit = doubleval($userDetails->credit) + doubleval($model->amount);
                 $userDetails->save();
                 Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
             } else {
-                $errors = array(
-                    '-1' => 'اطلاعات ارسال شده ناقص است.',
-                    '-2' => 'IP یا کد پذیرنده صحیح نیست.',
-                    '-3' => 'با توجه به محدودیت ها امکان پرداخت رقم درخواست شده میسر نمی باشد.',
-                    '-4' => 'سطح تایید پذیرنده پایین تر از سطح نقره ای است.',
-                    '-11' => 'درخواست مورد نظر یافت نشد.',
-                    '-12' => 'امکان ویرایش درخواست میسر نمی باشد.',
-                    '-21' => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد.',
-                    '-22' => 'تراکنش ناموفق بود.',
-                    '-33' => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد.',
-                    '-34' => 'سقف تقسیم تراکنش از لحاظ تعداد یا رقم عبور نموده است.',
-                    '-40' => 'اجازه دسترسی به متد مربوطه وجود ندارد.',
-                    '-41' => 'اطلاعات ارسال شده مربوط به AdditionalData غیر معتبر می باشد.',
-                    '-42' => 'مدت زمان معتبر طول عمر شناسه پرداخت باید بین 30 دقیقه تا 45 روز باشد.',
-                    '-54' => 'درخواست مورد نظر آرشیو شده است.',
-                    '101' => 'عملیات پرداخت موفق بوده و قبلا بررسی تراکنش انجام شده است.',
-                );
-                Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بود.');
-                Yii::app()->user->setFlash('transactionFailed', isset($errors[$result['Status']]) ? $errors[$result['Status']] : 'در انجام عملیات پرداخت خطایی رخ داده است.');
+                Yii::app()->user->setFlash('failed', $gateway->getError());
+                $this->redirect(array('/users/credit/buy'));
             }
         } else
             Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
-
         $this->render('verify', array(
             'model' => $model,
             'userDetails' => $userDetails,
