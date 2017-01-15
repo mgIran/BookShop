@@ -13,7 +13,6 @@
  * @property string $epub_file_name
  * @property string $create_date
  * @property string $publish_date
- * @property string $status
  * @property string $reason
  * @property string $for
  * @property string $price
@@ -32,14 +31,6 @@ class BookPackages extends CActiveRecord
     const STATUS_ACCEPTED = 'accepted';
     const STATUS_REFUSED = 'refused';
     const STATUS_CHANGE_REQUIRED = 'change_required';
-
-
-    public $statusLabels = array(
-        'pending' => 'بارگذاری شده',
-        'accepted' => 'تایید شده',
-        'refused' => 'رد شده',
-        'change_required' => 'نیاز به تغییر',
-    );
 
     public $forLabels = array(
         'new_book' => '<span class="label label-success">کتاب جدید</span>',
@@ -71,13 +62,12 @@ class BookPackages extends CActiveRecord
             array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter' => 'strip_tags'),
             array('package_name', 'length', 'max' => 100),
             array('pdf_file_name, epub_file_name', 'length', 'max' => 255),
-            array('status', 'length', 'max' => 15),
             array('for', 'length', 'max' => 8),
             array('create_date', 'default', 'value' => time()),
             array('isbn', 'isbnChecker'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, book_id, version, package_name, isbn, pdf_file_name, epub_file_name, create_date, publish_date, status, reason, for, price, sale_printed, printed_price', 'safe', 'on' => 'search'),
+            array('id, book_id, version, package_name, isbn, pdf_file_name, epub_file_name, create_date, publish_date, reason, for, price, sale_printed, printed_price', 'safe', 'on' => 'search'),
         );
     }
 
@@ -140,7 +130,6 @@ class BookPackages extends CActiveRecord
             'epub_file_name' => 'فایل EPUB',
             'create_date' => 'تاریخ بارگذاری',
             'publish_date' => 'تاریخ انتشار',
-            'status' => 'وضعیت',
             'reason' => 'دلیل',
             'for' => 'نوع نوبت چاپ',
             'isbn' => 'شابک',
@@ -175,7 +164,6 @@ class BookPackages extends CActiveRecord
         $criteria->compare('package_name', $this->package_name, true);
         $criteria->compare('pdf_file_name', $this->pdf_file_name, true);
         $criteria->compare('epub_file_name', $this->epub_file_name, true);
-        $criteria->compare('status', $this->status, true);
         $criteria->compare('isbn', $this->isbn, true);
 
         return new CActiveDataProvider($this, array(
