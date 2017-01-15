@@ -22,7 +22,7 @@
 if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'):
 ?>
 <div class="row">
-    <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="panel panel-default col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="panel-heading">جدیدترین کتاب ها</div>
         <div class="panel-body">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -34,221 +34,134 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'name'=>'publisher_id',
                         'value'=>'(is_null($data->publisher_id) or empty($data->publisher_id))?$data->publisher_name:$data->publisher->userDetails->publisher_id'
                     ),
-                    'confirm'=>array(
-                        'name'=>'confirm',
-                        'value'=>'CHtml::dropDownList("confirm", "pending", $data->confirmLabels, array("class"=>"change-confirm", "data-id"=>$data->id))',
-                        'type'=>'raw'
+                    'category_id'=>array(
+                        'name'=>'category_id',
+                        'value'=>'$data->category->title'
+                    ),
+                    'lastPackage.price'=>array(
+                        'name'=>'lastPackage.price',
+                        'value'=>'number_format($data->lastPackage->price)." تومان"'
                     ),
                     array(
                         'class'=>'CButtonColumn',
-                        'template' => '{view}{delete}{download}',
+                        'template' => '{view}{delete}',
                         'buttons'=>array(
                             'view'=>array(
                                 'label'=>'مشاهده کتاب',
-                                'url'=>'Yii::app()->createUrl("/book/".$data->id."/".urlencode($data->title))',
-                                'options'=>array(
-                                    'target'=>'_blank'
-                                ),
+                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/view/".$data->id)',
                             ),
                             'delete'=>array(
                                 'url'=>'CHtml::normalizeUrl(array(\'/manageBooks/baseManage/delete/\'.$data->id))'
                             ),
-                            'download'=>array(
-                                'label'=>'دانلود',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/download/".$data->id)',
-                                'imageUrl'=>Yii::app()->theme->baseUrl.'/img/download.png',
-                            ),
                         ),
                     ),
                 ),
             ));?>
-            <?php Yii::app()->clientScript->registerScript('changeConfirm', "
-                $('body').on('change','.change-confirm', function(){
-                    if($(this).val()=='accepted'){
-                        $('#book-id').val($(this).data('id'));
-                        $('#book-modal').modal('show');
-                    }else{
-                        $.ajax({
-                            url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
-                            type:'POST',
-                            dataType:'JSON',
-                            data:{book_id:$(this).data('id'), value:$(this).val()},
-                            success:function(data){
-                                if(data.status){
-                                    $.fn.yiiGridView.update('newest-books-grid');
-                                    $.fn.yiiGridView.update('newest-packages-grid');
-                                }else
-                                    alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
-                            }
-                        });
-                    }
-                });
-
-                $('body').on('change', '#default_commission', function(){
-                    $('#commission-text').prop('disabled', function(i, v) { return !v; }).val('');
-                });
-
-                $('.save-book-modal').click(function(){
-                    if(!$('#default_commission').is(':checked') && $('#commission-text').val()==''){
-                        $('.book-modal-message').addClass('error').text('لطفا میزان کمیسیون را تعیین نمایید.');
-                        return false;
-                    }else{
-                        $('.book-modal-message').removeClass('error').text('در حال ثبت...');
-                        $.ajax({
-                            url:'".$this->createUrl('/manageBooks/baseManage/changePublisherCommission')."',
-                            type:'POST',
-                            dataType:'JSON',
-                            data:$('#book-commission-form').serialize(),
-                            success:function(data){
-                                if(data.status == 'success'){
-                                    $.ajax({
-                                        url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
-                                        type:'POST',
-                                        dataType:'JSON',
-                                        data:{book_id:$('.change-confirm').data('id'), value:$('.change-confirm').val()},
-                                        success:function(data){
-                                            if(data.status){
-                                                $.fn.yiiGridView.update('newest-books-grid');
-                                                $.fn.yiiGridView.update('newest-packages-grid');
-
-                                                $('#book-modal').modal('hide');
-                                                $('#commission-text').val('');
-                                                $('.book-modal-message').text('');
-                                            }else
-                                                alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
-                                        }
-                                    });
-                                } else
-                                    alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
-                            }
-                        });
-                    }
-                });
-            ");?>
-            <div id="book-modal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <?php echo CHtml::beginForm('', 'post', array('id'=>'book-commission-form'));?>
-                                <?php echo CHtml::hiddenField('book_id', '', array('id'=>'book-id'));?>
-                                <?php echo CHtml::label('لطفا کمیسیون ناشر برای این کتاب را وارد کنید:', 'commission-text')?>
-                                <?php echo CHtml::textField('publisher_commission', '', array('placeholder'=>'کمیسیون ناشر (درصد)', 'class'=>'form-control', 'id'=>'commission-text'));?>
-                                <?php echo CHtml::checkBox('default_commission', false, array('style'=>'margin-top:15px;'));?>
-                                <?php echo CHtml::label('کمیسیون پیش فرض در نظر گرفته شود.', 'default_commission');?>
-                            <?php echo CHtml::endForm();?>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="book-modal-message error pull-right"></div>
-                            <button type="button" class="btn btn-success save-book-modal">ثبت</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <div class="panel-heading">نوبت چاپ های جدید</div>
-        <div class="panel-body">
-            <?php $this->widget('zii.widgets.grid.CGridView', array(
-                'id'=>'newest-packages-grid',
-                'dataProvider'=>$newestPackages,
-                'columns'=>array(
-                    'book_id'=>array(
-                        'name'=>'book_id',
-                        'value'=>'CHtml::link($data->book->title, Yii::app()->createUrl("/book/".$data->book_id."/".$data->book->title))',
-                        'type'=>'raw'
-                    ),
-                    'for'=>array(
-                        'name'=>'for',
-                        'value'=>'$data->forLabels[$data->for]',
-                        'type'=>'raw'
-                    ),
-                    'version',
-                    'status'=>array(
-                        'name'=>'status',
-                        'value'=>'CHtml::dropDownList("confirm", "pending", $data->statusLabels, array("class"=>"change-package-status", "data-id"=>$data->id))',
-                        'type'=>'raw'
-                    ),
-                    array(
-                        'class'=>'CButtonColumn',
-                        'template' => '{delete}{downloadPdf} {downloadEpub}',
-                        'buttons'=>array(
-                            'delete'=>array(
-                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/deletePackage/".$data->id)',
-                            ),
-                            'downloadPdf'=>array(
-                                'label'=>'دانلود PDF',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id."?title=pdf")',
-                                'visible'=>function($data,$model){
-                                    if(is_null($model->pdf_file_name))
-                                        return false;
-                                    return true;
-                                },
-                            ),
-                            'downloadEpub'=>array(
-                                'label'=>'دانلود EPUB',
-                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id."?title=epub")',
-                                'visible'=>function($data,$model){
-                                    if(is_null($model->epub_file_name))
-                                        return false;
-                                    return true;
-                                },
-                            ),
-                        ),
-                    ),
-                ),
-            ));?>
-            <?php Yii::app()->clientScript->registerScript('changePackageStatus', "
-                $('body').on('change', '.change-package-status', function(){
-                    if($(this).val()=='refused' || $(this).val()=='change_required'){
-                        $('#reason-modal').modal('show');
-                        $('input#package-id').val($(this).data('id'));
-                        $('input#package-status').val($(this).val());
-                    }else{
-                        $.ajax({
-                            url:'".$this->createUrl('/manageBooks/baseManage/changePackageStatus')."',
-                            type:'POST',
-                            dataType:'JSON',
-                            data:{package_id:$(this).data('id'), value:$(this).val()},
-                            success:function(data){
-                                if(data.status)
-                                    $.fn.yiiGridView.update('newest-packages-grid');
-                                else
-                                    alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
-                            }
-                        });
-                    }
-                });
-                $('.close-reason-modal').click(function(){
-                    $.fn.yiiGridView.update('newest-packages-grid');
-                    $('#reason-text').val('');
-                });
-                $('.save-reason-modal').click(function(){
-                    if($('#reason-text').val()==''){
-                        $('.reason-modal-message').addClass('error').text('لطفا دلیل را ذکر کنید.');
-                        return false;
-                    }else{
-                        $('.reason-modal-message').removeClass('error').text('در حال ثبت...');
-                        $.ajax({
-                            url:'".$this->createUrl('/manageBooks/baseManage/changePackageStatus')."',
-                            type:'POST',
-                            dataType:'JSON',
-                            data:{package_id:$('#package-id').val(), value:$('#package-status').val(), reason:$('#reason-text').val()},
-                            success:function(data){
-                                if(data.status){
-                                    $.fn.yiiGridView.update('newest-packages-grid');
-                                    $('#reason-modal').modal('hide');
-                                    $('#reason-text').val('');
-                                    $('.reason-modal-message').text('');
-                                } else
-                                    alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
-                            }
-                        });
-                    }
-                });
-            ");?>
-        </div>
-    </div>
+<!--    <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">-->
+<!--        <div class="panel-heading">نوبت چاپ های جدید</div>-->
+<!--        <div class="panel-body">-->
+<!--            --><?php //$this->widget('zii.widgets.grid.CGridView', array(
+//                'id'=>'newest-packages-grid',
+//                'dataProvider'=>$newestPackages,
+//                'columns'=>array(
+//                    'book_id'=>array(
+//                        'name'=>'book_id',
+//                        'value'=>'CHtml::link($data->book->title, Yii::app()->createUrl("/book/".$data->book_id."/".$data->book->title))',
+//                        'type'=>'raw'
+//                    ),
+//                    'for'=>array(
+//                        'name'=>'for',
+//                        'value'=>'$data->forLabels[$data->for]',
+//                        'type'=>'raw'
+//                    ),
+//                    'version',
+//                    'status'=>array(
+//                        'name'=>'status',
+//                        'value'=>'CHtml::dropDownList("confirm", "pending", $data->statusLabels, array("class"=>"change-package-status", "data-id"=>$data->id))',
+//                        'type'=>'raw'
+//                    ),
+//                    array(
+//                        'class'=>'CButtonColumn',
+//                        'template' => '{delete}{downloadPdf} {downloadEpub}',
+//                        'buttons'=>array(
+//                            'delete'=>array(
+//                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/deletePackage/".$data->id)',
+//                            ),
+//                            'downloadPdf'=>array(
+//                                'label'=>'دانلود PDF',
+//                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id."?title=pdf")',
+//                                'visible'=>function($data,$model){
+//                                    if(is_null($model->pdf_file_name))
+//                                        return false;
+//                                    return true;
+//                                },
+//                            ),
+//                            'downloadEpub'=>array(
+//                                'label'=>'دانلود EPUB',
+//                                'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/downloadPackage/".$data->id."?title=epub")',
+//                                'visible'=>function($data,$model){
+//                                    if(is_null($model->epub_file_name))
+//                                        return false;
+//                                    return true;
+//                                },
+//                            ),
+//                        ),
+//                    ),
+//                ),
+//            ));?>
+<!--            --><?php //Yii::app()->clientScript->registerScript('changePackageStatus', "
+//                $('body').on('change', '.change-package-status', function(){
+//                    if($(this).val()=='refused' || $(this).val()=='change_required'){
+//                        $('#reason-modal').modal('show');
+//                        $('input#package-id').val($(this).data('id'));
+//                        $('input#package-status').val($(this).val());
+//                    }else{
+//                        $.ajax({
+//                            url:'".$this->createUrl('/manageBooks/baseManage/changePackageStatus')."',
+//                            type:'POST',
+//                            dataType:'JSON',
+//                            data:{package_id:$(this).data('id'), value:$(this).val()},
+//                            success:function(data){
+//                                if(data.status)
+//                                    $.fn.yiiGridView.update('newest-packages-grid');
+//                                else
+//                                    alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+//                            }
+//                        });
+//                    }
+//                });
+//                $('.close-reason-modal').click(function(){
+//                    $.fn.yiiGridView.update('newest-packages-grid');
+//                    $('#reason-text').val('');
+//                });
+//                $('.save-reason-modal').click(function(){
+//                    if($('#reason-text').val()==''){
+//                        $('.reason-modal-message').addClass('error').text('لطفا دلیل را ذکر کنید.');
+//                        return false;
+//                    }else{
+//                        $('.reason-modal-message').removeClass('error').text('در حال ثبت...');
+//                        $.ajax({
+//                            url:'".$this->createUrl('/manageBooks/baseManage/changePackageStatus')."',
+//                            type:'POST',
+//                            dataType:'JSON',
+//                            data:{package_id:$('#package-id').val(), value:$('#package-status').val(), reason:$('#reason-text').val()},
+//                            success:function(data){
+//                                if(data.status){
+//                                    $.fn.yiiGridView.update('newest-packages-grid');
+//                                    $('#reason-modal').modal('hide');
+//                                    $('#reason-text').val('');
+//                                    $('.reason-modal-message').text('');
+//                                } else
+//                                    alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+//                            }
+//                        });
+//                    }
+//                });
+//            ");?>
+<!--        </div>-->
+<!--    </div>-->
 </div>
 <div class="row">
     <div class="panel panel-default col-lg-6 col-md-6 col-sm-12 col-xs-12">

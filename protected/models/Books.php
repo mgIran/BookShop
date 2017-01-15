@@ -124,7 +124,7 @@ class Books extends CActiveRecord
 				'order' => 'discount.id DESC'
 			),
 			'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
-			'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'on' => 'lastPackage.status = "accepted"', 'order' => 'lastPackage.publish_date DESC'),
+			'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPackage.publish_date DESC'),
 			'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 			'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 			'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),

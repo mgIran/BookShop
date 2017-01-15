@@ -579,12 +579,30 @@ class ManageBooksBaseManageController extends Controller
     /**
      * Download book
      * @param $id
+     * @param $title
      * @throws CHttpException
      */
-    public function actionDownload($id)
+    public function actionDownload($id, $title)
     {
         $model = $this->loadModel($id);
-        $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files/');
+        /* @var $model Books */
+        $filename = $folder = null;
+        switch ($title) {
+            case 'pdf':
+                $filename = $model->lastPackage->pdf_file_name;
+                $folder = 'files';
+                break;
+            case 'epub':
+                $filename = $model->lastPackage->epub_file_name;
+                $folder = 'files';
+                break;
+            case 'preview':
+                $filename = $model->preview_file;
+                $folder = 'previews';
+                break;
+        }
+
+        $this->download($filename, Yii::getPathOfAlias("webroot") . '/uploads/books/' . $folder . '/');
     }
 
     /**
