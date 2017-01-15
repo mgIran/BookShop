@@ -3,9 +3,6 @@
 class BookController extends Controller
 {
     public $layout = '//layouts/inner';
-
-    private $merchantID = '012d3926-9824-11e6-a86b-005056a205be';
-
     /**
      * @return array actions type list
      */
@@ -76,24 +73,29 @@ class BookController extends Controller
         $this->layout = 'panel';
         $userID = Yii::app()->user->getId();
         $model = $this->loadModel($id);
-        $price = $model->hasDiscount() ? $model->offPrice : $model->price;
-        if($price === 0){
-            Library::AddToLib($model->id ,$model->lastPackage->id ,$userID);
+
+        if(Library::BookExistsInLib($model->id, $model->lastPackage->id, $userID)){
+            Yii::app()->user->setFlash('warning', 'این کتاب در کتابخانه ی شما موجود است.');
             $this->redirect(array('/library'));
         }
 
-        $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID ,'book_id' => $id));
+        $price = $model->hasDiscount()?$model->offPrice:$model->price;
+        if($price === 0){
+            Library::AddToLib($model->id, $model->lastPackage->id, $userID);
+            $this->redirect(array('/book/' . $id . '/' . $title));
+        }
+
+        $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID, 'book_id' => $id));
 
         Yii::app()->getModule('users');
         $user = Users::model()->findByPk($userID);
         /* @var $user Users */
         if($model->publisher_id != $userID){
-            $buyResult = false;
             if(isset($_POST['Buy'])){
                 if(isset($_POST['Buy']['credit'])){
                     if($user->userDetails->credit < $price){
-                        Yii::app()->user->setFlash('credit-failed' ,'اعتبار فعلی شما کافی نیست!');
-                        Yii::app()->user->setFlash('failReason' ,'min_credit');
+                        Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
+                        Yii::app()->user->setFlash('failReason', 'min_credit');
                         $this->refresh();
                     }
 
@@ -101,8 +103,13 @@ class BookController extends Controller
                     $userDetails->setScenario('update-credit');
                     $userDetails->credit = $userDetails->credit - $price;
                     $userDetails->score = $userDetails->score + 1;
-                    if($userDetails->save())
-                        $buyResult = true;
+                    if($userDetails->save()){
+                        $this->saveBuyInfo($model, $price, $user, 'credit');
+                        Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
+                        Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+                        $this->redirect(array('/library'));
+                    }else
+                        Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
                 }elseif(isset($_POST['Buy']['gateway'])){
                     // Save payment
                     $transaction = new UserTransactions();
@@ -113,53 +120,32 @@ class BookController extends Controller
                     $transaction->type = 'book';
 
                     if($transaction->save()){
-                        // Redirect to payment gateway
-                        $MerchantID = $this->merchantID;  //Required
-                        $Amount = intval($price); //Amount will be based on Toman  - Required
-                        $Description = 'خرید کتاب از ' . Yii::app()->name;  // Required
-                        $Email = Yii::app()->user->email; // Optional
-                        $Mobile = '0'; // Optional
-
-                        $CallbackURL = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);  // Required
-
-                        include("lib/nusoap.php");
-                        $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl' ,'wsdl');
-                        $client->soap_defencoding = 'UTF-8';
-                        $result = $client->call('PaymentRequest' ,array(
-                            array(
-                                'MerchantID' => $MerchantID ,
-                                'Amount' => $Amount ,
-                                'Description' => $Description ,
-                                'Email' => $Email ,
-                                'Mobile' => $Mobile ,
-                                'CallbackURL' => $CallbackURL
-                            )
-                        ));
+                        $gateway = new ZarinPal();
+                        $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);
+                        $siteName = Yii::app()->name;
+                        $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
+                        $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+                        $transaction->scenario = 'set-authority';
+                        $transaction->description = $description;
+                        $transaction->authority = $result->getAuthority();
+                        $transaction->save();
                         //Redirect to URL You can do it also by creating a form
-                        if($result['Status'] == 100)
-                            $this->redirect('https://www.zarinpal.com/pg/StartPay/' . $result['Authority']);
+                        if($result->getStatus() == 100)
+                            $this->redirect($gateway->getRedirectUrl());
                         else
-                            echo 'ERR: ' . $result['Status'];
+                            throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
                     }
                 }
-
-                if($buyResult){
-                    $this->saveBuyInfo($model ,$user ,'credit');
-                    Yii::app()->user->setFlash('success' ,'خرید شما با موفقیت انجام شد.');
-                    $this->refresh();
-                }else
-                    Yii::app()->user->setFlash('failed' ,'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
             }
             $user->refresh();
         }else{
-            Yii::app()->user->setFlash('success' ,'شما ناشر این کتاب هستید ');
+            Yii::app()->user->setFlash('success', 'شما ناشر این کتاب هستید ');
         }
-
-        $this->render('buy' ,array(
-            'model' => $model ,
-            'price' => $price ,
-            'user' => $user ,
-            'bought' => ($buy) ? true : false ,
+        $this->render('buy', array(
+            'model' => $model,
+            'price' => $price,
+            'user' => $user,
+            'bought' => ($buy)?true:false,
         ));
     }
 
@@ -167,66 +153,37 @@ class BookController extends Controller
     {
         if(!isset($_GET['Authority']))
             $this->redirect(array('/book/buy' ,'id' => $id ,'title' => $title));
+        $Authority = $_GET['Authority'];
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        $criteria = new CDbCriteria();
-        $criteria->addCondition('user_id = :user_id');
-        $criteria->addCondition('status = :status');
-        $criteria->order = 'id DESC';
-        $criteria->params = array(':user_id' => Yii::app()->user->getId() ,':status' => 'unpaid');
-        $model = UserTransactions::model()->find($criteria);
+        $model = UserTransactions::model()->findByAttributes(array(
+            'authority' => $Authority,
+            'user_id' => Yii::app()->user->getId(),
+            'type' => 'book'
+        ));
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
-        $MerchantID = $this->merchantID;
         $Amount = $model->amount; //Amount will be based on Toman
-        $Authority = $_GET['Authority'];
-
         $transactionResult = false;
-        if($_GET['Status'] == 'OK'){
-            include("lib/nusoap.php");
-            $client = new NuSOAP_Client('https://ir.zarinpal.com/pg/services/WebGate/wsdl' ,'wsdl');
-            $client->soap_defencoding = 'UTF-8';
-            $result = $client->call('PaymentVerification' ,array(
-                    array(
-                        'MerchantID' => $MerchantID ,
-                        'Authority' => $Authority ,
-                        'Amount' => $Amount
-                    )
-                )
-            );
-
-            if($result['Status'] == 100){
+        if ($_GET['Status'] == 'OK') {
+            $gateway = new ZarinPal();
+            $gateway->verify($Authority, $Amount);
+            if ($gateway->getStatus() == 100) {
+                $model->scenario = 'update';
                 $model->status = 'paid';
-                $model->token = $result['RefID'];
-                $model->description = 'خرید کتاب "' . CHtml::encode($book->title) . '" از طریق درگاه زرین پال';
+                $model->token = $gateway->getRefId();
                 $model->save();
-
                 $transactionResult = true;
-                $this->saveBuyInfo($book ,$user ,'gateway' ,$model->id);
+                $this->saveBuyInfo($book ,$Amount, $user ,'gateway' ,$model->id);
                 Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
                 Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
-            }else{
-                $errors = array(
-                    '-1' => 'اطلاعات ارسال شده ناقص است.' ,
-                    '-2' => 'IP یا کد پذیرنده صحیح نیست.' ,
-                    '-3' => 'با توجه به محدودیت ها امکان پرداخت رقم درخواست شده میسر نمی باشد.' ,
-                    '-4' => 'سطح تایید پذیرنده پایین تر از سطح نقره ای است.' ,
-                    '-11' => 'درخواست مورد نظر یافت نشد.' ,
-                    '-12' => 'امکان ویرایش درخواست میسر نمی باشد.' ,
-                    '-21' => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد.' ,
-                    '-22' => 'تراکنش ناموفق بود.' ,
-                    '-33' => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد.' ,
-                    '-34' => 'سقف تقسیم تراکنش از لحاظ تعداد یا رقم عبور نموده است.' ,
-                    '-40' => 'اجازه دسترسی به متد مربوطه وجود ندارد.' ,
-                    '-41' => 'اطلاعات ارسال شده مربوط به AdditionalData غیر معتبر می باشد.' ,
-                    '-42' => 'مدت زمان معتبر طول عمر شناسه پرداخت باید بین 30 دقیقه تا 45 روز باشد.' ,
-                    '-54' => 'درخواست مورد نظر آرشیو شده است.' ,
-                    '101' => 'عملیات پرداخت موفق بوده و قبلا بررسی تراکنش انجام شده است.' ,
-                );
-                Yii::app()->user->setFlash('failed' ,isset($errors[$result['Status']]) ? $errors[$result['Status']] : 'در انجام عملیات پرداخت خطایی رخ داده است.');
+            } else {
+                Yii::app()->user->setFlash('failed', $gateway->getError());
+                $this->redirect(array('/book/buy/'.$id.'/'.urlencode($title)));
             }
-        }else
+        } else
             Yii::app()->user->setFlash('failed' ,'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+        //
 
         $this->render('verify' ,array(
             'transaction' => $model ,
@@ -240,19 +197,18 @@ class BookController extends Controller
     /**
      * Save buy information
      *
-     * @param $book Books
-     * @param $user Users
-     * @param $method string
-     * @param $transactionID string
+     * @param $book
+     * @param $price
+     * @param $user
+     * @param $method
+     * @param null $transactionID
+     * @throws CException
      */
-    private function saveBuyInfo($book ,$user ,$method ,$transactionID = null)
+    private function saveBuyInfo($book , $price,$user ,$method ,$transactionID = null)
     {
-        $price = $book->hasDiscount() ? $book->offPrice : $book->price;
-
         $book->download += 1;
         $book->setScenario('update-download');
         $book->save();
-
         $buy = new BookBuys();
         $buy->book_id = $book->id;
         $buy->user_id = $user->id;
@@ -261,13 +217,11 @@ class BookController extends Controller
         $buy->price = $price;
         if($method == 'gateway')
             $buy->rel_id = $transactionID;
-        $buy->save();
-
         if($book->publisher){
-            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion();
+            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($price);
             $book->publisher->userDetails->save();
         }
-
+        $buy->save();
         $message =
             '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
             <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
@@ -279,12 +233,22 @@ class BookController extends Controller
                 <tr>
                     <td style="font-weight: bold;width: 120px;">قیمت</td>
                     <td>' . Controller::parseNumbers(number_format($price ,0)) . ' تومان</td>
-                </tr>
-                <tr>
+                </tr>';
+        if($method == 'gateway' && $buy->transaction)
+            $message.= '<tr>
                     <td style="font-weight: bold;width: 120px;">کد رهگیری</td>
                     <td style="font-weight: bold;letter-spacing:4px">' . CHtml::encode($buy->transaction->token) . ' </td>
                 </tr>
                 <tr>
+                    <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
+                    <td style="font-weight: bold;">درگاه ' . CHtml::encode($buy->transaction->gateway_name) . ' </td>
+                </tr>';
+        elseif($message == 'credit')
+            $message.= '<tr>
+                    <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
+                    <td style="font-weight: bold;letter-spacing:4px">کسر از اعتبار</td>
+                </tr>';
+        $message.= '<tr>
                     <td style="font-weight: bold;width: 120px;">تاریخ</td>
                     <td>' . JalaliDate::date('d F Y - H:i' ,$buy->date) . '</td>
                 </tr>

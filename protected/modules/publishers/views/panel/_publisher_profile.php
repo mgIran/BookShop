@@ -49,19 +49,13 @@ endif;
             </div>
 
             <div class="form-group">
+                <?php echo $form->textField($model,'publication_name',array('placeholder'=>$model->getAttributeLabel('publication_name').' *','maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'publication_name'); ?>
+            </div>
+
+            <div class="form-group">
                 <?php echo $form->textField($model,'fa_web_url',array('placeholder'=>$model->getAttributeLabel('fa_web_url'),'maxlength'=>255,'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'fa_web_url'); ?>
-            </div>
-
-            <div class="form-group">
-                <?php echo $form->textField($model,'en_name',array('placeholder'=>$model->getAttributeLabel('en_name').' *','maxlength'=>50,'class'=>'form-control')); ?>
-                <small class="description">نام باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</small>
-                <?php echo $form->error($model,'en_name'); ?>
-            </div>
-
-            <div class="form-group">
-                <?php echo $form->textField($model,'en_web_url',array('placeholder'=>$model->getAttributeLabel('en_web_url'),'maxlength'=>255,'class'=>'form-control')); ?>
-                <?php echo $form->error($model,'en_web_url'); ?>
             </div>
 
             <div class="form-group">
@@ -150,10 +144,27 @@ endif;
             </div>
             <h3>اطلاعات مالی ناشر</h3>
 
+
             <div class="form-group">
-                <?php echo $form->labelEx($model,'account_owner'); ?>
-                <?php echo $form->textField($model,'account_owner',array('maxlength'=>100,'class'=>'form-control')); ?>
-                <?php echo $form->error($model,'account_owner'); ?>
+                <?php echo $form->labelEx($model, 'account_type');?>
+                <?php echo $form->dropDownList($model, 'account_type', $model->typeLabels);?>
+                <?php echo $form->error($model, 'account_type');?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'account_owner_name');?>
+                <?php echo $form->textField($model, 'account_owner_name', array(
+                    'class'=>'form-control',
+                    'maxLength' => 50,
+                ));?>
+                <?php echo $form->error($model, 'account_owner_name');?>
+            </div>
+            <div class="form-group" id="account_owner_family">
+                <?php echo $form->labelEx($model, 'account_owner_family');?>
+                <?php echo $form->textField($model, 'account_owner_family', array(
+                    'class'=>'form-control',
+                    'maxLength' => 50,
+                ));?>
+                <?php echo $form->error($model, 'account_owner_family');?>
             </div>
             <div class="form-group">
                 <?php echo $form->labelEx($model,'bank_name'); ?>
@@ -210,6 +221,11 @@ endif;
                 <?php echo $form->textField($model,'fa_name',array('placeholder'=>'نام و نام خانوادگی *','maxlength'=>50,'class'=>'form-control')); ?>
                 <small class="description">باید عبارتی با حداکثر 50 حرف باشد که از حروف و اعداد فارسی و انگلیسی، فاصله و نیم‌فاصله تشکیل شده باشد.</small>
                 <?php echo $form->error($model,'fa_name'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->textField($model,'publication_name',array('placeholder'=>$model->getAttributeLabel('publication_name').' *','maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'publication_name'); ?>
             </div>
 
             <div class="form-group">
@@ -311,9 +327,25 @@ endif;
             <h3>اطلاعات مالی ناشر</h3>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'account_owner'); ?>
-                <?php echo $form->textField($model,'account_owner',array('maxlength'=>100,'class'=>'form-control')); ?>
-                <?php echo $form->error($model,'account_owner'); ?>
+                <?php echo $form->labelEx($model, 'account_type');?>
+                <?php echo $form->dropDownList($model, 'account_type', $model->typeLabels);?>
+                <?php echo $form->error($model, 'account_type');?>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'account_owner_name');?>
+                <?php echo $form->textField($model, 'account_owner_name', array(
+                    'class'=>'form-control',
+                    'maxLength' => 50,
+                ));?>
+                <?php echo $form->error($model, 'account_owner_name');?>
+            </div>
+            <div class="form-group" id="account_owner_family">
+                <?php echo $form->labelEx($model, 'account_owner_family');?>
+                <?php echo $form->textField($model, 'account_owner_family', array(
+                    'class'=>'form-control',
+                    'maxLength' => 50,
+                ));?>
+                <?php echo $form->error($model, 'account_owner_family');?>
             </div>
             <div class="form-group">
                 <?php echo $form->labelEx($model,'bank_name'); ?>
@@ -344,7 +376,21 @@ endif;
     endif;
     ?>
 </div>
-<?php Yii::app()->clientScript->registerScript('inline-script', "
+<?php
+Yii::app()->clientScript->registerScript('account-type','
+    if($(\'#UserDetails_account_type\').val() == \'legal\')
+        $("#account_owner_family").fadeOut();
+    else
+        $("#account_owner_family").fadeIn();
+    $(\'body\').on(\'change\', \'#UserDetails_account_type\', function () {
+        if($(this).val() == \'legal\')
+            $("#account_owner_family").fadeOut();
+        else
+            $("#account_owner_family").fadeIn();
+    });
+', CClientScript::POS_READY);
+
+Yii::app()->clientScript->registerScript('inline-script', "
 $('body').on('change', '#default_commission', function(){
 	$('#UserDetails_commission').prop('disabled', function(i, v) { return !v; }).val('');
 });

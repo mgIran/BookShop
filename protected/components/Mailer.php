@@ -51,6 +51,6 @@ class Mailer
                     $mail->AddAttachment($attachment['path'], $attachment['name'], $encoding, $type);
             }
         }
-        return $mail->Send();
+        return @$mail->Send();
     }
 }

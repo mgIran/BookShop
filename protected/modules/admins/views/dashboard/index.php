@@ -185,11 +185,11 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'buttons'=>array(
                             'confirm'=>array(
                                 'label'=>'تایید کردن',
-                                'url'=>"CHtml::normalizeUrl(array('/users/usersManage/confirmDevID', 'id'=>\$data->user_id))",
+                                'url'=>"CHtml::normalizeUrl(array('/users/manage/confirmDevID', 'id'=>\$data->user_id))",
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/confirm.png',
                             ),
                             'delete'=>array(
-                                'url'=>'CHtml::normalizeUrl(array(\'/users/usersManage/deleteDevID\', \'id\'=>$data->user_id))'
+                                'url'=>'CHtml::normalizeUrl(array(\'/users/manage/deleteDevID\', \'id\'=>$data->user_id))'
                             ),
                         ),
                     ),
@@ -218,12 +218,12 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'buttons'=>array(
                             'confirm'=>array(
                                 'label'=>'تایید کردن',
-                                'url'=>"CHtml::normalizeUrl(array('/users/usersManage/confirmPublisher', 'id'=>\$data->user_id))",
+                                'url'=>"CHtml::normalizeUrl(array('/users/manage/confirmPublisher', 'id'=>\$data->user_id))",
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/confirm.png',
                             ),
                             'refused'=>array(
                                 'label'=>'رد کردن',
-                                'url'=>'CHtml::normalizeUrl(array(\'/users/usersManage/refusePublisher\', \'id\'=>$data->user_id))',
+                                'url'=>'CHtml::normalizeUrl(array(\'/users/manage/refusePublisher\', \'id\'=>$data->user_id))',
                                 'imageUrl'=>Yii::app()->theme->baseUrl.'/img/refused.png',
                             ),
                             'view'=>array(
@@ -242,19 +242,24 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                 'id'=>'newest-finance-info-grid',
                 'dataProvider'=>$newestFinanceInfo,
                 'columns'=>array(
-                    'fa_name'=>array(
+                    array(
                         'name'=>'fa_name',
                         'value'=>'CHtml::link($data->fa_name, Yii::app()->createUrl("/users/".$data->user_id))',
                         'type'=>'raw'
                     ),
-                    'account_owner',
+                    array(
+                        'name' => 'account_type',
+                        'value' => '$data->typeLabels[$data->account_type]',
+                    ),
+                    'account_owner_name',
+                    'account_owner_family',
                     'account_number',
                     'bank_name',
                     array(
                         'name'=>'iban',
                         'value'=>'"IR".$data->iban'
                     ),
-                    'financial_info_status'=>array(
+                    array(
                         'name'=>'financial_info_status',
                         'value'=>'CHtml::dropDownList("financial_info_status", "pending", $data->detailsStatusLabels, array("class"=>"change-finance-status", "data-id"=>$data->user_id))',
                         'type'=>'raw'

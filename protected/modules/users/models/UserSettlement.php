@@ -8,7 +8,9 @@
  * @property string $user_id
  * @property string $amount
  * @property string $date
- * @property string $account_owner
+ * @property string $account_type
+ * @property string $account_owner_name
+ * @property string $account_owner_family
  * @property string $account_number
  * @property string $bank_name
  * @property string $iban
@@ -27,6 +29,11 @@ class UserSettlement extends CActiveRecord
 		return 'ym_user_settlement';
 	}
 
+
+	public $typeLabels = array(
+		'real' => 'حقیقی',
+		'legal' => 'حقوقی',
+	);
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -40,7 +47,8 @@ class UserSettlement extends CActiveRecord
 			array('date', 'length', 'max'=>20),
 			array('iban', 'length', 'max'=>24),
 			array('token', 'length', 'max'=>255),
-			array('account_owner', 'length', 'max' => 100),
+			array('account_owner_name, account_owner_family', 'length', 'max' => 50),
+			array('account_type', 'safe'),
 			array('bank_name, account_number', 'length', 'max' => 50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -71,7 +79,9 @@ class UserSettlement extends CActiveRecord
 			'amount' => 'مبلغ',
 			'date' => 'تاریخ',
 			'iban' => 'شماره شبا',
-			'account_owner' => 'نام صاحب حساب',
+			'account_owner_name' => 'نام صاحب حساب',
+			'account_owner_family' => 'نام خانوادگی صاحب حساب',
+			'account_type' => 'نوع حساب',
 			'account_number' => 'شماره حساب',
 			'bank_name' => 'نام بانک',
 			'token' => 'کد رهگیری',

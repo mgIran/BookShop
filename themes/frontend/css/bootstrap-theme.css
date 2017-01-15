@@ -658,6 +658,7 @@ a:active{
 .thumbnail .thumb {
     position: relative;
     overflow: hidden;
+    height:314px;
 }
 
 .thumbnail .thumbnail-overlay {
@@ -865,6 +866,13 @@ a:active{
     float: right;
     margin: 0 0 20px 0;
     padding: 0 10px;
+}
+
+
+.book-list .thumbnail-list .thumbnail-container {
+    float: right;
+    margin: 0 0 12px 0;
+    padding: 0 6px;
 }
 
 .thumbnail-list {

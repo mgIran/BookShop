@@ -63,6 +63,7 @@ echo CHtml::endForm();
         'settled'=>array(
             'value'=>function($data){
                 $form=CHtml::beginForm(Yii::app()->createUrl("/publishers/panel/manageSettlement"), 'post', array('class'=>'settlement-form'));
+                $form.=CHtml::textField('iban', '', array('class'=>'form-control token','placeholder'=>'شماره شبا *'));
                 $form.=CHtml::textField('token', '', array('class'=>'form-control token','placeholder'=>'کد رهگیری *'));
                 $form.=CHtml::textField('amount', '', array('class'=>'form-control','placeholder'=>'مبلغ تسویه(تومان) *'));
                 $form.=CHtml::hiddenField('user_id', $data->user_id);

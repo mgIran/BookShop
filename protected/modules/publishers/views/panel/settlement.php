@@ -5,6 +5,18 @@
 /* @var $helpText string */
 /* @var $settlementHistory CActiveDataProvider */
 /* @var $formDisabled boolean */
+Yii::app()->clientScript->registerScript('account-type','
+    if($(\'#UserDetails_account_type\').val() == \'legal\')
+        $("#account_owner_family").fadeOut();
+    else
+        $("#account_owner_family").fadeIn();
+    $(\'body\').on(\'change\', \'#UserDetails_account_type\', function () {
+        if($(this).val() == \'legal\')
+            $("#account_owner_family").fadeOut();
+        else
+            $("#account_owner_family").fadeIn();
+    });
+', CClientScript::POS_READY);
 ?>
 <div class="white-form">
 
@@ -60,12 +72,27 @@
     <div class="form-row">
         <h4>اطلاعات حساب بانکی</h4>
         <div class="iban-container">
-            <?php echo $form->labelEx($userDetailsModel, 'account_owner');?>
-            <?php echo $form->textField($userDetailsModel, 'account_owner', array(
-                'class'=>'form-control',
-                'maxLength' => 100,
+            <?php echo $form->labelEx($userDetailsModel, 'account_type');?>
+            <?php echo $form->dropDownList($userDetailsModel, 'account_type', $userDetailsModel->typeLabels, array(
+                'class'=>'form-control'
             ));?>
-            <?php echo $form->error($userDetailsModel, 'account_owner');?>
+            <?php echo $form->error($userDetailsModel, 'account_type');?>
+        </div>
+        <div class="iban-container">
+            <?php echo $form->labelEx($userDetailsModel, 'account_owner_name');?>
+            <?php echo $form->textField($userDetailsModel, 'account_owner_name', array(
+                'class'=>'form-control',
+                'maxLength' => 50,
+            ));?>
+            <?php echo $form->error($userDetailsModel, 'account_owner_name');?>
+        </div>
+        <div class="iban-container" id="account_owner_family">
+            <?php echo $form->labelEx($userDetailsModel, 'account_owner_family');?>
+            <?php echo $form->textField($userDetailsModel, 'account_owner_family', array(
+                'class'=>'form-control',
+                'maxLength' => 50,
+            ));?>
+            <?php echo $form->error($userDetailsModel, 'account_owner_family');?>
         </div>
         <div class="iban-container">
             <?php echo $form->labelEx($userDetailsModel, 'account_number');?>
@@ -113,13 +140,15 @@
         <table class="table">
             <thead>
                 <tr>
-                    <td>مبلغ</td>
-                    <td>تاریخ</td>
-                    <td>کد رهگیری</td>
-                    <td>صاحب حساب</td>
+                    <td>نوع حساب</td>
+                    <td>نام صاحب حساب</td>
+                    <td>نام خانوادگی صاحب حساب</td>
                     <td>شماره حساب</td>
                     <td>نام بانک</td>
                     <td>شماره شبا</td>
+                    <td>کد رهگیری</td>
+                    <td>تاریخ</td>
+                    <td>مبلغ</td>
                 </tr>
             </thead>
             <tbody>
@@ -131,7 +160,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2">جمع کل درآمد</td>
+                    <td colspan="6">جمع کل درآمد</td>
                     <td colspan="2"><?= Controller::parseNumbers(number_format($this::$sumSettlement)).' تومان' ?></td>
                 </tr>
             </tfoot>

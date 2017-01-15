@@ -2008,3 +2008,10 @@ input[type="checkbox"]:checked + label::before {
 .my-library .table{
     margin: 0;
 }
+tfoot {
+    border-top: 1px solid #dadada;
+}
+.table td{
+    line-height: normal !important;
+    vertical-align: middle !important;
+}

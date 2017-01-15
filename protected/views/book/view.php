@@ -134,41 +134,43 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                     <?= Controller::printRateStars($model->rate) ?>
                                     <span>(<?= CHtml::encode(Controller::parseNumbers($model->getCountRate())) ?> کاربر)</span>
                                 </div>
-                                <?
-                                if($model->hasDiscount()):
-                                    ?>
-                                    <h5 class="price text-danger">
-                                        <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>">
-                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?></span>
-                                        <small> / <span class="<?= $model->discount->hasPrintedPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
-                                    </h5>
-                                    <h5 class="price">
-                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
-                                        <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
-                                    </h5>
-                                    <?
-                                else:
-                                    ?>
-                                    <h5 class="price">
-                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
-                                        <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
-                                    </h5>
-                                    <?
-                                endif;
-                                ?>
                                 <?php
                                 if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
                                     if(!$model->publisher_id || $model->publisher_id != Yii::app()->user->getId()):
-                                        $user = Users::model()->findByPk(Yii::app()->user->getId());
-                                        $criteria = new CDbCriteria(array('condition' => 'book_id = :id', 'order' => 'date DESC', 'limit' => 1,'params' => array(':id'=>$model->id)));
-                                        $bought = $user->bookBuys($criteria);
+                                        $criteria = new CDbCriteria(array(
+                                            'condition' => 'book_id = :book_id And user_id = :user_id',
+                                            'params' => array(':book_id'=>$model->id, ':user_id' => Yii::app()->user->getId())
+                                        ));
+                                        $bought = Library::model()->find($criteria);
                                         if(!$bought):
+                                            ?>
+                                            <?
+                                            if($model->hasDiscount()):
+                                                ?>
+                                                <h5 class="price text-danger">
+                                                    <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>">
+                                                    <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?></span>
+                                                    <small> / <span class="<?= $model->discount->hasPrintedPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
+                                                </h5>
+                                                <h5 class="price">
+                                                    <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
+                                                    <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
+                                                </h5>
+                                                <?
+                                            else:
+                                                ?>
+                                                <h5 class="price">
+                                                    <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
+                                                    <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                                </h5>
+                                                <?
+                                            endif;
                                             ?>
                                             <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                             <?php
                                         else:
-                                            if($bought[0]->package_id):
-                                                if($bought[0]->package_id != $model->lastPackage->id):
+                                            if($bought->package_id):
+                                                if($bought->package_id != $model->lastPackage->id):
                                                     ?>
                                                     <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
                                                     <?php
@@ -191,6 +193,28 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                     endif;
                                 else:
                                 ?>
+                                    <?
+                                    if($model->hasDiscount()):
+                                        ?>
+                                        <h5 class="price text-danger">
+                                        <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>">
+                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?></span>
+                                            <small> / <span class="<?= $model->discount->hasPrintedPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
+                                        </h5>
+                                        <h5 class="price">
+                                            <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
+                                            <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
+                                        </h5>
+                                        <?
+                                    else:
+                                        ?>
+                                        <h5 class="price">
+                                            <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
+                                            <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                        </h5>
+                                        <?
+                                    endif;
+                                    ?>
                                     <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                 <?
                                 endif;
