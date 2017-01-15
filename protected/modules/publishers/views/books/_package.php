@@ -15,9 +15,7 @@
                 <th>تاریخ بارگذاری</th>
                 <th>تاریخ انتشار</th>
                 <th>قیمت نسخه دیجیتال</th>
-<!--                <th>قیمت نسخه چاپی</th>-->
                 <th>عملیات</th>
-                <th>وضعیت</th>
             </tr>
         </thead>
         <?php $this->widget('zii.widgets.CListView', array(

@@ -382,6 +382,7 @@ class ManageBooksBaseManageController extends Controller
      */
     public function actionAdmin()
     {
+        $this->layout = '//layouts/column1';
         $model = new Books('search');
         $model->unsetAttributes();
         if (isset($_GET['Books']))
@@ -423,42 +424,44 @@ class ManageBooksBaseManageController extends Controller
         $model = $this->loadModel($_POST['book_id']);
         $model->confirm = $_POST['value'];
         $model->confirm_date = time();
-
-        if ($model->confirm == 'refused' or $model->confirm == 'change_required') {
+        if($model->save()){
             $package = $model->lastPackage;
             $package->setScenario('publish');
-            if ($_POST['value'] == 'accepted')
+            if($model->confirm == 'accepted')
                 $package->publish_date = time();
-            if ($_POST['value'] == 'refused' or $_POST['value'] == 'change_required')
+            if($model->confirm == 'refused' or $model->confirm == 'change_required')
                 $package->reason = $_POST['reason'];
-            if ($package->save()) {
-                if ($model->save()) {
-                    $message = '';
-                    switch ($_POST['value']) {
-                        case 'refused':
-                            $message = 'کتاب ' . $model->title . ' رد شده است. جهت اطلاع از دلیل تایید نشدن این کتاب به صفحه ویرایش کتاب مراجعه فرمایید.';
-                            break;
+            if($package->save()){
+                $message = '';
+                switch($model->confirm){
+                    case 'refused':
+                        $message = 'کتاب ' . $model->title . ' رد شده است. جهت اطلاع از دلیل تایید نشدن این کتاب به صفحه ویرایش کتاب مراجعه فرمایید.';
+                        break;
 
-                        case 'accepted':
-                            $message = 'کتاب ' . $model->title . ' تایید شده است.';
-                            break;
+                    case 'accepted':
+                        $message = 'کتاب ' . $model->title . ' تایید شده است.';
+                        break;
 
-                        case 'change_required':
-                            $message = 'کتاب ' . $model->title . ' نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.';
-                            break;
-                    }
-                    $this->createLog($message, $model->publisher_id);
-                    echo CJSON::encode(array(
-                        'status' => true
-                    ));
-                } else
-                    echo CJSON::encode(array(
-                        'status' => false,
-                        'message' => $this->implodeErrors($model)
-                    ));
-            } else
+                    case 'change_required':
+                        $message = 'کتاب ' . $model->title . ' نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.';
+                        break;
+
+                    case 'pending':
+                        $message = 'کتاب ' . $model->title . ' در حالت تعلیق قرار گرفت.';
+                        break;
+                }
+                $this->createLog($message, $model->publisher_id);
+
+                echo CJSON::encode(array(
+                    'status' => true
+                ));
+            }else
                 echo CJSON::encode(array('status' => false));
-        }
+        }else
+            echo CJSON::encode(array(
+                'status' => false,
+                'message' => $this->implodeErrors($model)
+            ));
     }
 
     public function actionChangeFinanceStatus()
