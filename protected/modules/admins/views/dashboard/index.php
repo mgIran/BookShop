@@ -286,27 +286,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
     </div>
 </div>
 
-
-<div id="reason-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <?php echo CHtml::hiddenField('package_id', '', array('id'=>'package-id'));?>
-                <?php echo CHtml::hiddenField('package_status', '', array('id'=>'package-status'));?>
-                <?php echo CHtml::label('لطفا دلیل این انتخاب را بنویسید:', 'reason-text')?>
-                <?php echo CHtml::textArea('reason', '', array('placeholder'=>'دلیل', 'class'=>'form-control', 'id'=>'reason-text'));?>
-                <div class="reason-modal-message error"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default close-reason-modal" data-dismiss="modal">انصراف</button>
-                <button type="button" class="btn btn-success save-reason-modal">ثبت</button>
-            </div>
-        </div>
-    </div>
-</div>
-<?
-endif;
-?>
+<?php endif;?>
 <div class="row">
     <div class="panel <?= $tickets['new']?'panel-success':'panel-default' ?> col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="panel-heading">

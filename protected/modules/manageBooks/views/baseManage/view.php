@@ -91,6 +91,10 @@ $purifier=new CHtmlPurifier();
         if($(this).val()=='accepted'){
             $('#book-id').val($(this).data('id'));
             $('#book-modal').modal('show');
+        }else if($(this).val()=='refused' || $(this).val()=='change_required'){
+            $('#reason-modal').modal('show');
+            $('#reason-modal input.book-id').val($(this).data('id'));
+            $('#reason-modal input.book-status').val($(this).val());
         }else{
             $.ajax({
                 url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
@@ -146,6 +150,33 @@ $purifier=new CHtmlPurifier();
             });
         }
     });
+
+    $('.close-reason-modal').click(function(){
+        $('#reason-text').val('');
+    });
+
+    $('.save-reason-modal').click(function(){
+        if($('#reason-text').val()==''){
+            $('.reason-modal-message').addClass('error').text('لطفا دلیل را ذکر کنید.');
+            return false;
+        }else{
+            $('.reason-modal-message').removeClass('error').text('در حال ثبت...');
+            $.ajax({
+                url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
+                type:'POST',
+                dataType:'JSON',
+                data:{book_id:$('#reason-modal .book-id').val(), value:$('#reason-modal .book-status').val(), reason:$('#reason-text').val()},
+                success:function(data){
+                    if(data.status){
+                        $('#reason-modal').modal('hide');
+                        $('#reason-text').val('');
+                        $('.reason-modal-message').text('');
+                    } else
+                        alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+                }
+            });
+        }
+    });
 ");?>
 
 <div id="book-modal" class="modal fade" role="dialog">
@@ -163,6 +194,24 @@ $purifier=new CHtmlPurifier();
             <div class="modal-footer">
                 <div class="book-modal-message error pull-right"></div>
                 <button type="button" class="btn btn-success save-book-modal">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="reason-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <?php echo CHtml::hiddenField('book_id', '', array('class'=>'book-id'));?>
+                <?php echo CHtml::hiddenField('book_status', '', array('class'=>'book-status'));?>
+                <?php echo CHtml::label('لطفا دلیل این انتخاب را بنویسید:', 'reason-text')?>
+                <?php echo CHtml::textArea('reason', '', array('placeholder'=>'دلیل', 'class'=>'form-control', 'id'=>'reason-text'));?>
+                <div class="reason-modal-message error"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close-reason-modal" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-success save-reason-modal">ثبت</button>
             </div>
         </div>
     </div>

@@ -29,7 +29,6 @@ class ManageBooksBaseManageController extends Controller
                 'deleteUploadPdfFile',
                 'deleteUploadEpubFile',
                 'changeConfirm',
-                'changePackageStatus',
                 'changeFinanceStatus',
                 'deletePackage',
                 'savePackage',
@@ -309,8 +308,8 @@ class ManageBooksBaseManageController extends Controller
             }
             $model->attributes = $_POST['Books'];
 
-            if(isset($_POST['default_commission']))
-                $model->publisher_commission=null;
+            if (isset($_POST['default_commission']))
+                $model->publisher_commission = null;
 
             $model->size = $newFileSize;
             $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
@@ -424,57 +423,39 @@ class ManageBooksBaseManageController extends Controller
         $model = $this->loadModel($_POST['book_id']);
         $model->confirm = $_POST['value'];
         $model->confirm_date = time();
-        if ($model->save()) {
-            if ($_POST['value'] == 'accepted') {
-                $package = BookPackages::model()->find(array('condition' => 'book_id=:book_id', 'params' => array(':book_id' => $model->id), 'order' => 'id DESC'));
-                $package->publish_date = time();
-                $package->status = 'accepted';
-                $package->setScenario('publish');
-                $package->save();
-            }
-            $message = '';
-            switch ($_POST['value']) {
-                case 'refused':
-                    $message = 'کتاب ' . $model->title . ' رد شده است. جهت اطلاع از دلیل تایید نشدن نوبت چاپ جدید به صفحه ویرایش کتاب مراجعه فرمایید.';
-                    break;
 
-                case 'accepted':
-                    $message = 'کتاب ' . $model->title . ' تایید شده است.';
-                    break;
-
-                case 'change_required':
-                    $message = 'کتاب ' . $model->title . ' نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.';
-                    break;
-            }
-            $this->createLog($message, $model->publisher_id);
-            echo CJSON::encode(array(
-                'status' => true
-            ));
-        } else
-            echo CJSON::encode(array(
-                'status' => false,
-                'message' => $this->implodeErrors($model)
-            ));
-    }
-
-    public function actionChangePackageStatus()
-    {
-        if (isset($_POST['package_id'])) {
-            $model = BookPackages::model()->findByPk($_POST['package_id']);
-            $model->status = $_POST['value'];
-            $model->setScenario('publish');
+        if ($model->confirm == 'refused' or $model->confirm == 'change_required') {
+            $package = $model->lastPackage;
+            $package->setScenario('publish');
             if ($_POST['value'] == 'accepted')
-                $model->publish_date = time();
+                $package->publish_date = time();
             if ($_POST['value'] == 'refused' or $_POST['value'] == 'change_required')
-                $model->reason = $_POST['reason'];
-            if ($model->save()) {
-                if ($_POST['value'] == 'accepted')
-                    $this->createLog('نوبت چاپ ' . $model->package_name . ' توسط مدیر سیستم تایید شد.', $model->book->publisher_id);
-                elseif ($_POST['value'] == 'refused')
-                    $this->createLog('نوبت چاپ ' . $model->package_name . ' توسط مدیر سیستم رد شد.', $model->book->publisher_id);
-                elseif ($_POST['value'] == 'change_required')
-                    $this->createLog('نوبت چاپ ' . $model->package_name . ' نیاز به تغییر دارد.', $model->book->publisher_id);
-                echo CJSON::encode(array('status' => true));
+                $package->reason = $_POST['reason'];
+            if ($package->save()) {
+                if ($model->save()) {
+                    $message = '';
+                    switch ($_POST['value']) {
+                        case 'refused':
+                            $message = 'کتاب ' . $model->title . ' رد شده است. جهت اطلاع از دلیل تایید نشدن این کتاب به صفحه ویرایش کتاب مراجعه فرمایید.';
+                            break;
+
+                        case 'accepted':
+                            $message = 'کتاب ' . $model->title . ' تایید شده است.';
+                            break;
+
+                        case 'change_required':
+                            $message = 'کتاب ' . $model->title . ' نیاز به تغییرات دارد. جهت مشاهده پیام کارشناسان به صفحه ویرایش کتاب مراجعه فرمایید.';
+                            break;
+                    }
+                    $this->createLog($message, $model->publisher_id);
+                    echo CJSON::encode(array(
+                        'status' => true
+                    ));
+                } else
+                    echo CJSON::encode(array(
+                        'status' => false,
+                        'message' => $this->implodeErrors($model)
+                    ));
             } else
                 echo CJSON::encode(array('status' => false));
         }
@@ -529,17 +510,17 @@ class ManageBooksBaseManageController extends Controller
             $model->publish_date = time();
             if (!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;
-            if(!$model->printed_price || empty($model->printed_price))
+            if (!$model->printed_price || empty($model->printed_price))
                 $model->printed_price = $model->price;
-            if($model->save()){
-                $response = ['status' => true ,'pdfFileName' => $model->pdf_file_name,'epubFileName' => $model->epub_file_name];
-                if(isset($_POST['pdf_file_name']))
-                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                if(isset($_POST['epub_file_name']))
-                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'] ,$uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-            }else{
-                $response = ['status' => false ,'message' => $this->implodeErrors($model)];
-                if(isset($_POST['pdf_file_name']))
+            if ($model->save()) {
+                $response = ['status' => true, 'pdfFileName' => $model->pdf_file_name, 'epubFileName' => $model->epub_file_name];
+                if (isset($_POST['pdf_file_name']))
+                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                if (isset($_POST['epub_file_name']))
+                    @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+            } else {
+                $response = ['status' => false, 'message' => $this->implodeErrors($model)];
+                if (isset($_POST['pdf_file_name']))
                     @unlink($tempDir . '/' . $_POST['pdf_file_name']);
 
                 if (isset($_POST['epub_file_name']))
@@ -784,7 +765,7 @@ class ManageBooksBaseManageController extends Controller
         $model->setScenario('change-publisher-commission');
 
         if (isset($_POST['default_commission']))
-            $model->publisher_commission=null;
+            $model->publisher_commission = null;
         else
             $model->publisher_commission = $_POST['publisher_commission'];
 
