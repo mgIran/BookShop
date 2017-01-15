@@ -105,7 +105,7 @@ class Library extends CActiveRecord
         $criteria->order = 'create_date DESC';
         return new CActiveDataProvider($this ,array(
             'criteria' => $criteria ,
-            'pagination' => array('pageSize' => 6)
+            'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
         ));
     }
 

@@ -62,7 +62,7 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('book_id, version, isbn, price, print_year', 'required'),
+            array('book_id, isbn, price, print_year', 'required'),
             array('pdf_file_name', 'orRequired', 'other' => 'epub_file_name'),
             array('book_id, price, printed_price', 'length', 'max' => 10),
             array('print_year', 'length', 'max' => 8),

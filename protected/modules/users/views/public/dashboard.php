@@ -2,6 +2,8 @@
 /* @var $this UsersPublicController */
 /* @var $model Users */
 /* @var $suggestedDataProvider CActiveDataProvider */
+/* @var $bookBuys CActiveDataProvider */
+/* @var $transactions CActiveDataProvider */
 /* @var $messages CArrayDataProvider */
 ?>
 <?php if($messages->totalItemCount > 0):?>
@@ -43,58 +45,109 @@
     </ul>
     <div class="tab-content">
         <div id="downloaded" class="tab-pane fade in active">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>زمان</th>
-                    <th>نام کتاب</th>
-                    <th>مبلغ</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php if(empty($model->bookBuys)):?>
-                    <tr>
-                        <td colspan="3" class="text-center">نتیجه ای یافت نشد.</td>
-                    </tr>
-                <?php else:?>
-                    <?php foreach($model->bookBuys as $buy):?>
-                        <tr>
-                            <td><?php echo JalaliDate::date('d F Y - H:i', $buy->date);?></td>
-                            <td><?php echo CHtml::encode($buy->book->title);?></td>
-                            <td><?php echo number_format($buy->book->price, 0).' تومان';?></td>
-                        </tr>
-                    <?php endforeach;?>
-                <?php endif;?>
-                </tbody>
-            </table>
+            <?php
+            $this->widget('zii.widgets.grid.CGridView', array(
+                'id' => 'book-buys-list',
+                'dataProvider' => $bookBuys->search(),
+                'template' => '{pager} {items} {pager}',
+                'ajaxUpdate' => true,
+                'afterAjaxUpdate' => "function(id, data){
+                    $('html, body').animate({
+                        scrollTop: ($('#'+id).offset().top-130)
+                    },1000);
+                }",
+                'pager' => array(
+                    'header' => '',
+                    'firstPageLabel' => '<<',
+                    'lastPageLabel' => '>>',
+                    'prevPageLabel' => '<',
+                    'nextPageLabel' => '>',
+                    'cssFile' => false,
+                    'htmlOptions' => array(
+                        'class' => 'pagination pagination-sm',
+                    ),
+                ),
+                'pagerCssClass' => 'blank',
+                'itemsCssClass' => 'table',
+                'columns' => array(
+                    array(
+                        'name' => 'date',
+                        'value' => 'JalaliDate::date("d F Y - H:i", $data->date)'
+                    ),
+                    array(
+                        'name' => 'book.title',
+                        'value' => function($data){
+                            return CHtml::link($data->book->title, array('/book/'.$data->book_id.'/'.urlencode($data->book->title)));
+                        },
+                        'type' => 'raw'
+                    ),
+                    array(
+                        'header' => 'مبلغ',
+                        'value' => 'Controller::parseNumbers(number_format($data->price))." تومان"',
+                    ),
+                    array(
+                        'class' => 'CButtonColumn',
+                        'header'=>$this->getPageSizeDropDownTag(),
+                        'template' =>'',
+                    )
+                )
+            ));
+            ?>
         </div>
         <div id="transactions" class="tab-pane fade">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>زمان</th>
-                    <th>مبلغ</th>
-                    <th>توضیحات</th>
-                    <th>کد رهگیری</th>
-                </tr>
-                </thead>
-                <tbody>
-            <?php if(empty($model->transactions)):?>
-                <tr>
-                    <td colspan="4" class="text-center">نتیجه ای یافت نشد.</td>
-                </tr>
-                <?php else:?>
-                    <?php foreach($model->transactions as $transaction):?>
-                        <tr>
-                            <td><?php echo JalaliDate::date('d F Y - H:i', $transaction->date);?></td>
-                            <td><?php echo number_format($transaction->amount, 0).' تومان';?></td>
-                            <td><?php echo CHtml::encode($transaction->description);?></td>
-                            <td><?php echo CHtml::encode($transaction->token);?></td>
-                        </tr>
-                    <?php endforeach;?>
-                <?php endif;?>
-                </tbody>
-            </table>
+            <?php
+            $this->widget('zii.widgets.grid.CGridView', array(
+                'id' => 'transactions-list',
+                'dataProvider' => $transactions->search(),
+                'template' => '{pager} {items} {pager}',
+                'ajaxUpdate' => true,
+                'afterAjaxUpdate' => "function(id, data){
+                    $('html, body').animate({
+                        scrollTop: ($('#'+id).offset().top-130)
+                    },1000);
+                }",
+                'pager' => array(
+                    'header' => '',
+                    'firstPageLabel' => '<<',
+                    'lastPageLabel' => '>>',
+                    'prevPageLabel' => '<',
+                    'nextPageLabel' => '>',
+                    'cssFile' => false,
+                    'htmlOptions' => array(
+                        'class' => 'pagination pagination-sm',
+                    ),
+                ),
+                'pagerCssClass' => 'blank',
+                'itemsCssClass' => 'table',
+                'columns' => array(
+                    array(
+                        'name' => 'date',
+                        'value' => 'JalaliDate::date("d F Y - H:i", $data->date)'
+                    ),
+                    array(
+                        'header' => 'مبلغ',
+                        'value' => 'Controller::parseNumbers(number_format($data->amount))." تومان"',
+                    ),
+                    array(
+                        'header' => 'توضیحات',
+                        'value' => 'CHtml::encode($data->description)',
+                    ),
+                    array(
+                        'name' => 'token',
+                        'value' => function($data){
+                            return CHtml::encode($data->token);
+                        },
+                        'htmlOptions' => array('style' => 'letter-spacing:2px;font-weight:bold'),
+                        'type' => 'raw'
+                    ),
+                    array(
+                        'class' => 'CButtonColumn',
+                        'header'=>$this->getPageSizeDropDownTag(),
+                        'template' =>'',
+                    )
+                )
+            ));
+            ?>
         </div>
     </div>
 </div>

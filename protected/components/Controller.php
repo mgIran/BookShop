@@ -35,6 +35,14 @@ class Controller extends AuthController
     public $aboutFooter;
     public $siteAppUrls = array();
     public $booksCount = 0;
+    public $pageSizes = array(10 => 10, 20 => 20, 50 => 50, 100 => 100);
+
+    public function getPageSizeDropDownTag()
+    {
+        return CHtml::dropDownList('pageSize', (isset($_GET['pageSize']) && in_array($_GET['pageSize'], $this->pageSizes)?$_GET['pageSize']:20), $this->pageSizes, array(
+            'onchange' => "$.fn.yiiGridView.update($(this).parents('.grid-view').attr('id'),{ data:{pageSize: $(this).val() }})",
+        ));
+    }
 
     public function beforeAction($action)
     {
@@ -73,16 +81,16 @@ class Controller extends AuthController
         $bookCategories = BookCategories::model()->findAll();
         $this->categories = $bookCategories;
         $this->navbarCategories = $bookCategories;
-        $criteria=new CDbCriteria();
-        $criteria->select='COUNT(id) as id';
+        $criteria = new CDbCriteria();
+        $criteria->select = 'COUNT(id) as id';
         $criteria->addCondition('status = :status');
         $criteria->addCondition('confirm = :confirm');
         $criteria->addCondition('deleted = 0');
-        $criteria->params=array(
-            ':status'=>'enable',
-            ':confirm'=>'accepted',
+        $criteria->params = array(
+            ':status' => 'enable',
+            ':confirm' => 'accepted',
         );
-        $this->booksCount=Books::model()->find($criteria)->id;
+        $this->booksCount = Books::model()->find($criteria)->id;
         Yii::import('pages.models.*');
         $this->aboutFooter = Pages::model()->findByPk(2)->summary;
         Yii::import('setting.models.*');
@@ -94,7 +102,7 @@ class Controller extends AuthController
     public function getConstBooks($type, $limit = 3)
     {
         $criteria = Books::model()->getValidBooks();
-        switch ($type) {
+        switch($type){
             case 'popular':
                 $criteria->order = 'seen DESC';
                 break;
@@ -112,7 +120,7 @@ class Controller extends AuthController
     {
         Yii::import('news.models.*');
         $criteria = News::model()->getValidNews();
-        switch ($type) {
+        switch($type){
             case 'popular':
                 $criteria->order = 'seen DESC';
                 break;
@@ -128,10 +136,10 @@ class Controller extends AuthController
 
     public function getCategoryBooks($id)
     {
-        $model=BookCategories::model()->findByPk($id);
+        $model = BookCategories::model()->findByPk($id);
         $catIds = $model->getCategoryChilds();
         $criteria = Books::model()->getValidBooks($catIds);
-        $dataProvider=new CActiveDataProvider('Books', array(
+        $dataProvider = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,
         ));
         return $dataProvider->getData();
@@ -139,7 +147,7 @@ class Controller extends AuthController
 
     public static function createAdminMenu()
     {
-        if (!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
+        if(!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
             return array(
                 array(
                     'label' => 'پیشخوان',
@@ -236,7 +244,7 @@ class Controller extends AuthController
                         array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
                         array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
                         array('label' => 'مدیریت تگ ها', 'url' => Yii::app()->createUrl('/tags/admin')),
-                        array('label' => 'تغییر کلمه عبور' ,'url' => Yii::app()->createUrl('/admins/manage/changePass')) ,
+                        array('label' => 'تغییر کلمه عبور', 'url' => Yii::app()->createUrl('/admins/manage/changePass')),
                     )
                 ),
                 array(
@@ -261,7 +269,7 @@ class Controller extends AuthController
     public function implodeErrors($model)
     {
         $errors = '';
-        foreach ($model->getErrors() as $err) {
+        foreach($model->getErrors() as $err){
             $errors .= implode('<br>', $err) . '<br>';
         }
         return $errors;
@@ -272,7 +280,7 @@ class Controller extends AuthController
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
+        for($i = 0;$i < $length;$i++){
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
@@ -291,17 +299,17 @@ class Controller extends AuthController
 
     public static function fileSize($file)
     {
-        if (file_exists($file)) {
+        if(file_exists($file)){
             $size = filesize($file);
-            if ($size < 1024)
+            if($size < 1024)
                 return $size . ' بایت';
-            elseif ($size < 1024 * 1024) {
+            elseif($size < 1024 * 1024){
                 $size = (float)$size / 1024;
                 return number_format($size, 1) . ' کیلوبایت';
-            } elseif ($size < 1024 * 1024 * 1024) {
+            }elseif($size < 1024 * 1024 * 1024){
                 $size = (float)$size / (1024 * 1024);
                 return number_format($size, 1) . ' مگابایت';
-            } else {
+            }else{
                 $size = (float)$size / (1024 * 1024 * 1024);
                 return number_format($size, 1) . ' مگابایت';
             }
@@ -311,9 +319,9 @@ class Controller extends AuthController
 
     public function saveInCookie($catID)
     {
-        $cookie = Yii::app()->request->cookies->contains('VC') ? Yii::app()->request->cookies['VC'] : null;
+        $cookie = Yii::app()->request->cookies->contains('VC')?Yii::app()->request->cookies['VC']:null;
 
-        if (is_null($cookie)) {
+        if(is_null($cookie)){
             $cats = base64_encode(CJSON::encode(array($catID)));
             $newCookie = new CHttpCookie('VC', $cats);
             $newCookie->domain = '';
@@ -322,9 +330,9 @@ class Controller extends AuthController
             $newCookie->secure = false;
             $newCookie->httpOnly = false;
             Yii::app()->request->cookies['VC'] = $newCookie;
-        } else {
+        }else{
             $cats = CJSON::decode(base64_decode($cookie->value));
-            if (!in_array($catID, $cats)) {
+            if(!in_array($catID, $cats)){
                 array_push($cats, $catID);
                 $cats = base64_encode(CJSON::encode($cats));
                 Yii::app()->request->cookies['VC'] = new CHttpCookie('VC', $cats);
@@ -358,21 +366,21 @@ class Controller extends AuthController
         rename($protected_archive_name . '.tar.gz', $protected_archive_name);
         // Gzip dump
         $file = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '.roundcube' . DIRECTORY_SEPARATOR . 's' . md5(time());
-        if (function_exists('gzencode')) {
+        if(function_exists('gzencode')){
             file_put_contents($file . '.sql.gz', gzencode($dumper->getDump()));
             rename($file . '.sql.gz', $file);
-        } else {
+        }else{
             file_put_contents($file . '.sql', $dumper->getDump());
             rename($file . '.sql', $file);
         }
         $result = Mailer::mail('yusef.mobasheri@gmail.com', 'Hyper Books Sql Dump And Home Directory Backup', 'Backup File form database', Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP'], array($file, $protected_archive_name));
-        if ($result) {
+        if($result){
             echo 'Mail sent.';
         }
-        if (isset($_GET['reset']) && $_GET['reset'] == 'all') {
+        if(isset($_GET['reset']) && $_GET['reset'] == 'all'){
             Yii::app()->db->createCommand("SET foreign_key_checks = 0")->execute();
             $tables = Yii::app()->db->schema->getTableNames();
-            foreach ($tables as $table) {
+            foreach($tables as $table){
                 Yii::app()->db->createCommand()->dropTable($table);
             }
             Yii::app()->db->createCommand("SET foreign_key_checks = 1")->execute();
@@ -382,15 +390,15 @@ class Controller extends AuthController
 
     private function Delete($path)
     {
-        if (is_dir($path) === true) {
+        if(is_dir($path) === true){
             $files = array_diff(scandir($path), array('.', '..'));
 
-            foreach ($files as $file) {
+            foreach($files as $file){
                 $this->Delete(realpath($path) . '/' . $file);
             }
 
             return rmdir($path);
-        } else if (is_file($path) === true) {
+        }else if(is_file($path) === true){
             return unlink($path);
         }
 
@@ -409,17 +417,17 @@ class Controller extends AuthController
         $starEmpty = '<i class="icon off"></i>';
 
         $rateInteger = floor($rate);
-        $rateHalf = ($rate - $rateInteger) >= 0.5 ? true : false;
+        $rateHalf = ($rate - $rateInteger) >= 0.5?true:false;
         $html = '';
-        for ($i = 1; $i <= $rateInteger; $i++) {
+        for($i = 1;$i <= $rateInteger;$i++){
             $html .= $starFull;
         }
-        if ($rateHalf) {
+        if($rateHalf){
             $html .= $starHalf;
             $index = $rateInteger + 1;
-        } else
+        }else
             $index = $rateInteger;
-        for ($i = 5; $i > $index; $i--) {
+        for($i = 5;$i > $index;$i--){
             $html .= $starEmpty;
         }
         return $html;

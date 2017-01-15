@@ -26,7 +26,7 @@ $this->menu=array(
 		array(
 			'name' => 'category_id',
 			'value' => '$data->category->fullTitle',
-			'filter' => CHtml::activeDropDownList($model,'category_id',BookCategories::model()->sortList(),array('prompt' => 'همه'))
+			'filter' => CHtml::activeDropDownList($model,'category_id',BookCategories::model()->sortList(true),array('prompt' => 'همه'))
 		),
 		array(
 			'name' => 'status',

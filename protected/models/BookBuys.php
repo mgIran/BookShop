@@ -99,7 +99,7 @@ class BookBuys extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('book_id',$this->book_id,true);
-		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('date',$this->date,true);
         $criteria->compare('method',$this->method,true);
         $criteria->compare('package_id',$this->package_id,true);

@@ -79,9 +79,27 @@ class UsersPublicController extends Controller
             }
         }
 
+        // create book buys for search in grid view
+        $bookBuys =new BookBuys('search');
+        $bookBuys->unsetAttributes();
+        if(isset($_GET['BookBuys']) && isset($_GET['ajax']) && $_GET['ajax']=='book-buys-list')
+            $bookBuys->attributes = $_GET['BookBuys'];
+        $bookBuys->user_id = $model->id;
+        //
+
+        // create downloaded model from Library for search in grid view
+        $transactions =new UserTransactions('search');
+        $transactions->unsetAttributes();
+        if(isset($_GET['UserTransactions']) && isset($_GET['ajax']) && $_GET['ajax']=='transactions-list')
+            $transactions->attributes = $_GET['UserTransactions'];
+        $transactions->user_id = $model->id;
+        //
+
         $this->render('dashboard', array(
             'model' => $model,
             'suggestedDataProvider' => $suggestedDataProvider,
+            'bookBuys' => $bookBuys,
+            'transactions' => $transactions,
             'messages' => new CArrayDataProvider($messages,array('keyField' =>'type')),
         ));
     }

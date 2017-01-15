@@ -84,26 +84,27 @@ $this->renderPartial('//partial-views/_flashMessage');
                     ),
                     array(
                         'class' => 'CButtonColumn',
-                        'template' =>'{download}',
-                        'buttons' => array(
-                            'download' => array(
-                                'label' => '<span class="icon icon-download-alt"></span>&nbsp;دانلود',
-                                'url' => 'array(\'/book/download\')',
-                                'options' => array('class' => 'btn btn-info btn-sm'),
-                                'click' => 'function(e){
-                                    e.preventDefault();
-//                                    $.ajax({
-//                                        url: $(this).attr("href"),
-//                                        dataType: "JSON",
-//                                        data: {bookId: $(this).parents("tr").data("book-id")},
-//                                        type: "POST",
-//                                        success: function(){
-//                                            $.fn.yiiGridView.update("bookmarked-grid");
-//                                        }
-//                                    });
-                                }'
-                            )
-                        )
+                        'header'=>$this->getPageSizeDropDownTag(),
+                        'template' =>'',
+//                        'buttons' => array(
+//                            'download' => array(
+//                                'label' => '<span class="icon icon-download-alt"></span>&nbsp;دانلود',
+//                                'url' => 'array(\'/book/download\')',
+//                                'options' => array('class' => 'btn btn-info btn-sm'),
+//                                'click' => 'function(e){
+//                                    e.preventDefault();
+////                                    $.ajax({
+////                                        url: $(this).attr("href"),
+////                                        dataType: "JSON",
+////                                        data: {bookId: $(this).parents("tr").data("book-id")},
+////                                        type: "POST",
+////                                        success: function(){
+////                                            $.fn.yiiGridView.update("bookmarked-grid");
+////                                        }
+////                                    });
+//                                }'
+//                            )
+//                        )
                     )
                 )
             ));
@@ -168,26 +169,8 @@ $this->renderPartial('//partial-views/_flashMessage');
                     ),
                     array(
                         'class' => 'CButtonColumn',
-                        'template' =>'{download}',
-                        'buttons' => array(
-                            'download' => array(
-                                'label' => '<span class="icon icon-download-alt"></span>&nbsp;دانلود',
-                                'url' => 'array(\'/book/download\')',
-                                'options' => array('class' => 'btn btn-info btn-sm'),
-                                'click' => 'function(e){
-                                    e.preventDefault();
-//                                    $.ajax({
-//                                        url: $(this).attr("href"),
-//                                        dataType: "JSON",
-//                                        data: {bookId: $(this).parents("tr").data("book-id")},
-//                                        type: "POST",
-//                                        success: function(){
-//                                            $.fn.yiiGridView.update("bookmarked-grid");
-//                                        }
-//                                    });
-                                }'
-                            )
-                        )
+                        'header'=>$this->getPageSizeDropDownTag(),
+                        'template' =>'',
                     )
                 )
             ));
@@ -205,7 +188,9 @@ $this->renderPartial('//partial-views/_flashMessage');
             <?php
             $this->widget('zii.widgets.grid.CGridView', array(
                 'id' => 'bookmarked-grid',
-                'dataProvider' => new CArrayDataProvider($user->bookmarkedBooks,array('pagination' => array('pageSize' => 6))),
+                'dataProvider' => new CArrayDataProvider($user->bookmarkedBooks,array(
+                    'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
+                )),
                 'template' => '{pager} {items} {pager}',
                 'rowHtmlOptionsExpression'=>'array("data-book-id" => $data->id)',
                 'ajaxUpdate' => true,
@@ -262,6 +247,7 @@ $this->renderPartial('//partial-views/_flashMessage');
                     ),
                     array(
                         'class' => 'CButtonColumn',
+                        'header'=>$this->getPageSizeDropDownTag(),
                         'template' =>'{unmark}',
                         'buttons' => array(
                             'unmark' => array(

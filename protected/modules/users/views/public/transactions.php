@@ -21,7 +21,7 @@
     <?php
     $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'bookmarked-grid',
-        'dataProvider' => $model->search(20),
+        'dataProvider' => $model->search(),
         'template' => '{items} {pager}',
         'rowHtmlOptionsExpression'=>'array("data-book-id" => $data->id)',
         'ajaxUpdate' => true,
@@ -60,6 +60,11 @@
                 'value' => '$data->token',
                 'htmlOptions' => array('style' => 'font-weight:bold;letter-spacing:4px')
             ),
+            array(
+                'class' => 'CButtonColumn',
+                'header'=>$this->getPageSizeDropDownTag(),
+                'template' =>'',
+            )
         )
     ));
     ?>

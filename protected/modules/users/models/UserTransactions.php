@@ -106,7 +106,7 @@ class UserTransactions extends CActiveRecord
 	 * @return CActiveDataProvider the data provider that can return the models
 	 * based on the search/filter conditions.
 	 */
-	public function search($pageSize=6)
+	public function search($pageSize=20)
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
@@ -129,6 +129,8 @@ class UserTransactions extends CActiveRecord
             $criteria->addSearchCondition('user.email', $this->user_name, true, 'OR');
         }
 
+		if(isset($_GET['pageSize']))
+			$pageSize = $_GET['pageSize'];
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination' => array('pageSize' => $pageSize)

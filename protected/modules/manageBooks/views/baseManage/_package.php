@@ -58,7 +58,7 @@ Yii::app()->clientScript->registerCss('inline',"
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <?php echo CHtml::textField('version', '', array('class'=>'form-control', 'placeholder'=>'نسخه *'));?>
+            <?php echo CHtml::textField('version', '', array('class'=>'form-control', 'placeholder'=>'نسخه'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <?php echo CHtml::textField('isbn', '', array('class'=>'form-control', 'placeholder'=>'شابک *'));?>
@@ -85,7 +85,8 @@ Yii::app()->clientScript->registerCss('inline',"
                 'dataType'=>'JSON',
                 'data'=>'js:$("#package-info-form").serialize()',
                 'beforeSend'=>"js:function(){
-                    if($('#package-info-form #version').val()=='' || $('#package-info-form #package_name').val()==''){
+                    if($('#package-info-form #isbn').val()=='' || $('#package-info-form #print_year').val()=='' || 
+                    $('#package-info-form #printed_price').val()=='' || $('#package-info-form #price').val()==''){
                         $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.');
                         return false;
                     }else if($('input[type=\"hidden\"][name=\"pdf_file_name\"]').length==0 && $('input[type=\"hidden\"][name=\"epub_file_name\"]').length==0){
