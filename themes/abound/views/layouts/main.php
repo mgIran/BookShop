@@ -21,6 +21,7 @@
 
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
       $cs->registerCssFile($baseUrl.'/css/bootstrap-reset.css');
+      $cs->registerCssFile($baseUrl.'/css/bootstrap-select.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
       $cs->registerCssFile($baseUrl.'/css/persian-datepicker-0.4.5.min.css');
       $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
@@ -32,6 +33,8 @@
       $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
       $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
+      $cs->registerScriptFile($baseUrl.'/js/bootstrap-select.min.js', CClientScript::POS_END);
+      $cs->registerScriptFile($baseUrl.'/js/defaults-fa_IR.min.js', CClientScript::POS_END);
       $cs->registerScriptFile($baseUrl.'/js/scripts.js');
 	?>
   </head>

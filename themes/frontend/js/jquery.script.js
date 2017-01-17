@@ -6,7 +6,8 @@ $(function() {
         else
             $(".navbar.navbar-default").removeClass('scroll-mode');
     });
-
+    if($('.selectpicker').length && $.fn.selectpicker)
+        $('.selectpicker').selectpicker();
     var ajaxGridUpdateTimeout;
     $body.on("keyup", ".ajax-grid-search", function(){
         var $this = $(this),

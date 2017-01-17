@@ -138,8 +138,6 @@ class BookController extends Controller
                 }
             }
             $user->refresh();
-        }else{
-            Yii::app()->user->setFlash('success', 'شما ناشر این کتاب هستید ');
         }
         $this->render('buy', array(
             'model' => $model,
@@ -313,7 +311,7 @@ class BookController extends Controller
      * }*/
 
     /**
-     * Show programs list
+     * Show books list
      */
     public function actionPublisher($title ,$id = null)
     {
@@ -494,8 +492,8 @@ class BookController extends Controller
                 }
                 $values[] = $count;
             }
-        }elseif(isset($_POST['show-chart-by-program'])){
-            $activeTab = 'by-program';
+        }elseif(isset($_POST['show-chart-by-book'])){
+            $activeTab = 'by-book';
             $showChart = true;
             $criteria = new CDbCriteria();
             $criteria->addCondition('date > :from_date');

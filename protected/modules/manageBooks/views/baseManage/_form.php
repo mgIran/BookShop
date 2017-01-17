@@ -85,7 +85,10 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'publisher_id'); ?>
-		<?php echo $form->dropDownList($model, 'publisher_id', CHtml::listData(Users::model()->getPublishers()->getData(), 'id', 'userDetails.fa_name')); ?>
+		<?php echo $form->dropDownList($model, 'publisher_id', CHtml::listData(Users::model()->getPublishers()->getData(), 'id', 'userDetails.fa_name'),array(
+			'class' => 'selectpicker',
+			'data-live-search' => true,
+		)); ?>
 		<?php echo $form->error($model,'publisher_id'); ?>
 	</div>
 
@@ -130,7 +133,10 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'category_id'); ?>
-		<?php echo $form->dropDownList($model,'category_id',BookCategories::model()->adminSortList(null,false));
+		<?php echo $form->dropDownList($model,'category_id',BookCategories::model()->adminSortList(null,false),array(
+			'class' => 'selectpicker',
+			'data-live-search' => true,
+		));
         ?>
 		<?php echo $form->error($model,'category_id'); ?>
 	</div>

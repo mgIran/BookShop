@@ -413,7 +413,7 @@ class Controller extends AuthController
     public static function printRateStars($rate)
     {
         $starFull = '<i class="icon"></i>';
-        $starHalf = '<i class="icon off"></i>';
+        $starHalf = '<i class="icon half"></i>';
         $starEmpty = '<i class="icon off"></i>';
 
         $rateInteger = floor($rate);

@@ -77,12 +77,22 @@ class AdminsDashboardController extends Controller
         $criteria->compare('messages.visit', 0);
         $criteria->compare('messages.sender', 'user');
         $tickets['new'] = Tickets::model()->count($criteria);
+
+        Yii::import("comments.models.*");
+        $comments = new Comment('search');
+        $comments->unsetAttributes();  // clear any default values
+        if (isset($_GET['Comment']))
+            $comments->attributes = $_GET['Comment'];
+        $comments->owner_name = 'Books';
+        //
+        
         $this->render('index', array(
             'newestPackages' => $newestPackages,
             'newestPrograms' => $newestPrograms,
             'devIDRequests' => $newestDevIdRequests,
             'newestPublishers' => $newestPublishers,
             'newestFinanceInfo' => $newestFinanceInfo,
+            'comments' => $comments,
             'tickets' => $tickets,
         ));
     }

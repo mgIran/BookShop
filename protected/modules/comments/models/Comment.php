@@ -226,7 +226,10 @@ class Comment extends CActiveRecord
         //if User model has been configured
         if(isset($relations['user']))
             $criteria->with[] = 'user';
-        $criteria->addCondition('t.status <> 2');
+
+        // condition for hide deleted comments
+        // $criteria->addCondition('t.status <> 2');
+
         $criteria->order = 't.status';
         $criteria->together = true;
         $criteria->with[] = 'books';
@@ -234,7 +237,7 @@ class Comment extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => 30,
+                'pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:30,
             ),
         ));
     }
@@ -558,7 +561,8 @@ class Comment extends CActiveRecord
             $routeData = array();
             foreach($config['pageUrl']['data'] as $routeVar => $modelProperty)
                 $routeData[$routeVar] = $ownerModel->$modelProperty;
-            return Yii::app()->createUrl($config['pageUrl']['route'], $routeData)."/#comment-$this->comment_id";
+            $routeData = implode('/',$routeData);
+            return Yii::app()->createUrl($config['pageUrl']['route'].$routeData)."/#comment-$this->comment_id";
         }
         return null;
     }

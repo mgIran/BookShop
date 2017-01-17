@@ -244,3 +244,24 @@ label{
 .relative{
     position: relative !important;
 }
+
+
+.stars{
+    overflow: hidden;
+}
+.stars .icon {
+    width: 18px;
+    height: 20px;
+    background: url("star-red.svg") no-repeat center;
+    background-size: 20px;
+    float: right;
+}
+.stars .icon.half{
+    opacity: 0.3;
+}
+.stars .icon.off {
+    opacity: 0.3;
+}
+.pagination .page.selected a {
+    background-color: #eee;
+}

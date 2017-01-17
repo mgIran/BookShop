@@ -12,6 +12,7 @@
     <div class="col-md-4">
         <?php $this->widget('application.extensions.PDatePicker.PDatePicker', array(
             'id'=>'month',
+            'value' => isset($_POST['month_altField'])?$_POST['month_altField']:false,
             'options'=>array(
                 'format'=>'MMMM YYYY',
                 'monthPicker'=>'js:{enabled:true}',

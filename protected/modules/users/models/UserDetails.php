@@ -99,7 +99,7 @@ class UserDetails extends CActiveRecord
             array('fa_name, en_name, national_card_image, company_name, registration_number, registration_certificate_image', 'length', 'max' => 50),
             array('fa_web_url, en_web_url, avatar', 'length', 'max' => 255),
             array('phone', 'length', 'max' => 11),
-            array('publisher_id, nickname', 'length', 'max' => 20, 'min' => 5),
+            array('publisher_id, nickname', 'length', 'max' => 20, 'min' =>3),
             array('address', 'length', 'max' => 1000),
             array('publication_name', 'length', 'max' => 100),
             array('details_status, financial_info_status', 'length', 'max' => 8),

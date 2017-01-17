@@ -568,7 +568,16 @@ a:active{
     background-size: 20px;
     float: right;
 }
-
+.stars .icon.half{
+    background: url("../svg/star-half.svg") no-repeat center;
+    background-size: 14px;
+    -webkit-transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+}
 .stars .icon.off {
     opacity: 0.3;
 }
@@ -2187,6 +2196,9 @@ input[type="checkbox"] + label:hover::before {
     color: #666;
     font-weight: lighter;
 }
+.book-view .comments-list .comment-form{
+    margin-top: 0 !important;
+}
 .book-view .comment-form{
     margin-top: 60px;
     position: relative;
@@ -2220,8 +2232,10 @@ input[type="checkbox"] + label:hover::before {
     vertical-align: middle;
 }
 .book-view .comment-form .rating ul li{
+    border: medium none !important;
     float: right;
-    margin-left: 30px;
+    margin: 0 0 0 30px !important;
+    padding: 0 !important;
 }
 .book-view .comment-form .rating .stars .icon{
     background-size: 17px;
@@ -2707,7 +2721,7 @@ input[type="checkbox"] + label:hover::before {
 }
 
 .default-comment-avatar {
-    background: url("../svg/comment-user.svg") no-repeat scroll center ;
+    background: url("../svg/comment-user.svg") no-repeat scroll center rgba(245,245,245,0.8);
     background-size: 40px;
     display: inline-block;
     position: absolute;
@@ -2716,9 +2730,9 @@ input[type="checkbox"] + label:hover::before {
     width: 60px;
     height: 60px;
     overflow: hidden;
-    -webkit-box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.4);
-    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.4);
 }
 
 .comment-form .rating .stars{

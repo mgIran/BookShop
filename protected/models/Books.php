@@ -138,32 +138,6 @@ class Books extends CActiveRecord
 		);
 	}
 
-	public function getPerson($role = NUlL)
-	{
-		$criteria = new CDbCriteria();
-		if ($role) {
-			$role = BookPersonRoles::model()->findByAttributes(array('title' => $role));
-			if (!$role)
-				return null;
-			$criteria->compare('role_id', $role->id);
-		}
-		return $this->persons($criteria);
-	}
-
-	public function getPersonsTags($role = NULL, $personProperty = 'fullName', $implode = true, $tag = 'a', $htmlOptions = array())
-	{
-		$html = array();
-		foreach ($this->getPerson($role) as $person) {
-			if ($tag == 'a') {
-				$link = array('/book/person/' . $person->id . '/' . urldecode($person->fullName));
-				$htmlTag = CHtml::link($person->{$personProperty}, $link, $htmlOptions);
-			} else
-				$htmlTag = CHtml::tag($tag, $htmlOptions, $person->{$personProperty});
-			array_push($html, $htmlTag);
-		}
-		return $implode ? implode(',', $html) : $html;
-	}
-
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
@@ -230,6 +204,16 @@ class Books extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 		));
+	}
+
+	public function publisherBooks($publisher_id=false)
+	{
+		$criteria = new CDbCriteria;
+		if($publisher_id)
+			$criteria->compare('publisher_id', $publisher_id);
+		$criteria->addCondition('deleted=0');
+		$criteria->order = 't.id DESC';
+		return $criteria;
 	}
 
 	/**
@@ -392,6 +376,32 @@ class Books extends CActiveRecord
 		return '';
 	}
 
+	public function getPerson($role = NUlL)
+	{
+		$criteria = new CDbCriteria();
+		if ($role) {
+			$role = BookPersonRoles::model()->findByAttributes(array('title' => $role));
+			if (!$role)
+				return null;
+			$criteria->compare('role_id', $role->id);
+		}
+		return $this->persons($criteria);
+	}
+
+	public function getPersonsTags($role = NULL, $personProperty = 'fullName', $implode = true, $tag = 'a', $htmlOptions = array())
+	{
+		$html = array();
+		foreach ($this->getPerson($role) as $person) {
+			if ($tag == 'a') {
+				$link = array('/book/person/' . $person->id . '/' . urldecode($person->fullName));
+				$htmlTag = CHtml::link($person->{$personProperty}, $link, $htmlOptions);
+			} else
+				$htmlTag = CHtml::tag($tag, $htmlOptions, $person->{$personProperty});
+			array_push($html, $htmlTag);
+		}
+		return $implode ? implode(',', $html) : $html;
+	}
+
 	public function getPublisherName()
 	{
 		if ($this->publisher_id)
@@ -533,7 +543,6 @@ class Books extends CActiveRecord
 		return Comment::model()->count($criteria);
 	}
 
-
 	public function getKeywords()
 	{
 		if ($this->seoTags) {
@@ -541,5 +550,9 @@ class Books extends CActiveRecord
 			return implode(',', $tags);
 		}
 		return false;
+	}
+
+	public function getTitleAndId(){
+		return $this->id.' - '.$this->title;
 	}
 }

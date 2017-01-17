@@ -3,6 +3,7 @@ class PDatePicker extends CInputWidget
 {
     protected $publishedAssetsPath;
     public $id;
+    public $value = false;
     public $options;
     public $htmlOptions;
 
@@ -29,6 +30,13 @@ class PDatePicker extends CInputWidget
         {
             echo CHtml::activeHiddenField($this->model,$this->attribute,array('id'=>$this->id.'_altField'));
             $value = explode('/', JalaliDate::date("Y/m/d/H/i/s", ($this->model->{$this->attribute}?$this->model->{$this->attribute}:time()), false));
+            $cs->registerScript(__CLASS__ . $this->id .'-set-values', '
+                $("#'.$this->id.'").persianDatepicker("setDate",['.$value[0].','.$value[1].','.$value[2].','.$value[3].','.$value[4].','.$value[5].']);
+            ');
+        }
+        else if($this->value){
+            echo CHtml::hiddenField($this->id.'_altField',$this->value);
+            $value = explode('/', JalaliDate::date("Y/m/d/H/i/s", $this->value, false));
             $cs->registerScript(__CLASS__ . $this->id .'-set-values', '
                 $("#'.$this->id.'").persianDatepicker("setDate",['.$value[0].','.$value[1].','.$value[2].','.$value[3].','.$value[4].','.$value[5].']);
             ');

@@ -37,9 +37,7 @@
             })
             .delegate('.approve', 'click', function(){
                 var id = $($(this).parents('.comment-widget')[0]).attr("id");
-                if(confirm($.fn.commentsList.settings[id]['approveConfirmString']))
-                {
-                    $.post($(this).attr('href'))
+                $.post($(this).attr('href'))
                     .success(function(data){
                         data = $.parseJSON(data);
                         if(data["code"] === "success")
@@ -47,7 +45,6 @@
                             $("#comment-"+data["approvedID"]+" > .admin-panel > .approve").remove();
                         }
                     });
-                }
                 return false;
             })
             .delegate('.add-comment', 'click', function(){

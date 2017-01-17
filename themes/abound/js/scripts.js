@@ -7,7 +7,7 @@ $(function(){
             return false;
         }
     });
-
+    $('.selectpicker').selectpicker();
     $('body').on('click', '.add-multipliable-input', function(){
         var input=document.createElement('input');
         input.type='text';

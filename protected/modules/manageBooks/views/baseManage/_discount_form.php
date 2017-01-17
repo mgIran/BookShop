@@ -27,7 +27,10 @@ $this->menu=array(
         if($model->isNewRecord):
     ?>
             <?php echo $form->labelEx($model, 'book_id'); ?>
-            <?php echo $form->dropDownList($model, 'book_id', $books); ?>
+            <?php echo $form->dropDownList($model, 'book_id', $books,array(
+                'class' => 'selectpicker',
+                'data-live-search' => true,
+            )); ?>
             <?php echo $form->error($model, 'book_id'); ?>
     <?php
         else:
