@@ -45,7 +45,7 @@ if(!isset($buy))
             <?php
             endif;
             ?>
-            <div class="stars">
+            <div class="stars" title="امتیاز <?= Controller::parseNumbers(number_format($data->rate,1)) ?>" data-placement="bottom">
                 <?= Controller::printRateStars($data->rate); ?>
             </div>
             <?php

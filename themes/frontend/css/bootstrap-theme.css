@@ -570,13 +570,18 @@ a:active{
 }
 .stars .icon.half{
     background: url("../svg/star-half.svg") no-repeat center;
-    background-size: 14px;
-    -webkit-transform: scaleX(-1);
-    -moz-transform: scaleX(-1);
-    -ms-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
+    background-size: 15.75px;
+    margin-top: -1px;
+}
+.stars .icon.quarter1{
+    background: url("../svg/star-quarter-1.svg") no-repeat center;
+    background-size: 15.75px;
+    margin-top: -1px;
+}
+.stars .icon.quarter3{
+    background: url("../svg/star-quarter-3.svg") no-repeat center;
+    background-size: 15.75px;
+    margin-top: -1px;
 }
 .stars .icon.off {
     opacity: 0.3;
@@ -2841,4 +2846,7 @@ input[type="checkbox"] + label:hover::before {
     height: 16px;
     width: 14px;
     background-size: 16px;
+}
+.tooltip{
+    font-family: IRANSans !important;
 }

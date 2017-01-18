@@ -110,6 +110,8 @@ class UserDetails extends CActiveRecord
             array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
             array('monthly_settlement', 'default', 'value' => 1),
+            // change-credit scenario
+            array('credit', 'required', 'on' => 'change-credit'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('user_id, fa_name, en_name, fa_web_url, en_web_url, national_code, national_card_image, phone, zip_code, address, credit, publisher_id, details_status, monthly_settlement, iban, nickname, score, avatar, account_owner_name, account_owner_family, account_number, bank_name, financial_info_status, publication_name, earning', 'safe', 'on' => 'search'),

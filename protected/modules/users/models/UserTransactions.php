@@ -118,7 +118,7 @@ class UserTransactions extends CActiveRecord
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('token',$this->token,true);
-		$criteria->compare('authority',$this->token,true);
+		$criteria->compare('authority',$this->authority,true);
 		$criteria->compare('description',$this->description,true);
         $criteria->compare('gateway_name',$this->gateway_name,true);
         $criteria->compare('type',$this->type,true);

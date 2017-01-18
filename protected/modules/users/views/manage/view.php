@@ -14,17 +14,53 @@ $this->breadcrumbs=array(
 	'کاربران'=>array('index'),
 	$model->userDetails->fa_name && !empty($model->userDetails->fa_name)?$model->userDetails->fa_name:$model->email,
 );
+if($model->role_id == 2)
+{
+	$this->menu=array(
+		array('label'=>'مدیرت کاربران', 'url'=>array($model->role_id == 2?'adminPublishers':'admin')),
+		array('label'=>'نمایش کتابخانه کاربر', 'url'=>array("userLibrary",'id'=>$model->id)),
+		array('label'=>'نمایش تراکنش های کاربر', 'url'=>array("userTransactions",'id'=>$model->id)),
+		array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
+		array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
+		array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id, 'view-page' => true)),
+		array('label'=>'تایید شناسه درخواستی کاربر', 'url'=>array('confirmDevID', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
+		array('label'=>'رد شناسه درخواستی کاربر', 'url'=>array('deleteDevID', 'id'=>$model->id, 'view-page' => true)),
+		array('label'=>'تایید اطلاعات مالی کاربر', 'url'=>"#" , 'linkOptions' => array('style' => 'margin-top:30px', 'class' => 'change-finance-status', 'data-id' => $model->id, 'data-value' => "accepted")),
+		array('label'=>'رد اطلاعات مالی کاربر', 'url'=>"#" , 'linkOptions' => array('class' => 'change-finance-status', 'data-id' => $model->id, 'data-value' => "refused")),
+		array('label'=>'افزایش اعتبار کاربر', 'url'=>array('changeCredit', 'id'=>$model->id), 'linkOptions' => array('style' => 'margin-top:30px;font-weight:bold')),
+	);
 
-$this->menu=array(
-	array('label'=>'مدیرت کاربران', 'url'=>array($model->role_id == 2?'adminPublishers':'admin')),
-	array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id)),
-	array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id)),
-	array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
-);
+	Yii::app()->clientScript->registerScript('changeFinanceStatus', "
+		$('body').on('click', '.change-finance-status', function(){
+			$.ajax({
+				url:'".$this->createUrl('/users/manage/changeFinanceStatus')."',
+				type:'POST',
+				dataType:'JSON',
+				data:{user_id:$(this).data('id'), value:$(this).data('value')},
+				success:function(data){
+					if(data.status){
+						alert('با موفقیت انجام شد.');
+						location.reload();
+					}else
+						alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
+				}
+			});
+		});
+	");
+}
+else
+	$this->menu=array(
+		array('label'=>'مدیرت کاربران', 'url'=>array($model->role_id == 2?'adminPublishers':'admin')),
+		array('label'=>'نمایش کتابخانه کاربر', 'url'=>array("userLibrary",'id'=>$model->id)),
+		array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
+		array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
+		array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id, 'view-page' => true)),
+		array('label'=>'افزایش اعتبار کاربر', 'url'=>array('changeCredit', 'id'=>$model->id), 'linkOptions' => array('style' => 'margin-top:30px;font-weight:bold')),
+	);
 ?>
 
 <h1>نمایش اطلاعات <?php echo $model->userDetails->fa_name && !empty($model->userDetails->fa_name)?$model->userDetails->fa_name:$model->email; ?></h1>
-
+<? $this->renderPartial('//layouts/_flashMessage') ?>
 <?php if($model->userDetails->type == 'real'):?>
 	<?php $this->widget('zii.widgets.CDetailView', array(
 		'data'=>$model,

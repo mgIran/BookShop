@@ -1,5 +1,6 @@
 var $body = $("body");
 $(function() {
+    $("[title]").tooltip();
     $(window).scroll(function () {
         if ($(window).scrollTop() > 85)
             $(".navbar.navbar-default").addClass('scroll-mode');
@@ -8,18 +9,6 @@ $(function() {
     });
     if($('.selectpicker').length && $.fn.selectpicker)
         $('.selectpicker').selectpicker();
-    var ajaxGridUpdateTimeout;
-    $body.on("keyup", ".ajax-grid-search", function(){
-        var $this = $(this),
-            $form = $this.parents("form"),
-            $url = $form.attr("action"),
-            $formData = $form.serialize(),
-            $gridView = $form.find(".grid-view");
-        clearTimeout(ajaxGridUpdateTimeout);
-        ajaxGridUpdateTimeout = setTimeout(function () {
-            $.fn.yiiGridView.update($gridView.attr("id"), {data: $formData});
-        },300);
-    });
     // ajax search
     $body.on("keyup","#search-term",function(e){
         var $this = $(this),

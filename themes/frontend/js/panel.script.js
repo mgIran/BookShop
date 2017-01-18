@@ -6,6 +6,21 @@ $(document).ready(function() {
         trigger:'hover'
     });
 
+    // filters ajax in panel
+    var ajaxGridUpdateTimeout;
+    $body.on("keyup", ".ajax-grid-search", function(){
+        var $this = $(this),
+            $form = $this.parents("form"),
+            $url = $form.attr("action"),
+            $formData = $form.serialize(),
+            $gridView = $form.find(".grid-view");
+        clearTimeout(ajaxGridUpdateTimeout);
+        ajaxGridUpdateTimeout = setTimeout(function () {
+            $.fn.yiiGridView.update($gridView.attr("id"), {data: $formData});
+        },300);
+    });
+    //
+
     var $panel_cookie=1;
     if($window.width() > 768 && $.cookie('p-s-mode'))
     {

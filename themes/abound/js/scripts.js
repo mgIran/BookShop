@@ -8,6 +8,20 @@ $(function(){
         }
     });
     $('.selectpicker').selectpicker();
+
+    var ajaxGridUpdateTimeout;
+    $("body").on("keyup", ".ajax-grid-search", function(){
+        var $this = $(this),
+            $form = $this.parents("form"),
+            $url = $form.attr("action"),
+            $formData = $form.serialize(),
+            $gridView = $form.find(".grid-view");
+        clearTimeout(ajaxGridUpdateTimeout);
+        ajaxGridUpdateTimeout = setTimeout(function () {
+            $.fn.yiiGridView.update($gridView.attr("id"), {data: $formData});
+        },300);
+    });
+
     $('body').on('click', '.add-multipliable-input', function(){
         var input=document.createElement('input');
         input.type='text';

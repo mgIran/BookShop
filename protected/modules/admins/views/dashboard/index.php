@@ -167,7 +167,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
             <?php Yii::app()->clientScript->registerScript('changeFinanceStatus', "
                 $('body').on('change', '.change-finance-status', function(){
                     $.ajax({
-                        url:'".$this->createUrl('/manageBooks/baseManage/changeFinanceStatus')."',
+                        url:'".$this->createUrl('/users/manage/changeFinanceStatus')."',
                         type:'POST',
                         dataType:'JSON',
                         data:{user_id:$(this).data('id'), value:$(this).val()},

@@ -35,7 +35,7 @@ if($book && $book->hasDiscount()) {
                         endif;
                         ?>
                     </span>
-                    <span class="book-rate">
+                    <span class="book-rate" title="امتیاز <?= Controller::parseNumbers(number_format($data->rate,1)) ?>" data-placement="bottom">
                         <?= Controller::printRateStars($book->rate); ?>
                     </span>
                 </div>

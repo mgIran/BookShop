@@ -414,6 +414,8 @@ class Controller extends AuthController
     {
         $starFull = '<i class="icon"></i>';
         $starHalf = '<i class="icon half"></i>';
+        $starQ1 = '<i class="icon quarter1"></i>';
+        $starQ3 = '<i class="icon quarter3"></i>';
         $starEmpty = '<i class="icon off"></i>';
 
         $rateInteger = floor($rate);
@@ -422,11 +424,25 @@ class Controller extends AuthController
         for($i = 1;$i <= $rateInteger;$i++){
             $html .= $starFull;
         }
+//        var_dump($rateHalf);exit;
         if($rateHalf){
+            $rateQ3 = ($rate - $rateInteger) >= 0.75?true:false;
+            if($rateQ3)
+                $html .= $starQ3;
+            else
+                $html .= $starHalf;
             $html .= $starHalf;
             $index = $rateInteger + 1;
         }else
-            $index = $rateInteger;
+        {
+            $rateQ1 = ($rate - $rateInteger) >= 0.25?true:false;
+            if($rateQ1)
+            {
+                $html .= $starQ1;
+                $index = $rateInteger + 1;
+            }else
+                $index = $rateInteger;
+        }
         for($i = 5;$i > $index;$i--){
             $html .= $starEmpty;
         }

@@ -29,7 +29,6 @@ class ManageBooksBaseManageController extends Controller
                 'deleteUploadPdfFile',
                 'deleteUploadEpubFile',
                 'changeConfirm',
-                'changeFinanceStatus',
                 'deletePackage',
                 'savePackage',
                 'images',
@@ -462,25 +461,6 @@ class ManageBooksBaseManageController extends Controller
                 'status' => false,
                 'message' => $this->implodeErrors($model)
             ));
-    }
-
-    public function actionChangeFinanceStatus()
-    {
-        if (isset($_POST['user_id'])) {
-            $model = UserDetails::model()->findByPk($_POST['user_id']);
-            $model->financial_info_status = $_POST['value'];
-            $model->setScenario('change-finance-info');
-
-            if ($model->save()) {
-                if ($_POST['value'] == 'accepted')
-                    $this->createLog('اطلاعات حساب بانکی شما توسط تیم مدیریت تایید شد.', $model->user_id);
-                elseif ($_POST['value'] == 'refused')
-                    $this->createLog('اطلاعات حساب بانکی شما توسط تیم مدیریت تایید نشد. لطفا اطلاعات حساب بانکی خود را تغییر دهید.', $model->user_id);
-
-                echo CJSON::encode(array('status' => true));
-            } else
-                echo CJSON::encode(array('status' => false));
-        }
     }
 
     public function actionDeletePackage($id)

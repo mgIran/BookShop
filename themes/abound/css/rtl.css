@@ -265,3 +265,7 @@ label{
 .pagination .page.selected a {
     background-color: #eee;
 }
+
+.table .odd td {
+    background-color: #eee !important;
+}
