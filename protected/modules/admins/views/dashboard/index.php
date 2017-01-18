@@ -29,6 +29,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
             <?php $this->widget('zii.widgets.grid.CGridView', array(
                 'id'=>'newest-books-grid',
                 'dataProvider'=>$newestPrograms,
+                'itemsCssClass' => 'table',
                 'columns'=>array(
                     'title',
                     'publisher_id'=>array(
@@ -70,6 +71,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
             <?php $this->widget('zii.widgets.grid.CGridView', array(
                 'id'=>'dev-id-requests-grid',
                 'dataProvider'=>$devIDRequests,
+                'itemsCssClass' => 'table',
                 'columns'=>array(
                     'user_id'=>array(
                         'name'=>'user_id',
@@ -103,6 +105,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
             <?php $this->widget('zii.widgets.grid.CGridView', array(
                 'id'=>'newest-publishers-grid',
                 'dataProvider'=>$newestPublishers,
+                'itemsCssClass' => 'table',
                 'columns'=>array(
                     'email'=>array(
                         'name'=>'email',
@@ -139,6 +142,7 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
             <?php $this->widget('zii.widgets.grid.CGridView', array(
                 'id'=>'newest-finance-info-grid',
                 'dataProvider'=>$newestFinanceInfo,
+                'itemsCssClass' => 'table',
                 'columns'=>array(
                     array(
                         'name'=>'fa_name',

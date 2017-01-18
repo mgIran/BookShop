@@ -22,6 +22,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 		),
 	),
 	'pagerCssClass' => 'blank',
+	'itemsCssClass' => 'table',
 	'filter'=>$model,
 	'columns'=>array(
 		array(
