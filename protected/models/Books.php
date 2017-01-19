@@ -187,22 +187,25 @@ class Books extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria = new CDbCriteria;
-
+		$criteria->compare('publisher_id', $this->publisher_id);
 		$criteria->compare('t.id', $this->id, true);
 		$criteria->compare('t.title', $this->title, true);
 		$criteria->compare('category_id', $this->category_id);
 		$criteria->compare('t.status', $this->status);
-		$criteria->with = array('publisher', 'publisher.userDetails');
-		$criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
-		$criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
+
+		if($this->devFilter){
+			$criteria->with = array('publisher', 'publisher.userDetails');
+			$criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
+			$criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
+		}
 
 		$criteria->addCondition('deleted=0');
-
 		$criteria->addCondition('t.title != ""');
 		$criteria->order = 't.id DESC';
 
-		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
+		return new CActiveDataProvider($this ,array(
+			'criteria' => $criteria ,
+			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
 		));
 	}
 

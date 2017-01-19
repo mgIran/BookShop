@@ -11,7 +11,7 @@ class UsersBonController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('create','update','admin','delete' ,'index','view')
+			'backend' => array('create','update','admin','delete' ,'index','view', 'generateCode')
 		);
 	}
 
@@ -23,6 +23,7 @@ class UsersBonController extends Controller
 		return array(
 			'checkAccess',
 			'postOnly + delete',
+			'ajaxOnly + generateCode',
 		);
 	}
 
@@ -45,10 +46,7 @@ class UsersBonController extends Controller
 	public function actionCreate()
 	{
 		$model=new UserBons;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
+        $model->codeGenerator();
 		if(isset($_POST['UserBons']))
 		{
 			$model->attributes=$_POST['UserBons'];
@@ -89,6 +87,11 @@ class UsersBonController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionGenerateCode(){
+		echo CJSON::encode(['status' => true, 'code' => UserBons::model()->codeGenerator()]);
+        Yii::app()->end();
 	}
 
 	/**

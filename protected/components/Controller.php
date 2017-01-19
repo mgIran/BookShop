@@ -228,7 +228,7 @@ class Controller extends AuthController
                         array('label' => 'مدیریت ناشران', 'url' => Yii::app()->createUrl('/users/manage/adminPublishers')),
                         array('label' => 'مدیریت کاربران', 'url' => Yii::app()->createUrl('/users/manage')),
                         array('label' => 'مدیریت بن های خرید', 'url' => Yii::app()->createUrl('/users/bon')),
-                        array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/users/off')),
+//                        array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/users/off')),
                     )
                 ),
                 array(

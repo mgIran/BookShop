@@ -41,7 +41,7 @@ class UserBons extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('title, start_date, end_date' ,'required') ,
+            array('code, title, start_date, end_date' ,'required') ,
             array('user_limit, status, amount' ,'numerical' ,'integerOnly' => true) ,
             array('code, title' ,'length' ,'max' => 50) ,
             array('code' ,'unique') ,
@@ -55,7 +55,7 @@ class UserBons extends CActiveRecord
         );
     }
 
-    private function codeGenerator()
+    public function codeGenerator()
     {
         $len = 5;
         $this->code = Controller::generateRandomString($len);
@@ -66,13 +66,7 @@ class UserBons extends CActiveRecord
             if($i > 5)
                 $len++;
         }
-    }
-
-    public function init()
-    {
-        if($this->isNewRecord && !$this->code)
-            $this->codeGenerator();
-        parent::init();
+        return $this->code;
     }
 
     /**
@@ -80,8 +74,6 @@ class UserBons extends CActiveRecord
      */
     public function relations()
     {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
             'users' => array(self::MANY_MANY ,'Users' ,'{{user_bon_rel}}(bon_id, user_id)') ,
             'rel' => array(self::HAS_MANY ,'UserBonRel' ,'bon_id'),

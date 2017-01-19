@@ -1,7 +1,19 @@
 <?php
-/* @var $this UserBonsManageController */
+/* @var $this UsersBonController */
 /* @var $model UserBons */
 /* @var $form CActiveForm */
+$genLink= $this->createUrl('generateCode');
+Yii::app()->clientScript->registerScript("generate-code", "
+	$('body').on('click', '.generate-code', function(){
+		$.get('{$genLink}', function( data ) {
+		    if(data.status)
+		        $('#UserBons_code').val(data.code);
+		    else
+		        alert(data.msg);
+		},'json');
+	});
+");
+
 ?>
 
 <div class="form">
@@ -20,8 +32,9 @@
 	?>
 		<div class="row">
 			<?php echo $form->labelEx($model,'code'); ?>
-			<?php echo CHtml::label("<strong>{$model->code}</strong>",''); ?>
-			<?php echo $form->hiddenField($model,'code'); ?>
+			<?php echo $form->textField($model,'code', array('size' => 10, 'max' => 50)); ?>
+			<button class="btn btn-info generate-code" type="button" >ایجاد کد تصادفی</button>
+			<?php echo $form->error($model,'code'); ?>
 		</div>
 	<?php
 	else:

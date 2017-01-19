@@ -90,18 +90,15 @@ class PublishersPanelController extends Controller
 	public function actionIndex()
 	{
         Yii::app()->theme='frontend';
-        $criteria=new CDbCriteria();
-        $criteria->addCondition('publisher_id = :user_id');
-        $criteria->addCondition('deleted = 0');
-        $criteria->addCondition('title != ""');
-        $criteria->params = array(':user_id' => Yii::app()->user->getId());
-        $booksDataProvider = new CActiveDataProvider('Books', array(
-            'criteria' => $criteria,
-        ));
-        Yii::app()->getModule('users');
-
+        // create book buys for search in grid view
+        $books =new Books('search');
+        $books->unsetAttributes();
+        if(isset($_GET['Books']) && isset($_GET['ajax']) && $_GET['ajax']=='books-list')
+            $books->attributes = $_GET['Books'];
+        $books->publisher_id = Yii::app()->user->getId();
+        //
         $this->render('index', array(
-            'booksDataProvider' => $booksDataProvider,
+            'books' => $books,
         ));
     }
 

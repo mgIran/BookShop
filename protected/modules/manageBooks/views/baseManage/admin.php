@@ -41,8 +41,24 @@ $this->breadcrumbs=array(
 			'value' => '$data->price != 0?$data->price." تومان":"رایگان"'
 		),
 		array(
+			'header' => 'قیمت دیجیتال با تخفیف',
+			'value' => function($data){
+				if($data->discount && $data->discount->hasPriceDiscount())
+					return Controller::parseNumbers(number_format($data->offPrice))." تومان";
+				return '-';
+			}
+		),
+		array(
 			'name' => 'lastPackage.printed_price',
 			'value' => '$data->printed_price?$data->printed_price." تومان":"غیرقابل فروش"'
+		),
+		array(
+			'header' => 'قیمت چاپی با تخفیف',
+			'value' => function($data){
+				if($data->discount && $data->discount->hasPrintedPriceDiscount())
+					return Controller::parseNumbers(number_format($data->off_printed_price))." تومان";
+				return '-';
+			}
 		),
 		array(
 			'header' => 'تغییر وضعیت',

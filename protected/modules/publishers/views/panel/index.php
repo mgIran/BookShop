@@ -1,6 +1,6 @@
 <?php
-/* @var $this PanelController */
-/* @var $booksDataProvider CActiveDataProvider */
+/* @var $this PublishersPanelController */
+/* @var $books Books */
 ?>
 <div class="transparent-form">
     <h3>کتاب ها</h3>
@@ -11,31 +11,77 @@
     <div class="buttons">
         <a class="btn btn-success" href="<?php echo $this->createUrl('/publishers/books/create');?>">افزودن کتاب جدید</a>
     </div>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>عنوان کتاب</th>
-            <th>وضعیت</th>
-            <th>قیمت</th>
-            <th class="hidden-xs">تعداد خرید</th>
-            <th>عملیات</th>
-            <th>تاییدیه</th>
-        </tr>
-        </thead>
-        <?php if(!$booksDataProvider->totalItemCount):?>
-            <tbody>
-                <tr>
-                    <td colspan="7" class="text-center">نتیجه ای یافت نشد.</td>
-                </tr>
-            </tbody>
-        <?php else:?>
-            <?php $this->widget('zii.widgets.CListView', array(
-                'dataProvider'=>$booksDataProvider,
-                'itemView'=>'_book_list',
-                'itemsTagName'=>'tbody',
-                'template'=>'{items}'
-            ));?>
-        <?php endif;?>
-    </table>
+<!--    <th>قیمت</th>-->
+<!--    <th class="hidden-xs">تعداد خرید</th>-->
+<!--    <th>عملیات</th>-->
+<!--    <th>تاییدیه</th>-->
+    <?php
+    $this->widget('zii.widgets.grid.CGridView', array(
+        'id' => 'books-list',
+        'dataProvider' => $books->search(),
+        'template' => '{pager} {items} {pager}',
+        'ajaxUpdate' => true,
+        'afterAjaxUpdate' => "function(id, data){
+            $('html, body').animate({
+                scrollTop: ($('#'+id).offset().top-130)
+            },1000);
+        }",
+        'pager' => array(
+            'header' => '',
+            'firstPageLabel' => '<<',
+            'lastPageLabel' => '>>',
+            'prevPageLabel' => '<',
+            'nextPageLabel' => '>',
+            'cssFile' => false,
+            'htmlOptions' => array(
+                'class' => 'pagination pagination-sm',
+            ),
+        ),
+        'pagerCssClass' => 'blank',
+        'itemsCssClass' => 'table',
+        'columns' => array(
+            'id',
+            array(
+                'name' => 'title',
+                'value' => function($data){
+                    return CHtml::link($data->title, array('/book/'.$data->id.'/'.urlencode($data->title)));
+                },
+                'type' => 'raw'
+            ),
+            array(
+                'header' => 'قیمت',
+                'name' => 'price',
+                'value' => function($data){
+                    return Controller::parseNumbers(number_format($data->price))." تومان";
+                },
+            ),
+            array(
+                'header' => 'قیمت با تخفیف',
+                'name' => 'offPrice',
+                'value' => function($data){
+                    if($data->discount && $data->discount->hasPriceDiscount())
+                        return Controller::parseNumbers(number_format($data->offPrice))." تومان";
+                    return '-';
+                },
+                'filter' => false
+            ),
+            array(
+                'name' => 'status',
+                'value' => function($data){
+                    return $data->statusLabels[$data->status];
+                },
+                'type' => 'raw',
+                'filter' => $books->statusLabels
+            ),
+            array(
+                'header' => 'نسخه کتاب',
+                'value' => '"ویرایش ".Controller::parseNumbers($data->lastPackage->version)',
+            ),
+            array(
+                'class' => 'CButtonColumn',
+                'header'=>$this->getPageSizeDropDownTag(),
+                'template' =>'',
+            )
+        )
+    ));?>
 </div>
