@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50617
+Source Server         : local
+Source Server Version : 50616
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50617
+Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2017-01-15 14:18:29
+Date: 2017-01-21 15:53:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -172,7 +172,14 @@ CREATE TABLE `ym_book_buys` (
   `method` varchar(10) CHARACTER SET utf8 COLLATE utf8_persian_ci DEFAULT NULL COMMENT 'روش خرید',
   `package_id` int(10) unsigned DEFAULT NULL COMMENT 'نسخه',
   `rel_id` int(10) unsigned DEFAULT NULL COMMENT 'تراکنش',
-  `price` varchar(10) CHARACTER SET utf8 DEFAULT NULL COMMENT 'مبلغ',
+  `price` decimal(10,0) unsigned DEFAULT NULL COMMENT 'مبلغ',
+  `base_price` decimal(10,0) unsigned DEFAULT NULL,
+  `publisher_commission` decimal(3,0) unsigned DEFAULT NULL,
+  `publisher_commission_amount` decimal(10,0) unsigned DEFAULT NULL,
+  `site_amount` decimal(10,0) unsigned DEFAULT NULL,
+  `discount_code_type` decimal(1,0) unsigned DEFAULT NULL,
+  `discount_code_amount` decimal(10,0) unsigned DEFAULT NULL,
+  `tax_amount` decimal(10,0) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   KEY `user_id` (`user_id`) USING BTREE,
@@ -185,11 +192,6 @@ CREATE TABLE `ym_book_buys` (
 -- ----------------------------
 -- Records of ym_book_buys
 -- ----------------------------
-INSERT INTO `ym_book_buys` VALUES ('38', '55', '46', '1483361813', 'credit', '71', null, '5000');
-INSERT INTO `ym_book_buys` VALUES ('39', '53', '46', '1483362187', 'credit', '47', null, '100');
-INSERT INTO `ym_book_buys` VALUES ('41', '52', '43', '1483363601', 'credit', '46', null, '9000');
-INSERT INTO `ym_book_buys` VALUES ('42', '56', '46', '1483364868', 'credit', '72', null, '10000');
-INSERT INTO `ym_book_buys` VALUES ('43', '58', '45', '1483427501', 'credit', '74', null, '3000');
 
 -- ----------------------------
 -- Table structure for ym_book_categories
@@ -500,11 +502,6 @@ CREATE TABLE `ym_library` (
 -- ----------------------------
 -- Records of ym_library
 -- ----------------------------
-INSERT INTO `ym_library` VALUES ('52', '46', '43', '0', '1483363601');
-INSERT INTO `ym_library` VALUES ('53', '47', '46', '0', '1483362187');
-INSERT INTO `ym_library` VALUES ('54', '48', '46', '0', '1483362200');
-INSERT INTO `ym_library` VALUES ('55', '71', '46', '0', '1483361813');
-INSERT INTO `ym_library` VALUES ('56', '72', '46', '0', '1483364868');
 
 -- ----------------------------
 -- Table structure for ym_news

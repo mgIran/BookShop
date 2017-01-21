@@ -232,10 +232,12 @@ class Books extends CActiveRecord
 
 	/**
 	 * Return developer portion
+	 *
 	 * @param $price
+	 * @param bool|BookBuys $buy
 	 * @return float|string
 	 */
-	public function getPublisherPortion($price)
+	public function getPublisherPortion($price, &$buy = false)
 	{
 		Yii::app()->getModule('setting');
 
@@ -243,20 +245,32 @@ class Books extends CActiveRecord
 		$commission = $this->publisher_commission;
 
 		// Get commission from publisher
-		if (is_null($commission) or $commission == '')
+		if(is_null($commission) or $commission == '')
 			$commission = $this->publisher->userDetails->commission;
 
 		// Get commission from setting
-		if (is_null($commission) or $commission == '')
+		if(is_null($commission) or $commission == '')
 			$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
 
-		if (!$this->publisher->userDetails->tax_exempt) {
+		if(!$this->publisher->userDetails->tax_exempt){
 			$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
 			$tax = ($price * $tax) / 100;
+			// save tax amount in db
+			if($buy)
+				$buy->tax_amount = $tax;
+
 			$price = $price - $tax;
 		}
-		$commission = ($price * $commission) / 100;
-		return $commission;
+		$commission_amount = ($price * $commission) / 100;
+
+		// save publisher commission percent and amount in db
+		if($buy)
+		{
+			$buy->publisher_commission = $commission;
+			$buy->publisher_commission_amount = $commission_amount;
+		}
+
+		return $commission_amount;
 	}
 
 	protected function afterSave()

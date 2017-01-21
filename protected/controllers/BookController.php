@@ -209,6 +209,7 @@ class BookController extends Controller
         $book->save();
         $buy = new BookBuys();
         $buy->book_id = $book->id;
+        $buy->base_price = $book->lastPackage->price;
         $buy->user_id = $user->id;
         $buy->package_id = $book->lastPackage->id;
         $buy->method = $method;
@@ -216,7 +217,7 @@ class BookController extends Controller
         if($method == 'gateway')
             $buy->rel_id = $transactionID;
         if($book->publisher){
-            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($price);
+            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($price, $buy);
             $book->publisher->userDetails->save();
         }
         $buy->save();
