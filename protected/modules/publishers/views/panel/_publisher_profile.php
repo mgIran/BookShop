@@ -173,8 +173,11 @@ endif;
             </div>
             <div class="form-group">
                 <?php echo $form->labelEx($model,'iban'); ?>
-                <?php echo $form->textField($model,'iban',array('maxlength'=>24,'class'=>'form-control')); ?>
-
+                <div class="input-group">
+                    <?php echo $form->textField($model,'iban',array('maxlength'=>24,'class'=>'form-control')); ?>
+                    <span class="input-group-addon">IR</span>
+                </div>
+                <small>شماره شبا بدون IR و هیچ گونه فاصله و خط تیره باید ثبت شود</small>
                 <?php echo $form->error($model,'iban'); ?>
             </div>
             <div class="form-group">

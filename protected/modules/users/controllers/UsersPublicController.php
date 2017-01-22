@@ -13,8 +13,6 @@ class UsersPublicController extends Controller
                 'logout',
                 'setting',
                 'notifications',
-                'register',
-                'login',
                 'verify',
                 'forgetPassword',
                 'changePassword',
@@ -24,6 +22,7 @@ class UsersPublicController extends Controller
                 'transactions',
                 'library',
                 'index',
+                'ResendVerification',
             )
         );
     }
@@ -61,36 +60,33 @@ class UsersPublicController extends Controller
         $suggestedDataProvider = new CActiveDataProvider('Books', array('criteria' => Books::model()->getValidBooks($visitedCats)));
 
         $messages = array();
-        if($model->role_id == 2)
-        {
+        if ($model->role_id == 2) {
             $credit = $model->userDetails->getSettlementAmount();
-            if($credit)
-            {
+            if ($credit) {
                 $messages[0]['type'] = 'info';
-                $messages[0]['message'] = 'مبلغ قابل تسویه شما: '.Controller::parseNumbers(number_format($credit)).' تومان';
+                $messages[0]['message'] = 'مبلغ قابل تسویه شما: ' . Controller::parseNumbers(number_format($credit)) . ' تومان';
             }
-            if($credit && !$model->userDetails->validateAccountingInformation())
-            {
-                $link = CHtml::link('اینجا',array('/publishers/panel/settlement'));
+            if ($credit && !$model->userDetails->validateAccountingInformation()) {
+                $link = CHtml::link('اینجا', array('/publishers/panel/settlement'));
                 $messages[1]['type'] = 'danger';
-                $messages[1]['message'] = 'اطلاعات بانکی شما به منظور انجام تسویه حساب ناقص است و تا زمانی که این اطلاعات تکمیل نشود تسویه حساب برای شما انجام نمی شود. برای تکیمل اطلاعات '.
-                    $link.
-                ' کلیک کنید.';
+                $messages[1]['message'] = 'اطلاعات بانکی شما به منظور انجام تسویه حساب ناقص است و تا زمانی که این اطلاعات تکمیل نشود تسویه حساب برای شما انجام نمی شود. برای تکیمل اطلاعات ' .
+                    $link .
+                    ' کلیک کنید.';
             }
         }
 
         // create book buys for search in grid view
-        $bookBuys =new BookBuys('search');
+        $bookBuys = new BookBuys('search');
         $bookBuys->unsetAttributes();
-        if(isset($_GET['BookBuys']) && isset($_GET['ajax']) && $_GET['ajax']=='book-buys-list')
+        if (isset($_GET['BookBuys']) && isset($_GET['ajax']) && $_GET['ajax'] == 'book-buys-list')
             $bookBuys->attributes = $_GET['BookBuys'];
         $bookBuys->user_id = $model->id;
         //
 
         // create downloaded model from Library for search in grid view
-        $transactions =new UserTransactions('search');
+        $transactions = new UserTransactions('search');
         $transactions->unsetAttributes();
-        if(isset($_GET['UserTransactions']) && isset($_GET['ajax']) && $_GET['ajax']=='transactions-list')
+        if (isset($_GET['UserTransactions']) && isset($_GET['ajax']) && $_GET['ajax'] == 'transactions-list')
             $transactions->attributes = $_GET['UserTransactions'];
         $transactions->user_id = $model->id;
         //
@@ -100,7 +96,7 @@ class UsersPublicController extends Controller
             'suggestedDataProvider' => $suggestedDataProvider,
             'bookBuys' => $bookBuys,
             'transactions' => $transactions,
-            'messages' => new CArrayDataProvider($messages,array('keyField' =>'type')),
+            'messages' => new CArrayDataProvider($messages, array('keyField' => 'type')),
         ));
     }
 
@@ -145,26 +141,32 @@ class UsersPublicController extends Controller
 
         $token = Yii::app()->request->getQuery('token');
         $model = Users::model()->find('verification_token=:token', array(':token' => $token));
+
         if ($model) {
             if ($model->status == 'pending') {
                 if (time() <= $model->create_date + 259200) {
                     $model->updateByPk($model->id, array('status' => 'active'));
                     Yii::app()->user->setFlash('success', 'حساب کاربری شما فعال گردید.');
+                    $login = new UserLoginForm('OAuth');
+                    $login->email = $model->email;
+                    $login->OAuth = true;
+                    if ($login->validate() && $login->login(true) === true)
+                        $this->redirect(array('/dashboard'));
                     $this->redirect($this->createUrl('/login'));
                 } else {
                     Yii::app()->user->setFlash('failed', 'لینک فعال سازی منقضی شده و نامعتبر می باشد. لطفا مجددا ثبت نام کنید.');
-                    $this->redirect($this->createUrl('/register'));
+                    $this->redirect($this->createUrl('/login'));
                 }
             } elseif ($model->status == 'active') {
                 Yii::app()->user->setFlash('failed', 'این حساب کاربری قبلا فعال شده است.');
                 $this->redirect($this->createUrl('/login'));
             } else {
                 Yii::app()->user->setFlash('failed', 'امکان فعال سازی این کاربر وجود ندارد. لطفا مجددا ثبت نام کنید.');
-                $this->redirect($this->createUrl('/register'));
+                $this->redirect($this->createUrl('/login'));
             }
         } else {
             Yii::app()->user->setFlash('failed', 'لینک فعال سازی نامعتبر می باشد.');
-            $this->redirect($this->createUrl('/register'));
+            $this->redirect($this->createUrl('/login'));
         }
     }
 
@@ -257,8 +259,8 @@ class UsersPublicController extends Controller
         $this->performAjaxValidation($model);
 
         if ($model->status == 'active') {
-            Yii::app()->theme = 'market';
-            $this->layout = '//layouts/backgroundImage';
+            Yii::app()->theme = 'frontend';
+            $this->layout = '//layouts/login';
 
             if (isset($_POST['Users'])) {
                 $model->password = $_POST['Users']['password'];
@@ -304,8 +306,8 @@ class UsersPublicController extends Controller
      */
     public function actionBookmarked()
     {
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
 
         $user = Users::model()->findByPk(Yii::app()->user->getId());
         /* @var $user Users */
@@ -320,12 +322,12 @@ class UsersPublicController extends Controller
      */
     public function actionTransactions()
     {
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
 
-        $model =new UserTransactions('search');
+        $model = new UserTransactions('search');
         $model->unsetAttributes();
-        if(isset($_GET['UserTransactions']))
+        if (isset($_GET['UserTransactions']))
             $model->attributes = $_GET['UserTransactions'];
         $model->user_id = Yii::app()->user->getId();
         //
@@ -340,34 +342,34 @@ class UsersPublicController extends Controller
      */
     public function actionLibrary()
     {
-        Yii::app()->theme='frontend';
-        $this->layout='//layouts/panel';
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
         $userID = Yii::app()->user->getId();
         $user = Users::model()->findByPk($userID);
         /* @var $user Users */
         // create downloaded model from Library for search in grid view
-        $downloadBooks =new Library('search');
+        $downloadBooks = new Library('search');
         $downloadBooks->unsetAttributes();
-        if(isset($_GET['Library']) && isset($_GET['ajax']) && $_GET['ajax']=='downloaded-list')
+        if (isset($_GET['Library']) && isset($_GET['ajax']) && $_GET['ajax'] == 'downloaded-list')
             $downloadBooks->attributes = $_GET['Library'];
         $downloadBooks->user_id = $userID;
         $downloadBooks->download_status = Library::STATUS_DOWNLOADED;
         //
         // create bought model from Library for search in grid view
-        $boughtBooks =new Library('search');
+        $boughtBooks = new Library('search');
         $boughtBooks->unsetAttributes();
-        if(isset($_GET['Library']) && isset($_GET['ajax']) && $_GET['ajax']=='bought-list')
+        if (isset($_GET['Library']) && isset($_GET['ajax']) && $_GET['ajax'] == 'bought-list')
             $boughtBooks->attributes = $_GET['Library'];
         $boughtBooks->user_id = $userID;
         $boughtBooks->download_status = Library::STATUS_DOWNLOADED_NOT;
         //
         // get my book
         $myBooks = false;
-        if($user->role_id == 2){
+        if ($user->role_id == 2) {
             $criteria = Books::model()->getValidBooks();
             $criteria->addCondition('publisher_id = :publisher_id');
             $criteria->params[':publisher_id'] = $user->id;
-            $myBooks = new CActiveDataProvider("Books",array(
+            $myBooks = new CActiveDataProvider("Books", array(
                 'criteria' => $criteria
             ));
         }
@@ -400,90 +402,90 @@ class UsersPublicController extends Controller
         $googleAuth->login($model);
     }
 
-    /**
-     * Login Action
-     */
-    public function actionLogin()
+    public function actionIndex()
     {
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/login';
+
         if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
             $this->redirect($this->createAbsoluteUrl('//'));
-        $model = new UserLoginForm;
-        // if it is ajax validation request
-        if(isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-            $errors = CActiveForm::validate($model);
-            if(CJSON::decode($errors)) {
+
+        $login = new UserLoginForm;
+        $register = new Users('create');
+
+        // Login codes
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
+            $errors = CActiveForm::validate($login);
+            if (CJSON::decode($errors)) {
                 echo $errors;
                 Yii::app()->end();
             }
         }
         // collect user input data
         if (isset($_POST['UserLoginForm'])) {
-            $model->attributes = $_POST['UserLoginForm'];
+            $login->attributes = $_POST['UserLoginForm'];
             // validate user input and redirect to the previous page if valid
-            if($model->validate() && $model->login()) {
-                if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
+            if ($login->validate() && $login->login()) {
+                if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/')
                     $redirect = Yii::app()->user->returnUrl;
                 else
                     $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
-                if(isset($_POST['ajax'])) {
-                    echo CJSON::encode(array('status' => true,'url' => $redirect));
+                if (isset($_POST['ajax'])) {
+                    echo CJSON::encode(array('status' => true, 'url' => $redirect));
                     Yii::app()->end();
                 } else
                     $this->redirect($redirect);
-            }else
-                Yii::app()->user->setFlash('login-failed', 'نام کاربری یا کلمه عبور اشتباه است.');
+            } else
+                $login->password = '';
         }
-        // display the login form
-        $this->redirect(array('/login'));
-    }
+        // End of login codes
 
-    /**
-     * Register user
-     */
-    public function actionRegister()
-    {
-        Yii::app()->theme = 'frontend';
-        $this->layout = '//layouts/login';
-        Yii::import('users.models.*');
-        $model = new Users('create');
+        // Register codes
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'register-form') {
-            echo CActiveForm::validate($model);
+            echo CActiveForm::validate($register);
             Yii::app()->end();
         }
         if (isset($_POST['Users'])) {
-            $model->attributes = $_POST['Users'];
-            $model->status = 'pending';
-            $model->create_date = time();
-//            Yii::import('users.components.*');
-            if ($model->save()) {
-                $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date);
-                $model->updateByPk($model->id, array('verification_token' => $token));
+            $register->attributes = $_POST['Users'];
+            $register->status = 'pending';
+            $register->create_date = time();
+            if ($register->save()) {
+                $token = md5($register->id . '#' . $register->password . '#' . $register->email . '#' . $register->create_date);
+                $register->updateByPk($register->id, array('verification_token' => $token));
                 $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
                 $message .= '<div style="text-align: right;font-size: 9pt;">';
                 $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '</a>';
                 $message .= '</div>';
                 $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
-                Mailer::mail($model->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
+                Mailer::mail($register->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
                 Yii::app()->user->setFlash('register-success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
-            }
-            else
+            } else
                 Yii::app()->user->setFlash('register-failed', 'متاسفانه در ثبت نام مشکلی بوجود آمده است. لطفا مجددا سعی کنید.');
         }
-        $this->redirect(array('/login'));
-    }
+        // End of register codes
 
-    public function actionIndex(){
-        Yii::app()->theme = 'frontend';
-        $this->layout = '//layouts/login';
-        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-            $this->redirect($this->createAbsoluteUrl('//'));
-        $login = new UserLoginForm;
-        $register = new Users('create');
         $this->render('index', array(
             'login' => $login,
             'register' => $register,
         ));
+    }
+
+    public function actionResendVerification()
+    {
+        $email = Yii::app()->request->getQuery('email');
+        if (!is_null($email)) {
+            $model = Users::model()->find('email = :email', array(':email' => $email));
+            $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date);
+            $model->updateByPk($model->id, array('verification_token' => $token));
+            $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
+            $message .= '<div style="text-align: right;font-size: 9pt;">';
+            $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '</a>';
+            $message .= '</div>';
+            $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
+            Mailer::mail($model->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
+            Yii::app()->user->setFlash('success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
+            $this->redirect(array('/login'));
+        } else
+            $this->redirect(array('/site'));
     }
 }

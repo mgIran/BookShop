@@ -122,6 +122,7 @@ Yii::app()->clientScript->registerScript('account-type','
                 ));?>
                 <span id="basic-addon1" class="input-group-addon">IR</span>
             </div>
+            <small class="description">شماره شبا بدون IR و هیچ گونه فاصله و خط تیره باید ثبت شود</small>
             <?php echo $form->error($userDetailsModel, 'iban');?>
         </div>
         <div class="buttons overflow-hidden">

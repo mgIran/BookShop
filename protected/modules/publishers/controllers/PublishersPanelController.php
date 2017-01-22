@@ -488,7 +488,7 @@ class PublishersPanelController extends Controller
     public function actionManageSettlement()
     {
         Yii::app()->theme = 'abound';
-        $this->layout = '//layouts/column2';
+        $this->layout = '//layouts/main';
 
         if (isset($_POST['token'])) {
             if (!isset($_POST['token']) or $_POST['token'] == '') {
@@ -508,6 +508,17 @@ class PublishersPanelController extends Controller
             if(!$iban){
                 Yii::app()->user->setFlash('failed', 'شماره شبا نمی تواند خالی باشد.');
                 $this->refresh();
+            }else {
+                if (strlen($iban) < 24 or strlen($iban) < 24) {
+                    Yii::app()->user->setFlash('failed', 'شماره شبا باید 24 کاراکتر باشد.');
+                    $this->refresh();
+                }
+                else {
+                    if (preg_match('/^\d{24}/', $iban) == 0) {
+                        Yii::app()->user->setFlash('failed', 'شماره شبا نامعتبر است.');
+                        $this->refresh();
+                    }
+                }
             }
 
             $userDetails=UserDetails::model()->findByAttributes(array('user_id'=>$_POST['user_id']));
@@ -607,7 +618,7 @@ class PublishersPanelController extends Controller
                 $family =  $settlementUser->account_owner_name;
             }
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A'.$row, "IR".$settlementUser->iban)
+                ->setCellValue('A'.$row, ' '.$settlementUser->iban)
                 ->setCellValue('B'.$row, number_format($settlementUser->getSettlementAmount()))
                 ->setCellValue('C'.$row, $name)
                 ->setCellValue('D'.$row, $family)

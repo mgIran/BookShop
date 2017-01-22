@@ -107,7 +107,7 @@ class UserDetails extends CActiveRecord
             array('commission', 'length', 'max' => 3),
             array('tax_exempt', 'length', 'max' => 1),
             array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
-            array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
+            array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement, update_real_profile, update_legal_profile'),
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
             array('monthly_settlement', 'default', 'value' => 1),
             // change-credit scenario

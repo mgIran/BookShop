@@ -135,7 +135,7 @@ return array(
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',
 				'news/<id:\d+>/<title:(.*)>'=>'news/manage/view',
-				'news/category/<id:\d+>/<title:(.*)>'=>'news/category/view',
+				'news/category/<id:\d+>/<title:(.*)>'=>'news/categoriesManage/view',
 				'news/tag/<id:\d+>/<title:(.*)>'=>'news/manage/tag',
 				'news/index'=>'news/manage/index',
 				'category/<action:\w+>'=>'bookCategories/<action>',
