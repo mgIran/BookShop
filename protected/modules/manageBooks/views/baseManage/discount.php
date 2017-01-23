@@ -15,6 +15,7 @@ $this->menu=array(
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'books-grid',
     'dataProvider'=>$model->searchDiscount(),
+    'itemsCssClass'=>'table',
     'columns'=>array(
         'book.title',
         array(

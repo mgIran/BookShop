@@ -163,18 +163,22 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                     ),
                     array(
                         'name'=>'financial_info_status',
-                        'value'=>'CHtml::dropDownList("financial_info_status", "pending", $data->detailsStatusLabels, array("class"=>"change-finance-status", "data-id"=>$data->user_id))',
+                        'value'=>function($data){
+                            $form=CHtml::dropDownList("financial_info_status", "pending", $data->detailsStatusLabels, array("class"=>"change-finance-status", "data-id"=>$data->user_id));
+                            $form.=CHtml::button("ثبت", array("class"=>"btn btn-success finance-confirm-status", 'style'=>'margin-right:5px;'));
+                            return $form;
+                        },
                         'type'=>'raw'
                     ),
                 ),
             ));?>
             <?php Yii::app()->clientScript->registerScript('changeFinanceStatus', "
-                $('body').on('change', '.change-finance-status', function(){
+                $('body').on('click', '.finance-confirm-status', function(){
                     $.ajax({
                         url:'".$this->createUrl('/users/manage/changeFinanceStatus')."',
                         type:'POST',
                         dataType:'JSON',
-                        data:{user_id:$(this).data('id'), value:$(this).val()},
+                        data:{user_id:$('.change-finance-status').data('id'), value:$('.change-finance-status').val()},
                         success:function(data){
                             if(data.status)
                                 $.fn.yiiGridView.update('newest-finance-info-grid');

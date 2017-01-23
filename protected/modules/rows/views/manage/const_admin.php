@@ -13,6 +13,7 @@ $this->breadcrumbs=array(
 	'id'=>'rows-homepage-grid',
 	'dataProvider'=>$model->search(true),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		array(

@@ -15,8 +15,7 @@
 <!--    <th class="hidden-xs">تعداد خرید</th>-->
 <!--    <th>عملیات</th>-->
 <!--    <th>تاییدیه</th>-->
-    <?php
-    $this->widget('zii.widgets.grid.CGridView', array(
+    <?php $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'books-list',
         'dataProvider' => $books->search(),
         'template' => '{pager} {items} {pager}',
@@ -75,12 +74,26 @@
             ),
             array(
                 'header' => 'نسخه کتاب',
-                'value' => '"ویرایش ".Controller::parseNumbers($data->lastPackage->version)',
+                'value' => 'is_null($data->lastPackage)?"-":"ویرایش ".Controller::parseNumbers($data->lastPackage->version)',
             ),
             array(
                 'class' => 'CButtonColumn',
                 'header'=>$this->getPageSizeDropDownTag(),
-                'template' =>'',
+                'template' =>'{update} {delete}',
+                'buttons'=>array(
+                    'update'=>array(
+                        'label'=>'',
+                        'url'=>'Yii::app()->createUrl("/publishers/books/update", array("id"=>$data->id))',
+                        'imageUrl'=>false,
+                        'options'=>array('class'=>'icon-pencil text-info')
+                    ),
+                    'delete'=>array(
+                        'label'=>'',
+                        'url'=>'Yii::app()->createUrl("/publishers/books/delete", array("id"=>$data->id))',
+                        'imageUrl'=>false,
+                        'options'=>array('class'=>'icon-trash text-danger ask-sure')
+                    ),
+                ),
             )
         )
     ));?>

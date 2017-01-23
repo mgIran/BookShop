@@ -28,6 +28,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'pages-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		array(

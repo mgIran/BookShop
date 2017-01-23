@@ -21,6 +21,7 @@ $this->menu=array(
 	'id'=>'rows-homepage-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		array(

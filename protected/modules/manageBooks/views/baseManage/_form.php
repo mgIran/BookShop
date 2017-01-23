@@ -1,5 +1,5 @@
 <?php
-/* @var $this BaseManageController */
+/* @var $this ManageBooksBaseManageController */
 /* @var $model Books */
 /* @var $form CActiveForm */
 ?>
@@ -49,8 +49,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'preview_file'); ?>
-		<?php
-		$this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+		<?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
 			'id' => 'uploaderPreview',
 			'model' => $model,
 			'name' => 'preview_file',

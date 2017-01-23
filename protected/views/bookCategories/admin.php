@@ -19,6 +19,7 @@ $this->menu=array(
 	'id'=>'book-categories-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		array(

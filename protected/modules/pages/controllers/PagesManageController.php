@@ -169,6 +169,7 @@ class PagesManageController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->layout='//layouts/main';
 		$model=new Pages('search');
         $model->unsetAttributes();  // clear any default values
         $model->category_id=$this->categoryId;

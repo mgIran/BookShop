@@ -22,6 +22,7 @@ $this->menu=array(
 	'id'=>'news-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		array(
@@ -35,11 +36,13 @@ $this->menu=array(
 		),
 		array(
 			'name' => 'create_date',
-			'value' => 'JalaliDate::date("Y/m/d - H:i",$data->create_date)'
+			'value' => 'JalaliDate::date("Y/m/d - H:i",$data->create_date)',
+            'filter'=>false
 		),
 		array(
 			'name' => 'publish_date',
-			'value' => '$data->publish_date?JalaliDate::date("Y/m/d - H:i",$data->publish_date):"-"'
+			'value' => '$data->publish_date?JalaliDate::date("Y/m/d - H:i",$data->publish_date):"-"',
+            'filter'=>false
 		),
 		'seen',
 		array(

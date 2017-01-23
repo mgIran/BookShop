@@ -18,6 +18,7 @@ $this->menu=array(
 	'id'=>'admins-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'username',
         'email',

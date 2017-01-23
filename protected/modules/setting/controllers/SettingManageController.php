@@ -17,7 +17,7 @@ class SettingManageController extends Controller
 		return array(
 			'backend' => array(
 				'changeSetting',
-                'social_links'
+                'socialLinks'
 			)
 		);
 	}

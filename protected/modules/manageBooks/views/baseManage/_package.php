@@ -6,8 +6,15 @@ Yii::app()->clientScript->registerCss('inline',"
     #uploaderFile .dropzone.single{width:100%;}
     a[href='#package-modal']{margin-top:20px;}
 ");
+
+Yii::app()->clientScript->registerScript('inline-script', "
+var checkedSalePrinted;
+$('#package-info-form #sale_printed').on('change', function(){
+    checkedSalePrinted=$(this).is(':checked');
+});
+");
 ?>
-<?php echo CHtml::beginForm('','post',array('id'=>'package-info-form'));?>
+<?php echo CHtml::beginForm('','post',array('id'=>'package-info-form', 'class'=>($dataProvider->totalItemCount==0)?'':'hidden'));?>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
@@ -86,7 +93,10 @@ Yii::app()->clientScript->registerCss('inline',"
                 'data'=>'js:$("#package-info-form").serialize()',
                 'beforeSend'=>"js:function(){
                     if($('#package-info-form #isbn').val()=='' || $('#package-info-form #print_year').val()=='' || 
-                    $('#package-info-form #printed_price').val()=='' || $('#package-info-form #price').val()==''){
+                       $('#package-info-form #price').val()==''){
+                        $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.');
+                        return false;
+                    }else if(checkedSalePrinted && $('#package-info-form #printed_price').val()==''){
                         $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.');
                         return false;
                     }else if($('input[type=\"hidden\"][name=\"pdf_file_name\"]').length==0 && $('input[type=\"hidden\"][name=\"epub_file_name\"]').length==0){
@@ -107,8 +117,8 @@ Yii::app()->clientScript->registerCss('inline',"
                         $('#package-info-form #price').val('');
                         $('#package-info-form #print_year').val('');
                         $('#package-info-form #printed_price').val('');
-                    }
-                    else
+                        $('#package-info-form').addClass('hidden');
+                    } else
                         $('.uploader-message').html(data.message);
                 }",
             ), array('class'=>'btn btn-success pull-left'));?>
@@ -116,9 +126,16 @@ Yii::app()->clientScript->registerCss('inline',"
     </div>
 <?php echo CHtml::endForm();?>
 <h5 class="uploader-message error"></h5>
+<?php echo CHtml::hiddenField('packages_count', $dataProvider->totalItemCount, array('id'=>'packages-count'));?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'packages-grid',
     'dataProvider'=>$dataProvider,
+    'afterAjaxUpdate'=>"js:function(id, data){
+        if($(data).find('#packages-count').val() != 0)
+            $('#package-info-form').addClass('hidden');
+        else
+            $('#package-info-form').removeClass('hidden');
+    }",
     'columns'=>array(
         'version',
         'isbn',

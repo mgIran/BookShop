@@ -97,6 +97,7 @@ echo CHtml::endForm();
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'settlements-grid',
     'dataProvider'=>$settlementHistory,
+    'itemsCssClass'=>'table',
     'columns'=>array(
         'date'=>array(
             'name'=>'date',

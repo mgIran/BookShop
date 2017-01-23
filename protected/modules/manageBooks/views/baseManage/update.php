@@ -28,13 +28,14 @@ if(isset($_GET['step']))
 
     <ul class="nav nav-tabs">
         <li class="<?= ($step == 1?'active':''); ?>"><a data-toggle="tab" href="#general">عمومی</a></li>
-        <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 2?'active':''); ?>"><a data-toggle="tab" href="#packages">نوبت های چاپ</a></li>
+        <li class="<?= $model->getIsNewRecord()?'disabled':''; ?> <?= ($step == 2?'active':''); ?>"><a data-toggle="tab" href="#packages">نوبت چاپ</a></li>
     </ul>
 
     <div class="tab-content">
     <div id="general" class="tab-pane fade <?= ($step == 1?'in active':''); ?>">
         <?php $this->renderPartial('_form', array(
-            'model'=>$model,'icon'=>$icon,
+            'model'=>$model,
+            'icon'=>$icon,
             'previewFile'=>$previewFile,
             'tax'=>$tax,
             'commission'=>$commission,
@@ -46,9 +47,6 @@ if(isset($_GET['step']))
         </div>
     <? endif;?>
 </div>
-
-
-
 
 <?php Yii::app()->clientScript->registerScript('changeConfirm', "
     $('body').on('change','.change-confirm', function(){
@@ -75,7 +73,7 @@ if(isset($_GET['step']))
         }
     });
     var commission_checked = false;
-    $('body').on('change', '#default_commission', function(){
+    $('body').on('change', '#default-commission', function(){
         commission_checked = $(this).is(':checked');
         $('#commission-text').prop('disabled', function(i, v) { return !v; }).val('');
     });
@@ -152,12 +150,13 @@ if(isset($_GET['step']))
                 <?php echo CHtml::hiddenField('book_id', '', array('id'=>'book-id'));?>
                 <?php echo CHtml::label('لطفا کمیسیون ناشر برای این کتاب را وارد کنید:', 'commission-text')?>
                 <?php echo CHtml::textField('publisher_commission', '', array('placeholder'=>'کمیسیون ناشر (درصد)', 'class'=>'form-control', 'id'=>'commission-text'));?>
-                <?php echo CHtml::checkBox('default_commission', false, array('style'=>'margin-top:15px;'));?>
-                <?php echo CHtml::label('کمیسیون پیش فرض در نظر گرفته شود.', 'default_commission');?>
+                <?php echo CHtml::checkBox('default_commission', false, array('style'=>'margin-top:15px;','id'=>'default-commission'));?>
+                <?php echo CHtml::label('کمیسیون پیش فرض در نظر گرفته شود.', 'default-commission');?>
                 <?php echo CHtml::endForm();?>
             </div>
             <div class="modal-footer">
                 <div class="book-modal-message error pull-right"></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
                 <button type="button" class="btn btn-success save-book-modal">ثبت</button>
             </div>
         </div>

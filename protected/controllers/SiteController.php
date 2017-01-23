@@ -211,7 +211,7 @@ class SiteController extends Controller
     public function actionTransactions()
     {
         Yii::app()->theme = 'abound';
-        $this->layout = '//layouts/column2';
+        $this->layout = '//layouts/main';
 
         $model = new UserTransactions('search');
         $model->unsetAttributes();  // clear any default values
