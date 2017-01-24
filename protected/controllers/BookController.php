@@ -315,7 +315,7 @@ class BookController extends Controller
                     <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
                     <td style="font-weight: bold;">درگاه ' . CHtml::encode($buy->transaction->gateway_name) . ' </td>
                 </tr>';
-        elseif($message == 'credit')
+        elseif($method == 'credit')
             $message.= '<tr>
                     <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
                     <td style="font-weight: bold;letter-spacing:4px">کسر از اعتبار</td>

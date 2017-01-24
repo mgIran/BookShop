@@ -17,8 +17,9 @@ $('.search-form form').submit(function(){
 ?>
 
 <h1>پشتیبانی</h1>
-
+<div class="well">
 <?php $this->renderPartial("_search",array('model' => new Tickets())); ?>
+</div>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'admins-grid',
 	'dataProvider'=>$dataProvider,
