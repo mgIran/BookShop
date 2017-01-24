@@ -65,9 +65,10 @@ $this->breadcrumbs=array(
 			'header' => 'تغییر وضعیت',
 			'value' => function($data){
 				$form=CHtml::dropDownList("confirm", $data->confirm, $data->confirmLabels, array("class"=>"change-confirm", "data-id"=>$data->id));
-				$form.=CHtml::button("ثبت", array("class"=>"btn btn-success confirm-status", 'style'=>'margin-right:5px;'));
+				$form.=CHtml::button("ثبت", array("class"=>"btn btn-sm btn-success confirm-status", 'style'=>'margin-right:5px;'));
 				return $form;
 			},
+			'htmlOptions' => ['style' => 'width:190px'],
 			'type' => 'raw'
 		),
 		array(
@@ -95,21 +96,22 @@ $this->breadcrumbs=array(
 <?php Yii::app()->clientScript->registerScript('changeConfirm', "
 	var row_id,row_val;
     $('body').on('click','.confirm-status', function(){
-    	row_id = $('.change-confirm').data('id');
-    	row_val = $('.change-confirm').val();
-        if($('.change-confirm').val()=='accepted'){
-            $('#book-id').val($('.change-confirm').data('id'));
+        var this = $(this); 
+    	row_id = this.data('id');
+    	row_val = this.val();
+        if(this.val()=='accepted'){
+            $('#book-id').val(this.data('id'));
             $('#book-modal').modal('show');
-        }else if($('.change-confirm').val()=='refused' || $('.change-confirm').val()=='change_required'){
+        }else if(this.val()=='refused' || this.val()=='change_required'){
             $('#reason-modal').modal('show');
-            $('#reason-modal input.book-id').val($('.change-confirm').data('id'));
-            $('#reason-modal input.book-status').val($('.change-confirm').val());
+            $('#reason-modal input.book-id').val(this.data('id'));
+            $('#reason-modal input.book-status').val(this.val());
         }else{
             $.ajax({
                 url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
                 type:'POST',
                 dataType:'JSON',
-                data:{book_id:$('.change-confirm').data('id'), value:$('.change-confirm').val()},
+                data:{book_id:this.data('id'), value:this.val()},
                 success:function(data){
                     if(data.status){
                         alert('اطلاعات با موفقیت ثبت شد.');
