@@ -1685,7 +1685,7 @@ ul.tagit li{
     margin-top: 25px;
 }
 .buy-label{
-    width: 80px;
+    width: 120px;
 }
 
 .btn-red {
@@ -2014,4 +2014,42 @@ tfoot {
 .table td{
     line-height: normal !important;
     vertical-align: middle !important;
+}
+.discount-codes{
+    display: block;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+}
+.discount-codes > li{
+    display: inline-block;
+    float: right;
+    margin: 2px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    background-color: #0a6aa1;
+    color: #fff;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.discount-codes > li:hover,
+.discount-codes > li:focus,
+.discount-codes > li:active{
+    background-color: #b00d00;
+}
+.discount-codes > li > a{
+    display: block;
+}
+.discount-codes > li > a > span{
+    color: #fff;
+}
+.discount-codes > li > a > span:last-child{
+    display: inline-block;
+    float: left;
+    margin: 0 10px 0 -5px;
+    color: #fff;
 }

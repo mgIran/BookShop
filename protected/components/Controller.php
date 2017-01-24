@@ -185,8 +185,19 @@ class Controller extends AuthController
                     'items' => array(
                         array('label' => 'تراکنش ها', 'url' => Yii::app()->createUrl('/site/transactions')),
                         array('label' => 'تسویه حساب', 'url' => Yii::app()->createUrl('/publishers/panel/manageSettlement')),
-                        array('label' => 'گزارش فروش', 'url' => Yii::app()->createUrl('/book/reportSales')),
                         array('label' => 'گزارش درآمد', 'url' => Yii::app()->createUrl('/book/reportIncome')),
+                    )
+                ),
+                array(
+                    'label' => 'گزارشات<span class="caret"></span>',
+                    'url' => '#',
+                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
+                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'items' => array(
+                        array('label' => 'نمودار گزارش فروش', 'url' => Yii::app()->createUrl('/book/reportSales')),
+                        array('label' => 'گزارش فروش کتاب ها', 'url' => Yii::app()->createUrl('/book/reportBookSales')),
+                        array('label' => 'گزارش افزایش اعتبار', 'url' => Yii::app()->createUrl('/users/credit/reportCreditBuys')),
+                        array('label' => 'گزارش استفاده از بن', 'url' => Yii::app()->createUrl('/users/credit/reportBonBuys')),
                     )
                 ),
                 array(
@@ -228,7 +239,7 @@ class Controller extends AuthController
                         array('label' => 'مدیریت ناشران', 'url' => Yii::app()->createUrl('/users/manage/adminPublishers')),
                         array('label' => 'مدیریت کاربران', 'url' => Yii::app()->createUrl('/users/manage')),
                         array('label' => 'مدیریت بن های خرید', 'url' => Yii::app()->createUrl('/users/bon')),
-//                        array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/users/off')),
+                        array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/admin')),
                     )
                 ),
                 array(

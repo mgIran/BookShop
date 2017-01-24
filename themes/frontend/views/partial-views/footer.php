@@ -26,7 +26,7 @@
                     <a href="<?= $this->siteAppUrls['windows'] ?>"><i class="windows-icon"></i>نسخه ویندوز</a>
                     <a href="<?= $this->siteAppUrls['android'] ?>"><i class="android-icon"></i>نسخه اندورید</a>
                 </div>
-                <div class="namad"><img src="uploads/enamad.png"></div>
+                <div class="namad"><img src="<?php echo Yii::app()->baseUrl.'/uploads/enamad.png';?>"></div>
                 <nav class="links">
                     <ul class="nav nav-justified">
                         <li><a href="<?= $this->createUrl('/publishers') ?>">ناشران</a></li>

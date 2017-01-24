@@ -40,6 +40,7 @@ return array(
 		'news',
 		'rows',
 		'places',
+		'discountCodes',
 		'comments'=>array(
 			//you may override default config for all connecting models
 			'defaultModelConfig' => array(
@@ -92,16 +93,14 @@ return array(
 		'yexcel' => array(
 			'class' => 'ext.yexcel.Yexcel'
 		),
-//		'session' => array(
-//			'class' => 'system.web.CDbHttpSession',
-//			'connectionID' => 'db',
-//			'sessionTableName' => 'session',
-//			'autoCreateSessionTable' => true,
-//			'timeout' => 1200,
-//		),
-//		'assetManager' => array(
-//			'linkAssets' => true
-//		),
+		'session' => array(
+			'class' => 'CDbHttpSession',
+			'autoStart' => false,
+			'connectionID' => 'db',
+			'sessionTableName' => 'ym_sessions',
+			'autoCreateSessionTable' => true,
+			'timeout' => 1200
+		),
 		'userCounter' => array(
 			'class' => 'application.components.UserCounter',
 			'tableUsers' => 'ym_counter_users',

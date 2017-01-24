@@ -7,7 +7,9 @@ $(function(){
             return false;
         }
     });
-    $('.selectpicker').selectpicker();
+
+    if($('.selectpicker').length && $.fn.selectpicker)
+        $('.selectpicker').selectpicker();
 
     var ajaxGridUpdateTimeout;
     $("body").on("keyup", ".ajax-grid-search", function(){

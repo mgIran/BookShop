@@ -25,6 +25,7 @@
  * @property Users $user
  * @property BookPackages $package
  * @property UserTransactions $transaction
+ * @property DiscountUsed $discountUsed
  */
 class BookBuys extends CActiveRecord
 {
@@ -38,6 +39,24 @@ class BookBuys extends CActiveRecord
     {
         return 'ym_book_buys';
     }
+
+    public $methodLabels = [
+        'credit' => 'اعتبار',
+        'gateway' => 'درگاه'
+    ];
+
+    public $publisher_id;
+    public $year_altField;
+    public $month_altField;
+    public $from_date_altField;
+    public $to_date_altField;
+    public $report_type;
+
+    public $totalPrice;
+    public $totalBasePrice;
+    public $publisherCommissionAmount;
+    public $siteAmount;
+    public $taxAmount;
 
     /**
      * @return array validation rules for model attributes.
@@ -53,9 +72,11 @@ class BookBuys extends CActiveRecord
             array('discount_code_type', 'length', 'max' => 1),
             array('publisher_commission', 'length', 'max' => 3),
             array('date', 'length', 'max' => 20),
+            array('report_type', 'filter', 'filter'=> 'strip_tags'),
+            array('report_type', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, book_id, user_id, date, method, package_id, rel_id, price', 'safe', 'on' => 'search'),
+            array('id, book_id, user_id, method, publisher_id, year_altField, month_altField, to_date_altField, from_date_altField, report_type', 'safe', 'on' => 'search'),
         );
     }
 
@@ -71,6 +92,7 @@ class BookBuys extends CActiveRecord
             'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
             'package' => array(self::BELONGS_TO, 'BookPackages', 'package_id'),
             'transaction' => array(self::BELONGS_TO, 'UserTransactions', 'rel_id'),
+            'discountUsed' => array(self::HAS_ONE, 'DiscountUsed', 'buy_id'),
         );
     }
 
@@ -116,18 +138,58 @@ class BookBuys extends CActiveRecord
 
         $criteria = new CDbCriteria;
 
+        $this->reportConditions($criteria);
+        $criteria->order='t.id DESC';
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
+        ));
+    }
+
+    /**
+     * @param $criteria
+     */
+    public function reportConditions(&$criteria)
+    {
         $criteria->compare('id', $this->id, true);
         $criteria->compare('book_id', $this->book_id, true);
         $criteria->compare('user_id', $this->user_id);
-        $criteria->compare('date', $this->date, true);
-        $criteria->compare('method', $this->method, true);
-        $criteria->compare('package_id', $this->package_id, true);
-        $criteria->compare('rel_id', $this->rel_id, true);
-        $criteria->compare('price', $this->price, true);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+        $criteria->compare('method', $this->method);
+        if($this->publisher_id){
+            $criteria->compare('book.publisher_id', $this->publisher_id, true);
+            $criteria->with = array('book');
+        }
+        if($this->report_type){
+            switch($this->report_type){
+                case 'yearly':
+                    $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->year_altField, false), 1, 1);
+                    $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
+                    $endTime = $startTime + (60 * 60 * 24 * 365);
+                    $criteria->addCondition('date >= :start_date');
+                    $criteria->addCondition('date <= :end_date');
+                    $criteria->params[':start_date'] = $startTime;
+                    $criteria->params[':end_date'] = $endTime;
+                    break;
+                case 'monthly':
+                    $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->month_altField, false), JalaliDate::date('m', $this->month_altField, false), 1);
+                    $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
+                    if(JalaliDate::date('m', $this->month_altField, false) <= 6)
+                        $endTime = $startTime + (60 * 60 * 24 * 31);
+                    else
+                        $endTime = $startTime + (60 * 60 * 24 * 30);
+                    $criteria->addCondition('date >= :start_date');
+                    $criteria->addCondition('date <= :end_date');
+                    $criteria->params[':start_date'] = $startTime;
+                    $criteria->params[':end_date'] = $endTime;
+                    break;
+                case 'by-date':
+                    $criteria->addCondition('date >= :start_date');
+                    $criteria->addCondition('date <= :end_date');
+                    $criteria->params[':start_date'] = $this->from_date_altField;
+                    $criteria->params[':end_date'] = $this->to_date_altField;
+                    break;
+            }
+        }
     }
 
     /**
@@ -139,5 +201,50 @@ class BookBuys extends CActiveRecord
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
+    }
+
+    public function getMethodLabel()
+    {
+        return $this->methodLabels[$this->method];
+    }
+
+    public function getTotalPrice(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(price) as totalPrice';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->totalPrice:0;
+    }
+    
+    public function getTotalBasePrice(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(base_price) as totalBasePrice';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->totalBasePrice:0;
+    }
+
+    public function getTotalPublisherCommission(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(publisher_commission_amount) as publisherCommissionAmount';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->publisherCommissionAmount:0;
+    }
+
+    public function getTotalSiteCommission(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(site_amount) as siteAmount';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->siteAmount:0;
+    }
+
+    public function getTotalTax(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(tax_amount) as taxAmount';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->taxAmount:0;
     }
 }

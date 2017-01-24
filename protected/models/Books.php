@@ -233,7 +233,7 @@ class Books extends CActiveRecord
 	/**
 	 * Return developer portion
 	 *
-	 * @param $price
+	 * @param $price float without discount code
 	 * @param bool|BookBuys $buy
 	 * @return float|string
 	 */
@@ -251,15 +251,10 @@ class Books extends CActiveRecord
 		// Get commission from setting
 		if(is_null($commission) or $commission == '')
 			$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
-
 		if(!$this->publisher->userDetails->tax_exempt){
 			$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
-			$tax = ($price * $tax) / 100;
-			// save tax amount in db
-			if($buy)
-				$buy->tax_amount = $tax;
-
-			$price = $price - $tax;
+            $tax = ($price * $tax) / 100;
+            $price = $price - $tax;
 		}
 		$commission_amount = ($price * $commission) / 100;
 
@@ -272,6 +267,27 @@ class Books extends CActiveRecord
 
 		return $commission_amount;
 	}
+
+    /**
+     * Return site portion
+     *
+     * @param $price float with discount code
+     * @param BookBuys $buy
+     * @return float
+     */
+	public function getSitePortion($price, &$buy)
+    {
+        Yii::app()->getModule('setting');
+        $p_a = $buy->publisher_commission_amount?$buy->publisher_commission_amount:0;
+        if(!$this->publisher || !$this->publisher->userDetails->tax_exempt){
+            $tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+            $tax = ($price * $tax) / 100;
+            $price = $price - $tax;
+            $buy->tax_amount = $tax;
+        }
+        $site_commission_amount = $price - $p_a;
+        return $site_commission_amount;
+    }
 
 	protected function afterSave()
 	{

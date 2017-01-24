@@ -4,20 +4,14 @@ class UsersCreditController extends Controller
 {
     public $layout = '//layouts/panel';
 
-    private $merchantID ='012d3926-9824-11e6-a86b-005056a205be';
-
     /**
      * @return array actions type list
      */
     public static function actionsType()
     {
         return array(
-            'frontend' => array(
-                'buy',
-                'bill',
-                'captcha',
-                'verify'
-            )
+            'frontend' => array('buy', 'bill', 'captcha', 'verify'),
+            'backend' => array('reportCreditBuys', 'reportBonBuys')
         );
     }
 
@@ -176,6 +170,38 @@ class UsersCreditController extends Controller
         $this->render('verify', array(
             'model' => $model,
             'userDetails' => $userDetails,
+        ));
+    }
+
+
+    public function actionReportCreditBuys()
+    {
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column1';
+
+        $model = new UserTransactions('search');
+        $model->unsetAttributes();
+        if(isset($_GET['UserTransactions']))
+            $model->attributes = $_GET['UserTransactions'];
+        $model->type = UserTransactions::TRANSACTION_TYPE_CREDIT;
+        $model->status = UserTransactions::TRANSACTION_STATUS_PAID;
+        
+        $this->render('report_credit_buys', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionReportBonBuys()
+    {
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column1';
+
+        $model = new UserBonRel('search');
+        $model->unsetAttributes();
+        if(isset($_GET['UserBonRel']))
+            $model->attributes = $_GET['UserBonRel'];
+        $this->render('report_bon_buys', array(
+            'model' => $model,
         ));
     }
 }

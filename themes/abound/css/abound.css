@@ -659,3 +659,19 @@ footer {
 .ltr{
     direction: ltr !important;
 }
+
+.dropdown-toggle.btn-default{
+    background-color: #fff !important;
+}
+
+.dropdown-toggle.btn-default span{
+    color: #333 !important;
+}
+.dropdown-toggle.btn-default .caret {
+    border-bottom-color: #333 !important;
+    border-top-color: #333 !important;
+}
+
+.form-inline .form-group{
+    margin-bottom: 15px !important;
+}

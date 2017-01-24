@@ -250,4 +250,41 @@ class Users extends CActiveRecord
         return Library::model()->count($criteria);
     }
 
+    /**
+     * @return integer
+     */
+    public static function getTotalUserCredits()
+    {
+        return Yii::app()->db->createCommand()
+            ->select('SUM(credit) as totalCredit')
+            ->from('{{user_details}}')
+            ->queryScalar();
+    }
+
+
+    public function getDiscountCodes()
+    {
+        $discountCodesInSession = array();
+        if (Yii::app()->user->hasState('discount-codes')) {
+            $discountCodesInSession = Yii::app()->user->getState('discount-codes');
+            $discountCodesInSession = CJSON::decode(base64_decode($discountCodesInSession));
+        }
+        return $discountCodesInSession;
+    }
+
+    public function getDiscountIds()
+    {
+        $discountCodesInSession = array();
+        if (Yii::app()->user->hasState('discount-ids')) {
+            $discountCodesInSession = Yii::app()->user->getState('discount-ids');
+            $discountCodesInSession = CJSON::decode(base64_decode($discountCodesInSession));
+        }
+        return $discountCodesInSession;
+    }
+
+    public function clearDiscountCodesStates()
+    {
+        Yii::app()->user->setState('discount-codes', null);
+        Yii::app()->user->setState('discount-ids', null);
+    }
 }

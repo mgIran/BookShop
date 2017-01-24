@@ -52,7 +52,8 @@ $this->renderPartial('//layouts/_flashMessage');
 			'filter' => $model->statusLabels
 		),
 		array(
-			'class'=>'CButtonColumn'
+			'class'=>'CButtonColumn',
+			'template' => '{view} {update}'
 		),
 	),
 )); ?>

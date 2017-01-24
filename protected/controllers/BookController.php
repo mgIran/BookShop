@@ -10,7 +10,7 @@ class BookController extends Controller
     {
         return array(
             'frontend' => array('discount' ,'tag' ,'search' ,'view' ,'download' ,'publisher' ,'buy' ,'bookmark' ,'rate' ,'verify' ,'updateVersion') ,
-            'backend' => array('reportSales' ,'reportIncome')
+            'backend' => array('reportSales' ,'reportIncome','reportBookSales')
         );
     }
 
@@ -20,7 +20,7 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + reportSales, reportIncome, buy, bookmark, rate, verify, updateVersion' ,
+            'checkAccess + reportSales, reportIncome, reportBookSales, reportCreditBuys, buy, bookmark, rate, verify, updateVersion' ,
             'postOnly + bookmark' ,
         );
     }
@@ -79,71 +79,124 @@ class BookController extends Controller
             $this->redirect(array('/library'));
         }
 
-        $price = $model->hasDiscount()?$model->offPrice:$model->price;
-        if($price === 0){
-            Library::AddToLib($model->id, $model->lastPackage->id, $userID);
-            $this->redirect(array('/book/' . $id . '/' . $title));
-        }
+        // price with publisher discount or not
+        $basePrice = $model->hasDiscount()?$model->offPrice:$model->price;
 
         $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID, 'book_id' => $id));
 
         Yii::app()->getModule('users');
         $user = Users::model()->findByPk($userID);
         /* @var $user Users */
+        $price = 0;
         if($model->publisher_id != $userID){
+
+            Yii::app()->getModule('discountCodes');
+            $price = $basePrice; // price, base price with discount code
+            $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
+            $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+            // use Discount codes
+            Yii::app()->getModule('discountCodes');
+            if (isset($_POST['DiscountCodes'])) {
+                $code = $_POST['DiscountCodes']['code'];
+                $criteria = DiscountCodes::ValidCodes();
+                $criteria->compare('code', $code);
+                $discount = DiscountCodes::model()->find($criteria);
+                /* @var $discount DiscountCodes */
+                if ($discount === NULL) {
+                    Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر موجود نیست.');
+                    $this->refresh();
+                }
+                if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times) {
+                    Yii::app()->user->setFlash('failed', 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.');
+                    $this->refresh();
+                }
+                if ($discount->user_id && $discount->user_id != $userID) {
+                    Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر نامعتبر است.');
+                    $this->refresh();
+                }
+                $used = $discount->codeUsed(array(
+                        'condition' => 'user_id = :user_id',
+                        'params' => array(':user_id' => $userID),
+                    )
+                );
+                /* @var $used DiscountUsed */
+                if ($used) {
+                    $u_date = JalaliDate::date('Y/m/d - H:i', $used->date);
+                    Yii::app()->user->setFlash('failed', "کد تخفیف مورد نظر قبلا در تاریخ {$u_date} استفاده شده است.");
+                    $this->refresh();
+                }
+                if(DiscountCodes::addDiscountCodes($discount))
+                    Yii::app()->user->setFlash('success', 'کد تخفیف با موفقیت اعمال شد.');
+                else
+                    Yii::app()->user->setFlash('failed', 'کد تخفیف در حال حاضر اعمال شده است.');
+                $this->refresh();
+            }
             if(isset($_POST['Buy'])){
-                if(isset($_POST['Buy']['credit'])){
-                    if($user->userDetails->credit < $price){
-                        Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
-                        Yii::app()->user->setFlash('failReason', 'min_credit');
-                        $this->refresh();
-                    }
+                if($price !== 0){
+                    if(isset($_POST['Buy']['credit'])){
+                        if($user->userDetails->credit < $price){
+                            Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
+                            Yii::app()->user->setFlash('failReason', 'min_credit');
+                            $this->refresh();
+                        }
 
-                    $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $userID));
-                    $userDetails->setScenario('update-credit');
-                    $userDetails->credit = $userDetails->credit - $price;
-                    $userDetails->score = $userDetails->score + 1;
-                    if($userDetails->save()){
-                        $this->saveBuyInfo($model, $price, $user, 'credit');
-                        Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
-                        Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-                        $this->redirect(array('/library'));
-                    }else
-                        Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
-                }elseif(isset($_POST['Buy']['gateway'])){
-                    // Save payment
-                    $transaction = new UserTransactions();
-                    $transaction->user_id = $userID;
-                    $transaction->amount = $price;
-                    $transaction->date = time();
-                    $transaction->gateway_name = 'زرین پال';
-                    $transaction->type = 'book';
+                        $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $userID));
+                        $userDetails->setScenario('update-credit');
+                        $userDetails->credit = $userDetails->credit - $price;
+                        $userDetails->score = $userDetails->score + 1;
+                        if($userDetails->save()){
+                            $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
+                            Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
+                            if($discountCodesInSession)
+                                DiscountCodes::InsertCodes($user, $buyId); // insert used discount code in db
+                            Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+                            $this->redirect(array('/library'));
+                        }else
+                            Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+                    }elseif(isset($_POST['Buy']['gateway'])){
+                        // Save payment
+                        $transaction = new UserTransactions();
+                        $transaction->user_id = $userID;
+                        $transaction->amount = $price;
+                        $transaction->date = time();
+                        $transaction->gateway_name = 'زرین پال';
+                        $transaction->type = 'book';
 
-                    if($transaction->save()){
-                        $gateway = new ZarinPal();
-                        $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);
-                        $siteName = Yii::app()->name;
-                        $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
-                        $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
-                        $transaction->scenario = 'set-authority';
-                        $transaction->description = $description;
-                        $transaction->authority = $result->getAuthority();
-                        $transaction->save();
-                        //Redirect to URL You can do it also by creating a form
-                        if($result->getStatus() == 100)
-                            $this->redirect($gateway->getRedirectUrl());
-                        else
-                            throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
+                        if($transaction->save()){
+                            $gateway = new ZarinPal();
+                            $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);
+                            $siteName = Yii::app()->name;
+                            $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
+                            $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+                            $transaction->scenario = 'set-authority';
+                            $transaction->description = $description;
+                            $transaction->authority = $result->getAuthority();
+                            $transaction->save();
+                            //Redirect to URL You can do it also by creating a form
+                            if($result->getStatus() == 100)
+                                $this->redirect($gateway->getRedirectUrl());
+                            else
+                                throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
+                        }
                     }
+                }else{
+                    $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
+                    Library::AddToLib($model->id, $model->lastPackage->id, $userID);
+                    if($discountCodesInSession)
+                        DiscountCodes::InsertCodes($user, $buyId); // insert used discount code in db
+                    Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+                    $this->redirect(array('/library'));
                 }
             }
             $user->refresh();
         }
         $this->render('buy', array(
             'model' => $model,
+            'basePrice' => $basePrice,
             'price' => $price,
             'user' => $user,
             'bought' => ($buy)?true:false,
+            'discountCodesInSession' => isset($discountCodesInSession)?$discountCodesInSession:false,
         ));
     }
 
@@ -161,7 +214,14 @@ class BookController extends Controller
         ));
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
+        $basePrice = $book->hasDiscount()?$book->offPrice:$book->price;
         $Amount = $model->amount; //Amount will be based on Toman
+
+        Yii::app()->getModule('discountCodes');
+        $price = $basePrice; // price, base price with discount code
+        $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
+        $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+
         $transactionResult = false;
         if ($_GET['Status'] == 'OK') {
             $gateway = new ZarinPal();
@@ -172,8 +232,10 @@ class BookController extends Controller
                 $model->token = $gateway->getRefId();
                 $model->save();
                 $transactionResult = true;
-                $this->saveBuyInfo($book ,$Amount, $user ,'gateway' ,$model->id);
+                $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj,$model->id);
                 Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
+                if($discountCodesInSession)
+                    DiscountCodes::InsertCodes($user, $buyId); // insert used discount code in db
                 Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
             } else {
                 Yii::app()->user->setFlash('failed', $gateway->getError());
@@ -182,7 +244,6 @@ class BookController extends Controller
         } else
             Yii::app()->user->setFlash('failed' ,'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
         //
-
         $this->render('verify' ,array(
             'transaction' => $model ,
             'book' => $book ,
@@ -196,20 +257,23 @@ class BookController extends Controller
      * Save buy information
      *
      * @param $book
-     * @param $price
      * @param $user
      * @param $method
+     * @param $price
+     * @param $basePrice
+     * @param $discount DiscountCodes
      * @param null $transactionID
+     * @return string
      * @throws CException
      */
-    private function saveBuyInfo($book , $price,$user ,$method ,$transactionID = null)
+    private function saveBuyInfo($book , $user ,$method, $basePrice, $price, $discount, $transactionID = null)
     {
         $book->download += 1;
         $book->setScenario('update-download');
         $book->save();
         $buy = new BookBuys();
         $buy->book_id = $book->id;
-        $buy->base_price = $book->lastPackage->price;
+        $buy->base_price = $basePrice;
         $buy->user_id = $user->id;
         $buy->package_id = $book->lastPackage->id;
         $buy->method = $method;
@@ -217,9 +281,18 @@ class BookController extends Controller
         if($method == 'gateway')
             $buy->rel_id = $transactionID;
         if($book->publisher){
-            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($price, $buy);
+            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($basePrice, $buy);
             $book->publisher->userDetails->save();
         }
+        if($discount)
+        {
+            $buy->discount_code_type = $discount->off_type;
+            if($discount->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT)
+                $buy->discount_code_amount = $discount->percent;
+            else if($discount->off_type == DiscountCodes::DISCOUNT_TYPE_AMOUNT)
+                $buy->discount_code_amount = $discount->amount;
+        }
+        $buy->site_amount = $book->getSitePortion($price, $buy);
         $buy->save();
         $message =
             '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
@@ -253,6 +326,7 @@ class BookController extends Controller
                 </tr>
             </table>';
         Mailer::mail($user->email ,'اطلاعات خرید کتاب' ,$message ,Yii::app()->params['noReplyEmail']);
+        return $buy->id;
     }
 
     /**
@@ -586,6 +660,20 @@ class BookController extends Controller
             'showChart' => $showChart ,
             'activeTab' => $activeTab ,
             'sumSales' => $sumSales ,
+        ));
+    }
+    public function actionReportBookSales()
+    {
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column1';
+
+        $model = new BookBuys('search');
+        $model->unsetAttributes();
+        if(isset($_GET['BookBuys']))
+            $model->attributes = $_GET['BookBuys'];
+
+        $this->render('report_book_sales', array(
+            'model' => $model,
         ));
     }
 
