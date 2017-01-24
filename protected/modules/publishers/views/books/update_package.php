@@ -1,5 +1,5 @@
 <?php
-/* @var $this ManageBooksBaseManageController */
+/* @var $this PublishersBooksController */
 /* @var $model BookPackages */
 /* @var $pdfPackage [] */
 /* @var $epubPackage [] */
@@ -99,7 +99,11 @@ Yii::app()->clientScript->registerCss('inline',"
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
                 <?php echo $form->labelEx($model , 'price'); ?>
-                <?php echo $form->textField($model , 'price', array('class'=>'form-control' , 'size'=>60));?>
+                <?php echo $form->textField($model , 'price', array('class'=>'form-control'.(($model->price==0)?' hidden':'') , 'size'=>60));?>
+                <div style="margin-top: 10px">
+                    <?php echo CHtml::checkBox('free', ($model->price==0)?true:false);?>
+                    <?php echo CHtml::label('رایگان', 'free');?>
+                </div>
                 <?php echo $form->error($model , 'price'); ?>
             </div>
 <!--            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group clearfix" style="margin-top: 15px;">-->
@@ -119,3 +123,18 @@ Yii::app()->clientScript->registerCss('inline',"
         </div>
     </div>
 </div>
+
+<?php Yii::app()->clientScript->registerScript('inline-script',"
+var price = null;
+$('#free').on('change', function(){
+    if($(this).is(':checked')){
+        price = $('#BookPackages_price').val();
+        $('#BookPackages_price').addClass('hidden').val(0);
+    }else{
+        if(price==0)
+            $('#BookPackages_price').val('').removeClass('hidden');
+        else
+            $('#BookPackages_price').val(price).removeClass('hidden');
+    }
+});
+");?>

@@ -517,6 +517,7 @@ class PublishersBooksController extends Controller
         if(isset($_GET['id']) && !empty($_GET['id'])){
             $id = (int)$_GET['id'];
             $model = BookPackages::model()->findByPk($id);
+            /* @var $model BookPackages */
             if($model === null || $model->book->publisher_id != Yii::app()->user->getId())
                 throw new CHttpException(404 ,'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
@@ -544,7 +545,10 @@ class PublishersBooksController extends Controller
             if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
-                $model->status = $model::STATUS_PENDING;
+
+                if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
+                    $model->price=0;
+
                 if (!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
                 if($model->save()){

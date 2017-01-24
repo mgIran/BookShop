@@ -105,7 +105,11 @@
                                         <?php echo CHtml::textField('print_year', '', array('class'=>'form-control', 'placeholder'=>'سال چاپ *'));?>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال * (تومان)'));?>
+                                        <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال (تومان)'));?>
+                                        <div style="margin-top: 10px">
+                                            <?php echo CHtml::checkBox('free', false);?>
+                                            <?php echo CHtml::label('رایگان', 'free');?>
+                                        </div>
                                     </div>
 <!--                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-top: 15px;">-->
 <!--                                        --><?php //echo CHtml::checkBox('sale_printed', false, array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
@@ -124,8 +128,11 @@
                                             'dataType'=>'JSON',
                                             'data'=>'js:$("#package-info-form").serialize()',
                                             'beforeSend'=>"js:function(){
-                                                if($('#package-info-form #isbn').val()=='' || $('#package-info-form #print_year').val()=='' || $('#package-info-form #price').val()==''){
+                                                if($('#package-info-form #isbn').val()=='' || $('#package-info-form #print_year').val()==''){
                                                     $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.').addClass('error');
+                                                    return false;
+                                                }else if($('#package-info-form #price').val()=='' && !$('#free').is(':checked')){
+                                                    $('.uploader-message').text('لطفا قیمت را مشخص کنید.').addClass('error');
                                                     return false;
                                                 }else if($('input[type=\"hidden\"][name=\"pdf_file_name\"]').length==0 && $('input[type=\"hidden\"][name=\"epub_file_name\"]').length==0){
                                                     $('.uploader-message').text('لطفا نوبت چاپ جدید را آپلود کنید.').addClass('error');
@@ -189,5 +196,20 @@ $('body').on('click', '.delete-package', function(){
         });
     }
     return false;
+});
+
+var price = null;
+$('#free').on('change', function(){
+    if($(this).is(':checked')){
+        price = $('#price').val();
+        $('#price').addClass('hidden').val(0);
+        $(this).parent().css('margin-top', 30);
+    }else{
+        if(price==0)
+            $('#price').val('').removeClass('hidden');
+        else
+            $('#price').val(price).removeClass('hidden');
+        $(this).parent().css('margin-top', 10);
+    }
 });
 ");?>
