@@ -27,8 +27,8 @@
     $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?3.2');
-    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?3.2');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css?3.3');
+    $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css?3.3');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/bootstrap-select.min.js', CClientScript::POS_END);
@@ -37,8 +37,8 @@
     $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
     $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3.2', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/panel.script.js?3.2', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3.3', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/panel.script.js?3.3', CClientScript::POS_END);
     ?>
 </head>
 <body>
