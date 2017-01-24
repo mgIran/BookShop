@@ -18,6 +18,7 @@ $this->menu=array(
 	'id'=>'advertises-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		array(
 			'name' => 'book_id',

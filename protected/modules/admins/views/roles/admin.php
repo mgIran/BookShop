@@ -18,6 +18,7 @@ $this->menu=array(
 	'id'=>'admin-roles-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'name',
         'role',

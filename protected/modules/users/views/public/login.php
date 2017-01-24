@@ -9,7 +9,6 @@
         <?php $this->renderPartial('//partial-views/_flashMessage', array('prefix' => 'login-')); ?>
         <?php $form=$this->beginWidget('CActiveForm', array(
             'id'=>'login-form',
-            'action' => array('/users/public/login'),
             'enableAjaxValidation'=>false,
             'enableClientValidation'=>true,
             'clientOptions'=>array(

@@ -30,7 +30,7 @@ if(!is_null($pdfSize)) {
             <a class="icon-pencil text-info" href="<?php echo $this->createUrl('/publishers/books/updatePackage/'.$data->id);?>"></a>
         </span>
         <span style="font-size: 16px">
-            <a class="icon-trash text-danger" href="<?php echo $this->createUrl('/publishers/books/deletePackage/'.$data->id);?>"></a>
+            <a class="icon-trash text-danger delete-package" href="<?php echo $this->createUrl('/publishers/books/deletePackage/'.$data->id);?>"></a>
         </span>
     </td>
 </tr>

@@ -42,23 +42,23 @@ class UserIdentity extends CUserIdentity
      * @param string $password
      * @param string $OAuth
      */
-    public function __construct($email, $password ,$OAuth = null)
+    public function __construct($email, $password, $OAuth = null)
     {
         $this->email = $email;
         $this->password = $password;
         $this->OAuth = $OAuth;
-        parent::__construct($email,$password);
+        parent::__construct($email, $password);
     }
 
     public function authenticate()
     {
-        if($this->OAuth)
-        {
+        if ($this->OAuth)
             $record = Users::model()->findByAttributes(array('email' => $this->email));
-        }else {
+        else {
             $bCrypt = new bCrypt;
             $record = Users::model()->findByAttributes(array('email' => $this->email));
         }
+
         if ($record === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         elseif ($record->status == 'pending')
@@ -77,7 +77,7 @@ class UserIdentity extends CUserIdentity
                 $this->setState('email', $record->email);
                 $this->setState('username', $record->username);
                 $this->setState('fa_name', $record->userDetails->fa_name);
-                $this->setState('en_name', $record->userDetails->fa_name);
+                $this->setState('en_name', $record->userDetails->en_name);
                 $this->setState('avatar', (is_null($record->userDetails->avatar) ? '' : $record->userDetails->avatar));
                 $this->setState('auth_mode', $record->auth_mode);
                 $this->errorCode = self::ERROR_NONE;
@@ -89,5 +89,10 @@ class UserIdentity extends CUserIdentity
     public function getId()
     {
         return $this->_id;
+    }
+
+    public function setId($id)
+    {
+        $this->_id = $id;
     }
 }

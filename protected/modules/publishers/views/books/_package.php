@@ -6,7 +6,7 @@
 ?>
 
 <div class="packages-list-container">
-    <a class="btn btn-success" href="#package-modal" data-toggle="modal">ثبت نوبت چاپ</a>
+    <a class="btn btn-success add-package<?php echo ($dataProvider->totalItemCount == 0)?'':' hidden';?>" href="#package-modal" data-toggle="modal">ثبت نوبت چاپ</a>
     <table class="table">
         <thead class="thead">
             <tr>
@@ -35,7 +35,6 @@
 <!--    --><?php //echo CHtml::beginForm();?>
 <!--        --><?php //echo CHtml::submitButton('ادامه', array('class'=>'btn btn-default', 'name'=>'packages-submit'));?>
 <!--    --><?php //echo CHtml::endForm();?>
-
     <div id="package-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -147,8 +146,8 @@
                                                     $('#package-info-form #price').val('');
                                                     $('#package-info-form #print_year').val('');
                                                     $('#package-info-form #printed_price').val('');
-                                                }
-                                                else
+                                                    $('.add-package').addClass('hidden');
+                                                } else
                                                     $('.uploader-message').html(data.message).addClass('error');
                                             }",
                                         ), array('class'=>'btn btn-success pull-left'));?>
@@ -168,3 +167,27 @@
 #package-info-form input[type="submit"], .uploader-message{margin-top:20px;}
 .uploader-message{line-height:32px;}
 ');?>
+<?php Yii::app()->clientScript->registerScript('inline-script', "
+$('body').on('click', '.delete-package', function(){
+    var confirmation=confirm('آیا از حذف این نسخه مطمئن هستید؟');
+    if(confirmation){
+        $.ajax({
+            url:$(this).attr('href'),
+            type:'GET',
+            dataType:'JSON',
+            success:function(data){
+                if(data.status == 'success'){
+                    $.fn.yiiListView.update('packages-list');
+                    if(data.count == 0)
+                        $('.add-package').removeClass('hidden');
+                }else
+                    alert('در انجام عملیات خطایی رخ داده است.');
+            },
+            error:function(){
+                alert('در انجام عملیات خطایی رخ داده است.');
+            }
+        });
+    }
+    return false;
+});
+");?>

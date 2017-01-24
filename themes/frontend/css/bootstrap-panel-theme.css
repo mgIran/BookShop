@@ -333,9 +333,16 @@ a:active{
     text-align: center;
 }
 .profile .profile-info h4{
-    margin: 35px 0 3px;
+    margin: 35px 0 6px;
     font-size: 17px;
     font-weight: bold;
+}
+.profile .profile-info small{
+    font-size: 11px;
+    opacity: 0.4;
+    display: block;
+    margin: 3px 0;
+    font-weight: lighter;
 }
 .profile .profile-info span{
     font-size: 13px;
@@ -1241,12 +1248,16 @@ a:active{
     border-color: #96c459;
     color: #fff;
 }
-.login-form .alert-danger{
+.login-box .alert-danger{
     background: #e74e40;
     border-color: #e74e40;
     color: #fff;
 }
-.login-form .alert-danger .errorMessage{
+.login-box .alert-danger a{
+    color: #2d3a4b;
+    font-size: 11px;
+}
+.login-box .alert-danger .errorMessage{
     color: #fff !important;
     margin: 0;
     font-size: 14px !important;
@@ -2014,6 +2025,10 @@ tfoot {
 .table td{
     line-height: normal !important;
     vertical-align: middle !important;
+}
+.table select{
+    font-size: 12px;
+    font-weight: normal;
 }
 .discount-codes{
     display: block;

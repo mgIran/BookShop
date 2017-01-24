@@ -9,6 +9,7 @@
     'id'=>'transactions-grid',
     'dataProvider'=>$model->search(),
     'filter'=>$model,
+    'itemsCssClass'=>'table',
     'columns'=>array(
         array(
             'name'=>'user_name',

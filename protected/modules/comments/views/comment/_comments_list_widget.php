@@ -68,12 +68,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
 			'buttons'=>array(
 				'delete' => array(
 					'url'=>'Yii::app()->urlManager->createUrl(CommentsModule::DELETE_ACTION_ROUTE, array("id"=>$data->comment_id))',
-					'visible' => '$data->status <> 2'
+					'visible' => '$data->status <> 2',
 				),
 				'approve' => array(
-					'label'=>Yii::t('commentsModule.msg', 'Approve'),
+					'label'=>Yii::t('commentsModule.msg', 'Approve').' | ',
 					'url'=>'Yii::app()->urlManager->createUrl(CommentsModule::APPROVE_ACTION_ROUTE, array("id"=>$data->comment_id))',
-					'options'=>array('style'=>'margin-right: 5px;'),
+                        'options'=>array('style'=>'margin-right: 5px;'),
 					'visible'=>'$data->status == 0',
 					'click'=>'function(){
 						$.post($(this).attr("href")).success(function(data){

@@ -19,6 +19,7 @@ $this->renderPartial('//layouts/_flashMessage');
 	'id'=>'user-bons-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		'code',

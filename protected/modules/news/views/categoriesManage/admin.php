@@ -19,6 +19,7 @@ $this->menu=array(
 	'dataProvider'=>$model->search(),
 	'id'=>'categories-grid',
 	'filter'=>$model,
+	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		array(

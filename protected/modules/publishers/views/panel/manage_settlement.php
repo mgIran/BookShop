@@ -46,6 +46,7 @@ echo CHtml::endForm();
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'required-settlements-grid',
     'dataProvider'=>$settlementRequiredUsers,
+    'itemsCssClass' => 'table',
     'columns'=>array(
         'fa_name'=>array(
             'name'=>'fa_name',
@@ -63,12 +64,18 @@ echo CHtml::endForm();
         'settled'=>array(
             'value'=>function($data){
                 $form=CHtml::beginForm(Yii::app()->createUrl("/publishers/panel/manageSettlement"), 'post', array('class'=>'settlement-form'));
-                $form.=CHtml::textField('iban', '', array('class'=>'form-control token','placeholder'=>'شماره شبا *'));
+                $form.=CHtml::openTag('div', array('class'=>'input-group-container'));
+                $form.=CHtml::openTag('div', array('class'=>'input-group'));
+                $form.=CHtml::textField('iban', '', array('maxlength'=>24,'class'=>'form-control iban-input','placeholder'=>'شماره شبا *','aria-describedby'=>'iban-addon'));
+                $form.=CHtml::tag('span', array('class'=>'input-group-addon', 'id'=>'iban-addon'), 'IR');
+                $form.=CHtml::closeTag('div');
+                $form.=CHtml::closeTag('div');
                 $form.=CHtml::textField('token', '', array('class'=>'form-control token','placeholder'=>'کد رهگیری *'));
                 $form.=CHtml::textField('amount', '', array('class'=>'form-control','placeholder'=>'مبلغ تسویه(تومان) *'));
                 $form.=CHtml::hiddenField('user_id', $data->user_id);
                 $form.=CHtml::submitButton('تسویه شد', array('class'=>'btn btn-success'));
                 $form.=CHtml::endForm();
+                $form.=CHtml::tag('small', array(), 'شماره شبا بدون IR و هیچ گونه فاصله و خط تیره باید ثبت شود');
                 return $form;
             },
             'type'=>'raw'
@@ -90,6 +97,7 @@ echo CHtml::endForm();
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'settlements-grid',
     'dataProvider'=>$settlementHistory,
+    'itemsCssClass'=>'table',
     'columns'=>array(
         'date'=>array(
             'name'=>'date',

@@ -467,10 +467,14 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = BookPackages::model()->findByPk($id);
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if (file_exists($uploadDir . '/' . $model->pdf_file_name))
-            if (unlink($uploadDir . '/' . $model->pdf_file_name))
+        if (file_exists($uploadDir . '/' . $model->pdf_file_name)) {
+            @unlink($uploadDir . '/' . $model->pdf_file_name);
+            if (file_exists($uploadDir . '/' . $model->epub_file_name)) {
+                @unlink($uploadDir . '/' . $model->epub_file_name);
                 if ($model->delete())
                     $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
+            }
+        }
 
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
@@ -489,7 +493,6 @@ class ManageBooksBaseManageController extends Controller
 
             $model = new BookPackages();
             $model->attributes = $_POST;
-            $model->status = 'accepted';
             $model->publish_date = time();
             if (!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;

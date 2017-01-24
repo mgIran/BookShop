@@ -9,6 +9,9 @@
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 float-none or-text">
             <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red"><i class="google-icon"></i>ورود یا ثبت نام با گوگل</a>
         </div>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 float-none">
+            <div class="row"><?php $this->renderPartial('//partial-views/_flashMessage'); ?></div>
+        </div>
     </div>
 </div>
 <div class="clearfix"></div>

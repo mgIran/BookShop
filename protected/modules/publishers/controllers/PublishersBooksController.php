@@ -248,6 +248,7 @@ class PublishersBooksController extends Controller
         $step = 1;
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
+        Yii::app()->user->returnUrl = $this->createUrl('update', array('id'=>$id));
         $model = $this->loadModel($id);
         if ($model->publisher_id != Yii::app()->user->getId()) {
             Yii::app()->user->setFlash('images-failed', 'شما اجازه دسترسی به این صفحه را ندارید.');
@@ -478,15 +479,34 @@ class PublishersBooksController extends Controller
     public function actionDeletePackage($id)
     {
         $model = BookPackages::model()->findByPk($id);
-        if($model === null || $model->book->publisher_id != Yii::app()->user->getId())
-            throw new CHttpException(404 ,'The requested page does not exist.');
+        /* @var $model BookPackages */
+        if ($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+            throw new CHttpException(404, 'The requested page does not exist.');
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if(file_exists($uploadDir . '/' . $model->file_name))
-            if(@unlink($uploadDir . '/' . $model->file_name))
-                $model->delete();
-
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        // Remove PDF & EPUB files
+        if (file_exists($uploadDir . '/' . $model->pdf_file_name)) {
+            @unlink($uploadDir . '/' . $model->pdf_file_name);
+            if (file_exists($uploadDir . '/' . $model->epub_file_name)) {
+                @unlink($uploadDir . '/' . $model->epub_file_name);
+                $bookID = $model->book_id;
+                if ($model->delete()) {
+                    $count = BookPackages::model()->count('book_id = :id', array(':id' => $bookID));
+                    echo CJSON::encode(array(
+                        'status' => 'success',
+                        'count' => $count
+                    ));
+                } else
+                    echo CJSON::encode(array(
+                        'status' => 'failed'
+                    ));
+            } else
+                echo CJSON::encode(array(
+                    'status' => 'failed'
+                ));
+        } else
+            echo CJSON::encode(array(
+                'status' => 'failed'
+            ));
     }
 
 

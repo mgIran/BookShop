@@ -97,6 +97,7 @@
             </div>
             <div class="profile-info">
                 <h4><?= $this->userDetails->getShowName(); ?></h4>
+                <small><?= $this->userDetails->user->email; ?></small>
                 <span><?= $this->userDetails->roleLabels[Yii::app()->user->roles] ?></span>
             </div>
         </div>

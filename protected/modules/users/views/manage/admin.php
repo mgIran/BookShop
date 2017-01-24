@@ -85,5 +85,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'admins-grid',
     'dataProvider'=>$model->search(),
     'filter'=>$model,
+    'itemsCssClass'=>'table',
     'columns'=>$columns
 )); ?>

@@ -1804,6 +1804,11 @@ input[type="checkbox"] + label:hover::before {
     font-size: 13px;
 }
 
+#login-modal .error a{
+    color: #818181 !important;
+    font-size: 11px;
+}
+
 .btn-red {
     padding: 13px 15px;
     background: #c8385e;

@@ -498,7 +498,7 @@ class BookController extends Controller
     public function actionReportSales()
     {
         Yii::app()->theme = 'abound';
-        $this->layout = '//layouts/column2';
+        $this->layout = '//layouts/main';
 
         $labels = $values = array();
         $showChart = false;
@@ -683,7 +683,7 @@ class BookController extends Controller
     public function actionReportIncome()
     {
         Yii::app()->theme = 'abound';
-        $this->layout = '//layouts/column2';
+        $this->layout = '//layouts/main';
 
         $labels = $values = array();
         $sumIncome = $sumCredit = 0;
