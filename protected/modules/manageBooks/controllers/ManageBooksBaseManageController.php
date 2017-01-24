@@ -37,8 +37,10 @@ class ManageBooksBaseManageController extends Controller
                 'downloadPackage',
                 'discount',
                 'createDiscount',
+                'groupDiscount',
                 'updateDiscount',
                 'deleteDiscount',
+                'deleteSelectedDiscount',
                 'uploadPreview',
                 'deleteUploadedPreview',
                 'deletePdfFile',
@@ -50,9 +52,9 @@ class ManageBooksBaseManageController extends Controller
 
     public function beforeAction($action)
     {
-        if (!is_dir(Yii::getPathOfAlias("webroot") . "/uploads/books/files/"))
+        if(!is_dir(Yii::getPathOfAlias("webroot") . "/uploads/books/files/"))
             mkdir(Yii::getPathOfAlias("webroot") . "/uploads/books/files/");
-        if (!is_dir(Yii::getPathOfAlias("webroot") . "/uploads/books/previews/"))
+        if(!is_dir(Yii::getPathOfAlias("webroot") . "/uploads/books/previews/"))
             mkdir(Yii::getPathOfAlias("webroot") . "/uploads/books/previews/");
         return true;
     }
@@ -173,22 +175,22 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = new Books();
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-        if (!is_dir($tmpDIR))
+        if(!is_dir($tmpDIR))
             mkdir($tmpDIR);
         $tmpUrl = Yii::app()->baseUrl . '/uploads/temp/';
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/icons/";
-        if (!is_dir($bookIconsDIR))
+        if(!is_dir($bookIconsDIR))
             mkdir($bookIconsDIR);
         $bookPreviewDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
-        if (!is_dir($bookPreviewDIR))
+        if(!is_dir($bookPreviewDIR))
             mkdir($bookPreviewDIR);
         $icon = array();
         $previewFile = array();
 
         $this->performAjaxValidation($model);
-        if (isset($_POST['Books']) && file_exists($tmpDIR . $_POST['Books']['icon'])) {
+        if(isset($_POST['Books']) && file_exists($tmpDIR . $_POST['Books']['icon'])){
             $model->attributes = $_POST['Books'];
-            if (isset($_POST['Books']['icon'])) {
+            if(isset($_POST['Books']['icon'])){
                 $file = $_POST['Books']['icon'];
                 $icon = array(
                     'name' => $file,
@@ -197,7 +199,7 @@ class ManageBooksBaseManageController extends Controller
                     'serverName' => $file,
                 );
             }
-            if (isset($_POST['Books']['preview_file'])) {
+            if(isset($_POST['Books']['preview_file'])){
                 $file = $_POST['Books']['preview_file'];
                 $previewFile = array(
                     'name' => $file,
@@ -207,18 +209,18 @@ class ManageBooksBaseManageController extends Controller
                 );
             }
             $model->confirm = 'accepted';
-            $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
-            $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
-            $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
-            $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
-            if ($model->save()) {
-                if ($model->icon)
+            $model->formTags = isset($_POST['Books']['formTags'])?explode(',', $_POST['Books']['formTags']):null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',', $_POST['Books']['formSeoTags']):null;
+            $model->formAuthor = isset($_POST['Books']['formAuthor'])?explode(',', $_POST['Books']['formAuthor']):null;
+            $model->formTranslator = isset($_POST['Books']['formTranslator'])?explode(',', $_POST['Books']['formTranslator']):null;
+            if($model->save()){
+                if($model->icon)
                     @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
-                if ($model->preview_file)
+                if($model->preview_file)
                     @rename($tmpDIR . $model->preview_file, $bookPreviewDIR . $model->preview_file);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect('update/' . $model->id . '/?step=2');
-            } else
+            }else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
         }
 
@@ -240,7 +242,7 @@ class ManageBooksBaseManageController extends Controller
     public function actionUpdate($id)
     {
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-        if (!is_dir($tmpDIR)) mkdir($tmpDIR);
+        if(!is_dir($tmpDIR)) mkdir($tmpDIR);
         $tmpUrl = Yii::app()->createAbsoluteUrl('/uploads/temp/');
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
         $bookPreviewDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/previews/';
@@ -254,7 +256,7 @@ class ManageBooksBaseManageController extends Controller
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
         $icon = array();
-        if ($model->icon && file_exists($bookIconsDIR . $model->icon))
+        if($model->icon && file_exists($bookIconsDIR . $model->icon))
             $icon = array(
                 'name' => $model->icon,
                 'src' => $bookIconsUrl . '/' . $model->icon,
@@ -263,7 +265,7 @@ class ManageBooksBaseManageController extends Controller
             );
 
         $previewFile = array();
-        if ($model->preview_file && file_exists($bookPreviewDIR . $model->preview_file))
+        if($model->preview_file && file_exists($bookPreviewDIR . $model->preview_file))
             $previewFile = array(
                 'name' => $model->preview_file,
                 'src' => $bookPreviewUrl . '/' . $model->preview_file,
@@ -272,9 +274,9 @@ class ManageBooksBaseManageController extends Controller
             );
 
         $images = array();
-        if ($model->images)
-            foreach ($model->images as $image)
-                if (file_exists($bookImagesDIR . $image->image))
+        if($model->images)
+            foreach($model->images as $image)
+                if(file_exists($bookImagesDIR . $image->image))
                     $images[] = array(
                         'name' => $image->image,
                         'src' => $bookImagesUrl . '/' . $image->image,
@@ -282,47 +284,47 @@ class ManageBooksBaseManageController extends Controller
                         'serverName' => $image->image,
                     );
 
-        foreach ($model->showTags as $tag)
+        foreach($model->showTags as $tag)
             array_push($model->formTags, $tag->title);
-        foreach ($model->seoTags as $tag)
+        foreach($model->seoTags as $tag)
             array_push($model->formSeoTags, $tag->title);
-        foreach ($model->persons(array('condition' => 'role_id = 1')) as $person)
+        foreach($model->persons(array('condition' => 'role_id = 1')) as $person)
             array_push($model->formAuthor, $person->name_family);
-        foreach ($model->persons(array('condition' => 'role_id = 2')) as $person)
+        foreach($model->persons(array('condition' => 'role_id = 2')) as $person)
             array_push($model->formTranslator, $person->name_family);
 
-        if (isset($_POST['Books'])) {
+        if(isset($_POST['Books'])){
             $iconFlag = false;
             $previewFileFlag = false;
             $newFileSize = $model->size;
-            if (isset($_POST['Books']['icon']) && !empty($_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon) {
+            if(isset($_POST['Books']['icon']) && !empty($_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon){
                 $file = $_POST['Books']['icon'];
                 $icon = array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,);
                 $iconFlag = true;
             }
-            if (isset($_POST['Books']['preview_file']) && !empty($_POST['Books']['preview_file']) && $_POST['Books']['preview_file'] != $model->preview_file) {
+            if(isset($_POST['Books']['preview_file']) && !empty($_POST['Books']['preview_file']) && $_POST['Books']['preview_file'] != $model->preview_file){
                 $file = $_POST['Books']['preview_file'];
                 $previewFile = array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,);
                 $previewFileFlag = true;
             }
             $model->attributes = $_POST['Books'];
 
-            if (isset($_POST['default_commission']))
+            if(isset($_POST['default_commission']))
                 $model->publisher_commission = null;
 
             $model->size = $newFileSize;
-            $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
-            $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
-            $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
-            $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
-            if ($model->save()) {
-                if ($iconFlag)
+            $model->formTags = isset($_POST['Books']['formTags'])?explode(',', $_POST['Books']['formTags']):null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',', $_POST['Books']['formSeoTags']):null;
+            $model->formAuthor = isset($_POST['Books']['formAuthor'])?explode(',', $_POST['Books']['formAuthor']):null;
+            $model->formTranslator = isset($_POST['Books']['formTranslator'])?explode(',', $_POST['Books']['formTranslator']):null;
+            if($model->save()){
+                if($iconFlag)
                     rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
-                if ($previewFileFlag)
+                if($previewFileFlag)
                     rename($tmpDIR . $model->preview_file, $bookPreviewDIR . $model->preview_file);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
                 $this->refresh();
-            } else {
+            }else{
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
         }
@@ -357,12 +359,12 @@ class ManageBooksBaseManageController extends Controller
         $model = $this->loadModel($id);
         $model->deleted = 1;
         $model->setScenario('delete');
-        if ($model->save())
+        if($model->save())
             $this->createLog('کتاب ' . $model->title . ' توسط مدیر سیستم حذف شد.', $model->publisher_id);
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        if(!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('admin'));
     }
 
     /**
@@ -384,7 +386,7 @@ class ManageBooksBaseManageController extends Controller
         $this->layout = '//layouts/column1';
         $model = new Books('search');
         $model->unsetAttributes();
-        if (isset($_GET['Books']))
+        if(isset($_GET['Books']))
             $model->attributes = $_GET['Books'];
         $this->render('admin', array(
             'model' => $model,
@@ -401,7 +403,7 @@ class ManageBooksBaseManageController extends Controller
     public function loadModel($id)
     {
         $model = Books::model()->findByPk($id);
-        if ($model === null)
+        if($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
@@ -412,7 +414,7 @@ class ManageBooksBaseManageController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'books-form') {
+        if(isset($_POST['ajax']) && $_POST['ajax'] === 'books-form'){
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
@@ -467,17 +469,17 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = BookPackages::model()->findByPk($id);
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if (file_exists($uploadDir . '/' . $model->pdf_file_name)) {
+        if(file_exists($uploadDir . '/' . $model->pdf_file_name)){
             @unlink($uploadDir . '/' . $model->pdf_file_name);
-            if (file_exists($uploadDir . '/' . $model->epub_file_name)) {
+            if(file_exists($uploadDir . '/' . $model->epub_file_name)){
                 @unlink($uploadDir . '/' . $model->epub_file_name);
-                if ($model->delete())
+                if($model->delete())
                     $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
             }
         }
 
-        if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        if(!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('admin'));
     }
 
     /**
@@ -485,31 +487,31 @@ class ManageBooksBaseManageController extends Controller
      */
     public function actionSavePackage()
     {
-        if (isset($_POST['book_id'])) {
+        if(isset($_POST['book_id'])){
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-            if (!is_dir($uploadDir))
+            if(!is_dir($uploadDir))
                 mkdir($uploadDir);
 
             $model = new BookPackages();
             $model->attributes = $_POST;
             $model->publish_date = time();
-            if (!isset($_POST['sale_printed']))
+            if(!isset($_POST['sale_printed']))
                 $model->sale_printed = 0;
-            if (!$model->printed_price || empty($model->printed_price))
+            if(!$model->printed_price || empty($model->printed_price))
                 $model->printed_price = $model->price;
-            if ($model->save()) {
+            if($model->save()){
                 $response = ['status' => true, 'pdfFileName' => $model->pdf_file_name, 'epubFileName' => $model->epub_file_name];
-                if (isset($_POST['pdf_file_name']))
+                if(isset($_POST['pdf_file_name']))
                     @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                if (isset($_POST['epub_file_name']))
+                if(isset($_POST['epub_file_name']))
                     @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-            } else {
+            }else{
                 $response = ['status' => false, 'message' => $this->implodeErrors($model)];
-                if (isset($_POST['pdf_file_name']))
+                if(isset($_POST['pdf_file_name']))
                     @unlink($tempDir . '/' . $_POST['pdf_file_name']);
 
-                if (isset($_POST['epub_file_name']))
+                if(isset($_POST['epub_file_name']))
                     @unlink($tempDir . '/' . $_POST['epub_file_name']);
             }
 
@@ -522,23 +524,23 @@ class ManageBooksBaseManageController extends Controller
     {
         $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
-        if (isset($_POST['image'])) {
+        if(isset($_POST['image'])){
             $flag = true;
-            foreach ($_POST['image'] as $image) {
-                if (file_exists($tempDir . $image)) {
+            foreach($_POST['image'] as $image){
+                if(file_exists($tempDir . $image)){
                     $model = new BookImages();
                     $model->book_id = (int)$id;
                     $model->image = $image;
                     rename($tempDir . $image, $uploadDir . $image);
-                    if (!$model->save(false))
+                    if(!$model->save(false))
                         $flag = false;
                 }
             }
-            if ($flag)
+            if($flag)
                 Yii::app()->user->setFlash('images-success', 'اطلاعات با موفقیت ثبت شد.');
             else
                 Yii::app()->user->setFlash('images-failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
-        } else
+        }else
             Yii::app()->user->setFlash('images-failed', 'تصاویر کتاب را آپلود کنید.');
         $this->redirect('update/' . $id . '/?step=3');
     }
@@ -554,7 +556,7 @@ class ManageBooksBaseManageController extends Controller
         $model = $this->loadModel($id);
         /* @var $model Books */
         $filename = $folder = null;
-        switch ($title) {
+        switch($title){
             case 'pdf':
                 $filename = $model->lastPackage->pdf_file_name;
                 $folder = 'files';
@@ -592,7 +594,7 @@ class ManageBooksBaseManageController extends Controller
         $fp = fopen($file, 'rb');
 
         $mimeType = '';
-        switch (pathinfo($fileName, PATHINFO_EXTENSION)) {
+        switch(pathinfo($fileName, PATHINFO_EXTENSION)){
             case 'pdf':
                 $mimeType = 'application/pdf';
                 break;
@@ -614,23 +616,23 @@ class ManageBooksBaseManageController extends Controller
 
     public function actionUpdatePackage()
     {
-        if (isset($_GET['id']) && isset($_GET['book_id']) && !empty($_GET['id']) && !empty($_GET['book_id'])) {
+        if(isset($_GET['id']) && isset($_GET['book_id']) && !empty($_GET['id']) && !empty($_GET['book_id'])){
             $id = (int)$_GET['id'];
             $book_id = (int)$_GET['book_id'];
             $model = BookPackages::model()->findByAttributes(array(
                 'id' => $id,
                 'book_id' => $book_id
             ));
-            if ($model === null)
+            if($model === null)
                 throw new CHttpException(404, 'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
             $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-            if (!is_dir($uploadDir))
+            if(!is_dir($uploadDir))
                 mkdir($uploadDir);
 
             $pdfPackage = $epubPackage = array();
-            if ($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
+            if($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
                 $pdfPackage = array(
                     'name' => $model->pdf_file_name,
                     'src' => $uploadUrl . '/' . $model->pdf_file_name,
@@ -638,27 +640,27 @@ class ManageBooksBaseManageController extends Controller
                     'serverName' => $model->pdf_file_name,
                 );
 
-            if ($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
+            if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
                 $epubPackage = array(
                     'name' => $model->epub_file_name,
                     'src' => $uploadUrl . '/' . $model->epub_file_name,
                     'size' => filesize($uploadDir . $model->epub_file_name),
                     'serverName' => $model->epub_file_name,
                 );
-            if (isset($_POST['BookPackages'])) {
+            if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
                 $model->status = $model::STATUS_ACCEPTED;
-                if (!isset($_POST['BookPackages']['sale_printed']))
+                if(!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
-                if ($model->save()) {
-                    if ($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                if($model->save()){
+                    if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
                         @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                    if ($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                    if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
                         @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
                     Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                     $this->redirect('update/' . $model->book_id . '/?step=2');
-                } else
+                }else
                     Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
             $this->render('update_package', array(
@@ -666,7 +668,7 @@ class ManageBooksBaseManageController extends Controller
                 'pdfPackage' => $pdfPackage,
                 'epubPackage' => $epubPackage,
             ));
-        } else
+        }else
             $this->redirect(array('/manageBooks/baseManage/admin'));
     }
 
@@ -674,10 +676,10 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = new BookDiscounts('admin_side');
 
-        if (isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form') {
+        if(isset($_GET['ajax']) && $_GET['ajax'] === 'books-discount-form'){
             $model->attributes = $_POST['BookDiscounts'];
             $errors = CActiveForm::validate($model);
-            if (CJSON::decode($errors)) {
+            if(CJSON::decode($errors)){
                 echo $errors;
                 Yii::app()->end();
             }
@@ -690,17 +692,19 @@ class ManageBooksBaseManageController extends Controller
     public function actionCreateDiscount()
     {
         $model = new BookDiscounts();
-        if (isset($_POST['BookDiscounts'])) {
+        if(Yii::app()->user->type == 'admin')
+            $model->scenario = 'admin_side';
+        if(isset($_POST['BookDiscounts'])){
             $model->attributes = $_POST['BookDiscounts'];
-            if ($model->save()) {
-                if (isset($_GET['ajax'])) {
+            if($model->save()){
+                if(isset($_GET['ajax'])){
                     echo CJSON::encode(array('status' => true, 'msg' => 'تخفیف با موفقیت اعمال شد.'));
                     Yii::app()->end();
-                } else {
+                }else{
                     Yii::app()->user->setFlash('discount-success', 'اعمال تخفیف با موفقیت اعمال شد.');
                     $this->redirect(array('discount'));
                 }
-            } else
+            }else
                 Yii::app()->user->setFlash('discount-failed', 'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
         }
         $criteria = new CDbCriteria();
@@ -714,20 +718,56 @@ class ManageBooksBaseManageController extends Controller
         $this->render('_discount_form', array('model' => $model, 'books' => $books));
     }
 
+    public function actionGroupDiscount()
+    {
+        $model = new BookDiscounts('group');
+        if(isset($_POST['BookDiscounts'])){
+            $model->attributes = $_POST['BookDiscounts'];
+            if($model->validate() && isset($_POST['group_type'])){
+                $criteria = Books::model()->getValidBooks();
+                $criteria->addCondition('lastPackage.price != 0');
+                $criteria->addCondition('title != ""');
+                $criteria->with[] = 'discount';
+                $criteria->with[] = 'lastPackage';
+                $criteria->addCondition('discount.book_id IS NULL');
+                if($_POST['group_type'] == 'publisher'){
+                    $criteria->compare('publisher_id', $_POST['publisher_id']);
+                }
+                $books = Books::model()->findAll($criteria);
+                $count = Books::model()->count($criteria);
+                $i = 0;
+                foreach($books as $book){
+                    $model = new BookDiscounts();
+                    $model->attributes = $_POST['BookDiscounts'];
+                    $model->book_id = $book->id;
+                    if($model->save())
+                        $i++;
+                }
+                if($i > 0){
+                    Yii::app()->user->setFlash('discount-success', "تخفیف بر روی {$i} کتاب از مجموع {$count} کتاب با موفقیت اعمال شد.");
+                    $this->redirect(array('discount'));
+                }
+            }
+        }
+
+        $publishers = CHtml::listData(Users::model()->getPublishers()->getData(), 'id', 'userDetails.fa_name');
+        $this->render('_group_discount_form', array('model' => $model, 'publishers' => $publishers));
+    }
+
     public function actionUpdateDiscount($id)
     {
         $model = BookDiscounts::model()->findByPk($id);
-        if (isset($_POST['BookDiscounts'])) {
+        if(isset($_POST['BookDiscounts'])){
             $model->attributes = $_POST['BookDiscounts'];
-            if ($model->save()) {
-                if (isset($_GET['ajax'])) {
+            if($model->save()){
+                if(isset($_GET['ajax'])){
                     echo CJSON::encode(array('status' => true, 'msg' => 'تخفیف با موفقیت اعمال شد.'));
                     Yii::app()->end();
-                } else {
+                }else{
                     Yii::app()->user->setFlash('discount-success', 'اعمال تخفیف با موفقیت اعمال شد.');
                     $this->redirect(array('discount'));
                 }
-            } else
+            }else
                 Yii::app()->user->setFlash('discount-failed', 'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
         }
         $this->render('_discount_form', array('model' => $model));
@@ -736,26 +776,35 @@ class ManageBooksBaseManageController extends Controller
     public function actionDeleteDiscount($id)
     {
         $model = BookDiscounts::model()->findByPk($id);
-        if ($model->book->publisher_id)
+        if($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        if($model->book->publisher_id)
             $this->createLog('تخفیف کتاب ' . $model->book->title . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
         $model->delete();
 
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        if(!isset($_GET['ajax']) && !Yii::app()->request->isAjaxRequest)
+            $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('admin'));
     }
+
+    public function actionDeleteSelectedDiscount()
+    {
+        foreach($_POST['selectedItems'] as $modelId){
+            $this->actionDeleteDiscount($modelId);
+        }
+    }
+
 
     public function actionChangePublisherCommission()
     {
         $model = Books::model()->findByPk($_POST['book_id']);
         $model->setScenario('change-publisher-commission');
 
-        if (isset($_POST['default_commission']))
+        if(isset($_POST['default_commission']))
             $model->publisher_commission = null;
         else
             $model->publisher_commission = $_POST['publisher_commission'];
 
-        if ($model->save())
+        if($model->save())
             echo CJSON::encode(array('status' => 'success'));
         else
             echo CJSON::encode(array('status' => 'failed'));

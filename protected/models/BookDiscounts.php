@@ -57,7 +57,8 @@ class BookDiscounts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('book_id, discount_type' ,'required') ,
+			array('book_id, discount_type' ,'required', 'except' => 'group') ,
+			array('discount_type' ,'required', 'on' => 'group') ,
 			array('book_id' ,'length' ,'max' => 11) ,
 			array('start_date, end_date, printed_start_date, printed_end_date' ,'length' ,'max' => 20) ,
 			array('discount_type' ,'length' ,'max' => 1) ,
@@ -175,7 +176,8 @@ class BookDiscounts extends CActiveRecord
 		);
 
 		return new CActiveDataProvider($this ,array(
-			'criteria' => $criteria
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:30)
 		));
 	}
 

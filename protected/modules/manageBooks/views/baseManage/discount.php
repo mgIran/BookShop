@@ -7,20 +7,24 @@ $this->breadcrumbs=array(
 );
 $this->menu=array(
     array('label'=>'افزودن تخفیف کتاب', 'url'=>array('createDiscount')),
+    array('label'=>'افزودن تخفیف به گروهی از کتاب ها', 'url'=>array('groupDiscount')),
 );
 ?>
 
 <h1>مدیریت کتاب ها</h1>
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<? $this->renderPartial('//layouts/_flashMessage',array('prefix' => 'discount-')); ?>
+<?php
+echo CHtml::beginForm('','post',array('id'=>'grid-delete'));
+$this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'books-grid',
     'dataProvider'=>$model->searchDiscount(),
     'itemsCssClass'=>'table',
+    'selectableRows'=>isset($_GET['pageSize'])?$_GET['pageSize']:30,
     'columns'=>array(
         'book.title',
         array(
             'name' => 'book.lastPackage.price',
-            'header' => 'قیمت آخرین نسخه دیجیتال',
+            'header' => 'قیمت اصلی',
             'value' => 'Controller::parseNumbers(number_format($data->book->lastPackage->price))." تومان"'
         ),
         array(
@@ -37,7 +41,12 @@ $this->menu=array(
             'value' => 'Controller::parseNumbers(number_format($data->book->off_printed_price))." تومان"'
         ),
         array(
+            'id'=>'selectedItems',
+            'class'=>'CCheckBoxColumn',
+        ),
+        array(
             'class'=>'CButtonColumn',
+            'header' => $this->getPageSizeDropDownTag(),
             'template' => '{update} {delete}',
             'buttons' => array(
                 'update' => array(
@@ -46,13 +55,16 @@ $this->menu=array(
                 'delete' => array(
                     'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/deleteDiscount", array("id"=>$data->id))'
                 ),
-//                'view' => array(
-//                    'url'=>'Yii::app()->createUrl("/book/".$data->id."/".urlencode($data->title))',
-//                    'options'=>array(
-//                        'target'=>'_blank'
-//                    ),
-//                )
             )
         ),
     ),
-)); ?>
+));
+echo CHtml::ajaxButton('حذف انتخاب ها',
+    $this->createUrl('deleteSelectedDiscount'),array(
+        'type'=>'POST',
+        'data' => 'js:$("#grid-delete").serialize()',
+        'success'=>'js:function(){
+            $("#books-grid").yiiGridView("update")
+        }',
+    ),array('class' => 'btn btn-success'));
+echo CHtml::endForm(); ?>

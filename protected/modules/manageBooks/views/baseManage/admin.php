@@ -1,5 +1,5 @@
 <?php
-/* @var $this BaseManageController */
+/* @var $this ManageBooksBaseManageController */
 /* @var $model Books */
 
 $this->breadcrumbs=array(
