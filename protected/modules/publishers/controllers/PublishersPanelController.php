@@ -600,31 +600,29 @@ class PublishersPanelController extends Controller
         $objPHPExcel->getActiveSheet()
             ->setCellValue('A1', 'شماره شبا')
             ->setCellValue('B1', 'مبلغ قابل تسویه (تومان)')
-            ->setCellValue('C1', 'نام صاحب حساب/نوع حساب')
-            ->setCellValue('D1', 'نام خانوادگی / نام حقوقی صاحب حساب')
+            ->setCellValue('C1', 'نام صاحب حساب / نوع حقوقی')
+            ->setCellValue('D1', 'نام خانوادگی / نام صاحب حساب حقوقی')
             ->setCellValue('E1', 'نام بانک')
             ->setCellValue('F1', 'شماره حساب')
             ->setCellValue('G1', 'نام انتشارات');
 
-        foreach ($settlementUsers as $key => $settlementUser){
-            $row = $key+2;
-            if($settlementUser->account_type == UserDetails::ACCOUNT_TYPE_REAL)
-            {
+        foreach ($settlementUsers as $key => $settlementUser) {
+            $row = $key + 2;
+            if ($settlementUser->account_type == UserDetails::ACCOUNT_TYPE_REAL) {
                 $name = $settlementUser->account_owner_name;
-                $family =  $settlementUser->account_owner_family;
-            }elseif($settlementUser->account_type == UserDetails::ACCOUNT_TYPE_LEGAL)
-            {
-                $name = $settlementUser->typeLabels[$settlementUser->account_type];
-                $family =  $settlementUser->account_owner_name;
+                $family = $settlementUser->account_owner_family;
+            } elseif ($settlementUser->account_type == UserDetails::ACCOUNT_TYPE_LEGAL) {
+                $name = $settlementUser->account_owner_family;
+                $family = $settlementUser->account_owner_name;
             }
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A'.$row, ' '.$settlementUser->iban)
-                ->setCellValue('B'.$row, number_format($settlementUser->getSettlementAmount()))
-                ->setCellValue('C'.$row, $name)
-                ->setCellValue('D'.$row, $family)
-                ->setCellValue('E'.$row, $settlementUser->bank_name)
-                ->setCellValue('F'.$row, '"'.$settlementUser->account_number.'"')
-                ->setCellValue('G'.$row, $settlementUser->publication_name);
+                ->setCellValue('A' . $row, $settlementUser->iban.' ')
+                ->setCellValue('B' . $row, $settlementUser->getSettlementAmount().' ')
+                ->setCellValue('C' . $row, $name)
+                ->setCellValue('D' . $row, $family)
+                ->setCellValue('E' . $row, $settlementUser->bank_name)
+                ->setCellValue('F' . $row, $settlementUser->account_number.' ')
+                ->setCellValue('G' . $row, $settlementUser->publication_name);
         }
         // Save a xls file
         $filename = 'Settlement Publishers';

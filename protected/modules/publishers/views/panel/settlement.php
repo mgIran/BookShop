@@ -6,15 +6,15 @@
 /* @var $settlementHistory CActiveDataProvider */
 /* @var $formDisabled boolean */
 Yii::app()->clientScript->registerScript('account-type','
-    if($(\'#UserDetails_account_type\').val() == \'legal\')
-        $("#account_owner_family").fadeOut();
+    if($("#UserDetails_account_type").val() == "legal")
+        $("#account_owner_family > label").text("نوع حقوقی");
     else
-        $("#account_owner_family").fadeIn();
-    $(\'body\').on(\'change\', \'#UserDetails_account_type\', function () {
-        if($(this).val() == \'legal\')
-            $("#account_owner_family").fadeOut();
+        $("#account_owner_family > label").text("نام خانوادگی صاحب حساب");
+    $("body").on("change", "#UserDetails_account_type", function () {
+        if($(this).val() == "legal")
+            $("#account_owner_family > label").text("نوع حقوقی");
         else
-            $("#account_owner_family").fadeIn();
+            $("#account_owner_family > label").text("نام خانوادگی صاحب حساب");
     });
 ', CClientScript::POS_READY);
 ?>

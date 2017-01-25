@@ -154,7 +154,10 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
                         'value' => '$data->typeLabels[$data->account_type]',
                     ),
                     'account_owner_name',
-                    'account_owner_family',
+                    array(
+                        'name'=>'account_owner_family',
+                        'header'=>'نام خانوادگی صاحب حساب / نوع حقوقی',
+                    ),
                     'account_number',
                     'bank_name',
                     array(
