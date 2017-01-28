@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
     'کاربران'=>array('index'),
-    'جلسات کاری فعال',
+    'دستگاه های متصل',
 );
 
 $this->menu = array(
@@ -13,7 +13,7 @@ $this->menu = array(
 );
 ?>
 
-<h3>نمایش جلسات کاری فعال
+<h3>نمایش دستگاه های متصل
     "<?php echo $model->user->userDetails->fa_name && !empty($model->user->userDetails->fa_name)?$model->user->userDetails->fa_name:$model->user->email; ?>
     "</h3>
 <? $this->renderPartial('//layouts/_flashMessage') ?>

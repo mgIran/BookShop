@@ -13,9 +13,10 @@ $this->menu=array(
 );
 $buttons = array(
     'session' => array(
-        'label' => 'جلسات کاری فعال',
-        'htmlOptions' => array(
-            'class' => 'icon icon-bars'
+        'label' => 'دستگاه های متصل',
+        'options' => array(
+            'class' => 'btn btn-sm btn-warning',
+            'style' => 'margin-bottom:5px'
         ),
         'url' => 'Yii::app()->createUrl("/users/manage/sessions/".$data->id)'
     )
@@ -58,9 +59,10 @@ if($role == 2){
             'url' => 'Yii::app()->createUrl("/publishers/panel/update",array("id" => $data->id))'
         ),
         'session' => array(
-            'label' => 'جلسات کاری فعال',
-            'htmlOptions' => array(
-                'class' => 'icon icon-bars'
+            'label' => 'دستگاه های متصل',
+            'options' => array(
+                'class' => 'btn btn-sm btn-warning',
+                'style' => 'margin-bottom:5px'
             ),
             'url' => 'Yii::app()->createUrl("/users/manage/sessions/".$data->id)'
         )
@@ -93,7 +95,7 @@ if($role == 2){
             'filter' => false
         ),
         array(
-            'header' => 'دستگاه فعال',
+            'header' => 'دستگاه های متصل',
             'value' => 'Controller::parseNumbers(number_format($data->getSessionsCount()))',
             'htmlOptions' => array(
                 'style' => 'width:10px'
