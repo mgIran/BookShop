@@ -91,9 +91,13 @@ $this->menu = array(
         <?php echo $form->error($model , 'print_year'); ?>
     </div>
     <div class="row">
-        <?php echo $form->labelEx($model , 'price'); ?>
-        <?php echo $form->textField($model , 'price', array('class'=>'form-control' , 'size'=>60));?>
+        <?php echo $form->labelEx($model , 'price', array('class'=>$model->price==0?'hidden':'')); ?>
+        <?php echo $form->textField($model , 'price', array('class'=>'form-control'.($model->price==0?' hidden':'') , 'size'=>60));?>
         <?php echo $form->error($model , 'price'); ?>
+    </div>
+    <div class="row clearfix" style="margin-top: 15px;">
+        <?php echo CHtml::checkBox('free', $model->price==0?true:false);?>
+        <?php echo CHtml::label('رایگان', 'free');?>
     </div>
     <div class="row clearfix" style="margin-top: 15px;">
         <?php echo $form->checkBox($model,'sale_printed', array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
@@ -109,3 +113,20 @@ $this->menu = array(
         <?php echo CHtml::submitButton('ویرایش',array('class' => 'btn btn-success')); ?>
     </div>
 <?php $this->endWidget();
+
+Yii::app()->clientScript->registerScript('free-price', "
+var price = null;
+$('#free').on('change', function(){
+    if($(this).is(':checked')){
+        price = $('#BookPackages_price').val();
+        $('#BookPackages_price').addClass('hidden').val('0');
+        $('#BookPackages_price').parent().find('label').addClass('hidden');
+    }else{
+        if(price==0)
+            $('#BookPackages_price').val('').removeClass('hidden');
+        else
+            $('#BookPackages_price').val(price).removeClass('hidden');
+        $('#BookPackages_price').parent().find('label').removeClass('hidden');
+    }
+});
+");

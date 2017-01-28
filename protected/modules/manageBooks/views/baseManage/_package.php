@@ -74,7 +74,11 @@ $('#package-info-form #sale_printed').on('change', function(){
             <?php echo CHtml::textField('print_year', '', array('class'=>'form-control', 'placeholder'=>'سال چاپ *'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال * (تومان)'));?>
+            <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال (تومان)'));?>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clearfix" style="margin-top: 15px;">
+            <?php echo CHtml::checkBox('free', false);?>
+            <?php echo CHtml::label('رایگان', 'free');?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clearfix" style="margin-top: 15px;">
             <?php echo CHtml::checkBox('sale_printed', false, array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
@@ -92,9 +96,11 @@ $('#package-info-form #sale_printed').on('change', function(){
                 'dataType'=>'JSON',
                 'data'=>'js:$("#package-info-form").serialize()',
                 'beforeSend'=>"js:function(){
-                    if($('#package-info-form #isbn').val()=='' || $('#package-info-form #print_year').val()=='' || 
-                       $('#package-info-form #price').val()==''){
+                    if($('#package-info-form #isbn').val()=='' || $('#package-info-form #print_year').val()==''){
                         $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.');
+                        return false;
+                    }else if($('#package-info-form #price').val()=='' && !$('#free').is(':checked')){
+                        $('.uploader-message').text('لطفا قیمت را مشخص کنید.').addClass('error');
                         return false;
                     }else if(checkedSalePrinted && $('#package-info-form #printed_price').val()==''){
                         $('.uploader-message').text('لطفا فیلد های ستاره دار را پر کنید.');
@@ -130,6 +136,7 @@ $('#package-info-form #sale_printed').on('change', function(){
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'packages-grid',
     'dataProvider'=>$dataProvider,
+    'itemsCssClass'=>'table',
     'afterAjaxUpdate'=>"js:function(id, data){
         if($(data).find('#packages-count').val() != 0)
             $('#package-info-form').addClass('hidden');
@@ -141,12 +148,12 @@ $('#package-info-form #sale_printed').on('change', function(){
         'isbn',
         array(
             'name' => 'price',
-            'value' => 'Controller::parseNumbers(number_format($data->price))." تومان"',
+            'value' => '$data->price==0?"رایگان":(Controller::parseNumbers(number_format($data->price))." تومان")',
             'filter' => false
         ),
         array(
             'name' => 'printed_price',
-            'value' => 'Controller::parseNumbers(number_format($data->printed_price))." تومان"',
+            'value' => '$data->printed_price==0?"رایگان":(Controller::parseNumbers(number_format($data->printed_price))." تومان")',
             'filter' => false
         ),
         array(
@@ -167,4 +174,20 @@ $('#package-info-form #sale_printed').on('change', function(){
 <?php Yii::app()->clientScript->registerCss('package-form','
 #package-info-form input[type="text"]{margin-top:20px;}
 #package-info-form input[type="submit"]{margin-top:20px;}
-');?>
+');
+
+Yii::app()->clientScript->registerScript('free-price', "
+var price = null;
+$('#free').on('change', function(){
+    if($(this).is(':checked')){
+        price = $('#price').val();
+        $('#price').addClass('hidden').val('0');
+    }else{
+        if(price==0)
+            $('#price').val('').removeClass('hidden');
+        else
+            $('#price').val(price).removeClass('hidden');
+    }
+});
+");
+?>

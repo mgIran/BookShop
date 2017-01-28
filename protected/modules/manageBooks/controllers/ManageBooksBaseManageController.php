@@ -623,6 +623,7 @@ class ManageBooksBaseManageController extends Controller
                 'id' => $id,
                 'book_id' => $book_id
             ));
+            /* @var $model BookPackages */
             if($model === null)
                 throw new CHttpException(404, 'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
@@ -650,7 +651,10 @@ class ManageBooksBaseManageController extends Controller
             if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
-                $model->status = $model::STATUS_ACCEPTED;
+
+                if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
+                    $model->price=0;
+
                 if(!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
                 if($model->save()){
