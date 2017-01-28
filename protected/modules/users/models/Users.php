@@ -109,6 +109,7 @@ class Users extends CActiveRecord
             'role' => array(self::BELONGS_TO, 'UserRoles', 'role_id'),
             'bookmarkedBooks' => array(self::MANY_MANY, 'Books', '{{user_book_bookmark}}(user_id, book_id)'),
             'bookRate' => array(self::BELONGS_TO, 'BookRatings', 'id'),
+            'sessions' => array(self::HAS_MANY, 'Sessions', 'user_id', 'on' => 'user_type = "user"'),
         );
     }
 
@@ -286,5 +287,15 @@ class Users extends CActiveRecord
     {
         Yii::app()->user->setState('discount-codes', null);
         Yii::app()->user->setState('discount-ids', null);
+    }
+
+    public function getSessionsCount($id=false){
+        if($id)
+            $this->id = $id;
+        return Yii::app()->db->createCommand()
+            ->select('COUNT(id)')
+            ->from('{{sessions}}')
+            ->where("user_type = 'user' AND user_id = {$this->id}")
+            ->queryScalar();
     }
 }

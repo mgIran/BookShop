@@ -50,18 +50,7 @@ Yii::app()->clientScript->registerCss('gen','
 ?>
 
 <div class="form">
-	<?php if(Yii::app()->user->hasFlash("success")): ?>
-        <div class="alert alert-success">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            <?=Yii::app()->user->getFlash("success"); ?>
-        </div>
-    <?php endif; ?>
-    <?php if(Yii::app()->user->hasFlash("failed")): ?>
-        <div class="alert alert-error">
-            <button data-dismiss="alert" class="close" type="button">×</button>
-            <?=Yii::app()->user->getFlash("failed"); ?>
-        </div>
-    <?php endif; ?>
+	<?php $this->renderPartial('//layouts/_flashMessage') ?>
 
 
 <?php $form=$this->beginWidget('CActiveForm', array(

@@ -21,6 +21,7 @@ $this->menu=array(
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
     'selectableRows'=>20,
+    'itemsCssClass'=>'table',
 	'columns'=>array(
 		'title',
 		'code',

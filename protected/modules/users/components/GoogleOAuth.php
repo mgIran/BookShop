@@ -89,8 +89,7 @@ class GoogleOAuth extends CComponent
             $url = "https://www.googleapis.com/oauth2/v4/token";
             $result = $this->google_request(1, $url, $header, $data);
             if (!empty($result['error'])) { // If error login
-                var_dump($result['error']);
-                exit;
+                throw new CHttpException(500, $result['error']);
             } else
                 Yii::app()->user->setState("gp_access_token", $result['access_token']);
         }

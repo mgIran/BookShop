@@ -22,6 +22,8 @@ class UsersPublicController extends Controller
                 'transactions',
                 'library',
                 'index',
+                'sessions',
+                'removeSession',
                 'ResendVerification',
             )
         );
@@ -33,7 +35,7 @@ class UsersPublicController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + dashboard, logout, setting, notifications, bookmarked, downloaded, transactions, library',
+            'checkAccess + dashboard, logout, setting, notifications, bookmarked, downloaded, transactions, library, sessions, removeSession',
         );
     }
 
@@ -42,7 +44,7 @@ class UsersPublicController extends Controller
      */
     public function actionLogout()
     {
-        Yii::app()->user->logout(false);
+        Yii::app()->user->logout();
         $this->redirect(array('/login'));
     }
 
@@ -487,5 +489,33 @@ class UsersPublicController extends Controller
             $this->redirect(array('/login'));
         } else
             $this->redirect(array('/site'));
+    }
+
+    /**
+     * Show User Sessions
+     */
+    public function actionSessions()
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+        $model =new Sessions('search');
+        $model->unsetAttributes();
+        if(isset($_GET['Sessions']))
+            $model->attributes = $_GET['Sessions'];
+        $model->user_type = "user";
+        $model->user_id = Yii::app()->user->getId();
+        //
+
+        $this->render('view_sessions', array(
+            'model' => $model
+        ));
+    }
+
+    public function actionRemoveSession($id)
+    {
+        $model = Sessions::model()->findByPk($id);
+        if($model !== null)
+            $model->delete();
+        $this->redirect(array('/users/public/sessions'));
     }
 }

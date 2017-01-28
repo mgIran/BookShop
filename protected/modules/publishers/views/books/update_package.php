@@ -24,7 +24,6 @@ Yii::app()->clientScript->registerCss('inline',"
         <div class="form">
         <?php $form=$this->beginWidget('CActiveForm', array(
             'id'=>'book-packages-form',
-            'enableAjaxValidation'=>true,
             'enableClientValidation'=>true,
             'clientOptions' => array(
                 'validateOnSubmit' => true

@@ -618,7 +618,7 @@ class PublishersPanelController extends Controller
                 $family =  $settlementUser->account_owner_name;
             }
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A'.$row, ' '.$settlementUser->iban)
+                ->setCellValue('A'.$row, $settlementUser->iban)
                 ->setCellValue('B'.$row, number_format($settlementUser->getSettlementAmount()))
                 ->setCellValue('C'.$row, $name)
                 ->setCellValue('D'.$row, $family)

@@ -232,8 +232,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'ناشر',
             'value' => function($data){
                 return $data->book->publisher && $data->book->publisher->userDetails->fa_name?$data->book->publisher->userDetails->fa_name:$data->book->publisher_name;
-            },
-            'footer'=>'<h5 class="text-center"><strong>مجموع</strong></h5>',
+            }
         ),
         array(
             'header' => 'نام کتاب',

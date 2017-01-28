@@ -41,6 +41,15 @@ return array(
 		'rows',
 		'places',
 		'discountCodes',
+		'festivals',
+        'shop' => array(
+            'debug' => true,
+//            'loginUrl' => array('/user/auth'),
+//            'currencySymbol' => 'IRR',
+//            'termsView' => array('/myprojectspecific_controller/terms'),
+//            'successView' => array('/myprojectspecific_controller/success'),
+//            'failureView' => array('/myprojectspecific_controller/failure'),
+        ),
 		'comments'=>array(
 			//you may override default config for all connecting models
 			'defaultModelConfig' => array(
@@ -99,7 +108,7 @@ return array(
 			'connectionID' => 'db',
 			'sessionTableName' => 'ym_sessions',
 			'autoCreateSessionTable' => true,
-			'timeout' => 1200
+			'timeout' => 3600*24*30
 		),
 		'userCounter' => array(
 			'class' => 'application.components.UserCounter',
@@ -113,6 +122,7 @@ return array(
 			'allowAutoLogin'=>true,
 			'class' => 'WebUser',
 			'loginUrl'=>array('/login'),
+			'allowActiveSessions'=>2,
 		),
 		'authManager'=>array(
 			'class'=>'CDbAuthManager',

@@ -18,6 +18,8 @@ class UsersManageController extends Controller
             'backend' => array(
                 'index',
                 'view',
+                'sessions',
+                'removeSession',
                 'create',
                 'update',
                 'admin',
@@ -373,6 +375,33 @@ class UsersManageController extends Controller
         $this->render('user_transactions', array(
             'model' => $model
         ));
+    }
+
+    /**
+     * Show User Sessions
+     *
+     * @param $id
+     */
+    public function actionSessions($id)
+    {
+        $model =new Sessions('search');
+        $model->unsetAttributes();
+        if(isset($_GET['Sessions']))
+            $model->attributes = $_GET['Sessions'];
+        $model->user_type = "user";
+        $model->user_id = $id;
+        //
+
+        $this->render('view_sessions', array(
+            'model' => $model
+        ));
+    }
+
+    public function actionRemoveSession($id)
+    {
+        $model = Sessions::model()->findByPk($id);
+        if($model !== null)
+            $model->delete();
     }
 
     /**

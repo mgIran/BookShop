@@ -16,7 +16,6 @@ $this->menu = array(
 <h1>ویرایش </h1>
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'book-packages-form',
-    'enableAjaxValidation'=>true,
     'enableClientValidation'=>true,
     'clientOptions' => array(
         'validateOnSubmit' => true

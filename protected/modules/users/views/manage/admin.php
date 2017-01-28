@@ -11,7 +11,15 @@ $this->breadcrumbs=array(
 $this->menu=array(
     array('label'=>'افزودن', 'url'=>array($role==1?'create':'/publishers/panel/create')),
 );
-$buttons = array();
+$buttons = array(
+    'session' => array(
+        'label' => 'جلسات کاری فعال',
+        'htmlOptions' => array(
+            'class' => 'icon icon-bars'
+        ),
+        'url' => 'Yii::app()->createUrl("/users/manage/sessions/".$data->id)'
+    )
+);
 $columns = array(
     'email',
     array(
@@ -30,8 +38,16 @@ $columns = array(
         'filter' => false
     ),
     array(
+        'header' => 'دستگاه فعال',
+        'value' => 'Controller::parseNumbers(number_format($data->getSessionsCount()))',
+        'htmlOptions' => array(
+            'style' => 'width:10px'
+        ),
+        'filter' => false
+    ),
+    array(
         'class'=>'CButtonColumn',
-        'template' => '{view}{update}{delete}',
+        'template' => '{session} {view}{update}{delete}',
         'buttons' => $buttons
     ),
 );
@@ -40,6 +56,13 @@ if($role == 2){
     $buttons = array(
         'update' => array(
             'url' => 'Yii::app()->createUrl("/publishers/panel/update",array("id" => $data->id))'
+        ),
+        'session' => array(
+            'label' => 'جلسات کاری فعال',
+            'htmlOptions' => array(
+                'class' => 'icon icon-bars'
+            ),
+            'url' => 'Yii::app()->createUrl("/users/manage/sessions/".$data->id)'
         )
     );
     $columns = array(
@@ -70,8 +93,16 @@ if($role == 2){
             'filter' => false
         ),
         array(
+            'header' => 'دستگاه فعال',
+            'value' => 'Controller::parseNumbers(number_format($data->getSessionsCount()))',
+            'htmlOptions' => array(
+                'style' => 'width:10px'
+            ),
+            'filter' => false
+        ),
+        array(
             'class' => 'CButtonColumn',
-            'template' => '{view}{update}{delete}',
+            'template' => '{session} {view}{update}{delete}',
             'buttons' => $buttons
         ),
     );

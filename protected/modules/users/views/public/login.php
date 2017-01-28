@@ -57,3 +57,10 @@
     <!--    <p>تازه وارد هستید؟ <a href="--><?//= Yii::app()->createUrl('/register') ?><!--" class="register-link">ثبت نام کنید</a></p>-->
     </div>
 </div>
+
+<?php
+Yii::app()->clientScript->registerScript('clear-inputs', '
+    setTimeout(function(){
+        $(".form-control").val("");
+    }, 100);
+',CClientScript::POS_LOAD);

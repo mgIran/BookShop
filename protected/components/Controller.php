@@ -212,15 +212,6 @@ class Controller extends AuthController
                     )
                 ),
                 array(
-                    'label' => 'صفحات متنی<span class="caret"></span>',
-                    'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
-                    'items' => array(
-                        array('label' => 'صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
-                    )
-                ),
-                array(
                     'label' => 'مدیران <span class="caret"></span>',
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"), 'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
@@ -254,8 +245,10 @@ class Controller extends AuthController
                     'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
                     'items' => array(
                         array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
+                        array('label' => 'صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
                         array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
                         array('label' => 'مدیریت تگ ها', 'url' => Yii::app()->createUrl('/tags/admin')),
+                        array('label' => 'مدیریت طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/admin')),
                         array('label' => 'تغییر کلمه عبور', 'url' => Yii::app()->createUrl('/admins/manage/changePass')),
                     )
                 ),

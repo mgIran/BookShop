@@ -75,7 +75,7 @@ class AdminsLoginController extends Controller
      * Action Logout
      */
     public function actionLogout() {
-        Yii::app()->user->logout(false);
+        Yii::app()->user->logout();
         $this->redirect(array('/admins/login'));
     }
 }

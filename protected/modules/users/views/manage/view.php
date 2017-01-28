@@ -20,6 +20,7 @@ if($model->role_id == 2)
 		array('label'=>'مدیرت کاربران', 'url'=>array($model->role_id == 2?'adminPublishers':'admin')),
 		array('label'=>'نمایش کتابخانه کاربر', 'url'=>array("userLibrary",'id'=>$model->id)),
 		array('label'=>'نمایش تراکنش های کاربر', 'url'=>array("userTransactions",'id'=>$model->id)),
+		array('label'=>'نمایش جلسات کاری فعال کاربر', 'url'=>array("sessions",'id'=>$model->id)),
 		array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
 		array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
 		array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id, 'view-page' => true)),
@@ -52,6 +53,7 @@ else
 	$this->menu=array(
 		array('label'=>'مدیرت کاربران', 'url'=>array($model->role_id == 2?'adminPublishers':'admin')),
 		array('label'=>'نمایش کتابخانه کاربر', 'url'=>array("userLibrary",'id'=>$model->id)),
+		array('label'=>'نمایش جلسات کاری فعال کاربر', 'url'=>array("sessions",'id'=>$model->id)),
 		array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
 		array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
 		array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id, 'view-page' => true)),

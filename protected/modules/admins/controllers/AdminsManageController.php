@@ -21,6 +21,8 @@ class AdminsManageController extends Controller
 				'create',
 				'update',
 				'admin',
+				'sessions',
+				'removeSession',
 				'changePass',
 				'delete'
 			)
@@ -170,7 +172,31 @@ class AdminsManageController extends Controller
 			'model'=>$model,
 		));
 	}
+	/**
+	 * Show Admin Sessions
+	 */
+	public function actionSessions()
+	{
+		$model =new Sessions('search');
+		$model->unsetAttributes();
+		if(isset($_GET['Sessions']))
+			$model->attributes = $_GET['Sessions'];
+		$model->user_type = "admin";
+		$model->user_id = Yii::app()->user->getId();
+		//
 
+		$this->render('view_sessions', array(
+			'model' => $model
+		));
+	}
+
+    public function actionRemoveSession($id)
+    {
+        $model = Sessions::model()->findByPk($id);
+        if($model !== null)
+            $model->delete();
+    }
+    
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

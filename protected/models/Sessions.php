@@ -1,33 +1,30 @@
 <?php
 
 /**
- * This is the model class for table "{{users_addresses}}".
+ * This is the model class for table "{{sessions}}".
  *
- * The followings are the available columns in table '{{users_addresses}}':
+ * The followings are the available columns in table '{{sessions}}':
  * @property string $id
+ * @property integer $expire
+ * @property string $data
  * @property string $user_id
- * @property string $transferee
- * @property string $emergency_tel
- * @property string $landline_tel
- * @property string $town_id
- * @property string $place_id
- * @property string $district
- * @property string $postal_address
- * @property string $postal_code
+ * @property string $user_type
+ * @property string $device_platform
+ * @property string $device_ip
+ * @property string $device_type
  *
  * The followings are the available model relations:
  * @property Users $user
- * @property Towns $town
- * @property Places $place
+ * @property Admins $admin
  */
-class UserAddresses extends CActiveRecord
+class Sessions extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return '{{users_addresses}}';
+		return '{{sessions}}';
 	}
 
 	/**
@@ -38,15 +35,17 @@ class UserAddresses extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, transferee, emergency_tel, landline_tel, town_id, place_id, postal_address, postal_code', 'required'),
-			array('user_id, town_id, place_id, postal_code', 'length', 'max'=>10),
-			array('transferee', 'length', 'max'=>255),
-			array('emergency_tel', 'length', 'max'=>11),
-			array('landline_tel', 'length', 'max'=>15),
-			array('district', 'length', 'max'=>50),
+			array('id', 'required'),
+			array('expire', 'numerical', 'integerOnly'=>true),
+			array('id', 'length', 'max'=>32),
+			array('user_id', 'length', 'max'=>10),
+			array('user_type, device_platform', 'length', 'max'=>20),
+			array('device_ip', 'length', 'max'=>15),
+			array('device_type', 'length', 'max'=>255),
+			array('data', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, transferee, emergency_tel, landline_tel, town_id, place_id, district, postal_address, postal_code', 'safe', 'on'=>'search'),
+			array('id, expire, data, user_id, user_type, device_platform, device_ip, device_type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,8 +58,7 @@ class UserAddresses extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'town' => array(self::BELONGS_TO, 'Towns', 'town_id'),
-			'place' => array(self::BELONGS_TO, 'Places', 'place_id'),
+			'admin' => array(self::BELONGS_TO, 'Admins', 'user_id')
 		);
 	}
 
@@ -71,15 +69,13 @@ class UserAddresses extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'user_id' => 'User',
-			'transferee' => 'Transferee',
-			'emergency_tel' => 'Emergency Tel',
-			'landline_tel' => 'Landline Tel',
-			'town_id' => 'Town',
-			'place_id' => 'Place',
-			'district' => 'District',
-			'postal_address' => 'Postal Address',
-			'postal_code' => 'Postal Code',
+			'expire' => 'تاریخ انقضا',
+			'data' => 'اطلاعات',
+			'user_id' => 'شناسه کاربر',
+			'user_type' => 'نوع کاربر',
+			'device_platform' => 'پلتفرم دستگاه',
+			'device_ip' => 'آی پی دستگاه',
+			'device_type' => 'نوع دستگاه',
 		);
 	}
 
@@ -102,15 +98,15 @@ class UserAddresses extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('expire',$this->expire);
+		$criteria->compare('data',$this->data,true);
 		$criteria->compare('user_id',$this->user_id,true);
-		$criteria->compare('transferee',$this->transferee,true);
-		$criteria->compare('emergency_tel',$this->emergency_tel,true);
-		$criteria->compare('landline_tel',$this->landline_tel,true);
-		$criteria->compare('town_id',$this->town_id,true);
-		$criteria->compare('place_id',$this->place_id,true);
-		$criteria->compare('district',$this->district,true);
-		$criteria->compare('postal_address',$this->postal_address,true);
-		$criteria->compare('postal_code',$this->postal_code,true);
+		$criteria->compare('user_type',$this->user_type,true);
+		$criteria->compare('device_platform',$this->device_platform,true);
+		$criteria->compare('device_ip',$this->device_ip,true);
+		$criteria->compare('device_type',$this->device_type,true);
+        $session_id=session_id();
+        $criteria->order = "case when id = '{$session_id}' then 1 else 2 end";
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -121,7 +117,7 @@ class UserAddresses extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return UserAddresses the static model class
+	 * @return Sessions the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -1014,6 +1014,15 @@ a:active{
     vertical-align: middle;
     margin-left: 15px;
 }
+.session-icon{
+    background: url("../svg/devices.svg") no-repeat center;
+    background-size: 15px;
+    width: 15px;
+    height:15px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+}
 .discount-icon{
     background: url("../svg/discount.svg") no-repeat center;
     background-size: 15px;
