@@ -162,7 +162,7 @@ class UsersCreditController extends Controller
                 // calculate festival gifts
                 Yii::app()->getModule('festivals');
                 $result = Festivals::CheckFestivals(Yii::app()->user->getId(), Festivals::FESTIVAL_TYPE_CREDIT, $model->amount);
-                $gift = $result['gift'];
+                $gift = (float)$result['gift'];
                 if($gift)
                     $userDetails->credit += $gift;
                 if($userDetails->save())

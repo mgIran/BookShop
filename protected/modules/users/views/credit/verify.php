@@ -23,7 +23,7 @@
             ?>
             <p>
                 <?php echo CHtml::label('هدیه دریافتی:','');?>
-                <?php echo Controller::parseNumbers(number_format($model->amount)).' تومان';?>
+                <?php echo Controller::parseNumbers(number_format($gift)).' تومان';?>
             </p>
             <?php
             endif;

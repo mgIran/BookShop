@@ -189,7 +189,7 @@ class Festivals extends CActiveRecord
                 continue;
             if($record->gift_type == self::FESTIVAL_GIFT_TYPE_AMOUNT)
             {
-                $GiftSum+=$record->gift_amount;
+                $GiftSum+=(double)$record->gift_amount;
                 $ids[] = $record->id;
             }
             elseif($record->gift_type == self::FESTIVAL_GIFT_TYPE_PERCENT)
