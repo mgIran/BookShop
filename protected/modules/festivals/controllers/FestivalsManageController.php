@@ -109,6 +109,7 @@ class FestivalsManageController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		Festivals::DeleteExpires();
 		$model=new Festivals('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Festivals']))

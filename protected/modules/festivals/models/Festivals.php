@@ -49,7 +49,7 @@ class Festivals extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('title, start_date, end_date, type, gift_type', 'required'),
+            array('start_date, end_date, type, gift_type', 'required'),
             array('title, start_date, end_date', 'length', 'max' => 50),
             array('start_date, end_date', 'length', 'max' => 20),
             array('limit_times, range, gift_amount', 'length', 'max' => 10),
@@ -83,7 +83,7 @@ class Festivals extends CActiveRecord
             'end_date' => 'تاریخ پایان',
             'limit_times' => 'محدودیت استفاده',
             'type' => 'نوع طرح',
-            'range' => 'مقدار شرط',
+            'range' => 'اعتبار خریداری شده',
             'gift_type' => 'نوع هدیه',
             'gift_amount' => 'میزان هدیه',
             'disposable' => 'یکبار مصرف',
@@ -142,7 +142,7 @@ class Festivals extends CActiveRecord
     public static function ValidCodes()
     {
         $criteria = new CDbCriteria();
-        $criteria->addCondition('start_date <= :time AND expire_date >= :time');
+        $criteria->addCondition('start_date <= :time AND end_date >= :time');
         $criteria->params[':time'] = time();
         return $criteria;
     }
@@ -152,7 +152,7 @@ class Festivals extends CActiveRecord
      */
     public function usedCount()
     {
-        return FestivalUsed::model()->count('discount_id = :id', array(':id' => $this->id));
+        return FestivalUsed::model()->count('festival_id = :id', array(':id' => $this->id));
     }
 
     /**
@@ -162,6 +162,50 @@ class Festivals extends CActiveRecord
     public function userUsedStatus($userID)
     {
         return FestivalUsed::model()->count('festival_id = :id AND user_id = :user_id', array(':id' => $this->id, ':user_id' => $userID));
+    }
+
+    /**
+     * Check Festivals and return gift amounts
+     *
+     * @param $user_id
+     * @param $type
+     * @param $range
+     * @return array of gift amount and used festival ids
+     */
+    public static function CheckFestivals($user_id, $type, $range){
+        $criteria = self::ValidCodes();
+        $criteria->compare('t.type', $type);
+        $criteria->compare('t.range', (double)$range);
+        $records = Festivals::model()->findAll($criteria);
+        $GiftSum = 0;
+        $ids = [];
+        foreach($records as $record)
+        {
+            // check festival disposable or not
+            if($record->disposable && $record->userUsedStatus($user_id))
+                continue;
+            // check expire limitation user times or not
+            if($record->limit_times && $record->usedCount() >= $record->limit_times)
+                continue;
+            if($record->gift_type == self::FESTIVAL_GIFT_TYPE_AMOUNT)
+            {
+                $GiftSum+=$record->gift_amount;
+                $ids[] = $record->id;
+            }
+            elseif($record->gift_type == self::FESTIVAL_GIFT_TYPE_PERCENT)
+            {
+                $GiftSum+= (double)$range * ((double)$record->gift_amount/100);
+                $ids[] = $record->id;
+            }
+        }
+        return ['gift' => $GiftSum, 'ids' => $ids];
+    }
+
+    public static function DeleteExpires(){
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('end_date < :time');
+        $criteria->params[':time'] = time();
+        @Festivals::model()->deleteAll($criteria);
     }
 
     /**
@@ -177,9 +221,9 @@ class Festivals extends CActiveRecord
     {
         $model = new FestivalUsed();
         $model->festival_id = $festival_id;
-        $model->festival_id = $user_id;
-        $model->festival_id = $transaction_id;
-        $model->festival_id = $book_id;
+        $model->user_id = $user_id;
+        $model->transaction_id = $transaction_id;
+        $model->book_id = $book_id;
         return @$model->save();
     }
 }

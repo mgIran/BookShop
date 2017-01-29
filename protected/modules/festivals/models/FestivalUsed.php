@@ -33,9 +33,10 @@ class FestivalUsed extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('festival_id, user_id, transaction_id, book_id', 'required'),
+			array('festival_id, user_id', 'required'),
 			array('festival_id, user_id, transaction_id, book_id', 'length', 'max'=>10),
 			array('date', 'length', 'max'=>20),
+			array('date', 'default', 'value'=>time()),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, festival_id, user_id, transaction_id, book_id, date', 'safe', 'on'=>'search'),

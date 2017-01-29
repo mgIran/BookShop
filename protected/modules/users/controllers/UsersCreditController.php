@@ -159,7 +159,15 @@ class UsersCreditController extends Controller
                 $model->save();
                 $userDetails->setScenario('update-credit');
                 $userDetails->credit = doubleval($userDetails->credit) + doubleval($model->amount);
-                $userDetails->save();
+                $result = Festivals::CheckFestivals(Yii::app()->user->getId(), Festivals::FESTIVAL_TYPE_CREDIT, $model->amount);
+                $gift = $result['gift'];
+                if($gift)
+                    $userDetails->credit += $gift;
+                if($userDetails->save())
+                {
+                    foreach($result['ids'] as $id)
+                        Festivals::ApplyUsed($id, Yii::app()->user->getId(), $model->id);
+                }
                 Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
             } else {
                 Yii::app()->user->setFlash('failed', $gateway->getError());
@@ -170,6 +178,7 @@ class UsersCreditController extends Controller
         $this->render('verify', array(
             'model' => $model,
             'userDetails' => $userDetails,
+            'gift' => isset($gift)?$gift:false,
         ));
     }
 

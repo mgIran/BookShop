@@ -2,6 +2,7 @@
 /* @var $this CreditController */
 /* @var $model UserTransactions */
 /* @var $userDetails UserDetails */
+/* @var $gift string */
 ?>
 
 <div class="white-form">
@@ -15,11 +16,21 @@
         <div class="panel-body">
             <p>
                 <?php echo CHtml::label('مبلغ پرداخت شده:','');?>
-                <?php echo number_format($model->amount, 0).' تومان';?>
+                <?php echo Controller::parseNumbers(number_format($model->amount)).' تومان';?>
             </p>
+            <?php
+            if($gift):
+            ?>
+            <p>
+                <?php echo CHtml::label('هدیه دریافتی:','');?>
+                <?php echo Controller::parseNumbers(number_format($model->amount)).' تومان';?>
+            </p>
+            <?php
+            endif;
+            ?>
             <p>
                 <?php echo CHtml::label('اعتبار فعلی شما:','');?>
-                <?php echo number_format($userDetails->credit, 0).' تومان';?>
+                <?php echo Controller::parseNumbers(number_format($userDetails->credit)).' تومان';?>
             </p>
             <p>
                 <?php echo CHtml::label('کد رهگیری تراکنش:','');?>
