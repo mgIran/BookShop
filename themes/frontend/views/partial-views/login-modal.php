@@ -30,7 +30,9 @@
                                 }'
                             )
                         ));
-                        echo CHtml::hiddenField('ajax','login-form'); ?>
+                        echo CHtml::hiddenField('ajax','login-form');
+                        echo CHtml::hiddenField('returnUrl',$this->route);
+                        ?>
                         <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center" ></p></div>
                         <div class="form-group">
                             <?php echo $formL->emailField($loginModel,'email' ,array(

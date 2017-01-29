@@ -159,6 +159,8 @@ class UsersCreditController extends Controller
                 $model->save();
                 $userDetails->setScenario('update-credit');
                 $userDetails->credit = doubleval($userDetails->credit) + doubleval($model->amount);
+                // calculate festival gifts
+                Yii::app()->getModule('festivals');
                 $result = Festivals::CheckFestivals(Yii::app()->user->getId(), Festivals::FESTIVAL_TYPE_CREDIT, $model->amount);
                 $gift = $result['gift'];
                 if($gift)

@@ -426,6 +426,8 @@ class UsersPublicController extends Controller
         // collect user input data
         if (isset($_POST['UserLoginForm'])) {
             $login->attributes = $_POST['UserLoginForm'];
+            if(isset($_POST['returnUrl']))
+                Yii::app()->user->returnUrl = $_POST['returnUrl'];
             // validate user input and redirect to the previous page if valid
             if ($login->validate() && $login->login()) {
                 if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/')

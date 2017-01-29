@@ -138,6 +138,14 @@ $(function() {
         });
     }
 
+    $body.on("click", "[data-toggle='modal']", function () {
+        var $this = $(this),
+            $url = $this.data("return-url"),
+            $target = $this.data("target");
+        if($target == '#login-modal')
+            $("#login-modal").find("#returnUrl").val($url);
+    });
+
     //paralax
     var $window = $(window);
     $('.paralax .content').each(function () {

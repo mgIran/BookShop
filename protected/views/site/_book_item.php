@@ -84,7 +84,7 @@ if(!isset($buy))
                 endif;
             else:
             ?>
-                <a href="#" data-target="#login-modal" data-toggle="modal" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                <a href="#" data-target="#login-modal" data-toggle="modal" class="btn btn-add-to-library" role="button" data-return-url="<?= $this->createUrl('/book/buy', array('id'=>$data->id, 'title'=>$data->title)); ?>" ><i class="icon"></i>افزودن به کتابخانه</a>
             <?
             endif;
             ?>
