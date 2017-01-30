@@ -2098,6 +2098,9 @@ tfoot {
     padding-right: 10px;
 }
 
+.thumbnail.small .caption .stars .icon.quarter1,
+.thumbnail.small .caption .stars .icon.quarter3,
+.thumbnail.small .caption .stars .icon.half,
 .search-suggest-box .search-entries .thumbnail-container .stars .icon.quarter1,
 .search-suggest-box .search-entries .thumbnail-container .stars .icon.quarter3,
 .search-suggest-box .search-entries .thumbnail-container .stars .icon.half{
