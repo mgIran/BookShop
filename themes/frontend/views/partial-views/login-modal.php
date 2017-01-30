@@ -112,7 +112,7 @@
                 </div>
                 <div class="divider"></div>
                 <p class="text-center">می توانید با حساب کاربری گوگل وارد شوید یا ثبت نام کنید...</p>
-                <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red"><i class="google-icon"></i>ورود یا ثبت نام با گوگل</a>
+                <a href="<?= $this->createUrl('/googleLogin') ?>" class="btn-red" id="google-login-btn"><i class="google-icon"></i>ورود یا ثبت نام با گوگل</a>
             </div>
         </div>
     </div>

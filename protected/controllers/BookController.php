@@ -742,59 +742,172 @@ class BookController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         // book criteria
-        $criteria = new CDbCriteria();
-        $criteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
-        $criteria->params[':status'] = 'enable';
-        $criteria->params[':confirm'] = 'accepted';
-        $criteria->params[':deleted'] = 0;
-        $criteria->order = 't.confirm_date DESC';
+        $bookCriteria =  new CDbCriteria();
+        $publisherCriteria =  new CDbCriteria();
+        $personsCriteria =  new CDbCriteria();
+        $categoryCriteria =  new CDbCriteria();
+
+        $bookCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+        $bookCriteria->params[':status'] = 'enable';
+        $bookCriteria->params[':confirm'] = 'accepted';
+        $bookCriteria->params[':deleted'] = 0;
+        $bookCriteria->order = 't.confirm_date DESC';
+
+        $publisherCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+        $publisherCriteria->params[':status'] = 'enable';
+        $publisherCriteria->params[':confirm'] = 'accepted';
+        $publisherCriteria->params[':deleted'] = 0;
+        $publisherCriteria->order = 't.confirm_date DESC';
+
+        $personsCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+        $personsCriteria->params[':status'] = 'enable';
+        $personsCriteria->params[':confirm'] = 'accepted';
+        $personsCriteria->params[':deleted'] = 0;
+        $personsCriteria->order = 't.confirm_date DESC';
+
+        $categoryCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+        $categoryCriteria->params[':status'] = 'enable';
+        $categoryCriteria->params[':confirm'] = 'accepted';
+        $categoryCriteria->params[':deleted'] = 0;
+        $categoryCriteria->order = 't.confirm_date DESC';
+
         if(isset($_GET['term']) && !empty($term = $_GET['term'])){
             $terms = explode(' ' ,urldecode($term));
-            $sql = null;
+            $bookSql = '(t.title regexp :term OR t.description regexp :term)';
+            $publisherSql = '(userDetails.fa_name regexp :term)';
+            $personsSql = '(persons.name_family regexp :term)';
+            $categorySql = '(category.title regexp :term)';
+            $bookCriteria->params[":term"] = $term;
+            $publisherCriteria->params[":term"] = $term;
+            $personsCriteria->params[":term"] = $term;
+            $categoryCriteria->params[":term"] = $term;
             foreach($terms as $key => $term)
                 if($term){
-                    if(!$sql)
-                        $sql = "(";
-                    else
-                        $sql .= " OR (";
-                    $sql .= "t.title regexp :term$key OR t.description regexp :term$key OR t.publisher_name regexp :term$key OR userDetails.publisher_id regexp :term$key OR userDetails.fa_name regexp :term$key OR category.title regexp :term$key OR persons.name_family regexp :term$key)";
+                    if($bookSql)
+                        $bookSql .= " OR (";
+                    $bookSql .= "t.title regexp :term$key OR t.description regexp :term$key)";
+
+                    if($publisherSql)
+                        $publisherSql .= " OR (";
+                    $publisherSql .= "userDetails.fa_name regexp :term$key)";
+
+                    if($personsSql)
+                        $personsSql .= " OR (";
+                    $personsSql .= "persons.name_family regexp :term$key)";
+
+                    if($categorySql)
+                        $categorySql .= " OR (";
+                    $categorySql .= "category.title regexp :term$key)";
                     // with correction
                     //$sql .= "t.title sounds like :term$key OR t.description sounds like :term$key OR t.publisher_name sounds like :term$key OR userDetails.publisher_id sounds like :term$key OR userDetails.fa_name sounds like :term$key OR category.title sounds like :term$key OR persons.name_family sounds like :term$key)";
-                    $criteria->params[":term$key"] = $term;
+                    $bookCriteria->params[":term$key"] = $term;
+                    $publisherCriteria->params[":term$key"] = $term;
+                    $personsCriteria->params[":term$key"] = $term;
+                    $categoryCriteria->params[":term$key"] = $term;
                 }
-            $criteria->together = true;
-            $criteria->with[] = 'category';
-            $criteria->with[] = 'persons';
-            $criteria->with[] = 'publisher';
-            $criteria->with[] = 'publisher.userDetails';
-            $criteria->addCondition($sql);
+            $bookCriteria->together = true;
+            $publisherCriteria->together = true;
+            $personsCriteria->together = true;
+            $categoryCriteria->together = true;
+
+            $bookCriteria->addCondition($bookSql);
+
+            $publisherCriteria->addCondition($publisherSql);
+            $publisherCriteria->with = array('publisher.userDetails');
+
+            $personsCriteria->addCondition($personsSql);
+            $personsCriteria->with = array('persons');
+
+            $categoryCriteria->addCondition($categorySql);
+            $categoryCriteria->with = array('category');
         }
         $pagination = new CPagination();
         $pagination->pageSize = 8;
         if(Yii::app()->request->isAjaxRequest){
-            $criteria->limit = 6;
-            $pagination->pageSize = 6;
+            $bookCriteria->limit = 4;
+            $publisherCriteria->limit = 4;
+            $personsCriteria->limit = 4;
+            $categoryCriteria->limit = 4;
+            $pagination->pageSize = 4;
         }
-        $dataProvider = new CActiveDataProvider('Books' ,array(
-            'criteria' => $criteria ,
+        $bookDataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $bookCriteria ,
+            'pagination' => $pagination
+        ));
+        $publisherDataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $publisherCriteria,
+            'pagination' => $pagination
+        ));
+        $personsDataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $personsCriteria,
+            'pagination' => $pagination
+        ));
+        $categoryDataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $categoryCriteria,
             'pagination' => $pagination
         ));
         if(Yii::app()->request->isAjaxRequest){
-            $this->beginClip('book-list');
-            $this->widget('zii.widgets.CListView' ,array(
-                'id' => 'search-book-list' ,
-                'dataProvider' => $dataProvider ,
-                'itemView' => '//site/_search_book_item' ,
-                'template' => '{items}' ,
-            ));
-            $this->endClip();
-            $response['html'] = $this->clips['book-list'];
+            $response['html'] = '';
+            if($bookDataProvider->totalItemCount){
+                $this->beginClip('book-list');
+                echo '<div class="result-group">کتاب ها</div>';
+                $this->widget('zii.widgets.CListView', array(
+                    'id' => 'search-book-list',
+                    'dataProvider' => $bookDataProvider,
+                    'itemView' => '//site/_search_book_item',
+                    'template' => '{items}',
+                ));
+                $this->endClip();
+                $response['html'] .= $this->clips['book-list'];
+            }
+            if($publisherDataProvider->totalItemCount){
+                $this->beginClip('publisher-list');
+                echo '<div class="result-group">انتشارات</div>';
+                $this->widget('zii.widgets.CListView', array(
+                    'id' => 'search-book-list',
+                    'dataProvider' => $publisherDataProvider,
+                    'itemView' => '//site/_search_book_item',
+                    'template' => '{items}',
+                ));
+                $this->endClip();
+                $response['html'] .= $this->clips['publisher-list'];
+            }
+            if($personsDataProvider->totalItemCount){
+                $this->beginClip('persons-list');
+                echo '<div class="result-group">اشخاص و نویسندگان</div>';
+                $this->widget('zii.widgets.CListView', array(
+                    'id' => 'search-book-list',
+                    'dataProvider' => $personsDataProvider,
+                    'itemView' => '//site/_search_book_item',
+                    'template' => '{items}',
+                ));
+                $this->endClip();
+                $response['html'] .= $this->clips['persons-list'];
+            }
+            if($categoryDataProvider->totalItemCount){
+                $this->beginClip('category-list');
+                echo '<div class="result-group">دسته بندی ها</div>';
+                $this->widget('zii.widgets.CListView', array(
+                    'id' => 'search-book-list',
+                    'dataProvider' => $categoryDataProvider,
+                    'itemView' => '//site/_search_book_item',
+                    'template' => '{items}',
+                ));
+                $this->endClip();
+                $response['html'] .= $this->clips['category-list'];
+            }
+
+            if($response['html'] == '')
+                $response['html'] = 'نتیجه ای یافت نشد.';
             $response['status'] = true;
             echo CJSON::encode($response);
             Yii::app()->end();
         }else
             $this->render('search' ,array(
-                'dataProvider' => $dataProvider
+                'bookDataProvider' => $bookDataProvider,
+                'publisherDataProvider' => $publisherDataProvider,
+                'personsDataProvider' => $personsDataProvider,
+                'categoryDataProvider' => $categoryDataProvider,
             ));
     }
 

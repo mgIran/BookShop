@@ -429,14 +429,12 @@ class Controller extends AuthController
         for($i = 1;$i <= $rateInteger;$i++){
             $html .= $starFull;
         }
-//        var_dump($rateHalf);exit;
         if($rateHalf){
             $rateQ3 = ($rate - $rateInteger) >= 0.75?true:false;
             if($rateQ3)
                 $html .= $starQ3;
             else
                 $html .= $starHalf;
-            $html .= $starHalf;
             $index = $rateInteger + 1;
         }else
         {

@@ -31,8 +31,7 @@
                 <?
                 if(Yii::app()->user->isGuest ||  Yii::app()->user->type == 'admin'):
                     ?>
-                    <li><a href="<?= $this->createUrl('/register') ?>">ثبت نام</a></li>
-                    <li><a href="#login-modal" data-toggle="modal">ورود</a></li>
+                    <li><a href="#login-modal" data-toggle="modal">ثبت نام / ورود</a></li>
                     <?
                 elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
                     // @todo after user login change login and register buttons

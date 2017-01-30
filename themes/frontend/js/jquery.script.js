@@ -143,7 +143,10 @@ $(function() {
             $url = $this.data("return-url"),
             $target = $this.data("target");
         if($target == '#login-modal')
+        {
             $("#login-modal").find("#returnUrl").val($url);
+            $("#login-modal").find("#google-login-btn").attr('href', baseUrl+"/googleLogin?return-url="+$url);
+        }
     });
 
     //paralax

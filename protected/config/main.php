@@ -137,8 +137,8 @@ return array(
 			'appendParams'=>true,
 			'rules'=>array(
 				'<action:(about|contactus|help|publishers)>' => 'site/<action>',
-				'login' => 'users/public/index',
-				'<action:(logout|register|dashboard|googleLogin|library|transactions|downloaded)>' => 'users/public/<action>',
+				'<action:(register|login)>' => 'users/public/index',
+				'<action:(logout|dashboard|googleLogin|library|transactions|downloaded)>' => 'users/public/<action>',
 				'/help'=>'site/help',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',

@@ -399,6 +399,8 @@ class UsersPublicController extends Controller
 
     public function actionGoogleLogin()
     {
+        if(isset($_GET['return-url']))
+            Yii::app()->user->returnUrl = $_GET['return-url'];
         $googleAuth = new GoogleOAuth();
         $model = new UserLoginForm('OAuth');
         $googleAuth->login($model);
@@ -462,9 +464,19 @@ class UsersPublicController extends Controller
                 $message .= '</div>';
                 $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
                 Mailer::mail($register->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
-                Yii::app()->user->setFlash('register-success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
+                if (isset($_POST['ajax'])) {
+                    echo CJSON::encode(array('status' => true, 'msg' => 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.'));
+                    Yii::app()->end();
+                }else
+                    Yii::app()->user->setFlash('register-success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
             } else
-                Yii::app()->user->setFlash('register-failed', 'متاسفانه در ثبت نام مشکلی بوجود آمده است. لطفا مجددا سعی کنید.');
+            {
+                if (isset($_POST['ajax'])) {
+                    echo CJSON::encode(array('status' => false, 'msg' => 'متاسفانه در ثبت نام مشکلی بوجود آمده است. لطفا مجددا سعی کنید.'));
+                    Yii::app()->end();
+                }else
+                    Yii::app()->user->setFlash('register-failed', 'متاسفانه در ثبت نام مشکلی بوجود آمده است. لطفا مجددا سعی کنید.');
+            }
         }
         // End of register codes
 

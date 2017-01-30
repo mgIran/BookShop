@@ -40,7 +40,7 @@
  * @property BookPackages[] $packages
  * @property BookDiscounts $discount
  * @property Advertises $bookAdvertises
- * @property BookPersons $persons
+ * @property BookPersons[] $persons
  * @property Comment[] $comments
  * @property Tags[] $showTags
  * @property Tags[] $seoTags
