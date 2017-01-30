@@ -593,6 +593,21 @@ a:active{
     float: right;
 }
 
+.stars .icon.half{
+    background: url("../svg/star-half.svg") no-repeat center;
+    background-size: 15.7px;
+    margin-top: -1px;
+}
+.stars .icon.quarter1{
+    background: url("../svg/star-quarter-1.svg") no-repeat center;
+    background-size: 15.7px;
+    margin-top: -1px;
+}
+.stars .icon.quarter3{
+    background: url("../svg/star-quarter-3.svg") no-repeat center;
+    background-size: 15.7px;
+    margin-top: -1px;
+}
 .stars .icon.off {
     opacity: 0.3;
 }
@@ -2104,5 +2119,6 @@ tfoot {
 .search-suggest-box .search-entries .thumbnail-container .stars .icon.quarter1,
 .search-suggest-box .search-entries .thumbnail-container .stars .icon.quarter3,
 .search-suggest-box .search-entries .thumbnail-container .stars .icon.half{
-    background-size: 11.75px !important;
+    background-size: 12.15px !important;
+    margin-top: 0;
 }

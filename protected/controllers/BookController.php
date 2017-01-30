@@ -318,7 +318,7 @@ class BookController extends Controller
         elseif($method == 'credit')
             $message.= '<tr>
                     <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
-                    <td style="font-weight: bold;letter-spacing:4px">کسر از اعتبار</td>
+                    <td style="font-weight: bold;">کسر از اعتبار</td>
                 </tr>';
         $message.= '<tr>
                     <td style="font-weight: bold;width: 120px;">تاریخ</td>
@@ -822,7 +822,7 @@ class BookController extends Controller
             $categoryCriteria->with = array('category');
         }
         $pagination = new CPagination();
-        $pagination->pageSize = 8;
+        $pagination->pageSize = 4;
         if(Yii::app()->request->isAjaxRequest){
             $bookCriteria->limit = 4;
             $publisherCriteria->limit = 4;
@@ -846,7 +846,7 @@ class BookController extends Controller
             'criteria' => $categoryCriteria,
             'pagination' => $pagination
         ));
-        if(Yii::app()->request->isAjaxRequest){
+        if(Yii::app()->request->isAjaxRequest && !isset($_GET['ajax'])){
             $response['html'] = '';
             if($bookDataProvider->totalItemCount){
                 $this->beginClip('book-list');
