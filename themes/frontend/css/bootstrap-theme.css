@@ -570,17 +570,17 @@ a:active{
 }
 .stars .icon.half{
     background: url("../svg/star-half.svg") no-repeat center;
-    background-size: 15.75px;
+    background-size: 15.65px;
     margin-top: -1px;
 }
 .stars .icon.quarter1{
     background: url("../svg/star-quarter-1.svg") no-repeat center;
-    background-size: 15.75px;
+    background-size: 15.65px;
     margin-top: -1px;
 }
 .stars .icon.quarter3{
     background: url("../svg/star-quarter-3.svg") no-repeat center;
-    background-size: 15.75px;
+    background-size: 15.65px;
     margin-top: -1px;
 }
 .stars .icon.off {

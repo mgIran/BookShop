@@ -2087,3 +2087,19 @@ tfoot {
     padding: 10px;
     vertical-align: middle;
 }
+
+
+.result-group {
+    display: block;
+    overflow: hidden;
+    line-height: 24px;
+    background-color: #dadada;
+    font-size: 12px;
+    padding-right: 10px;
+}
+
+.search-suggest-box .search-entries .thumbnail-container .stars .icon.quarter1,
+.search-suggest-box .search-entries .thumbnail-container .stars .icon.quarter3,
+.search-suggest-box .search-entries .thumbnail-container .stars .icon.half{
+    background-size: 11.75px !important;
+}
