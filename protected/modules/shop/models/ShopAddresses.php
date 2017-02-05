@@ -19,11 +19,13 @@
  * @property string $map_zoom
  *
  * The followings are the available model relations:
+ * @property ShopOrder[] $orders
+ * @property ShopOrder[] $orders1
  * @property Users $user
  * @property Towns $town
  * @property Places $place
  */
-class Addresses extends CActiveRecord
+class ShopAddresses extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
@@ -51,7 +53,7 @@ class Addresses extends CActiveRecord
 			array('map_zoom', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, transferee, emergency_tel, landline_tel, town_id, place_id, district, postal_address, postal_code', 'safe', 'on'=>'search'),
+			array('id, user_id, transferee, emergency_tel, landline_tel, town_id, place_id, district, postal_address, postal_code, map_lat, map_lng, map_zoom', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,9 +65,8 @@ class Addresses extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'town' => array(self::BELONGS_TO, 'Towns', 'town_id'),
-			'place' => array(self::BELONGS_TO, 'Places', 'place_id'),
+			'orders' => array(self::HAS_MANY, 'ShopOrder', 'delivery_address_id'),
+			'orders1' => array(self::HAS_MANY, 'ShopOrder', 'billing_address_id'),
 		);
 	}
 
@@ -76,18 +77,18 @@ class Addresses extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'user_id' => 'کاربر',
+			'user_id' => 'User',
 			'transferee' => 'تحویل گیرنده',
 			'emergency_tel' => 'شماره تماس اضطراری',
-			'landline_tel' => 'شماره تلفن ثابت',
+			'landline_tel' => 'تلفن ثابت',
 			'town_id' => 'استان',
 			'place_id' => 'شهرستان',
-			'district' => 'ناحیه',
+			'district' => 'ناحیه/محله',
 			'postal_address' => 'آدرس پستی',
-			'postal_code' => 'کد پستی',
+			'postal_code' => 'کدپستی',
 			'map_lat' => 'عرض جغرافیایی',
 			'map_lng' => 'طول جغرافیایی',
-			'map_zoom' => 'بزرگنمایی',
+			'map_zoom' => 'بزرگنمایی جغرافیایی',
 		);
 	}
 
@@ -119,6 +120,9 @@ class Addresses extends CActiveRecord
 		$criteria->compare('district',$this->district,true);
 		$criteria->compare('postal_address',$this->postal_address,true);
 		$criteria->compare('postal_code',$this->postal_code,true);
+		$criteria->compare('map_lat',$this->map_lat,true);
+		$criteria->compare('map_lng',$this->map_lng,true);
+		$criteria->compare('map_zoom',$this->map_zoom,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -129,7 +133,7 @@ class Addresses extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Addresses the static model class
+	 * @return ShopAddresses the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
