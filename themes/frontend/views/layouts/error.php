@@ -21,13 +21,10 @@
 
     $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
     $cs->registerCssFile($baseUrl.'/css/bootstrap-rtl.min.css');
-    $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
-    $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
     $cs->registerCssFile($baseUrl.'/css/bootstrap-panel-theme.css');
     $cs->registerCssFile($baseUrl.'/css/responsive-panel-theme.css');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.script.js', CClientScript::POS_END);
     ?>
 </head>
