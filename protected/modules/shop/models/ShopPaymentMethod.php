@@ -5,12 +5,17 @@
  *
  * The followings are the available columns in table '{{shop_payment_method}}':
  * @property string $id
+ * @property string $name
  * @property string $title
  * @property string $description
  * @property double $price
+ * @property string $status
  */
 class ShopPaymentMethod extends CActiveRecord
 {
+	const STATUS_DEACTIVE = 0;
+	const STATUS_ACTIVE = 1;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -18,6 +23,11 @@ class ShopPaymentMethod extends CActiveRecord
 	{
 		return '{{shop_payment_method}}';
 	}
+
+	public $statusLabels = [
+		self::STATUS_DEACTIVE => 'غیرفعال',
+		self::STATUS_ACTIVE => 'فعال',
+	];
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -29,11 +39,13 @@ class ShopPaymentMethod extends CActiveRecord
 		return array(
 			array('title, price', 'required'),
 			array('price', 'numerical'),
+			array('name', 'length', 'max'=>50),
 			array('title', 'length', 'max'=>255),
+			array('status', 'length', 'max'=>1),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, price', 'safe', 'on'=>'search'),
+			array('id, name, title, description, price, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,9 +67,11 @@ class ShopPaymentMethod extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'name' => 'نام روش',
 			'title' => 'عنوان',
 			'description' => 'توضیحات',
-			'price' => 'قیمت',
+			'price' => 'هزینه اضافی',
+			'status' => 'وضعیت',
 		);
 	}
 
@@ -80,9 +94,11 @@ class ShopPaymentMethod extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('name',$this->name,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);
+		$criteria->compare('status',$this->status,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -98,5 +114,25 @@ class ShopPaymentMethod extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+    /**
+     * @return mixed
+     */
+    public function getStatusLabel(){
+        return $this->statusLabels[$this->status];
+    }
+
+    /**
+     * Change Payment Method Status
+     *
+     * @return $this
+     */
+	public function changeStatus(){
+		if($this->status == self::STATUS_ACTIVE)
+			$this->status = self::STATUS_DEACTIVE;
+        else if($this->status == self::STATUS_DEACTIVE)
+			$this->status = self::STATUS_ACTIVE;
+        return $this;
 	}
 }

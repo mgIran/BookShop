@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "{{shop_order_position}}".
+ * This is the model class for table "{{shop_order_basket}}".
  *
- * The followings are the available columns in table '{{shop_order_position}}':
+ * The followings are the available columns in table '{{shop_order_basket}}':
  * @property integer $id
  * @property string $order_id
  * @property string $book_id
@@ -14,14 +14,14 @@
  * @property Books $book
  * @property ShopOrder $order
  */
-class ShopOrderPosition extends CActiveRecord
+class ShopOrderBasket extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return '{{shop_order_position}}';
+		return '{{shop_order_basket}}';
 	}
 
 	/**
@@ -101,7 +101,7 @@ class ShopOrderPosition extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ShopOrderPosition the static model class
+	 * @return ShopOrderBasket the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

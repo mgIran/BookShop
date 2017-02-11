@@ -87,8 +87,11 @@ class RowsManageController extends Controller
         if (isset($_POST['RowsHomepage'])) {
             $model->attributes = $_POST['RowsHomepage'];
             $model->const_query = 0;
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+            if ($model->save()) {
+                Yii::app()->user->setFlash('success', '<span class="icon-check"></span>&nbsp;&nbsp;اطلاعات با موفقیت ویرایش شد.');
+                $this->refresh();
+            } else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
         }
 
         $this->render('update', array(

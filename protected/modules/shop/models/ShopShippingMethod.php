@@ -8,16 +8,25 @@
  * @property string $title
  * @property string $description
  * @property double $price
+ * @property string $status
  */
 class ShopShippingMethod extends CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return '{{shop_shipping_method}}';
-	}
+    const STATUS_DEACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName()
+    {
+        return '{{shop_shipping_method}}';
+    }
+
+    public $statusLabels = [
+        self::STATUS_DEACTIVE => 'غیرفعال',
+        self::STATUS_ACTIVE => 'فعال',
+    ];
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -30,10 +39,11 @@ class ShopShippingMethod extends CActiveRecord
 			array('title, price', 'required'),
 			array('price', 'numerical'),
 			array('title', 'length', 'max'=>255),
+			array('status', 'length', 'max'=>1),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, price', 'safe', 'on'=>'search'),
+			array('id, title, description, price, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +67,8 @@ class ShopShippingMethod extends CActiveRecord
 			'id' => 'ID',
 			'title' => 'عنوان',
 			'description' => 'توضیحات',
-			'price' => 'قیمت',
+			'price' => 'هزینه',
+			'status' => 'وضعیت',
 		);
 	}
 
@@ -83,6 +94,7 @@ class ShopShippingMethod extends CActiveRecord
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);
+		$criteria->compare('status',$this->status,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -98,5 +110,25 @@ class ShopShippingMethod extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getStatusLabel(){
+		return $this->statusLabels[$this->status];
+	}
+
+	/**
+	 * Change Payment Method Status
+	 *
+	 * @return $this
+	 */
+	public function changeStatus(){
+		if($this->status == self::STATUS_ACTIVE)
+			$this->status = self::STATUS_DEACTIVE;
+		else if($this->status == self::STATUS_DEACTIVE)
+			$this->status = self::STATUS_ACTIVE;
+		return $this;
 	}
 }

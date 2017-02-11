@@ -693,3 +693,9 @@ footer {
     width:162px;
     margin: 0;
 }
+
+textarea.form-control{
+    color: #222;
+    width: auto;
+    display: inline-block;
+}

@@ -67,6 +67,9 @@ class ShopAddresses extends CActiveRecord
 		return array(
 			'orders' => array(self::HAS_MANY, 'ShopOrder', 'delivery_address_id'),
 			'orders1' => array(self::HAS_MANY, 'ShopOrder', 'billing_address_id'),
+			'town' => array(self::BELONGS_TO, 'Towns', 'town_id'),
+			'place' => array(self::BELONGS_TO, 'Places', 'place_id'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -138,5 +141,15 @@ class ShopAddresses extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public static function isEmpty($vars) {
+		return
+			$vars['postal_code'] == ''
+			|| $vars['postal_address'] == ''
+			|| $vars['town_id'] == ''
+			|| $vars['place_id'] == ''
+			|| $vars['transferee'] == ''
+			|| $vars['emergency_tel'] == '';
 	}
 }

@@ -14,6 +14,12 @@ class ShopModule extends CWebModule
 		));
 	}
 
+	public $controllerMap = array(
+		'order' => 'shop.controllers.ShopOrderController',
+		'payment' => 'shop.controllers.ShopPaymentController',
+		'shipping' => 'shop.controllers.ShopShippingController'
+	);
+
 	public function beforeControllerAction($controller, $action)
 	{
 		if(parent::beforeControllerAction($controller, $action))

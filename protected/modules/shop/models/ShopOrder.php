@@ -20,10 +20,13 @@
  * @property Users $user
  * @property ShopAddresses $deliveryAddress
  * @property ShopAddresses $billingAddress
- * @property ShopOrderPosition[] $shopOrderPositions
+ * @property ShopOrderBasket[] $baskets
  */
 class ShopOrder extends CActiveRecord
 {
+    const STATUS_DEACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -31,6 +34,11 @@ class ShopOrder extends CActiveRecord
 	{
 		return '{{shop_order}}';
 	}
+
+    public $statusLabels = [
+        self::STATUS_DEACTIVE => 'غیرفعال',
+        self::STATUS_ACTIVE => 'فعال',
+    ];
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -63,7 +71,7 @@ class ShopOrder extends CActiveRecord
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'deliveryAddress' => array(self::BELONGS_TO, 'ShopAddresses', 'delivery_address_id'),
 			'billingAddress' => array(self::BELONGS_TO, 'ShopAddresses', 'billing_address_id'),
-			'shopOrderPositions' => array(self::HAS_MANY, 'ShopOrderPosition', 'order_id'),
+			'baskets' => array(self::HAS_MANY, 'ShopOrderBasket', 'order_id'),
 		);
 	}
 
@@ -74,12 +82,12 @@ class ShopOrder extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'user_id' => 'User',
-			'delivery_address_id' => 'Delivery Address',
-			'billing_address_id' => 'Billing Address',
+			'user_id' => 'کاربر',
+			'delivery_address_id' => 'آدرس تحویل کالا',
+			'billing_address_id' => 'آدرس تحویل فاکتور',
 			'ordering_date' => 'تاریخ ثبت سفارش',
 			'update_date' => 'تاریخ تغییر وضعیت',
-			'status' => 'Status',
+			'status' => 'وضعیت',
 			'payment_method' => 'روش پرداخت',
 			'shipping_method' => 'روش تحویل',
 			'comment' => 'توضیحات',
@@ -131,5 +139,25 @@ class ShopOrder extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getStatusLabel(){
+		return $this->statusLabels[$this->status];
+	}
+
+	/**
+	 * Change Payment Method Status
+	 *
+	 * @return $this
+	 */
+	public function changeStatus(){
+		if($this->status == self::STATUS_ACTIVE)
+			$this->status = self::STATUS_DEACTIVE;
+		else if($this->status == self::STATUS_DEACTIVE)
+			$this->status = self::STATUS_ACTIVE;
+		return $this;
 	}
 }

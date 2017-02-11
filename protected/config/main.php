@@ -42,14 +42,7 @@ return array(
 		'places',
 		'discountCodes',
 		'festivals',
-        'shop' => array(
-            'debug' => true,
-//            'loginUrl' => array('/user/auth'),
-//            'currencySymbol' => 'IRR',
-//            'termsView' => array('/myprojectspecific_controller/terms'),
-//            'successView' => array('/myprojectspecific_controller/success'),
-//            'failureView' => array('/myprojectspecific_controller/failure'),
-        ),
+        'shop',
 		'comments'=>array(
 			//you may override default config for all connecting models
 			'defaultModelConfig' => array(

@@ -168,6 +168,17 @@ class Controller extends AuthController
                     )
                 ),
                 array(
+                    'label' => 'فروشگاه<span class="caret"></span>',
+                    'url' => '#',
+                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
+                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'items' => array(
+                        array('label' => 'مدیریت سفارشات', 'url' => Yii::app()->createUrl('/shop/order/admin/')),
+                        array('label' => 'مدیریت روش های پرداخت', 'url' => Yii::app()->createUrl('/shop/payment/admin/')),
+                        array('label' => 'مدیریت روش های تحویل', 'url' => Yii::app()->createUrl('/shop/shipping/admin/')),
+                    )
+                ),
+                array(
                     'label' => 'اخبار<span class="caret"></span>',
                     'url' => '#',
                     'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
