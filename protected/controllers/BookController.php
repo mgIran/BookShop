@@ -408,7 +408,7 @@ class BookController extends Controller
 
         if($id){
             $user = UserDetails::model()->findByAttributes(array('user_id' => $id));
-            $pageTitle = 'کتاب های ' . ($user->publisher_id ? $user->publisher_id : $user->fa_name);
+            $pageTitle = 'کتاب های ' . ($user->getPublisherName());
         }else
             $pageTitle = $title;
         $this->render('books_list' ,array(
@@ -753,17 +753,9 @@ class BookController extends Controller
         $bookCriteria->params[':deleted'] = 0;
         $bookCriteria->order = 't.confirm_date DESC';
 
-        $publisherCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
-        $publisherCriteria->params[':status'] = 'enable';
-        $publisherCriteria->params[':confirm'] = 'accepted';
-        $publisherCriteria->params[':deleted'] = 0;
-        $publisherCriteria->order = 't.confirm_date DESC';
-
-        $personsCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
-        $personsCriteria->params[':status'] = 'enable';
-        $personsCriteria->params[':confirm'] = 'accepted';
-        $personsCriteria->params[':deleted'] = 0;
-        $personsCriteria->order = 't.confirm_date DESC';
+        $publisherCriteria->addCondition('role_id = :role');
+        $publisherCriteria->params[':role'] = 2;
+        $publisherCriteria->order = 'userDetails.fa_name DESC';
 
         $categoryCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
         $categoryCriteria->params[':status'] = 'enable';
@@ -774,8 +766,8 @@ class BookController extends Controller
         if(isset($_GET['term']) && !empty($term = $_GET['term'])){
             $terms = explode(' ' ,urldecode($term));
             $bookSql = '(t.title regexp :term OR t.description regexp :term)';
-            $publisherSql = '(userDetails.fa_name regexp :term)';
-            $personsSql = '(persons.name_family regexp :term)';
+            $publisherSql = '(userDetails.fa_name regexp :term OR userDetails.nickname regexp :term)';
+            $personsSql = '(t.name_family regexp :term)';
             $categorySql = '(category.title regexp :term)';
             $bookCriteria->params[":term"] = $term;
             $publisherCriteria->params[":term"] = $term;
@@ -789,34 +781,30 @@ class BookController extends Controller
 
                     if($publisherSql)
                         $publisherSql .= " OR (";
-                    $publisherSql .= "userDetails.fa_name regexp :term$key)";
+                    $publisherSql .= "userDetails.fa_name regexp :term$key OR userDetails.nickname regexp :term$key)";
 
                     if($personsSql)
                         $personsSql .= " OR (";
-                    $personsSql .= "persons.name_family regexp :term$key)";
+                    $personsSql .= "t.name_family regexp :term$key)";
 
                     if($categorySql)
                         $categorySql .= " OR (";
                     $categorySql .= "category.title regexp :term$key)";
                     // with correction
-                    //$sql .= "t.title sounds like :term$key OR t.description sounds like :term$key OR t.publisher_name sounds like :term$key OR userDetails.publisher_id sounds like :term$key OR userDetails.fa_name sounds like :term$key OR category.title sounds like :term$key OR persons.name_family sounds like :term$key)";
                     $bookCriteria->params[":term$key"] = $term;
                     $publisherCriteria->params[":term$key"] = $term;
                     $personsCriteria->params[":term$key"] = $term;
                     $categoryCriteria->params[":term$key"] = $term;
                 }
             $bookCriteria->together = true;
-            $publisherCriteria->together = true;
-            $personsCriteria->together = true;
             $categoryCriteria->together = true;
 
             $bookCriteria->addCondition($bookSql);
 
             $publisherCriteria->addCondition($publisherSql);
-            $publisherCriteria->with = array('publisher.userDetails');
+            $publisherCriteria->with = array('userDetails');
 
             $personsCriteria->addCondition($personsSql);
-            $personsCriteria->with = array('persons');
 
             $categoryCriteria->addCondition($categorySql);
             $categoryCriteria->with = array('category');
@@ -834,11 +822,11 @@ class BookController extends Controller
             'criteria' => $bookCriteria ,
             'pagination' => $pagination
         ));
-        $publisherDataProvider = new CActiveDataProvider('Books' ,array(
+        $publisherDataProvider = new CActiveDataProvider('Users' ,array(
             'criteria' => $publisherCriteria,
             'pagination' => $pagination
         ));
-        $personsDataProvider = new CActiveDataProvider('Books' ,array(
+        $personsDataProvider = new CActiveDataProvider('BookPersons' ,array(
             'criteria' => $personsCriteria,
             'pagination' => $pagination
         ));
@@ -867,6 +855,7 @@ class BookController extends Controller
                     'id' => 'search-book-list',
                     'dataProvider' => $publisherDataProvider,
                     'itemView' => '//site/_search_book_item',
+                    'viewData' => array('type' => 'publisher'),
                     'template' => '{items}',
                 ));
                 $this->endClip();
@@ -879,6 +868,7 @@ class BookController extends Controller
                     'id' => 'search-book-list',
                     'dataProvider' => $personsDataProvider,
                     'itemView' => '//site/_search_book_item',
+                    'viewData' => array('type' => 'person'),
                     'template' => '{items}',
                 ));
                 $this->endClip();

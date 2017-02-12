@@ -306,4 +306,9 @@ class UserDetails extends CActiveRecord
     public function getDetailsStatus(){
         return $this->detailsStatusLabels[$this->financial_info_status];
     }
+
+    public function getPublisherName()
+    {
+        return $this->nickname ? $this->nickname : $this->fa_name;
+    }
 }

@@ -42,7 +42,7 @@ $purifier=new CHtmlPurifier();
                 ?><?php
                 if($model->getPerson('مترجم')):?><div>مترجم<?= $model->getPersonsTags('مترجم') ?></div><?php
                 endif;
-                ?><div>ناشر<a href="<?php echo $this->createUrl('/book/publisher?title='.($model->publisher?urlencode($model->publisher->userDetails->publisher_id).'&id='.$model->publisher_id:urlencode($model->publisher_name).'&t=1'));?>"
+                ?><div>ناشر<a href="<?php echo $this->createUrl('/book/publisher/'.$model->publisher_id.'/'.urlencode($model->getPublisherName()));?>"
                     ><?= CHtml::encode($model->getPublisherName()) ?></a></div>
             </div>
         </div>

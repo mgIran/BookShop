@@ -2793,7 +2793,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .search-suggest-box{
     display: block;
-    overflow: hidden;
+    overflow: auto;
     position: absolute;
     top: 100%;
     left: 15px;
