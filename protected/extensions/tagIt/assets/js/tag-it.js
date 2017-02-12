@@ -221,6 +221,17 @@
             }
 
             // Events.
+            this.tagInput.bind('paste', function (event) {
+                // Set short timeout so .val() will have a value
+                setTimeout(function () {
+                    var tagArray = that.tagInput.val().split(/[\n,]+/);
+                    if (tagArray.length > 1) {
+                        for (var i = 0; i < tagArray.length; i++) {
+                            that.createTag(tagArray[i]);
+                        }
+                    }
+                }, 100);
+            });
             this.tagInput
                 .keydown(function(event) {
                     // Backspace is not detected within a keypress, so it must use keydown.
@@ -240,7 +251,8 @@
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty,
                     // in which case it isn't caught.
-                    if (event.which === $.ui.keyCode.ENTER ||
+                    if ((event.key == ',' && event.shiftKey === false) ||
+                        event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
                             that.tagInput.val() !== ''
