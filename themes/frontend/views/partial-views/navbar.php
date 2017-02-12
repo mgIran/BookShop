@@ -28,19 +28,14 @@
             ?>
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="#categories-modal" data-toggle="modal">موضوعات</a></li>
-                <?
-                if(Yii::app()->user->isGuest ||  Yii::app()->user->type == 'admin'):
-                    ?>
-                    <li><a href="#login-modal" data-toggle="modal">ثبت نام / ورود</a></li>
-                    <?
-                elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
-                    // @todo after user login change login and register buttons
-                    ?>
+                <? if(Yii::app()->user->isGuest ||  Yii::app()->user->type == 'admin'):?>
+                    <li><a href="#login-modal" data-toggle="modal">ثبت نام&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;ورود</a></li>
+                <? elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
+                // @todo after user login change login and register buttons
+                ?>
                     <li><a href="<?= $this->createUrl('/dashboard') ?>">داشبورد</a></li>
                     <li><a href="<?= $this->createUrl('/logout') ?>" class="error">خروج</a></li>
-                    <?
-                endif;
-                ?>
+                <? endif;?>
             </ul>
         </div>
     </div>

@@ -4,8 +4,10 @@
 /* @var $similar CActiveDataProvider */
 /* @var $bookmarked boolean */
 /* @var $categories array */
+/* @var $about Pages */
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
 $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
+$purifier=new CHtmlPurifier();
 ?>
 <svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -50,7 +52,17 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb"><img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon ?>" alt="<?= CHtml::encode($model->title) ?>" ></div>
+                    <?php if(!empty($model->icon) and file_exists(Yii::getPathOfAlias("webroot").'/uploads/books/icons/'.$model->icon)):?>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb">
+                            <img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon ?>" alt="<?= CHtml::encode($model->title) ?>" >
+                        </div>
+                    <?php else:?>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb no-image">
+                            <div class="img-container">
+                                <img src="<?= Yii::app()->theme->baseUrl.'/svg/logo-white.svg';?>">
+                            </div>
+                        </div>
+                    <?php endif;?>
                     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 book-info">
                         <div class="info">
                             <h4><?= CHtml::encode($model->title)?><small><span>ویرایش: <?php echo CHtml::encode($this->parseNumbers($model->lastPackage->version));?></span><span>سال چاپ: <?php echo CHtml::encode($this->parseNumbers($model->lastPackage->print_year));?></span></small></h4>
@@ -154,21 +166,36 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                                 </h5>
                                                 <h5 class="price">
                                                     <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
-                                                    <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
+                                                    <?php if($model->lastPackage->sale_printed):?>
+                                                        <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
+                                                    <?php endif;?>
                                                 </h5>
                                                 <?
                                             else:
                                                 ?>
                                                 <h5 class="price">
                                                     <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
-                                                    <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                                    <?php if($model->lastPackage->sale_printed):?>
+                                                        <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                                    <?php endif;?>
                                                 </h5>
                                                 <?
                                             endif;
                                             ?>
-                                            <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                            <?php if($model->lastPackage->sale_printed):?>
+                                                <div class="row buttons">
+                                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                        <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                        <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-green"><i class="cart-icon"></i>خرید نسخه چاپی</a>
+                                                    </div>
+                                                </div>
+                                            <?php else:?>
+                                                <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                            <?php endif;?>
                                             <?php
-                                        else:
+                                        /*else:
                                             if($bought->package_id):
                                                 if($bought->package_id != $model->lastPackage->id):
                                                     ?>
@@ -183,12 +210,12 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                                 ?>
                                                 <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
                                                 <?php
-                                            endif;
+                                            endif;*/
                                         endif;
                                     else:
                                     ?>
                                         <h6>شما ناشر این کتاب هستید.</h6>
-                                        <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>
+<!--                                        <a href="--><?php //echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?><!--" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>-->
                                     <?
                                     endif;
                                 else:
@@ -203,19 +230,34 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                                         </h5>
                                         <h5 class="price">
                                             <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
-                                            <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
+                                            <?php if($model->lastPackage->sale_printed):?>
+                                                <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
+                                            <?php endif;?>
                                         </h5>
                                         <?
                                     else:
                                         ?>
                                         <h5 class="price">
                                             <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
-                                            <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                            <?php if($model->lastPackage->sale_printed):?>
+                                                <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
+                                            <?php endif;?>
                                         </h5>
                                         <?
                                     endif;
                                     ?>
-                                    <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                    <?php if($model->lastPackage->sale_printed):?>
+                                        <div class="row buttons">
+                                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-green"><i class="cart-icon"></i>خرید نسخه چاپی</a>
+                                            </div>
+                                        </div>
+                                    <?php else:?>
+                                        <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
+                                    <?php endif;?>
                                 <?
                                 endif;
                                 ?>
@@ -245,15 +287,11 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
                             <li><a data-toggle="tab" href="#comments">نظرات (<?= CHtml::encode(Controller::parseNumbers($model->getCountComments())) ?>)</a></li>
                         </ul>
                         <div class="tab-content">
-                            <div id="summary" class="tab-pane fade in active"><?php
-                            echo $model->description;
-                                ?></div>
+                            <div id="summary" class="tab-pane fade in active"><?php echo $purifier->purify($model->description); ?></div>
                             <div id="comments" class="tab-pane fade">
-                                <?
-                                $this->widget('comments.widgets.ECommentsListWidget', array(
+                                <?php $this->widget('comments.widgets.ECommentsListWidget', array(
                                     'model' => $model,
-                                ));
-                                ?>
+                                )); ?>
                             </div>
                         </div>
                     </div>
@@ -294,11 +332,9 @@ $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 sidebar-col">
                 <div class="boxed">
                     <div class="heading">
-                        <h4>درباره بوک شاپ</h4>
+                        <h4>درباره <?php echo Yii::app()->name;?></h4>
                     </div>
-                    <div class="text-justify"><?php
-                        echo strip_tags($about->summary);
-                        ?></div>
+                    <div class="text-justify"><?php echo $purifier->purify($about->summary); ?></div>
                 </div><div class="boxed">
                     <div class="heading">
                         <h4>دسته بندی ها</h4>

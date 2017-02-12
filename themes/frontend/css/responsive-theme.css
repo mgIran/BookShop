@@ -202,6 +202,14 @@
         text-align: center;
         margin-bottom: 15px;
     }
+    .book-view .buttons > div:first-child{
+        margin-bottom: 15px;
+    }
+    .book-view .buttons > div:first-child,
+    .book-view .buttons > div:last-child{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
 @media screen and (max-width: 480px){
     .thumbnail-list .thumbnail-container{
@@ -514,11 +522,16 @@
     .slider{
         max-height: 600px;
     }
-    .book-meta [class*="col-"]:last-of-type{
-        width: 100%;
-    }
     .book-view .sidebar-col{
         padding: 0 15px;
+    }
+    .book-view .buttons > div:first-child{
+        margin-bottom: 15px;
+    }
+    .book-view .buttons > div:first-child,
+    .book-view .buttons > div:last-child{
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 @media (min-width: 992px) and (max-width: 1200px){
@@ -558,11 +571,16 @@
     .news-list-item.side-view .news-detail .category{
         display: none;
     }
+    .book-view .buttons > div:first-child{
+        margin-bottom: 15px;
+    }
+    .book-view .buttons > div:first-child,
+    .book-view .buttons > div:last-child{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
 @media (min-width: 992px) and (max-width: 1024px){
-    .book-meta [class*="col-"]:last-of-type{
-        width: 100%;
-    }
 }
 @media (min-width: 1200px){
     .thumbnail-list .thumbnail-container{

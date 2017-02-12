@@ -1,3 +1,4 @@
+<?php $purifier=new CHtmlPurifier();?>
 <div class="footer">
     <div class="container">
         <div class="row">
@@ -5,10 +6,8 @@
                 <div class="about">
                     <div class="title">
                         <img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo.svg';?>" alt="<?php echo Yii::app()->name;?>">
-                        <h1>بوک شاپ<small>نزدیکترین کتابفروشی شهر</small></h1>
-                        <div class="text"><?php
-                            echo nl2br(strip_tags($this->aboutFooter));
-                            ?></div>
+                        <h1><?php echo Yii::app()->name;?><small>نزدیکترین کتابفروشی شهر</small></h1>
+                        <div class="text"><?php echo $purifier->purify($this->aboutFooter); ?></div>
                     </div>
                 </div>
             </div>
@@ -53,7 +52,7 @@
                     </ul>
                 </div>
             </nav>
-            <span class="pull-left copy-right"> © 2016 Ketabic</span>
+            <span class="pull-left copy-right"> © <?php echo date("Y");?> Ketabic</span>
         </div>
     </div>
 </div>
