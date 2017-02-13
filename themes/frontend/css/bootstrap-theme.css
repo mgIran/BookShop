@@ -1784,6 +1784,7 @@ input[type="checkbox"] + label:hover::before {
 .btn-blue:focus,
 .btn-blue:active {
     background: #128bae;
+    color: #fff;
 }
 
 #login-modal .btn-blue {
@@ -3458,4 +3459,18 @@ input[type="checkbox"] + label:hover::before {
 }
 .book-view .buttons > div:last-child{
     padding-right: 5px;
+}
+.cart .empty-message h4{
+    color: #e74e40;
+    text-align: center;
+    margin-top: 50px;
+}
+.cart .empty-message h4 small{
+    display: block;
+    margin: 20px 0;
+}
+.cart .empty-message a{
+    display: block;
+    margin: 50px auto;
+    width: 100px;
 }
