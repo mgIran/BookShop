@@ -37,14 +37,14 @@
                                     </div>
                                 </td>
                                 <td class="vertical-middle text-center">
-                                    <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity", "data-id"=>$position));?>
+                                    <?php echo CHtml::dropDownList('qty_'.$position, ($book["qty"]-1), array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity", "data-id"=>$position));?>
                                     <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟')));?>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
-                                    <span class="price"><?php echo Controller::parseNumbers(number_format($model->lastPackage->price))?><small> تومان</small></span>
+                                    <span class="price"><?php echo Controller::parseNumbers(number_format($model->getOff_printed_price()))?><small> تومان</small></span>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
-                                    <span class="price"><?php echo Controller::parseNumbers(number_format($book["qty"]*$model->lastPackage->price))?><small> تومان</small></span>
+                                    <span class="price"><?php echo Controller::parseNumbers(number_format($book["qty"]*$model->getOff_printed_price()))?><small> تومان</small></span>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
                                     <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟')));?>
@@ -56,7 +56,8 @@
                 </table>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left total-container">
                     <div class="row">
-                        <?php $cartStatistics=Shop::getPriceTotal();?>
+                        <?php $cartStatistics=Shop::getPriceTotal();
+                        ?>
                         <ul class="list-group green-list">
                             <li class="list-group-item">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">جمع کل خرید شما</div>
