@@ -14,7 +14,7 @@ class ShopCartController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('view', 'index', 'add', 'remove', 'getPriceTotal', 'updateAmount'),
+			'frontend' => array('view', 'index', 'add', 'remove', 'getPriceTotal', 'updateQty'),
 		);
 	}
 
@@ -44,11 +44,13 @@ class ShopCartController extends Controller
 		echo Shop::getPriceTotal();
 	}
 
-	public function actionUpdateAmount()
+	public function actionUpdateQty()
 	{
 		$cart = Shop::getCartContent();
 
-		foreach($_POST as $key => $value){
+		if(isset($_POST)){
+			$key = $_POST['book_id'];
+			$value = $_POST['qty'];
 			if(substr($key, 0, 4) == 'qty_'){
 				if($value == '')
 					return true;
@@ -57,12 +59,16 @@ class ShopCartController extends Controller
 				$position = explode('_', $key);
 				$position = $position[1];
 
-				if(isset($cart[$position]['amount']))
-					$cart[$position]['amount'] = $value;
+				if(isset($cart[$position]['qty']))
+					$cart[$position]['qty'] = $value;
 				$book = Books::model()->findByPk($position);
-				echo $book->getOff_printed_price();
-				echo CJSON::encode(['status' => true, '']);
-				return Shop::setCartContent($cart);
+				$thisBookTotal = (double)($book->getOff_printed_price() * $value);
+				echo CJSON::encode([
+					'status' => true,
+					'thisBookTotal' => $thisBookTotal,
+					'priceTotal' => Shop::getPriceTotal()
+				]);
+				Shop::setCartContent($cart);
 			}
 		}
 	}
@@ -86,12 +92,11 @@ class ShopCartController extends Controller
 		if(isset($_POST['yt1']))
 			unset($_POST['yt1']);
 		$id = $_POST['book_id'];
-		var_dump($id);exit;
 		if(is_array($cart) && in_array($id,$cart))
 		{
-			$amount = $cart[$id]['amount'];
-			if($amount<10)
-				$cart[$id]['amount']+= $amount;
+			$qty = $cart[$id]['qty'];
+			if($qty<10)
+				$cart[$id]['qty']+= $qty;
 		}else
 			$cart[$id] = $_POST;
 		Shop::setCartcontent($cart);
