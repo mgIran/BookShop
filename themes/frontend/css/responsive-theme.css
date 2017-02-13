@@ -516,8 +516,15 @@
         display: none;
     }
     .navbar-brand > h1{
-        font-size: 20px;
+        font-size: 17px;
         margin-right: 10px;
+    }
+    .navbar-default.scroll-mode .navbar-brand > h1{
+        font-size: 17px;
+    }
+    .navbar-default .navbar-form{
+        width: 25%;
+        margin-left: -8% !important;
     }
     .slider{
         max-height: 600px;
