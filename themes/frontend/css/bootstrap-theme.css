@@ -2030,6 +2030,8 @@ input[type="checkbox"] + label:hover::before {
 .book-view .btn-red,
 .book-view .btn-green{
     display: block;
+    width: 100%;
+    height: 54px;
 }
 .add-to-library-icon{
     background: url("../svg/add-to-library-white.svg") no-repeat center;

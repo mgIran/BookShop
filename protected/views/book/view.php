@@ -188,7 +188,11 @@ $purifier=new CHtmlPurifier();
                                                         <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                                        <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-green"><i class="cart-icon"></i>خرید نسخه چاپی</a>
+                                                        <?php echo CHtml::beginForm("/shop/cart/add");?>
+                                                            <?php echo CHtml::hiddenField("book_id", $model->id);?>
+                                                            <?php echo CHtml::hiddenField("qty", 1);?>
+                                                            <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
+                                                        <?php echo CHtml::endForm();?>
                                                     </div>
                                                 </div>
                                             <?php else:?>
@@ -252,7 +256,11 @@ $purifier=new CHtmlPurifier();
                                                 <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                                <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-green"><i class="cart-icon"></i>خرید نسخه چاپی</a>
+                                                <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
+                                                    <?php echo CHtml::hiddenField("book_id", $model->id);?>
+                                                    <?php echo CHtml::hiddenField("qty", 1);?>
+                                                    <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
+                                                <?php echo CHtml::endForm();?>
                                             </div>
                                         </div>
                                     <?php else:?>
