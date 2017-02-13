@@ -23,8 +23,8 @@ if($books):?>
                             <h4><a href="<?php echo $this->createUrl("/book/".$model->id."/".urlencode($model->title));?>"><?php echo CHtml::encode($model->title);?></a></h4>
                             <span class="item hidden-xs">نویسنده: <span class="value"><?php echo $model->getPersonsTags("نویسنده", "fullName", true, "span");?></span></span>
                             <span class="item hidden-xs">ناشر: <span class="value"><?php echo CHtml::encode($model->getPublisherName());?></span></span>
-                            <span class="item hidden-xs">سال چاپ: <span class="value"><?php echo CHtml::encode($model->lastPackage->print_year);?></span></span>
-                            <span class="item hidden-xs">تعداد صفحات: <span class="value"><?php echo CHtml::encode($model->number_of_pages);?> صفحه</span></span>
+                            <span class="item hidden-xs">سال چاپ: <span class="value"><?php echo Controller::parseNumbers($model->lastPackage->print_year);?></span></span>
+                            <span class="item hidden-xs">تعداد صفحات: <span class="value"><?php echo Controller::parseNumbers($model->number_of_pages);?> صفحه</span></span>
                         </div>
                     </td>
                     <td class="vertical-middle text-center">
