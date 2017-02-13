@@ -2936,6 +2936,8 @@ input[type="checkbox"] + label:hover::before {
 .cart .table .info h4{
     margin-top: 0;
     margin-bottom: 20px;
+}
+.cart .table .info h4 a{
     color: #444;
 }
 .cart .table .info .item{

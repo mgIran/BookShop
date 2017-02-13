@@ -27,9 +27,9 @@
                         <?php if(@$model = Books::model()->findByPk($book['book_id'])):?>
                             <tr>
                                 <td>
-                                    <img src="<?php echo Yii::app()->baseUrl."/uploads/books/icons/".$model->icon;?>" alt="<?php echo CHtml::encode($model->title);?>" class="hidden-xs hidden-sm">
+                                    <a href="<?php echo $this->createUrl("/book/".$model->id."/".urlencode($model->title));?>"><img src="<?php echo Yii::app()->baseUrl."/uploads/books/icons/".$model->icon;?>" alt="<?php echo CHtml::encode($model->title);?>" class="hidden-xs hidden-sm"></a>
                                     <div class="info">
-                                        <h4><?php echo CHtml::encode($model->title);?></h4>
+                                        <h4><a href="<?php echo $this->createUrl("/book/".$model->id."/".urlencode($model->title));?>"><?php echo CHtml::encode($model->title);?></a></h4>
                                         <span class="item hidden-xs">نویسنده: <span class="value"><?php echo $model->getPersonsTags("نویسنده", "fullName", true, "span");?></span></span>
                                         <span class="item hidden-xs">ناشر: <span class="value"><?php echo CHtml::encode($model->getPublisherName());?></span></span>
                                         <span class="item hidden-xs">سال چاپ: <span class="value"><?php echo CHtml::encode($model->lastPackage->print_year);?></span></span>
@@ -87,13 +87,13 @@
 		</div>
 	</div>
 </div>
-<?php Yii::app()->clientScript->registerScript("update-amount", '
+<?php Yii::app()->clientScript->registerScript("update-qty", '
 $(".quantity").on("change", function(){
     $.ajax({
-        url: "'.$this->createUrl("/shop/cart/updateAmount").'",
+        url: "'.$this->createUrl("/shop/cart/updateQty").'",
         type: "POST",
         dataType: "JSON",
-        data: {book_id:$(this).data("id"), amount: $(this).val()},
+        data: {book_id:$(this).data("id"), qty: $(this).val()},
         success: function(data){
 
         }
