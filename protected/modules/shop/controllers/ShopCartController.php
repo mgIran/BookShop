@@ -24,7 +24,7 @@ class ShopCartController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - add, remove',
+			'checkAccess + s',
 			'postOnly + add',
 		);
 	}
@@ -87,7 +87,7 @@ class ShopCartController extends Controller
 
 		$cart[] = $_POST;
 		Shop::setCartcontent($cart);
-		echo CJSON::encode(['status' => true]);
+		$this->redirect(array('/shop/cart/view'));
 	}
 
 	public function actionIndex()
