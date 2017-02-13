@@ -25,7 +25,7 @@ class ShopCartController extends Controller
 	{
 		return array(
 			'checkAccess + s',
-			'postOnly + add',
+			'postOnly + add, remove, updateQty',
 		);
 	}
 
@@ -64,20 +64,31 @@ class ShopCartController extends Controller
 			$this->endClip();
 			echo CJSON::encode([
 				'status' => true,
+				'countCart' => Controller::parseNumbers(number_format(Shop::getCartCount())),
 				'table' => $this->clips['basket-table']
 			]);
+			Yii::app()->end();
 		}
 	}
 
 
-	public function actionRemove($id){
-		$id = (int) $id;
-		$cart = json_decode(Yii::app()->user->getState('cart'), true);
+	public function actionRemove(){
+		if(isset($_POST)){
+			$id = (int)$_POST['book_id'];
+			$cart = json_decode(Yii::app()->user->getState('cart'), true);
 
-		unset($cart[$id]);
-		Yii::app()->user->setState('cart', json_encode($cart));
-
-		$this->redirect(array('//shop/cart/view'));
+			unset($cart[$id]);
+			Yii::app()->user->setState('cart', json_encode($cart));
+			$this->beginClip('basket-table');
+			$this->renderPartial('_basket_table', array('books' => $cart));
+			$this->endClip();
+			echo CJSON::encode([
+				'status' => true,
+				'countCart' => Controller::parseNumbers(number_format(Shop::getCartCount())),
+				'table' => $this->clips['basket-table']
+			]);
+			Yii::app()->end();
+		}
 	}
 
 	public function actionAdd(){
