@@ -1,14 +1,41 @@
 <?php
 
-class ShoppingCartController extends Controller
+class ShopCartController extends Controller
 {
+	/**
+	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+	 * using two-column layout. See 'protected/views/layouts/column2.php'.
+	 */
+	public $layout='//layouts/public';
+
+	/**
+	 * @return array actions type list
+	 */
+	public static function actionsType()
+	{
+		return array(
+			'frontend' => array('view', 'index', 'add', 'remove', 'getPriceTotal'),
+		);
+	}
+
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'checkAccess - add, remove',
+			'postOnly + add',
+		);
+	}
+
 	public function actionView()
 	{
 		$cart = Shop::getCartContent();
 
 		$this->render('view',array(
-						'products'=>$cart
-						));
+			'products'=>$cart
+		));
 	}
 
 	public function actionGetPriceTotal() {
@@ -40,7 +67,17 @@ class ShoppingCartController extends Controller
 	}
 
 
-	public function actionAddToCart(){
+	public function actionRemove($id){
+		$id = (int) $id;
+		$cart = json_decode(Yii::app()->user->getState('cart'), true);
+
+		unset($cart[$id]);
+		Yii::app()->user->setState('cart', json_encode($cart));
+
+		$this->redirect(array('//shop/shoppingCart/view'));
+	}
+
+	public function actionAdd(){
 		$cart = Shop::getCartContent();
 		var_dump($_POST, $cart);exit;
 		// remove potential clutter
@@ -52,16 +89,6 @@ class ShoppingCartController extends Controller
 		$cart[] = $_POST;
 		Shop::setCartcontent($cart);
 		echo CJSON::encode(['status' => true]);
-	}
-
-	public function actionRemoveFromCart($id){
-		$id = (int) $id;
-		$cart = json_decode(Yii::app()->user->getState('cart'), true);
-
-		unset($cart[$id]);
-		Yii::app()->user->setState('cart', json_encode($cart));
-
-		$this->redirect(array('//shop/shoppingCart/view'));
 	}
 
 	public function actionIndex()

@@ -16,6 +16,7 @@ class ShopModule extends CWebModule
 
 	public $controllerMap = array(
 		'order' => 'shop.controllers.ShopOrderController',
+		'cart' => 'shop.controllers.ShopCartController',
 		'payment' => 'shop.controllers.ShopPaymentController',
 		'shipping' => 'shop.controllers.ShopShippingController'
 	);

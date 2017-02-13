@@ -121,7 +121,7 @@
 		else
 		{
 			while (($parent=$this->getParentModule())!==null)
-				if($parent instanceof shopModule)	
+				if($parent instanceof shopModule)
 					return $parent;
 		} 
 	}
