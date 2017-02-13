@@ -3035,6 +3035,7 @@ input[type="checkbox"] + label:hover::before {
 .btn-black:focus,
 .btn-black:active {
     background: #969696;
+    color: #fff;
 }
 .btn-green {
     padding: 13px 15px;
