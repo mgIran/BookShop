@@ -30,7 +30,7 @@
                                     <img src="<?php echo Yii::app()->baseUrl."/uploads/books/icons/".$model->icon;?>" alt="<?php echo CHtml::encode($model->title);?>" class="hidden-xs hidden-sm">
                                     <div class="info">
                                         <h4><?php echo CHtml::encode($model->title);?></h4>
-                                        <span class="item hidden-xs">نویسنده: <span class="value"><?php echo CHtml::encode($model->getPersonsTags("نویسنده"));?></span></span>
+                                        <span class="item hidden-xs">نویسنده: <span class="value"><?php echo $model->getPersonsTags("نویسنده", "fullName", true, "span");?></span></span>
                                         <span class="item hidden-xs">ناشر: <span class="value"><?php echo CHtml::encode($model->getPublisherName());?></span></span>
                                         <span class="item hidden-xs">سال چاپ: <span class="value"><?php echo CHtml::encode($model->lastPackage->print_year);?></span></span>
                                         <span class="item hidden-xs">تعداد صفحات: <span class="value"><?php echo CHtml::encode($model->number_of_pages);?> صفحه</span></span>
@@ -38,7 +38,7 @@
                                 </td>
                                 <td class="vertical-middle text-center">
                                     <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity"));?>
-                                    <?php CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove", 'confirm' => Shop::t('Are you sure?')));?>
+                                    <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟')));?>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
                                     <span class="price"><?php echo Controller::parseNumbers(number_format($model->lastPackage->price))?><small> تومان</small></span>
@@ -47,7 +47,7 @@
                                     <span class="price"><?php echo Controller::parseNumbers(number_format($book["qty"]*$model->lastPackage->price))?><small> تومان</small></span>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
-                                    <?php CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove", 'confirm' => Shop::t('Are you sure?')));?>
+                                    <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove", 'confirm' => Shop::t('Are you sure?')));?>
                                 </td>
                             </tr>
                         <?php endif;?>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="buttons">
-                    <input type="submit" class="btn-black pull-right" value="بازگشت به صفحه اصلی">
+                    <a href="<?php echo $this->createUrl("/site");?>" class="btn-black pull-right">بازگشت به صفحه اصلی</a>
                     <input type="submit" class="btn-blue pull-left" value="انتخاب شیوه ارسال">
                 </div>
             <?php else:?>
@@ -87,3 +87,16 @@
 		</div>
 	</div>
 </div>
+<?php Yii::app()->clientScript->registerScript("update-amount", '
+$(".quantity").on("change", function(){
+    $.ajax({
+        url: "'.$this->createUrl("/shop/cart/updateAmount").'",
+        type: "POST",
+        dataType: "JSON",
+        data: {$(this).attr("name"): $(this).val()},
+        success: function(data){
+            
+        }
+    });
+});
+');?>
