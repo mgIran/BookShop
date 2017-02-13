@@ -46,16 +46,20 @@ class Shop
 		$response = [];
 		$price_total = 0;
 		$tax_total = 0;
+		$tax_rate = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
 		foreach(Shop::getCartContent() as $product){
 			$model = Books::model()->findByPk($product['book_id']);
-			$price_total += $model->getOff_printed_price();
+			$price = $model->getOff_printed_price();
+			$price_total += $price;
             // calculate tax
-			$tax_total += $model->getTaxRate(@$product['Variations'], @$product['amount']);
+			$tax = ($price * $tax_rate) / 100;
+			$tax_total += $tax;
 		}
 
 		if($shipping_method = Shop::getShippingMethod())
 			$price_total += $shipping_method->price;
 
+		$response['taxRate'] = $tax_rate;
 		$response['totalPrice'] = $price_total;
 		$response['totalTax'] = $tax_total;
 		$response['totalPayment'] = $price_total + $tax_total;

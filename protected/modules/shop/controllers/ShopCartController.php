@@ -86,7 +86,8 @@ class ShopCartController extends Controller
 		if(is_array($cart) && in_array($id,$cart))
 		{
 			$amount = $cart[$id]['amount'];
-			$cart[$id]['amount']+= $amount;
+			if($amount<10)
+				$cart[$id]['amount']+= $amount;
 		}else
 			$cart[$id] = $_POST;
 		Shop::setCartcontent($cart);
@@ -95,43 +96,6 @@ class ShopCartController extends Controller
 
 	public function actionIndex()
 	{
-		if(isset($_SESSION['cartowner'])) {
-			$carts = ShoppingCart::model()->findAll('cartowner = :cartowner', array(':cartowner' => $_SESSION['cartowner']));
-
-			$this->render('index',array( 'carts'=>$carts,));
-		} 
-	}
-
-	public function actionAdmin()
-	{
-		$model=new ShoppingCart('search');
-		if(isset($_GET['ShoppingCart']))
-			$model->attributes=$_GET['ShoppingCart'];
-			$model->cartowner = Yii::app()->User->getState('cartowner');
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
-
-	public function loadModel()
-	{
-		if($this->_model===null)
-		{
-			if(isset($_GET['id']))
-				$this->_model=ShoppingCart::model()->findbyPk($_GET['id']);
-			if($this->_model===null)
-				throw new CHttpException(404,'The requested page does not exist.');
-		}
-		return $this->_model;
-	}
-
-	protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='shopping cart-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
+		$this->redirect(array('view'));
 	}
 }
