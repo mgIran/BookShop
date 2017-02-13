@@ -47,7 +47,7 @@
                                     <span class="price"><?php echo Controller::parseNumbers(number_format($book["qty"]*$model->lastPackage->price))?><small> تومان</small></span>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
-                                    <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove", 'confirm' => Shop::t('Are you sure?')));?>
+                                    <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟')));?>
                                 </td>
                             </tr>
                         <?php endif;?>
