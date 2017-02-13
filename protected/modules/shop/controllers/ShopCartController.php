@@ -34,7 +34,6 @@ class ShopCartController extends Controller
 		Yii::app()->theme="frontend";
 		$this->layout="//layouts/index";
 		$cart = Shop::getCartContent();
-
 		$this->render('view',array(
 			'books'=>$cart
 		));
