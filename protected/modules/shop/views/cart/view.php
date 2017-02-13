@@ -37,7 +37,7 @@
                                     </div>
                                 </td>
                                 <td class="vertical-middle text-center">
-                                    <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity", "data-id"=>$position));?>
+                                    <?php echo CHtml::dropDownList('qty_'.$position, ($book["qty"]-1), array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity", "data-id"=>$position));?>
                                     <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟')));?>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
@@ -57,7 +57,6 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left total-container">
                     <div class="row">
                         <?php $cartStatistics=Shop::getPriceTotal();
-                        var_dump($cartStatistics);exit;
                         ?>
                         <ul class="list-group green-list">
                             <li class="list-group-item">
