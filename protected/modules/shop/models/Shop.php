@@ -52,7 +52,10 @@ class Shop
 			$price = $model->getOff_printed_price();
 			$price_total += $price;
             // calculate tax
-			$tax = ($price * $tax_rate) / 100;
+			$tax = 0;
+			if(!$model->publisher->userDetails->tax_exempt){
+				$tax = ($price * $tax_rate) / 100;
+			}
 			$tax_total += $tax;
 		}
 

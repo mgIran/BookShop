@@ -14,7 +14,7 @@ class ShopCartController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('view', 'index', 'add', 'remove', 'getPriceTotal'),
+			'frontend' => array('view', 'index', 'add', 'remove', 'getPriceTotal', 'updateAmount'),
 		);
 	}
 
@@ -48,7 +48,7 @@ class ShopCartController extends Controller
 	{
 		$cart = Shop::getCartContent();
 
-		foreach($_GET as $key => $value){
+		foreach($_POST as $key => $value){
 			if(substr($key, 0, 4) == 'qty_'){
 				if($value == '')
 					return true;
@@ -61,6 +61,7 @@ class ShopCartController extends Controller
 					$cart[$position]['amount'] = $value;
 				$book = Books::model()->findByPk($position);
 				echo $book->getOff_printed_price();
+				echo CJSON::encode(['status' => true, '']);
 				return Shop::setCartContent($cart);
 			}
 		}
@@ -85,6 +86,7 @@ class ShopCartController extends Controller
 		if(isset($_POST['yt1']))
 			unset($_POST['yt1']);
 		$id = $_POST['book_id'];
+		var_dump($id);exit;
 		if(is_array($cart) && in_array($id,$cart))
 		{
 			$amount = $cart[$id]['amount'];
