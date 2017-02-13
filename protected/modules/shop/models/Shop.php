@@ -1,6 +1,8 @@
 <?php
 class Shop
 {
+	public static $qtyList = array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10);
+
 	public static function mailNotification($order)
 	{
 		$email = Shop::module()->notifyAdminEmail;
@@ -41,15 +43,24 @@ class Shop
 		return Yii::app()->user->setState('cart', json_encode($cart));
 	}
 
+	public static function getCartCount()
+	{
+		$cart = self::getCartContent();
+		$count = 0;
+		foreach($cart as $item)
+			$count += $item['qty'];
+		return $count;
+	}
+
 	public static function getPriceTotal()
 	{
 		$response = [];
 		$price_total = 0;
 		$tax_total = 0;
 		$tax_rate = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
-		foreach(Shop::getCartContent() as $product){
-			$model = Books::model()->findByPk($product['book_id']);
-			$price = $model->getOff_printed_price();
+		foreach(Shop::getCartContent() as $book){
+			$model = Books::model()->findByPk($book['book_id']);
+			$price = (double)($model->getOff_printed_price() * $book['qty']);
 			$price_total += $price;
             // calculate tax
 			$tax = 0;
@@ -61,7 +72,6 @@ class Shop
 			}
 			$tax_total += $tax;
 		}
-
 		if($shipping_method = Shop::getShippingMethod())
 			$price_total += $shipping_method->price;
 

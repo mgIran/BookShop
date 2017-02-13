@@ -18,6 +18,7 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'ext.yiiSortableModel.models.*',
+		'application.modules.shop.models.*',
 	),
 
 	'modules'=>array(

@@ -1,4 +1,4 @@
-<div class="loading-container">
+<div class="loading-container"<? isset($id)?'id="'.$id.'"':"" ?>>
     <div class="overly"></div>
     <div class="spinners">
         <div class="spinner"></div>

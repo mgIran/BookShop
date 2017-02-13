@@ -50,25 +50,22 @@ class ShopCartController extends Controller
 		if(isset($_POST)){
 			$key = $_POST['book_id'];
 			$value = $_POST['qty'];
-			if(substr($key, 0, 4) == 'qty_'){
-				if($value == '')
-					return true;
-				if(!is_numeric($value) || $value <= 0)
-					throw new CException('تعداد نامعتبر است.');
-				$position = explode('_', $key);
-				$position = $position[1];
+			if($value == '')
+				return true;
+			if(!is_numeric($value) || $value <= 0)
+				throw new CException('تعداد نامعتبر است.');
 
-				if(isset($cart[$position]['qty']))
-					$cart[$position]['qty'] = $value;
-				$book = Books::model()->findByPk($position);
-				$thisBookTotal = (double)($book->getOff_printed_price() * $value);
-				echo CJSON::encode([
-					'status' => true,
-					'thisBookTotal' => $thisBookTotal,
-					'priceTotal' => Shop::getPriceTotal()
-				]);
-				Shop::setCartContent($cart);
-			}
+			if(isset($cart[$key]['qty']))
+				$cart[$key]['qty'] = $value;
+			Shop::setCartContent($cart);
+			$cart = Shop::getCartContent();
+			$this->beginClip('basket-table');
+			$this->renderPartial('_basket_table',array('books' => $cart));
+			$this->endClip();
+			echo CJSON::encode([
+				'status' => true,
+				'table' => $this->clips['basket-table']
+			]);
 		}
 	}
 
@@ -91,11 +88,11 @@ class ShopCartController extends Controller
 		if(isset($_POST['yt1']))
 			unset($_POST['yt1']);
 		$id = $_POST['book_id'];
-		if(is_array($cart) && in_array($id,$cart))
+		if(is_array($cart) && array_key_exists($id,$cart))
 		{
 			$qty = $cart[$id]['qty'];
 			if($qty<10)
-				$cart[$id]['qty']+= $qty;
+				$cart[$id]['qty']++;
 		}else
 			$cart[$id] = $_POST;
 		Shop::setCartcontent($cart);
