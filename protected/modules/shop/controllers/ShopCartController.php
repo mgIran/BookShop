@@ -34,7 +34,7 @@ class ShopCartController extends Controller
 		$cart = Shop::getCartContent();
 
 		$this->render('view',array(
-			'products'=>$cart
+			'books'=>$cart
 		));
 	}
 
@@ -79,7 +79,6 @@ class ShopCartController extends Controller
 
 	public function actionAdd(){
 		$cart = Shop::getCartContent();
-		var_dump($_POST, $cart);exit;
 		// remove potential clutter
 		if(isset($_POST['yt0']))
 			unset($_POST['yt0']);
