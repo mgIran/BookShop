@@ -48,7 +48,9 @@ class ShopCartController extends Controller
 	{
 		$cart = Shop::getCartContent();
 
-		foreach($_POST as $key => $value){
+		if(isset($_POST)){
+			$key = $_POST['book_id'];
+			$value = $_POST['amount'];
 			if(substr($key, 0, 4) == 'qty_'){
 				if($value == '')
 					return true;
@@ -60,9 +62,13 @@ class ShopCartController extends Controller
 				if(isset($cart[$position]['amount']))
 					$cart[$position]['amount'] = $value;
 				$book = Books::model()->findByPk($position);
-				echo $book->getOff_printed_price();
-				echo CJSON::encode(['status' => true, '']);
-				return Shop::setCartContent($cart);
+				$thisBookTotal = (double)($book->getOff_printed_price() * $value);
+				echo CJSON::encode([
+					'status' => true,
+					'thisBookTotal' => $thisBookTotal,
+					'priceTotal' => Shop::getPriceTotal()
+				]);
+				Shop::setCartContent($cart);
 			}
 		}
 	}
