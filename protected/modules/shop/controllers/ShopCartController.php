@@ -31,6 +31,8 @@ class ShopCartController extends Controller
 
 	public function actionView()
 	{
+		Yii::app()->theme="frontend";
+		$this->layout="//layouts/index";
 		$cart = Shop::getCartContent();
 
 		$this->render('view',array(
