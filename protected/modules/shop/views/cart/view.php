@@ -37,7 +37,7 @@
                                     </div>
                                 </td>
                                 <td class="vertical-middle text-center">
-                                    <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity"));?>
+                                    <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), array("class"=>"quantity", "data-id"=>$position));?>
                                     <?php echo CHtml::link("حذف", array('//shop/cart/remove', 'id' => $position), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟')));?>
                                 </td>
                                 <td class="vertical-middle text-center hidden-xs">
@@ -93,9 +93,9 @@ $(".quantity").on("change", function(){
         url: "'.$this->createUrl("/shop/cart/updateAmount").'",
         type: "POST",
         dataType: "JSON",
-        data: {$(this).attr("name"): $(this).val()},
+        data: {book_id:$(this).data("id"), amount: $(this).val()},
         success: function(data){
-            
+
         }
     });
 });
