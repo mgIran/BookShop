@@ -27,7 +27,7 @@
             echo CHtml::endForm();
             ?>
             <ul class="nav navbar-nav navbar-left">
-                <li><a href="<?php echo $this->createUrl("/shop/cart/view");?>">سبد خرید<small class="cart-count"><?php echo Shop::getCartCount();?></small></a></li>
+                <li><a href="<?php echo $this->createUrl("/shop/cart/view");?>">سبد خرید<?php if(Shop::getCartCount() != 0):?><small class="cart-count"><?php echo Controller::parseNumbers(Shop::getCartCount());?></small><?php endif;?></a></li>
                 <li><a href="#categories-modal" data-toggle="modal">موضوعات</a></li>
                 <? if(Yii::app()->user->isGuest ||  Yii::app()->user->type == 'admin'):?>
                     <li><a href="#login-modal" data-toggle="modal">ثبت نام&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;ورود</a></li>
