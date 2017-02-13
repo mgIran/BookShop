@@ -43,6 +43,7 @@ class Shop
 
 	public static function getPriceTotal()
 	{
+		$response = [];
 		$price_total = 0;
 		$tax_total = 0;
 		foreach(Shop::getCartContent() as $product){
@@ -55,15 +56,10 @@ class Shop
 		if($shipping_method = Shop::getShippingMethod())
 			$price_total += $shipping_method->price;
 
-		$price_total = Shop::t('Price total: {total}', array(
-			'{total}' => Shop::priceFormat($price_total),
-		));
-		$price_total .= '<br />';
-		$price_total .= Shop::t('All prices are including VAT: {vat}', array(
-				'{vat}' => Shop::priceFormat($tax_total))) . '<br />';
-		$price_total .= Shop::t('All prices excluding shipping costs') . '<br />';
-
-		return $price_total;
+		$response['totalPrice'] = $price_total;
+		$response['totalTax'] = $tax_total;
+		$response['totalPayment'] = $price_total + $tax_total;
+		return $response;
 	}
 
 	public static function register($file)

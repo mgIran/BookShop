@@ -47,23 +47,21 @@ class ShopCartController extends Controller
 		$cart = Shop::getCartContent();
 
 		foreach($_GET as $key => $value){
-			if(substr($key, 0, 7) == 'amount_'){
+			if(substr($key, 0, 4) == 'qty_'){
 				if($value == '')
 					return true;
 				if(!is_numeric($value) || $value <= 0)
-					throw new CException('Wrong amount');
+					throw new CException('تعداد نامعتبر است.');
 				$position = explode('_', $key);
 				$position = $position[1];
 
 				if(isset($cart[$position]['amount']))
 					$cart[$position]['amount'] = $value;
-				$product = Products::model()->findByPk($cart[$position]['product_id']);
-				echo Shop::priceFormat(
-					@$product->getPrice($cart[$position]['Variations'], $value));
+				$book = Books::model()->findByPk($position);
+				echo $book->getOff_printed_price();
 				return Shop::setCartContent($cart);
 			}
 		}
-
 	}
 
 
@@ -74,7 +72,7 @@ class ShopCartController extends Controller
 		unset($cart[$id]);
 		Yii::app()->user->setState('cart', json_encode($cart));
 
-		$this->redirect(array('//shop/shoppingCart/view'));
+		$this->redirect(array('//shop/cart/view'));
 	}
 
 	public function actionAdd(){
@@ -84,10 +82,15 @@ class ShopCartController extends Controller
 			unset($_POST['yt0']);
 		if(isset($_POST['yt1']))
 			unset($_POST['yt1']);
-
-		$cart[] = $_POST;
+		$id = $_POST['book_id'];
+		if(is_array($cart) && in_array($id,$cart))
+		{
+			$amount = $cart[$id]['amount'];
+			$cart[$id]['amount']+= $amount;
+		}else
+			$cart[$id] = $_POST;
 		Shop::setCartcontent($cart);
-		$this->redirect(array('/shop/cart/view'));
+		$this->redirect(array('//shop/cart/view'));
 	}
 
 	public function actionIndex()
