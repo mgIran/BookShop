@@ -57,84 +57,84 @@ $flag = false;
             <?php
             endif;
             ?>
-            <?php
-            if($publisherDataProvider->totalItemCount):
-                $flag = true;
-            ?>
-                <div class="row">
-                    <h2 class="search-group-title">انتشارات</h2>
-                    <div class="thumbnail-list">
-                        <?php
-                        $this->widget('zii.widgets.CListView', array(
-                            'id' => 'publisher-list',
-                            'dataProvider' => $publisherDataProvider,
-                            'itemView' => '/site/_book_item',
-                            'template' => '{items} {pager}',
-                            'viewData' => array('itemClass' => 'simple'),
-                            'ajaxUpdate' => true,
-                            'afterAjaxUpdate' => "function(id, data){
-                                $('html, body').animate({
-                                    scrollTop: ($('#'+id).offset().top-130)
-                                },1000);
-                            }",
-                            'pager' => array(
-                                'header' => '',
-                                'firstPageLabel' => '<<',
-                                'lastPageLabel' => '>>',
-                                'prevPageLabel' => '<',
-                                'nextPageLabel' => '>',
-                                'cssFile' => false,
-                                'htmlOptions' => array(
-                                    'class' => 'pagination pagination-sm',
-                                ),
-                            ),
-                            'pagerCssClass' => 'thumbnail-container',
-                        ));
-                        ?>
-                    </div>
-                </div>
-            <?php
-            endif;
-            ?>
-            <?php
-            if($personsDataProvider->totalItemCount):
-                $flag = true;
-            ?>
-                <div class="row">
-                    <h2 class="search-group-title">اشخاص و نویسندگان</h2>
-                    <div class="thumbnail-list">
-                        <?php
-                        $this->widget('zii.widgets.CListView', array(
-                            'id' => 'persons-list',
-                            'dataProvider' => $personsDataProvider,
-                            'itemView' => '/site/_book_item',
-                            'template' => '{items} {pager}',
-                            'viewData' => array('itemClass' => 'simple'),
-                            'ajaxUpdate' => true,
-                            'afterAjaxUpdate' => "function(id, data){
-                                $('html, body').animate({
-                                    scrollTop: ($('#'+id).offset().top-130)
-                                },1000);
-                            }",
-                            'pager' => array(
-                                'header' => '',
-                                'firstPageLabel' => '<<',
-                                'lastPageLabel' => '>>',
-                                'prevPageLabel' => '<',
-                                'nextPageLabel' => '>',
-                                'cssFile' => false,
-                                'htmlOptions' => array(
-                                    'class' => 'pagination pagination-sm',
-                                ),
-                            ),
-                            'pagerCssClass' => 'thumbnail-container',
-                        ));
-                        ?>
-                    </div>
-                </div>
-            <?php
-            endif;
-            ?>
+<!--            --><?php
+//            if($publisherDataProvider->totalItemCount):
+//                $flag = true;
+//            ?>
+<!--                <div class="row">-->
+<!--                    <h2 class="search-group-title">انتشارات</h2>-->
+<!--                    <div class="thumbnail-list">-->
+<!--                        --><?php
+//                        $this->widget('zii.widgets.CListView', array(
+//                            'id' => 'publisher-list',
+//                            'dataProvider' => $publisherDataProvider,
+//                            'itemView' => '/site/_book_item',
+//                            'template' => '{items} {pager}',
+//                            'viewData' => array('itemClass' => 'simple'),
+//                            'ajaxUpdate' => true,
+//                            'afterAjaxUpdate' => "function(id, data){
+//                                $('html, body').animate({
+//                                    scrollTop: ($('#'+id).offset().top-130)
+//                                },1000);
+//                            }",
+//                            'pager' => array(
+//                                'header' => '',
+//                                'firstPageLabel' => '<<',
+//                                'lastPageLabel' => '>>',
+//                                'prevPageLabel' => '<',
+//                                'nextPageLabel' => '>',
+//                                'cssFile' => false,
+//                                'htmlOptions' => array(
+//                                    'class' => 'pagination pagination-sm',
+//                                ),
+//                            ),
+//                            'pagerCssClass' => 'thumbnail-container',
+//                        ));
+//                        ?>
+<!--                    </div>-->
+<!--                </div>-->
+<!--            --><?php
+//            endif;
+//            ?>
+<!--            --><?php
+//            if($personsDataProvider->totalItemCount):
+//                $flag = true;
+//            ?>
+<!--                <div class="row">-->
+<!--                    <h2 class="search-group-title">اشخاص و نویسندگان</h2>-->
+<!--                    <div class="thumbnail-list">-->
+<!--                        --><?php
+//                        $this->widget('zii.widgets.CListView', array(
+//                            'id' => 'persons-list',
+//                            'dataProvider' => $personsDataProvider,
+//                            'itemView' => '/site/_book_item',
+//                            'template' => '{items} {pager}',
+//                            'viewData' => array('itemClass' => 'simple'),
+//                            'ajaxUpdate' => true,
+//                            'afterAjaxUpdate' => "function(id, data){
+//                                $('html, body').animate({
+//                                    scrollTop: ($('#'+id).offset().top-130)
+//                                },1000);
+//                            }",
+//                            'pager' => array(
+//                                'header' => '',
+//                                'firstPageLabel' => '<<',
+//                                'lastPageLabel' => '>>',
+//                                'prevPageLabel' => '<',
+//                                'nextPageLabel' => '>',
+//                                'cssFile' => false,
+//                                'htmlOptions' => array(
+//                                    'class' => 'pagination pagination-sm',
+//                                ),
+//                            ),
+//                            'pagerCssClass' => 'thumbnail-container',
+//                        ));
+//                        ?>
+<!--                    </div>-->
+<!--                </div>-->
+<!--            --><?php
+//            endif;
+//            ?>
             <?php
             if($categoryDataProvider->totalItemCount):
                 $flag = true;

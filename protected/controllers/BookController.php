@@ -756,6 +756,7 @@ class BookController extends Controller
         $publisherCriteria->addCondition('role_id = :role');
         $publisherCriteria->params[':role'] = 2;
         $publisherCriteria->order = 'userDetails.fa_name DESC';
+        $publisherCriteria->with = array('userDetails');
 
         $categoryCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
         $categoryCriteria->params[':status'] = 'enable';
@@ -802,7 +803,6 @@ class BookController extends Controller
             $bookCriteria->addCondition($bookSql);
 
             $publisherCriteria->addCondition($publisherSql);
-            $publisherCriteria->with = array('userDetails');
 
             $personsCriteria->addCondition($personsSql);
 
