@@ -14,25 +14,28 @@ $discountCodesInSession = Users::model()->getDiscountCodes();
     <div class="container page-content">
         <div class="white-box cart">
             <?php $this->renderPartial('/order/_steps', array('point' => 2));?>
-            <div class="discount-code">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="has-discount" data-toggle="collapse" data-target="#discount-code-form">
-                    <label for="has-discount">کد تخفیف کتابیک دارم</label>
+            <?php if($discountCodesInSession):?>
+                <div class="used-discount-code">
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">کد تخفیف نوروزی<a href="#" class="remove">حذف</a></div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">1.000<small> تومان</small></div>
                 </div>
-                <div id="discount-code-form" class="collapse">
-                    <div class="pull-right">لطفا کد تخفیف خود را وارد کنید.</div>
-                    <div class="pull-left">
-                        <?php echo CHtml::beginForm(array("/shop/order/addDiscount"));?>
-                            <?php echo CHtml::textField("DiscountCodes[code]", "", array("class"=>"text-field sm pull-right", "placeholder"=>"کد تخفیف"));?>
-                            <?php echo CHtml::submitButton("ثبت", array("class"=>"btn-blue btn-sm pull-left"));?>
-                        <?php echo CHtml::endForm();?>
+            <?php else:?>
+                <div class="discount-code">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="has-discount" data-toggle="collapse" data-target="#discount-code-form">
+                        <label for="has-discount">کد تخفیف کتابیک دارم</label>
+                    </div>
+                    <div id="discount-code-form" class="collapse">
+                        <div class="pull-right">لطفا کد تخفیف خود را وارد کنید.</div>
+                        <div class="pull-left">
+                            <?php echo CHtml::beginForm(array("/shop/order/addDiscount"));?>
+                                <?php echo CHtml::textField("DiscountCodes[code]", "", array("class"=>"text-field sm pull-right", "placeholder"=>"کد تخفیف"));?>
+                                <?php echo CHtml::submitButton("ثبت", array("class"=>"btn-blue btn-sm pull-left"));?>
+                            <?php echo CHtml::endForm();?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="used-discount-code">
-                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">کد تخفیف نوروزی<a href="#" class="remove">حذف</a></div>
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">1.000<small> تومان</small></div>
-            </div>
+            <?php endif;?>
             <div class="bill">
                 <?php $cartStatistics=Shop::getPriceTotal(); ?>
                 <ul class="list-group">
