@@ -15,7 +15,7 @@ if(!isset($model))
                 <?php $this->renderPartial('shop.views.shipping._loading')?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'address-form',
-                    'action'=>'/shop/addresses/add',
+                    'action'=>$model->isNewRecord?array('/shop/addresses/add'):array('/shop/addresses/update'),
                     'enableAjaxValidation'=>false,
                     'enableClientValidation'=>true,
                     'clientOptions'=>array(
@@ -25,10 +25,9 @@ if(!isset($model))
                             {
                                 var form = $("#address-form");
                                 var loading = $(".modal .loading-container");
-                                var url = \''.Yii::app()->createUrl('/shop/addresses/add').'\';
                                 submitAjaxForm(
                                     form,
-                                    url,
+                                    form.attr("action"),
                                     loading,
                                     "if(html.status){ $(\'#addresses-list-container\').html(html.content); $(\'#add-address-modal #address-form input[type=\"text\"]\').val(\'\'); $(\'#add-address-modal .close\').trigger(\'click\'); $(\'#places-label\').html(\'شهرستان مورد نظر را انتخاب کنید\'); $(\'#places\').html(\'\'); $(\'#places-hidden\').val(\'\'); $(\'#towns-label\').html(\'استان مورد نظر را انتخاب کنید\'); $(\'#towns-hidden\').val(\'\'); }else $(\'#add-address-modal #summary-errors\').html(html.errors);");
                             }
