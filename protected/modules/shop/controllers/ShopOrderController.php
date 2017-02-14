@@ -106,6 +106,7 @@ class ShopOrderController extends Controller
 			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
             $this->render('/payment/choose', array(
 				'user' => Shop::getCustomer(),
+				'shipping_price' => $shipping_object->price,
 				'paymentMethods' => $shipping_object->getPaymentMethodObjects()
 			));
             Yii::app()->end();
