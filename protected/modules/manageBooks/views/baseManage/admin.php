@@ -73,6 +73,7 @@ $this->breadcrumbs=array(
 		),
 		array(
 			'class'=>'CButtonColumn',
+			'template'=>'{view} {update} {delete} {sell_printed}',
             'buttons' => array(
                 'update' => array(
                     'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/update", array("id"=>$data->id))'
@@ -85,6 +86,13 @@ $this->breadcrumbs=array(
 					'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/view/".$data->id)',
 					'options'=>array(
 						'target'=>'_blank'
+					),
+                ),
+				'sell_printed' => array(
+					'label'=>'تنظیمات فروش',
+					'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/updatePackage/".$data->lastPackege->id)',
+					'options'=>array(
+						'class'=>'btn btn-sm btn-success'
 					),
                 )
             )
