@@ -58,6 +58,9 @@ class ShopOrderController extends Controller
     public function actionCreate($customer = null, $payment_method = null, $shipping_method = null) {
 		Yii::app()->theme="frontend";
         $this->layout="//layouts/index";
+		$cart = Shop::getCartContent();
+		if(!$cart)
+			$this->redirect(array('/shop/cart/view'));
         if(isset($_POST['ShippingMethod']))
             Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
 
@@ -91,10 +94,10 @@ class ShopOrderController extends Controller
             Yii::app()->end();
         }
 //		var_dump($shipping_method);exit;
-        if(!$shipping_method) {
-            $this->render('/shipping/choose', array(
+		if(!$shipping_method) {
+			$this->render('/shipping/choose', array(
                 'customer' => Shop::getCustomer()));
-            Yii::app()->end();
+			Yii::app()->end();
         }
         if(!$payment_method) {
             $this->render('/payment/choose', array(
