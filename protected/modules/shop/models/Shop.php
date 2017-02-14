@@ -89,12 +89,14 @@ class Shop
 			$response['paymentPrice'] = (double)$payment_method->price;
 			$payment_total += $response['paymentPrice'];
 		}
-
-//		if($payment_method = Users::getPaymentMethod())
-//		{
-//			$response['paymentPrice'] = (double)$payment_method->price;
-//			$payment_total += $response['paymentPrice'];
-//		}
+		var_dump($payment_total);
+		if($discount_codes = Users::model()->getDiscountIds())
+		{
+			DiscountCodes::calculateDiscountCodes($payment_total);
+			var_dump($payment_total);exit;
+			$response['paymentPrice'] = (double)$payment_method->price;
+			$payment_total += $response['paymentPrice'];
+		}
 
 		$response['totalPrice'] = $price_total;
 		$response['totalDiscount'] = $discount_total;
