@@ -74,7 +74,9 @@ class Shop
 			$discount_total += ($price - $discount_price);
 			$payment_total += $discount_price;
 		}
-			
+
+		$response['cartPrice'] = $payment_total;
+
 		if($shipping_method = Shop::getShippingMethod())
 			$payment_total += $shipping_method->price;
 
