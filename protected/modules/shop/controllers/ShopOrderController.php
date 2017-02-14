@@ -93,15 +93,19 @@ class ShopOrderController extends Controller
 			$this->render('login');
             Yii::app()->end();
         }
-//		var_dump($shipping_method);exit;
 		if(!$shipping_method) {
 			$this->render('/shipping/choose', array(
-                'customer' => Shop::getCustomer()));
+                'user' => Shop::getCustomer(),
+                'shipping_methods' => ShopShippingMethod::model()->findAll('status <> :deactive',array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)),
+			));
 			Yii::app()->end();
         }
         if(!$payment_method) {
+			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
             $this->render('/payment/choose', array(
-                'customer' => Shop::getCustomer()));
+				'user' => Shop::getCustomer(),
+				'payment_methods' => $shipping_object->getPaymentMethodObjects()
+			));
             Yii::app()->end();
         }
 
