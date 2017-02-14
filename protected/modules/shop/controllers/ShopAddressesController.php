@@ -104,7 +104,7 @@ class ShopAddressesController extends Controller
 		}
 
 		$this->beginClip('add-address-modal');
-		$this->renderPartial('shop.views.shipping._add_addresses_modal', array('model' => $model));
+		$this->renderPartial('shop.views.shipping._add_address_modal', array('model' => $model));
 		$this->endClip();
 		echo CJSON::encode(['status' => true, 'content' => $this->clips['add-address-modal']]);
 	}
