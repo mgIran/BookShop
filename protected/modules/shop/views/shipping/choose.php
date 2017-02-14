@@ -15,7 +15,7 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
                 $("#basket-loading").fadeIn();
             },
             success: function(data){
-                console.log($(data.content).find("#add-address-modal").html());
+                $("#add-address-modal").html($(data.content).html());
                 $("#basket-loading").fadeOut();
                 $("#add-address-modal").modal("show");
             }
