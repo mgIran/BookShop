@@ -15,6 +15,7 @@ $model=new ShopAddresses();
                 <?php $this->renderPartial('//partial-views/_loading')?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'address-form',
+                    'action'=>'/shop/addresses/add',
                     'enableAjaxValidation'=>false,
                     'enableClientValidation'=>true,
                     'clientOptions'=>array(
@@ -32,7 +33,9 @@ $model=new ShopAddresses();
                 ));
                 echo CHtml::hiddenField('ajax','address-form');
                 ?>
+
                 <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center"></p></div>
+
                 <div class="form-group">
                     <?php echo $form->textField($model,'transferee' ,array(
                         'placeholder' => $model->getAttributeLabel("transferee"),
@@ -40,16 +43,82 @@ $model=new ShopAddresses();
                     ));
                     echo $form->error($model,'transferee'); ?>
                 </div>
-                <div class="form-group">
-                    <?php echo $form->textField($model,'postal_address' ,array(
-                        'placeholder' => $model->getAttributeLabel("postal_address"),
-                        'class' => 'text-field'
-                    ));
-                    echo $form->error($model,'postal_address'); ?>
+
+                <div class="form-group row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 right-control">
+                        <?php $this->widget('ext.dropDown.dropDown', array(
+                            'id' => 'towns',
+                            'model'=>$model,
+                            'attribute' => 'town_id',
+                            'label' => 'استان مورد نظر را انتخاب کنید',
+                            'emptyOpt' => false,
+                            'data' => CHtml::listData(Towns::model()->findAll() , 'id' ,'name'),
+                            'caret' => '<i class="icon icon-chevron-down"></i>',
+                            'selected' => $model->town_id?$model->town_id:false,
+                            'onclickAjax' => array(
+                                'url' => Yii::app()->createUrl('/places/places/getCities'),
+                                'type' => 'GET',
+                                'dataType' => 'html',
+                                'success' => '
+                                    $("#places-label").html("شهرستان مورد نظر را انتخاب کنید");
+                                    $("#places").html(data);
+                                    $("#places-hidden").val("");'
+                            )
+                        )); ?>
+                        <?php echo $form->error($model,'town_id'); ?>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 left-control">
+                        <?php $this->widget('ext.dropDown.dropDown', array(
+                            'id' => 'places',
+                            'model'=>$model,
+                            'attribute' => 'place_id',
+                            'label' => 'شهرستان مورد نظر را انتخاب کنید',
+                            'selected' => $model->place_id?$model->place_id:false,
+                            'data' => $model->town_id?CHtml::listData(Places::model()->findAll('town_id = :id' ,array(':id'=>$model->town_id)) , 'id' ,'name'):null,
+                            'caret' => '<i class="icon icon-chevron-down"></i>',
+                        )); ?>
+                        <?php echo $form->error($model,'place_id'); ?>
+                    </div>
                 </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 right-control">
+                        <?php echo $form->textField($model,'postal_address' ,array(
+                            'placeholder' => $model->getAttributeLabel("postal_address"),
+                            'class' => 'text-field'
+                        ));?>
+                        <?php echo $form->error($model,'postal_address'); ?>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 left-control">
+                        <?php echo $form->textField($model,'postal_code' ,array(
+                            'placeholder' => $model->getAttributeLabel("postal_code"),
+                            'class' => 'text-field'
+                        ));?>
+                        <?php echo $form->error($model,'postal_code'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 right-control">
+                        <?php echo $form->textField($model,'emergency_tel' ,array(
+                            'placeholder' => $model->getAttributeLabel("emergency_tel"),
+                            'class' => 'text-field'
+                        ));?>
+                        <?php echo $form->error($model,'emergency_tel'); ?>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 left-control">
+                        <?php echo $form->textField($model,'landline_tel' ,array(
+                            'placeholder' => $model->getAttributeLabel("landline_tel"),
+                            'class' => 'text-field'
+                        ));?>
+                        <?php echo $form->error($model,'landline_tel'); ?>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <?= CHtml::submitButton('ورود',array('class'=>"btn-blue")); ?>
                 </div>
+
                 <? $this->endWidget(); ?>
             </div>
         </div>
