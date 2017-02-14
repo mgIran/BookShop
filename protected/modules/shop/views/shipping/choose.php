@@ -68,7 +68,7 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
         <?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
         <div class="white-box cart">
             <?php $this->renderPartial('/order/_steps', array('point' => 1));?>
-            <?php $this->renderPartial('//partials-views/_flashMessage');?>
+            <?php $this->renderPartial('//partial-views/_flashMessage');?>
             <div class="select-address">
                 <?php echo CHtml::beginForm("/shop/order/create");?>
                     <?php echo CHtml::hiddenField("form", "shipping-form");?>
