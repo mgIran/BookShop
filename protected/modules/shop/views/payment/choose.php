@@ -3,7 +3,7 @@ Shop::register('css/shop.css');
 $this->renderPartial('/order/_steps', array('point' => 3));
 
 if(!isset($customer))
-	$customer = new Customer;
+	$customer = new Uesrs;
 
 	if(!isset($billingAddress))
 		if(isset($customer->billingAddress))

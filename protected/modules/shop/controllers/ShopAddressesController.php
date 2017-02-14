@@ -25,30 +25,17 @@ class ShopAddressesController extends Controller
 	{
 		return array(
 			'checkAccess',
-			'postOnly + add, remove, update',
+//			'postOnly + add, remove, update',
 		);
 	}
 
 
 
 
-	public function actionRemove(){
-		if(isset($_POST)){
-			$id = (int)$_POST['book_id'];
-			$cart = json_decode(Yii::app()->user->getState('cart'), true);
-
-			unset($cart[$id]);
-			Yii::app()->user->setState('cart', json_encode($cart));
-			$this->beginClip('basket-table');
-			$this->renderPartial('_basket_table', array('books' => $cart));
-			$this->endClip();
-			echo CJSON::encode([
-				'status' => true,
-				'countCart' => Controller::parseNumbers(number_format(Shop::getCartCount())),
-				'table' => $this->clips['basket-table']
-			]);
-			Yii::app()->end();
-		}
+	public function actionRemove($id){
+		$model = $this->loadModel($id);
+		
+		
 	}
 
 	public function actionAdd(){
@@ -68,10 +55,25 @@ class ShopAddressesController extends Controller
 			{
 //				$model->user->refresh();
 				$this->beginClip('address-list');
-				$this->renderPartial('_addresses_list', array('addresses' => $model->user->addresses));
+				$this->renderPartial('/shipping/_addresses_list', array('addresses' => $model->user->addresses));
 				$this->endClip();
 				echo CJSON::encode(['status' => true, 'html' => $this->clips['address-list']]);
 			}
 		}
+	}
+
+	/**
+	 * Returns the data model based on the primary key given in the GET variable.
+	 * If the data model is not found, an HTTP exception will be raised.
+	 * @param integer $id the ID of the model to be loaded
+	 * @return ShopOrder the loaded model
+	 * @throws CHttpException
+	 */
+	public function loadModel($id)
+	{
+		$model=ShopAddresses::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
 	}
 }

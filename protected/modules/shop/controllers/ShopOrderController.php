@@ -89,7 +89,7 @@ class ShopOrderController extends Controller
         if(!$shipping_method)
             $shipping_method = Yii::app()->user->getState('shipping_method');
         if(!$customer) {
-			Yii::app()->user->returnUrl = '/'.$this->route;
+			Yii::app()->user->returnUrl = Yii::app()->createUrl('/shop/cart/view');
 			$this->render('login');
             Yii::app()->end();
         }
@@ -100,6 +100,7 @@ class ShopOrderController extends Controller
 			));
 			Yii::app()->end();
         }
+		var_dump($shipping_method);exit;
         if(!$payment_method) {
 			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
             $this->render('/payment/choose', array(
@@ -112,7 +113,7 @@ class ShopOrderController extends Controller
 
         if($customer && $payment_method && $shipping_method)   {
             if(is_numeric($customer))
-                $customer = Customer::model()->findByPk($customer);
+                $customer = Users::model()->findByPk($customer);
             if(is_numeric($shipping_method))
                 $shipping_method = ShopShippingMethod::model()->findByPk($shipping_method);
             if(is_numeric($payment_method))
