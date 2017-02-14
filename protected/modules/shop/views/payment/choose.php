@@ -4,6 +4,7 @@
 /* @var $user Users */
 /* @var $paymentMethods ShopPaymentMethod[] */
 Shop::getPriceTotal();
+$discountCodesInSession = Users::model()->getDiscountCodes();
 ?>
 <div class="page">
     <div class="page-heading">

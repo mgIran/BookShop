@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create'),
+			'frontend' => array('create','addDiscount'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create',
+			'checkAccess - create, addDiscount',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -241,6 +241,7 @@ class ShopOrderController extends Controller
 
 	public function actionAddDiscount(){
 		Yii::app()->getModule('discountCodes');
+		$price = 100;
 		$discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
 		$discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
 		// use Discount codes
@@ -258,20 +259,20 @@ class ShopOrderController extends Controller
 				Yii::app()->user->setFlash('failed', 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.');
 				$this->refresh();
 			}
-			if ($discount->user_id && $discount->user_id != $userID) {
+			if (!Yii::app()->user->isGuest && $discount->user_id && $discount->user_id != Yii::app()->user->getId()) {
 				Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر نامعتبر است.');
 				$this->refresh();
 			}
 			$used = $discount->codeUsed(array(
 					'condition' => 'user_id = :user_id',
-					'params' => array(':user_id' => $userID),
+					'params' => array(':user_id' => Yii::app()->user->getId()),
 				)
 			);
 			/* @var $used DiscountUsed */
 			if ($used) {
 				$u_date = JalaliDate::date('Y/m/d - H:i', $used->date);
 				Yii::app()->user->setFlash('failed', "کد تخفیف مورد نظر قبلا در تاریخ {$u_date} استفاده شده است.");
-				$this->refresh();
+				$this->redirect(array('/shop/order/create'));
 			}
 			if(DiscountCodes::addDiscountCodes($discount))
 				Yii::app()->user->setFlash('success', 'کد تخفیف با موفقیت اعمال شد.');
