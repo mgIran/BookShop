@@ -92,10 +92,10 @@ class Shop
 //		var_dump($payment_total);
 		if($discount_codes = Users::model()->getDiscountIds())
 		{
-			DiscountCodes::calculateDiscountCodes($payment_total);
-//			var_dump($payment_total);exit;
-			$response['paymentPrice'] = (double)$payment_method->price;
-			$payment_total += $response['paymentPrice'];
+//			DiscountCodes::calculateDiscountCodes($payment_total);
+////			var_dump($payment_total);exit;
+//			$response['paymentPrice'] = (double)$payment_method->price;
+//			$payment_total += $response['paymentPrice'];
 		}
 
 		$response['totalPrice'] = $price_total;
