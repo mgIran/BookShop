@@ -88,6 +88,7 @@ class ShopOrderController extends Controller
             $this->render('login');
             Yii::app()->end();
         }
+//		var_dump($shipping_method);exit;
         if(!$shipping_method) {
             $this->render('/shipping/choose', array(
                 'customer' => Shop::getCustomer()));
