@@ -4,8 +4,10 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
-
+<div style="margin-top: 30px">
+	<?php
+	$this->renderPartial('//layouts/_flashMessage');
+	?>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'shop-shipping-method-form',
 	'enableAjaxValidation'=>false,
@@ -27,6 +29,12 @@
 		<?php echo $form->labelEx($model,'price'); ?>
 		<?php echo $form->textField($model,'price'); ?>
 		<?php echo $form->error($model,'price'); ?>
+	</div>
+
+	<div class="row"><br>
+		<?php echo $form->labelEx($model,'payment_method'); ?><br><br>
+		<?php echo $form->checkBoxList($model,'payment_method',CHtml::listData(ShopPaymentMethod::model()->findAll(),'id','title')); ?>
+		<?php echo $form->error($model,'payment_method'); ?>
 	</div>
 
 	<div class="row buttons">

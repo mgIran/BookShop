@@ -11,8 +11,11 @@ $this->breadcrumbs=array(
 <h1>مدیریت روش های تحویل</h1>
 <a href="<?= $this->createUrl('create') ?>" class=" btn btn-success pull-right">افزودن روش تحویل جدید</a>
 <div class="clearfix"></div>
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('ext.yiiSortableModel.widgets.SortableCGridView', array(
 	'id'=>'shop-shipping-method-grid',
+	'orderField' => 'order',
+	'idField' => 'id',
+	'orderUrl' => 'order',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
     'itemsCssClass'=>'table',
@@ -22,6 +25,17 @@ $this->breadcrumbs=array(
 			'name' => 'price',
 			'value' => function($data){
 				return Controller::parseNumbers(number_format($data->price)).' تومان';
+			},
+            'filter' => false
+		),
+		array(
+			'name' => 'payment_method',
+			'value' => function($data){
+				$methods= [];
+				foreach($data->paymentMethods as $method){
+					$methods[]=ShopPaymentMethod::model()->findByPk($method)->title;
+				}
+				return implode(' - ',$methods);
 			},
             'filter' => false
 		),

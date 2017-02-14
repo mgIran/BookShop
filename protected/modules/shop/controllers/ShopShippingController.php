@@ -14,7 +14,7 @@ class ShopShippingController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('admin', 'index', 'view', 'delete', 'create', 'update', 'changeStatus')
+			'backend' => array('admin', 'index', 'view', 'delete', 'create', 'update', 'changeStatus', 'order')
 		);
 	}
 
@@ -27,6 +27,15 @@ class ShopShippingController extends Controller
 			'checkAccess',
 			'postOnly + delete',
             'ajaxOnly + changeStatus',
+		);
+	}
+
+	public function actions()
+	{
+		return array(
+			'order' => array(
+				'class' => 'ext.yiiSortableModel.actions.AjaxSortingAction',
+			)
 		);
 	}
 
@@ -52,6 +61,10 @@ class ShopShippingController extends Controller
 		if(isset($_POST['ShopShippingMethod']))
 		{
 			$model->attributes=$_POST['ShopShippingMethod'];
+			if(!$model->payment_method)
+				$model->payment_method = null;
+			else
+				$model->payment_method=CJSON::encode($model->payment_method);
 			if ($model->save()) {
 				Yii::app()->user->setFlash('success', '<span class="icon-check"></span>&nbsp;&nbsp;اطلاعات با موفقیت ذخیره شد.');
 				$this->redirect(array('admin'));
@@ -73,18 +86,20 @@ class ShopShippingController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['ShopShippingMethod']))
 		{
 			$model->attributes=$_POST['ShopShippingMethod'];
+			if(!$model->payment_method)
+				$model->payment_method = null;
+			else
+				$model->payment_method=CJSON::encode($model->payment_method);
 			if ($model->save()) {
 				Yii::app()->user->setFlash('success', '<span class="icon-check"></span>&nbsp;&nbsp;اطلاعات با موفقیت ویرایش شد.');
 				$this->refresh();
 			} else
 				Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
 		}
+		$model->payment_method=CJSON::decode($model->payment_method);
 
 		$this->render('update',array(
 			'model'=>$model,
