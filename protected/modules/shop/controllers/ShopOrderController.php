@@ -61,7 +61,7 @@ class ShopOrderController extends Controller
         $this->layout="//layouts/index";
 		Yii::app()->getModule('users');
 		Yii::app()->getModule('discountCodes');
-		
+
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
@@ -243,9 +243,6 @@ class ShopOrderController extends Controller
 
 	public function actionAddDiscount(){
 		Yii::app()->getModule('discountCodes');
-		$price = 100;
-		$discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
-		$discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
 		// use Discount codes
 		if (isset($_POST['DiscountCodes'])) {
 			$code = $_POST['DiscountCodes']['code'];
@@ -255,15 +252,15 @@ class ShopOrderController extends Controller
 			/* @var $discount DiscountCodes */
 			if ($discount === NULL) {
 				Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر موجود نیست.');
-				$this->refresh();
+				$this->redirect(array('/shop/order/create'));
 			}
 			if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times) {
 				Yii::app()->user->setFlash('failed', 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.');
-				$this->refresh();
+				$this->redirect(array('/shop/order/create'));
 			}
 			if (!Yii::app()->user->isGuest && $discount->user_id && $discount->user_id != Yii::app()->user->getId()) {
 				Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر نامعتبر است.');
-				$this->refresh();
+				$this->redirect(array('/shop/order/create'));
 			}
 			$used = $discount->codeUsed(array(
 					'condition' => 'user_id = :user_id',
@@ -280,7 +277,7 @@ class ShopOrderController extends Controller
 				Yii::app()->user->setFlash('success', 'کد تخفیف با موفقیت اعمال شد.');
 			else
 				Yii::app()->user->setFlash('failed', 'کد تخفیف در حال حاضر اعمال شده است.');
-			$this->refresh();
+			$this->redirect(array('/shop/order/create'));
 		}
 	}
 }

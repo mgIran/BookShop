@@ -4,6 +4,7 @@
 /* @var $user Users */
 /* @var $paymentMethods ShopPaymentMethod[] */
 $discountCodesInSession = Users::model()->getDiscountCodes();
+$discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
 ?>
 <div class="page">
     <div class="page-heading">
