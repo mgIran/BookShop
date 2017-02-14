@@ -82,6 +82,7 @@ class Shop
 		$response['cartPrice'] = $payment_total;
 
 		if($discount_codes = Users::model()->getDiscountCodes()){
+			Yii::app()->getModule('discountCodes');
 			$discountObj = DiscountCodes::model()->findByAttributes(['code' => $discount_codes]);
 			$discountCodeAmount = (double)$discountObj->getAmount($payment_total);
 			DiscountCodes::calculateDiscountCodes($payment_total);

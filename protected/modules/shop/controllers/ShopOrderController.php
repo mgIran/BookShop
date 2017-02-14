@@ -105,6 +105,10 @@ class ShopOrderController extends Controller
 			Yii::app()->end();
 		}
 		if(!$payment_method){
+			if(isset($_POST['form']) && $_POST['form'] == 'payment-form'){
+				if(!$payment_method)
+					Yii::app()->user->setFlash('warning', 'لطفا شیوه پرداخت را انتخاب کنید.');
+			}
 			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
 			$this->render('/payment/choose', array(
 				'user' => Shop::getCustomer(),
