@@ -76,7 +76,10 @@ $this->breadcrumbs=array(
 			'template'=>'{view} {update} {delete} {sell_printed}',
             'buttons' => array(
                 'update' => array(
-                    'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/update", array("id"=>$data->id))'
+                    'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/update", array("id"=>$data->id))',
+					'visible' => function(){
+						return Yii::app()->user->roles == 'admin';
+					}
                 ),
                 'delete' => array(
                     'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/delete", array("id"=>$data->id))'
@@ -90,10 +93,14 @@ $this->breadcrumbs=array(
                 ),
 				'sell_printed' => array(
 					'label'=>'تنظیمات فروش',
-					'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/updatePackage/".$data->lastPackege->id)',
+					'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/updatePackage?id=".$data->lastPackage->id."&book_id=".$data->id)',
 					'options'=>array(
+						'style' => 'margin-top:5px',
 						'class'=>'btn btn-sm btn-success'
 					),
+					'visible' => function(){
+						return Yii::app()->user->roles != 'admin';
+					}
                 )
             )
 		),
