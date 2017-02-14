@@ -138,4 +138,12 @@ class ShopShippingMethod extends SortableCActiveRecord
 	public function getPaymentMethods(){
 		return CJSON::decode($this->payment_method);
 	}
+
+	public function getPaymentMethodObjects(){
+		$criteria = new CDbCriteria();
+		$criteria->compare('status', ShopPaymentMethod::STATUS_ACTIVE);
+		$criteria->addInCondition('id', $this->getPaymentMethods());
+		$criteria->order;
+		return ShopPaymentMethod::model()->findAll($criteria);
+	}
 }
