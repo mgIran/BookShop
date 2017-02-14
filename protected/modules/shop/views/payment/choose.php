@@ -14,61 +14,7 @@
 		<?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
 		<div class="white-box cart">
 			<?php $this->renderPartial('/order/_steps', array('point' => 2));?>
-
-			<table class="table">
-				<thead>
-				<tr>
-					<th>شرح محصول</th>
-					<th class="text-center">تعداد</th>
-					<th class="text-center hidden-xs">قیمت واحد</th>
-					<th class="text-center hidden-xs">قیمت کل</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr>
-					<td>
-						<img src="uploads/books/images/914.jpg" alt="Book Name" class="hidden-xs hidden-sm">
-						<div class="info">
-							<h4>دختر شینا</h4>
-							<span class="item hidden-xs">نویسنده: <span class="value">محمد علیزاده</span></span>
-							<span class="item hidden-xs">ناشر: <span class="value">نشر معروف</span></span>
-							<span class="item hidden-xs">سال چاپ: <span class="value">1394</span></span>
-							<span class="item hidden-xs">تعداد صفحات: <span class="value">120 صفحه</span></span>
-						</div>
-					</td>
-					<td class="vertical-middle text-center">
-						<strong>1</strong>
-					</td>
-					<td class="vertical-middle text-center hidden-xs">
-						<span class="price">10.000<small> تومان</small></span>
-					</td>
-					<td class="vertical-middle text-center hidden-xs">
-						<span class="price">10.000<small> تومان</small></span>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<img src="uploads/books/images/914.jpg" alt="Book Name" class="hidden-xs hidden-sm">
-						<div class="info">
-							<h4>دختر شینا</h4>
-							<span class="item hidden-xs">نویسنده: <span class="value">محمد علیزاده</span></span>
-							<span class="item hidden-xs">ناشر: <span class="value">نشر معروف</span></span>
-							<span class="item hidden-xs">سال چاپ: <span class="value">1394</span></span>
-							<span class="item hidden-xs">تعداد صفحات: <span class="value">120 صفحه</span></span>
-						</div>
-					</td>
-					<td class="vertical-middle text-center">
-						<strong>1</strong>
-					</td>
-					<td class="vertical-middle text-center hidden-xs">
-						<span class="price">10.000<small> تومان</small></span>
-					</td>
-					<td class="vertical-middle text-center hidden-xs">
-						<span class="price">10.000<small> تومان</small></span>
-					</td>
-				</tr>
-				</tbody>
-			</table>
+			<?php $this->renderPartial('/payment/_basket_table', array('books' => Shop::getCartContent()));?>
 			<div class="bill">
 				<h5>خلاصه صورتحساب شما</h5>
 				<ul class="list-group">
