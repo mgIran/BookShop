@@ -213,7 +213,7 @@ class BookDiscounts extends CActiveRecord
 			$price = $this->book->lastPackage->printed_price;
 			$disVal = 0;
 			if($this->printed_percent && !empty($this->printed_percent) && $this->discount_type == self::DISCOUNT_TYPE_PERCENT)
-				$disVal = $this->book->lastPackage->price * $this->printed_percent / 100;
+				$disVal = $this->book->lastPackage->printed_price * $this->printed_percent / 100;
 			elseif($this->printed_amount && !empty($this->printed_amount) && $this->discount_type == self::DISCOUNT_TYPE_AMOUNT)
 				$disVal = $this->printed_amount;
 			$offPrice = $price - $disVal;
