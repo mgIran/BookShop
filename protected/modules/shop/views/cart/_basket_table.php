@@ -32,10 +32,10 @@ if($books):?>
                         <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟'), 'data-id' => $position));?>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
-                        <span class="price"><?php echo Controller::parseNumbers(number_format($model->getOff_printed_price()))?><small> تومان</small></span>
+                        <span class="price"><?php echo Controller::parseNumbers(number_format($model->getPrinted_price()))?><small> تومان</small></span>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
-                        <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$model->getOff_printed_price())))?><small> تومان</small></span>
+                        <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$model->getPrinted_price())))?><small> تومان</small></span>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
                         <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟'), 'data-id' => $position));?>

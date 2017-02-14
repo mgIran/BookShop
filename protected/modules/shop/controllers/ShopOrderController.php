@@ -75,18 +75,17 @@ class ShopOrderController extends Controller
             }
         }
 
-        if(!$customer)
-            $customer = Yii::app()->user->getState('customer_id');
+        if(!$customer && !Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+            $customer = Yii::app()->user->getId();
         if(!Yii::app()->user->isGuest && !$customer)
             $customer = Users::model()->findByPk(Yii::app()->user->id);
         if(!$payment_method)
             $payment_method = Yii::app()->user->getState('payment_method');
         if(!$shipping_method)
             $shipping_method = Yii::app()->user->getState('shipping_method');
-
         if(!$customer) {
-            $this->render('/customer/create', array(
-                'action' => array('//shop/customer/create')));
+			Yii::app()->user->returnUrl = $this->route;
+            $this->render('login');
             Yii::app()->end();
         }
         if(!$shipping_method) {
