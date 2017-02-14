@@ -48,7 +48,7 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
         </div>
     </div>
     <div class="container page-content relative">
-        <?php $this->renderPartial('//partial-views/_loading', array('id' => 'basket-loading')) ?>
+        <?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
         <div class="white-box cart">
             <?php $this->renderPartial('/order/_steps', array('point' => 1));?>
             <div class="select-address">
@@ -74,8 +74,8 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
                     ?>
                 </div>
                 <div class="buttons">
-                    <input type="submit" class="btn-black pull-right" value="بازگشت به سبد خرید">
-                    <input type="submit" class="btn-blue pull-left" value="بازبینی سفارش">
+                    <a href="<?= $this->createUrl('/shop/cart/view') ?>" class="btn-black pull-right">بازگشت به سبد خرید</a>
+                    <a href="<?= $this->createUrl('/shop/order/create') ?>" class="btn-blue pull-left">بازبینی سفارش</a>
                 </div>
             </div>
         </div>

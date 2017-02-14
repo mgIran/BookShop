@@ -32,6 +32,7 @@ class ShopAddressesController extends Controller
 	public function actionAdd()
 	{
 		$model = new ShopAddresses();
+		$model->user_id = Yii::app()->user->getId();
 		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
 			$errors = CActiveForm::validate($model);
 			if(CJSON::decode($errors)){
@@ -68,6 +69,7 @@ class ShopAddressesController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->loadModel($id);
+		$model->user_id = Yii::app()->user->getId();
 		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
 			$errors = CActiveForm::validate($model);
 			if(CJSON::decode($errors)){
@@ -102,7 +104,7 @@ class ShopAddressesController extends Controller
 		}
 
 		$this->beginClip('add-address-modal');
-		$this->renderPartial('shop.views.shipping._add_addresses_modal', array('model' => $model));
+		$this->renderPartial('shop.views.shipping._add_address_modal', array('model' => $model));
 		$this->endClip();
 		echo CJSON::encode(['status' => true, 'content' => $this->clips['add-address-modal']]);
 	}

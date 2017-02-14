@@ -12,7 +12,7 @@ if(!isset($model))
                 <h4 class="modal-title">افزودن آدرس جدید</small></h4>
             </div>
             <div class="modal-body" style="overflow: visible !important;">
-                <?php $this->renderPartial('//partial-views/_loading')?>
+                <?php $this->renderPartial('shop.views.shipping._loading')?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'address-form',
                     'action'=>'/shop/addresses/add',
