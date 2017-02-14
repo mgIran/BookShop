@@ -11,7 +11,7 @@ $model=new ShopAddresses();
                 <button type="button" class="close" data-dismiss="modal"><i class="close-icon"></i></button>
                 <h4 class="modal-title">افزودن آدرس جدید</small></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="overflow: visible !important;">
                 <?php $this->renderPartial('//partial-views/_loading')?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'address-form',

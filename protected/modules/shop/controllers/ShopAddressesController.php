@@ -39,17 +39,17 @@ class ShopAddressesController extends Controller
 		$this->beginClip('address-list');
 
 		if($model->save())
-			$this->renderPartial('//partial-views/_alertMessage', array(
+			$this->renderPartial('shop.views.shipping._alertMessage', array(
 				'type' => 'success',
-				'closeButton' => true,
-				'message' => 'آدرس با موفقیت حذف گردید.',
+				'class' => 'address-list',
+				'message' => '<span class="icon icon-check"></span> آدرس با موفقیت حذف گردید.',
 				'autoHide' => true
 			));
 		else
-			$this->renderPartial('//partial-views/_alertMessage', array(
+			$this->renderPartial('shop.views.shipping._alertMessage', array(
 				'type' => 'danger',
-				'closeButton' => true,
-				'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
+				'class' => 'address-list',
+				'message' => 'متاسفانه در حذف آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
 				'autoHide' => true
 			));
 
@@ -77,15 +77,13 @@ class ShopAddressesController extends Controller
 				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'success',
 					'class' => 'address-list',
-					'closeButton' => true,
-					'message' => '<span class="icon icon-check"></span>آدرس با موفقیت ثبت گردید.',
+					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت ثبت گردید.',
 					'autoHide' => true
 				));
 			else
 				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'danger',
 					'class' => 'address-list',
-					'closeButton' => true,
 					'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
 					'autoHide' => true
 				));
