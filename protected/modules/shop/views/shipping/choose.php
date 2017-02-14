@@ -5,7 +5,8 @@
 /* @var $shippingMethods ShopShippingMethod[] */
 
 Yii::app()->clientScript->registerScript('delete-update-address-script','
-    $("body").on("click", ".edit-link", function(){
+    $("body").on("click", ".edit-link", function(e){
+        e.preventDefault();
         var $this = $(this);
         $.ajax({
             url: $this.attr("href"),
@@ -14,7 +15,7 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
                 $("#basket-loading").fadeIn();
             },
             success: function(data){
-                console.log($(data.content).find("#add-address-modal").html());
+                $("#add-address-modal").html($(data.content).html());
                 $("#basket-loading").fadeOut();
             }
         });
