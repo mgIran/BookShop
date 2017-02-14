@@ -3514,3 +3514,6 @@ input[type="checkbox"] + label:hover::before {
     height: auto;
     font-size: 13px;
 }
+#add-address-modal input[type="submit"]{
+    min-width: 160px;
+}
