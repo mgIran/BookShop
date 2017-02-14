@@ -113,8 +113,11 @@ class ShopAddressesController extends Controller
 		if(isset($_POST['id'])){
 			$model = $this->loadModel((int)$_POST['id']);
 			Yii::app()->getModule('places');
-			$this->beginClip('address-list');
 
+			if(Yii::app()->user->getState('delivery_address') == $model->id)
+				Yii::app()->user->setState('delivery_address', null);
+
+			$this->beginClip('address-list');
 			if($model->delete())
 				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'success',

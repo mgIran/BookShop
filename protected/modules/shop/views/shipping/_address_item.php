@@ -1,8 +1,8 @@
 <?php /* @var $data ShopAddresses */ ?>
-<div class="address-item">
+<div class="address-item<?= Yii::app()->user->getState('delivery_address') == $data->id?" selected":'' ?>">
     <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
         <div class="radio-control">
-            <?php echo CHtml::radioButton("DeliveryAddress", false, array("id"=>"address-".$data->id, "value"=>$data->id));?>
+            <?php echo CHtml::radioButton("DeliveryAddress", Yii::app()->user->getState('delivery_address') == $data->id?true:false, array("id"=>"address-".$data->id, "value"=>$data->id));?>
             <?php echo CHtml::label("", "address-".$data->id);?>
         </div>
     </div>

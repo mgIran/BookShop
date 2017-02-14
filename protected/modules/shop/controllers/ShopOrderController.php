@@ -91,9 +91,9 @@ class ShopOrderController extends Controller
 			if(isset($_POST['form']) && $_POST['form'] == 'shipping-form')
 			{
 				if(!$shipping_method && !$delivery_address)
-					Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل و روش ارسال را انتخاب کنید.');
+					Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل و شیوه ارسال را انتخاب کنید.');
 				elseif(!$shipping_method)
-					Yii::app()->user->setFlash('warning', 'لطفا روش ارسال را انتخاب کنید.');
+					Yii::app()->user->setFlash('warning', 'لطفا شیوه ارسال را انتخاب کنید.');
 				elseif(!$delivery_address)
 					Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل را انتخاب کنید.');
 			}

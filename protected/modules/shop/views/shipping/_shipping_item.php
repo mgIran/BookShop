@@ -1,8 +1,8 @@
 <?php /* @var $data ShopShippingMethod */ ?>
-<div class="shipping-method-item">
+<div class="shipping-method-item<?= Yii::app()->user->getState('shipping_method') == $data->id?" selected":'' ?>">
     <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
         <div class="radio-control">
-            <?php echo CHtml::radioButton("ShippingMethod", false, array("id"=>"shipping-method-".$data->id, "value"=>$data->id));?>
+            <?php echo CHtml::radioButton("ShippingMethod", Yii::app()->user->getState('shipping_method') == $data->id?true:false, array("id"=>"shipping-method-".$data->id, "value"=>$data->id));?>
             <?php echo CHtml::label("", "shipping-method-".$data->id);?>
         </div>
     </div>
