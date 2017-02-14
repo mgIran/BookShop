@@ -60,6 +60,10 @@ class dropDown extends CWidget
      * @var array html tag options
      */
     public $onchange = false;
+    /**
+     * @var array html tag options
+     */
+    public $containerClass = false;
 
     /**
      * init widget
@@ -162,6 +166,7 @@ class dropDown extends CWidget
             'selected' => $this->selected,
             'caret' => $this->caret,
             'emptyOpt' => $this->emptyOpt,
+            'containerClass' => $this->containerClass,
         ));
     }
 }

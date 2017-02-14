@@ -22,7 +22,7 @@ class PlacesCitiesController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess',
+			'checkAccess - getCities',
 			'postOnly + delete',
 		);
 	}
