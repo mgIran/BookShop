@@ -60,6 +60,8 @@ class ShopOrderController extends Controller
 		Yii::app()->theme="frontend";
         $this->layout="//layouts/index";
 		Yii::app()->getModule('users');
+		Yii::app()->getModule('discountCodes');
+		
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
