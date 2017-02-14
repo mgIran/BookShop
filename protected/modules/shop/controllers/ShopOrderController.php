@@ -89,7 +89,7 @@ class ShopOrderController extends Controller
         if(!$shipping_method)
             $shipping_method = Yii::app()->user->getState('shipping_method');
         if(!$customer) {
-			Yii::app()->user->returnUrl = $this->route;
+			Yii::app()->user->returnUrl = '/'.$this->route;
 			$this->render('login');
             Yii::app()->end();
         }
