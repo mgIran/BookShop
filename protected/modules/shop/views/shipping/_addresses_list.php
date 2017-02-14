@@ -8,6 +8,6 @@ $this->widget("zii.widgets.CListView", array(
         "pagination"=>false,
     )),
     "template"=>"{items}",
-    "itemView"=>"_address_item",
+    "itemView"=>"shop.views.shipping._address_item",
     "emptyText"=>"آدرسی یافت نشد."
 ));

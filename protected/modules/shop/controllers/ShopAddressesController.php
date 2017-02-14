@@ -33,32 +33,66 @@ class ShopAddressesController extends Controller
 
 
 	public function actionRemove($id){
+		Yii::app()->theme = 'front-end';
 		$model = $this->loadModel($id);
-		
-		
+		Yii::app()->getModule('places');
+		$this->beginClip('address-list');
+
+		if($model->save())
+			$this->renderPartial('//partial-views/_alertMessage', array(
+				'type' => 'success',
+				'closeButton' => true,
+				'message' => 'آدرس با موفقیت حذف گردید.',
+				'autoHide' => true
+			));
+		else
+			$this->renderPartial('//partial-views/_alertMessage', array(
+				'type' => 'danger',
+				'closeButton' => true,
+				'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
+				'autoHide' => true
+			));
+
+		$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
+		$this->endClip();
+		echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
 	}
 
-	public function actionAdd(){
+	public function actionAdd()
+	{
 		$model = new ShopAddresses();
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'address-form') {
+		$model->user_id = Yii::app()->user->getId();
+		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
 			$errors = CActiveForm::validate($model);
-			if (CJSON::decode($errors)) {
+			if(CJSON::decode($errors)){
 				echo $errors;
 				Yii::app()->end();
 			}
 		}
-		if(isset($_POST['ShopAddresses']))
-		{
-			$model->attributes = $_POST['ShopAddresses'];  
-			$model->user_id = Yii::app()->user->getId();
+		if(isset($_POST['ShopAddresses'])){
+			$model->attributes = $_POST['ShopAddresses'];
+			Yii::app()->getModule('places');
+			$this->beginClip('address-list');
 			if($model->save())
-			{
-//				$model->user->refresh();
-				$this->beginClip('address-list');
-				$this->renderPartial('/shipping/_addresses_list', array('addresses' => $model->user->addresses));
-				$this->endClip();
-				echo CJSON::encode(['status' => true, 'html' => $this->clips['address-list']]);
-			}
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'success',
+					'class' => 'address-list',
+					'closeButton' => true,
+					'message' => 'آدرس با موفقیت حذف گردید.',
+					'autoHide' => true
+				));
+			else
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'danger',
+					'class' => 'address-list',
+					'closeButton' => true,
+					'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
+					'autoHide' => true
+				));
+
+			$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
+			$this->endClip();
+			echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
 		}
 	}
 
