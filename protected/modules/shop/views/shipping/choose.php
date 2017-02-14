@@ -36,62 +36,10 @@ $form=$this->beginWidget('CActiveForm', array(
                 <?php $this->renderPartial('/order/_steps', array('point' => 1));?>
                 <div class="select-address">
                     <h5 class="pull-right">انتخاب آدرس</h5>
-                    <input type="button" class="btn-green pull-left" value="افزودن آدرس جدید">
+                    <a href="#" data-toggle="modal" data-target="#add-address-modal" class="btn-green pull-left">افزودن آدرس جدید</a>
                     <div class="clearfix"></div>
-                    <div class="address-list">
-                        <div class="address-item">
-                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
-                                <div class="radio-control">
-                                    <input name="r" id="r1" type="radio">
-                                    <label for="r1"></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
-                                <div class="pull-right">
-                                    <h5 class="name">مسعود قراگوزلو</h5>
-                                    <div class="address">
-                                        <span>استان: قم</span>
-                                        <span>شهر: قم</span>
-                                        <div>بلوار سوم خرداد خ شهید شوندی ک 12 پ 5 - کدپستی: 1234</div>
-                                    </div>
-                                    <div class="phone">
-                                        <div><span>شماره موبایل:</span>09373252746</div>
-                                        <div><span>شماره تماس ثابت:</span>38846821</div>
-                                    </div>
-                                </div>
-                                <div class="links pull-left">
-                                    <a href="#" class="edit-link"></a>
-                                    <a href="#" class="remove-link"></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="address-item">
-                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
-                                <div class="radio-control">
-                                    <input name="r" id="r1" type="radio">
-                                    <label for="r1"></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
-                                <div class="pull-right">
-                                    <h5 class="name">مسعود قراگوزلو</h5>
-                                    <div class="address">
-                                        <span>استان: قم</span>
-                                        <span>شهر: قم</span>
-                                        <div>بلوار سوم خرداد خ شهید شوندی ک 12 پ 5 - کدپستی: 1234</div>
-                                    </div>
-                                    <div class="phone">
-                                        <div><span>شماره موبایل:</span>09373252746</div>
-                                        <div><span>شماره تماس ثابت:</span>38846821</div>
-                                    </div>
-                                </div>
-                                <div class="links pull-left">
-                                    <a href="#" class="edit-link"></a>
-                                    <a href="#" class="remove-link"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php $this->renderPartial("/shipping/_addresses_list", array("addresses"=>$user->addresses));?>
+                    <?php $this->renderPartial("/shipping/_add_address_modal");?>
                     <div class="shipping-method">
                         <h5>شیوه ارسال</h5>
                         <div class="shipping-methods-list">
