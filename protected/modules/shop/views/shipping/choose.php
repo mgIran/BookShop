@@ -2,7 +2,7 @@
 /* @var $this ShopOrderController */
 /* @var $form CActiveForm */
 /* @var $user Users */
-/* @var $paymentMethods ShopPaymentMethod[] */
+/* @var $shippingMethods ShopShippingMethod[] */
 
 if(!isset($customer))
 	$customer = new Users();
