@@ -46,7 +46,6 @@ $model=new ShopAddresses();
                         'class' => 'text-field'
                     ));
                     echo $form->error($model,'postal_address'); ?>
-                    ?>
                 </div>
                 <div class="form-group">
                     <?= CHtml::submitButton('ورود',array('class'=>"btn-blue")); ?>
