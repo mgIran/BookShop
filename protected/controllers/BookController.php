@@ -95,7 +95,6 @@ class BookController extends Controller
             $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
             $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
             // use Discount codes
-            Yii::app()->getModule('discountCodes');
             if (isset($_POST['DiscountCodes'])) {
                 $code = $_POST['DiscountCodes']['code'];
                 $criteria = DiscountCodes::ValidCodes();

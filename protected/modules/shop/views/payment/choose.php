@@ -3,6 +3,7 @@
 /* @var $form CActiveForm */
 /* @var $user Users */
 /* @var $paymentMethods ShopPaymentMethod[] */
+$discountCodesInSession = Users::model()->getDiscountCodes();
 ?>
 <div class="page">
     <div class="page-heading">
