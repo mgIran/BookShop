@@ -55,12 +55,11 @@ class ShopAddressesController extends Controller
 
 		$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
 		$this->endClip();
-		echo CJSON::encode(['status' => true, 'html' => $this->clips['address-list']]);
+		echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
 	}
 
 	public function actionAdd()
 	{
-		Yii::app()->theme = 'front-end';
 		$model = new ShopAddresses();
 		$model->user_id = Yii::app()->user->getId();
 		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
@@ -74,17 +73,18 @@ class ShopAddressesController extends Controller
 			$model->attributes = $_POST['ShopAddresses'];
 			Yii::app()->getModule('places');
 			$this->beginClip('address-list');
-
 			if($model->save())
-				$this->renderPartial('//partial-views/_alertMessage', array(
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'success',
+					'class' => 'address-list',
 					'closeButton' => true,
 					'message' => 'آدرس با موفقیت حذف گردید.',
 					'autoHide' => true
 				));
 			else
-				$this->renderPartial('//partial-views/_alertMessage', array(
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'danger',
+					'class' => 'address-list',
 					'closeButton' => true,
 					'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
 					'autoHide' => true
@@ -92,7 +92,7 @@ class ShopAddressesController extends Controller
 
 			$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
 			$this->endClip();
-			echo CJSON::encode(['status' => true, 'html' => $this->clips['address-list']]);
+			echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
 		}
 	}
 
