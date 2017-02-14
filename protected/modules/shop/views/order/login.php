@@ -1,0 +1,1 @@
+<?php $this->renderPartial('/order/_steps', array('point' => 1));?>

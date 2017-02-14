@@ -67,7 +67,7 @@ if($books):?>
     <div class="clearfix"></div>
     <div class="buttons">
         <a href="<?php echo $this->createUrl("/site");?>" class="btn-black pull-right">بازگشت به صفحه اصلی</a>
-        <input type="submit" class="btn-blue pull-left" value="انتخاب شیوه ارسال">
+        <a href="<?php echo $this->createUrl("/shop/order/create");?>" class="btn-blue pull-left">انتخاب شیوه ارسال</a>
     </div>
 <?php else:?>
     <div class="empty-message">
