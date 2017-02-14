@@ -64,13 +64,17 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
                 <?php $this->renderPartial("/shipping/_add_address_modal");?>
                 <div class="shipping-method">
                     <h5>شیوه ارسال</h5>
-                    <div class="shipping-methods-list">
-                        <?php
-                        foreach($shippingMethods as $method):
-//                            $this->widget('zii.widgets.');
-                        endforeach;
-                        ?>
-                    </div>
+                    <?php
+                    $this->widget('zii.widgets.CListView', array(
+                        'id' => 'shipping-list',
+                        'dataProvider' => new CArrayDataProvider($shippingMethods,array(
+                            'pagination' => false
+                        )),
+                        'itemView' => 'shop.views.shipping._shipping_item',
+                        'template' => '{items}',
+                        'itemsCssClass' => 'shipping-methods-list'
+                    ));
+                    ?>
                 </div>
                 <div class="buttons">
                     <input type="submit" class="btn-black pull-right" value="بازگشت به سبد خرید">

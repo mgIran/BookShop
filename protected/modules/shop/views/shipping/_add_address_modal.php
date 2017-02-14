@@ -1,8 +1,8 @@
 <?php
 /* @var $form CActiveForm */
 /* @var $model ShopAddresses */
-
-$model=new ShopAddresses();
+if(!isset($model))
+    $model=new ShopAddresses();
 ?>
 <div id="add-address-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
