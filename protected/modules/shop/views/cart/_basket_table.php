@@ -54,8 +54,8 @@ if($books):?>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics["totalPrice"]));?><small> تومان</small></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 tax-container">مالیات بر ارزش افزوده<small> (<?php echo Controller::parseNumbers($cartStatistics["taxRate"]);?> درصد)</small></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics["totalTax"]));?><small> تومان</small></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 tax-container">تخفیف</div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics["totalDiscount"]));?><small> تومان</small></div>
                 </li>
                 <li class="list-group-item">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 total">مبلغ قابل پرداخت</div>
