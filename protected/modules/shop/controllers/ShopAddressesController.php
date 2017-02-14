@@ -78,7 +78,7 @@ class ShopAddressesController extends Controller
 					'type' => 'success',
 					'class' => 'address-list',
 					'closeButton' => true,
-					'message' => 'آدرس با موفقیت حذف گردید.',
+					'message' => '<span class="icon icon-check"></span>آدرس با موفقیت ثبت گردید.',
 					'autoHide' => true
 				));
 			else
