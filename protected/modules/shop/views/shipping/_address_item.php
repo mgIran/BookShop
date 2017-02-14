@@ -21,9 +21,7 @@
         </div>
         <div class="links pull-left">
             <?php echo CHtml::link('',array("/shop/addresses/update", "id"=>$data->id), array(
-                'class' => 'edit-link',
-                'data-toggle' => 'modal',
-                'data-target' => '#add-address-modal'
+                'class' => 'edit-link'
             )); ?>
             <?php echo CHtml::link('',array("/shop/addresses/remove"), array(
                 'class' => 'remove-link',
