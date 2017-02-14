@@ -22,7 +22,7 @@ $cartStatistics = Shop::getPriceTotal();
             <?php if($discountCodesInSession):?>
                 <div class="used-discount-code">
                     <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"><?php echo CHtml::encode($discountObj->title);?><a href="<?php echo $this->createUrl("/shop/order/removeDiscount", array("code"=>$discountObj->code));?>" class="remove">حذف</a></div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">1.000<small> تومان</small></div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['discountCodeAmount']))?><small> تومان</small></div>
                 </div>
             <?php else:?>
                 <div class="discount-code">
