@@ -24,7 +24,7 @@
                     </div>
                 </td>
                 <td class="vertical-middle text-center">
-                    <strong><?php echo $book["qty"];?></strong>
+                    <strong><?php echo Controller::parseNumbers($book["qty"]);?></strong>
                 </td>
                 <td class="vertical-middle text-center hidden-xs">
                     <span class="price"><?php echo Controller::parseNumbers(number_format($model->getPrinted_price()))?><small> تومان</small></span>
