@@ -1,8 +1,8 @@
 <?php
 /* @var $this ShopOrderController */
 /* @var $form CActiveForm */
-
-$this->renderPartial('/order/_steps', array('point' => 1));
+/* @var $user Users */
+/* @var $paymentMethods ShopPaymentMethod[] */
 
 if(!isset($customer))
 	$customer = new Users();
@@ -24,6 +24,124 @@ $form=$this->beginWidget('CActiveForm', array(
 			'enableAjaxValidation'=>false,
 			)); 
 ?>
+
+    <div class="page">
+        <div class="page-heading">
+            <div class="container">
+                <h1>اطلاعات ارسال سفارش</h1>
+            </div>
+        </div>
+        <div class="container page-content">
+            <div class="white-box cart">
+                <?php $this->renderPartial('/order/_steps', array('point' => 1));?>
+                <div class="select-address">
+                    <h5 class="pull-right">انتخاب آدرس</h5>
+                    <input type="button" class="btn-green pull-left" value="افزودن آدرس جدید">
+                    <div class="clearfix"></div>
+                    <div class="address-list">
+                        <div class="address-item">
+                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
+                                <div class="radio-control">
+                                    <input name="r" id="r1" type="radio">
+                                    <label for="r1"></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
+                                <div class="pull-right">
+                                    <h5 class="name">مسعود قراگوزلو</h5>
+                                    <div class="address">
+                                        <span>استان: قم</span>
+                                        <span>شهر: قم</span>
+                                        <div>بلوار سوم خرداد خ شهید شوندی ک 12 پ 5 - کدپستی: 1234</div>
+                                    </div>
+                                    <div class="phone">
+                                        <div><span>شماره موبایل:</span>09373252746</div>
+                                        <div><span>شماره تماس ثابت:</span>38846821</div>
+                                    </div>
+                                </div>
+                                <div class="links pull-left">
+                                    <a href="#" class="edit-link"></a>
+                                    <a href="#" class="remove-link"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="address-item">
+                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
+                                <div class="radio-control">
+                                    <input name="r" id="r1" type="radio">
+                                    <label for="r1"></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
+                                <div class="pull-right">
+                                    <h5 class="name">مسعود قراگوزلو</h5>
+                                    <div class="address">
+                                        <span>استان: قم</span>
+                                        <span>شهر: قم</span>
+                                        <div>بلوار سوم خرداد خ شهید شوندی ک 12 پ 5 - کدپستی: 1234</div>
+                                    </div>
+                                    <div class="phone">
+                                        <div><span>شماره موبایل:</span>09373252746</div>
+                                        <div><span>شماره تماس ثابت:</span>38846821</div>
+                                    </div>
+                                </div>
+                                <div class="links pull-left">
+                                    <a href="#" class="edit-link"></a>
+                                    <a href="#" class="remove-link"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shipping-method">
+                        <h5>شیوه ارسال</h5>
+                        <div class="shipping-methods-list">
+                            <div class="shipping-method-item">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
+                                    <div class="radio-control">
+                                        <input name="r" id="r2" type="radio">
+                                        <label for="r2"></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
+                                    <div class="pull-right">
+                                        <h5 class="name">تحویل اکسپرس کتابیک</h5>
+                                        <div class="desc">زمان تحويل سفارش ثبت شده تا ساعت 12: روز بعد (به‌جز روزهاي تعطيل)</div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <span>هزینه ارسال</span>
+                                        <div class="price">8.000<small> تومان</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="shipping-method-item">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
+                                    <div class="radio-control">
+                                        <input name="r" id="r2" type="radio">
+                                        <label for="r2"></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
+                                    <div class="pull-right">
+                                        <h5 class="name">تحویل اکسپرس کتابیک</h5>
+                                        <div class="desc">زمان تحويل سفارش ثبت شده تا ساعت 12: روز بعد (به‌جز روزهاي تعطيل)</div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <span>هزینه ارسال</span>
+                                        <div class="price">8.000<small> تومان</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <input type="submit" class="btn-black pull-right" value="بازگشت به سبد خرید">
+                        <input type="submit" class="btn-blue pull-left" value="بازبینی سفارش">
+                    </div>
+
+
+
+
+
 
 <h2> <?php echo Shop::t('Shipping options'); ?> </h2>
 
@@ -149,3 +267,12 @@ foreach(ShopShippingMethod::model()->findAll('status <> 0') as $method) {
 	</div>
 </div>
 <?php $this->endWidget(); ?>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
