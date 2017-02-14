@@ -15,6 +15,7 @@ $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCode
     <div class="container page-content">
         <div class="white-box cart">
             <?php $this->renderPartial('/order/_steps', array('point' => 2));?>
+            <?php $this->renderPartial("//partial-views/_flashMessage");?>
             <?php if($discountCodesInSession):?>
                 <div class="used-discount-code">
                     <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">کد تخفیف نوروزی<a href="#" class="remove">حذف</a></div>
