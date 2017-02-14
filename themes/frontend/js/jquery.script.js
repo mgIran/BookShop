@@ -142,7 +142,7 @@ $(function() {
         var $this = $(this),
             $url = $this.data("return-url"),
             $target = $this.data("target");
-        if($target == '#login-modal')
+        if($target == '#login-modal' && typeof $url !== "undefined")
         {
             $("#login-modal").find("#returnUrl").val($url);
             $("#login-modal").find("#google-login-btn").attr('href', baseUrl+"/googleLogin?return-url="+$url);
