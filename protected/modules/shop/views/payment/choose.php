@@ -4,45 +4,103 @@
 /* @var $user Users */
 /* @var $paymentMethods ShopPaymentMethod[] */
 ?>
-	<div class="page">
-		<div class="page-heading">
-			<div class="container">
-				<h1>اطلاعات ارسال سفارش</h1>
-			</div>
+<div class="page">
+	<div class="page-heading">
+		<div class="container">
+			<h1>بازبینی سفارش</h1>
 		</div>
-		<div class="container page-content relative">
-			<?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
-			<div class="white-box cart">
-				<?php $this->renderPartial('/order/_steps', array('point' => 1));?>
-				<?php $this->renderPartial('//partial-views/_flashMessage');?>
-				<div class="select-address">
-					<?php echo CHtml::beginForm(array("/shop/order/create"));?>
-					<?php echo CHtml::hiddenField("form", "shipping-form");?>
-					<h5 class="pull-right">انتخاب آدرس</h5>
-					<a href="#" data-toggle="modal" data-target="#add-address-modal" id="add-address-modal-trigger" class="btn-green pull-left">افزودن آدرس جدید</a>
-					<div class="clearfix"></div>
-					<div id="addresses-list-container">
-						<?php $this->renderPartial("/shipping/_addresses_list", array("addresses"=>$user->addresses));?>
-					</div>
-					<div class="shipping-method">
-						<h5>شیوه ارسال</h5>
-						<?php $this->widget('zii.widgets.CListView', array(
-							'id' => 'payment-method-list',
-							'dataProvider' => new CArrayDataProvider($paymentMethods,array(
-								'pagination' => false
-							)),
-							'itemView' => 'shop.views.payment._payment_item',
-							'template' => '{items}',
-							'itemsCssClass' => 'payment-methods-list'
-						)); ?>
-					</div>
-					<div class="buttons">
-						<a href="<?= $this->createUrl('/shop/cart/view') ?>" class="btn-black pull-right">بازگشت به سبد خرید</a>
-						<?php echo CHtml::submitButton("بازبینی سفارش", array("class"=>"btn-blue pull-left"));?>
-					</div>
-					<?php echo CHtml::endForm();?>
-				</div>
+	</div>
+	<div class="container page-content relative">
+		<?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
+		<div class="white-box cart">
+			<?php $this->renderPartial('/order/_steps', array('point' => 2));?>
+
+			<table class="table">
+				<thead>
+				<tr>
+					<th>شرح محصول</th>
+					<th class="text-center">تعداد</th>
+					<th class="text-center hidden-xs">قیمت واحد</th>
+					<th class="text-center hidden-xs">قیمت کل</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>
+						<img src="uploads/books/images/914.jpg" alt="Book Name" class="hidden-xs hidden-sm">
+						<div class="info">
+							<h4>دختر شینا</h4>
+							<span class="item hidden-xs">نویسنده: <span class="value">محمد علیزاده</span></span>
+							<span class="item hidden-xs">ناشر: <span class="value">نشر معروف</span></span>
+							<span class="item hidden-xs">سال چاپ: <span class="value">1394</span></span>
+							<span class="item hidden-xs">تعداد صفحات: <span class="value">120 صفحه</span></span>
+						</div>
+					</td>
+					<td class="vertical-middle text-center">
+						<strong>1</strong>
+					</td>
+					<td class="vertical-middle text-center hidden-xs">
+						<span class="price">10.000<small> تومان</small></span>
+					</td>
+					<td class="vertical-middle text-center hidden-xs">
+						<span class="price">10.000<small> تومان</small></span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img src="uploads/books/images/914.jpg" alt="Book Name" class="hidden-xs hidden-sm">
+						<div class="info">
+							<h4>دختر شینا</h4>
+							<span class="item hidden-xs">نویسنده: <span class="value">محمد علیزاده</span></span>
+							<span class="item hidden-xs">ناشر: <span class="value">نشر معروف</span></span>
+							<span class="item hidden-xs">سال چاپ: <span class="value">1394</span></span>
+							<span class="item hidden-xs">تعداد صفحات: <span class="value">120 صفحه</span></span>
+						</div>
+					</td>
+					<td class="vertical-middle text-center">
+						<strong>1</strong>
+					</td>
+					<td class="vertical-middle text-center hidden-xs">
+						<span class="price">10.000<small> تومان</small></span>
+					</td>
+					<td class="vertical-middle text-center hidden-xs">
+						<span class="price">10.000<small> تومان</small></span>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="bill">
+				<h5>خلاصه صورتحساب شما</h5>
+				<ul class="list-group">
+					<li class="list-group-item">
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل خرید شما</div>
+						<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">10.000<small> تومان</small></div>
+					</li>
+					<li class="list-group-item">
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">هزینه ارسال</div>
+						<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">8.000<small> تومان</small></div>
+					</li>
+					<li class="list-group-item red-item">
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل تخفیف</div>
+						<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">0<small> تومان</small></div>
+					</li>
+					<li class="list-group-item green-item">
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل قابل پرداخت</div>
+						<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">18.000<small> تومان</small></div>
+					</li>
+				</ul>
+			</div>
+			<div class="address-info">
+				<h5>اطلاعات ارسال سفارش</h5>
+				<ul class="list-group">
+					<li class="list-group-item">این سفارش به <span class="green-label">مسعود قراگوزلو</span> به آدرس <span class="green-label">بلوار سوم خرداد</span> و شماره تماس <span class="green-label">09373252746</span> تحویل می گردد.</li>
+					<li class="list-group-item">این سفارش از طریق <span class="green-label">تحویل اکسپرس کتابیک</span> با هزینه <span class="green-label">8.000</span> تومان به شما تحویل داده خواهد شد.</li>
+				</ul>
+			</div>
+			<div class="buttons">
+				<input type="submit" class="btn-black pull-right" value="بازگشت">
+				<input type="submit" class="btn-blue pull-left" value="تایید و انتخاب شیوه پرداخت">
 			</div>
 		</div>
 	</div>
-<?php $this->renderPartial("/shipping/_add_address_modal");?>
+</div>
