@@ -48,7 +48,7 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
         </div>
     </div>
     <div class="container page-content relative">
-        <?php $this->renderPartial('//partial-views/_loading', array('id' => 'basket-loading')) ?>
+        <?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
         <div class="white-box cart">
             <?php $this->renderPartial('/order/_steps', array('point' => 1));?>
             <div class="select-address">
