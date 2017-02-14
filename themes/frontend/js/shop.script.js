@@ -115,4 +115,11 @@ $(function() {
         $("#add-address-modal #address-form").attr("action", $(this).data('url'));
     });
 
+    // payment scripts
+    $body.on("click", ".payment-methods-list .payment-method-item", function(){
+        $(".payment-methods-list .payment-method-item").removeClass("selected");
+        $(this).addClass("selected");
+        $(this).find("input[type='radio']").prop("checked", true);
+    });
+
 });

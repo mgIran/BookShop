@@ -38,7 +38,7 @@
                     </div>
                     <div class="buttons">
                         <a href="<?= $this->createUrl('/shop/cart/view') ?>" class="btn-black pull-right">بازگشت به سبد خرید</a>
-                        <?php echo CHtml::submitButton("بازبینی سفارش", array("class"=>"btn-blue pull-left"));?>
+                        <?php echo CHtml::submitButton("انتخاب شیوه پرداخت", array("class"=>"btn-blue pull-left"));?>
                     </div>
                 <?php echo CHtml::endForm();?>
             </div>
