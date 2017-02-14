@@ -90,6 +90,12 @@ class Shop
 			$payment_total += $response['paymentPrice'];
 		}
 
+//		if($payment_method = Users::getPaymentMethod())
+//		{
+//			$response['paymentPrice'] = (double)$payment_method->price;
+//			$payment_total += $response['paymentPrice'];
+//		}
+
 		$response['totalPrice'] = $price_total;
 		$response['totalDiscount'] = $discount_total;
 		$response['totalPayment'] = $payment_total;
