@@ -77,8 +77,8 @@ Yii::app()->clientScript->registerScript('delete-update-address-script','
                     ?>
                 </div>
                 <div class="buttons">
-                    <input type="submit" class="btn-black pull-right" value="بازگشت به سبد خرید">
-                    <input type="submit" class="btn-blue pull-left" value="بازبینی سفارش">
+                    <a href="<?= $this->createUrl('/shop/cart/view') ?>" class="btn-black pull-right">بازگشت به سبد خرید</a>
+                    <a href="<?= $this->createUrl('/shop/order/create') ?>" class="btn-blue pull-left">بازبینی سفارش</a>
                 </div>
             </div>
         </div>
