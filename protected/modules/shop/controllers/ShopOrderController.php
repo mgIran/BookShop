@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create, addDiscount',
+			'checkAccess - create, addDiscount, removeDiscount',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);

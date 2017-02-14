@@ -6,7 +6,6 @@
 /* @var $discountObj DiscountCodes */
 
 $discountCodesInSession = Users::model()->getDiscountCodes();
-$discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
 $cartStatistics = Shop::getPriceTotal();
 ?>
 <div class="page">
@@ -19,9 +18,11 @@ $cartStatistics = Shop::getPriceTotal();
         <div class="white-box cart">
             <?php $this->renderPartial('/order/_steps', array('point' => 2));?>
             <?php $this->renderPartial("//partial-views/_flashMessage");?>
-            <?php if($discountCodesInSession):?>
+            <?php if($discountCodesInSession):
+                $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+                ?>
                 <div class="used-discount-code">
-                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"><?php echo CHtml::encode($discountObj->title);?><a href="<?php echo $this->createUrl("/shop/order/removeDiscount", array("code"=>$discountObj->code));?>" class="remove">حذف</a></div>
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"><?php echo CHtml::encode($discountObj->title);?><a href="<?php echo $this->createUrl("/shop/order/removeDiscount", array("code"=>$discountObj->code));?>" class="remove-discount">حذف</a></div>
                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['discountCodeAmount']))?><small> تومان</small></div>
                 </div>
             <?php else:?>
@@ -45,15 +46,15 @@ $cartStatistics = Shop::getPriceTotal();
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل خرید</div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php //echo ?><small> تومان</small></div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['totalPrice'])) ?><small> تومان</small></div>
                     </li>
                     <li class="list-group-item red-item">
                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">تخفیف کتاب + کد تخفیف نوروزی</div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">1.000<small> تومان</small></div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['totalDiscount'])) ?><small> تومان</small></div>
                     </li>
                     <li class="list-group-item green-item">
                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">مبلغ قابل پرداخت</div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center">17.000<small> تومان</small></div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['totalPayment'])) ?><small> تومان</small></div>
                     </li>
                 </ul>
             </div>
