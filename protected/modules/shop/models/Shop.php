@@ -29,6 +29,12 @@ class Shop
 			return ShopShippingMethod::model()->findByPk($shipping_method);
 	}
 
+	public static function getDeliveryAddress()
+	{
+		if($delivery_address = Yii::app()->user->getState('delivery_address'))
+			return ShopAddresses::model()->findByPk($delivery_address);
+	}
+
 
 	public static function getCartContent()
     {

@@ -54,8 +54,9 @@ class ShopOrderController extends Controller
      * @param null $customer
      * @param null $payment_method
      * @param null $shipping_method
+     * @param null $delivery_address
      */
-    public function actionCreate($customer = null, $payment_method = null, $shipping_method = null) {
+    public function actionCreate($customer = null, $payment_method = null, $shipping_method = null, $delivery_address = null) {
 		Yii::app()->theme="frontend";
         $this->layout="//layouts/index";
 		$cart = Shop::getCartContent();
@@ -64,44 +65,44 @@ class ShopOrderController extends Controller
         if(isset($_POST['ShippingMethod']))
             Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
 
+		if(isset($_POST['DeliveryAddress']))
+			Yii::app()->user->setState('delivery_address', $_POST['DeliveryAddress']);
+
         if(isset($_POST['PaymentMethod']))
             Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
-
-
-        if(isset($_POST['ShopAddresses']) && $_POST['ShopAddresses'] === true) {
-            if(ShopAddresses::isEmpty($_POST['ShopAddresses'])) {
-                Shop::setFlash(Shop::t('Delivery address is not complete! Please fill in all fields to set the Delivery address'));
-            } else {
-                $deliveryAddress = new ShopAddresses();
-                $deliveryAddress->attributes = $_POST['ShopAddresses'];
-                $deliveryAddress->user_id = Shop::getCustomer()->id;
-                if($deliveryAddress->save()) {
-                }
-            }
-        }
 
         if(!$customer && !Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
             $customer = Yii::app()->user->getId();
         if(!Yii::app()->user->isGuest && !$customer)
             $customer = Users::model()->findByPk(Yii::app()->user->id);
-        if(!$payment_method)
-            $payment_method = Yii::app()->user->getState('payment_method');
         if(!$shipping_method)
             $shipping_method = Yii::app()->user->getState('shipping_method');
+		if(!$delivery_address)
+            $delivery_address = Yii::app()->user->getState('delivery_address');
+		if(!$payment_method)
+			$payment_method = Yii::app()->user->getState('payment_method');
         if(!$customer) {
 			Yii::app()->user->returnUrl = Yii::app()->createUrl('/shop/cart/view');
 			$this->render('login');
             Yii::app()->end();
         }
-		if(!$shipping_method) {
+		if(!$shipping_method || !$delivery_address) {
 			Yii::app()->getModule('places');
+			if(isset($_POST['form']) && $_POST['form'] == 'shipping-form')
+			{
+				if(!$shipping_method && !$delivery_address)
+					Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل و روش ارسال را انتخاب کنید.');
+				elseif(!$shipping_method)
+					Yii::app()->user->setFlash('warning', 'لطفا روش ارسال را انتخاب کنید.');
+				elseif(!$delivery_address)
+					Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل را انتخاب کنید.');
+			}
 			$this->render('/shipping/choose', array(
                 'user' => Shop::getCustomer(),
                 'shippingMethods' => ShopShippingMethod::model()->findAll('status <> :deactive',array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)),
 			));
 			Yii::app()->end();
         }
-		var_dump($shipping_method);exit;
         if(!$payment_method) {
 			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
             $this->render('/payment/choose', array(
@@ -112,18 +113,21 @@ class ShopOrderController extends Controller
         }
 
 
-        if($customer && $payment_method && $shipping_method)   {
+        if($customer && $payment_method && $shipping_method && $delivery_address)   {
             if(is_numeric($customer))
                 $customer = Users::model()->findByPk($customer);
             if(is_numeric($shipping_method))
                 $shipping_method = ShopShippingMethod::model()->findByPk($shipping_method);
+			if(is_numeric($delivery_address))
+                $delivery_address = ShopAddresses::model()->findByPk($delivery_address);
             if(is_numeric($payment_method))
                 $payment_method = ShopPaymentMethod::model()->findByPk($payment_method);
 
             $this->render('/order/create', array(
                 'customer' => $customer,
                 'shippingMethod' => $shipping_method,
-                'paymentMethod' => $payment_method,
+				'delivery_address' => $delivery_address,
+				'paymentMethod' => $payment_method
             ));
         }
     }
