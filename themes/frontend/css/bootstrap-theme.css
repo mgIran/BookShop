@@ -3270,7 +3270,7 @@ input[type="checkbox"] + label:hover::before {
 }
 .address-list .address-item .phone span{
     display: inline-block;
-    width:115px;
+    width:125px;
 }
 .address-list .address-item .links{
     width: 5%;
