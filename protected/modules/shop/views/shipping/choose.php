@@ -2,7 +2,7 @@
 /* @var $this ShopOrderController */
 /* @var $form CActiveForm */
 
-$this->renderPartial('/order/_steps', array('point' => 2));
+$this->renderPartial('/order/_steps', array('point' => 1));
 
 if(!isset($customer))
 	$customer = new Users();
