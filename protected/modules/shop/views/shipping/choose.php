@@ -18,7 +18,9 @@
                     <h5 class="pull-right">انتخاب آدرس</h5>
                     <a href="#" data-toggle="modal" data-target="#add-address-modal" class="btn-green pull-left">افزودن آدرس جدید</a>
                     <div class="clearfix"></div>
-                    <?php $this->renderPartial("/shipping/_addresses_list", array("addresses"=>$user->addresses));?>
+                    <div id="addresses-list-container">
+                        <?php $this->renderPartial("/shipping/_addresses_list", array("addresses"=>$user->addresses));?>
+                    </div>
                     <?php $this->renderPartial("/shipping/_add_address_modal");?>
                     <div class="shipping-method">
                         <h5>شیوه ارسال</h5>

@@ -26,15 +26,22 @@ $model=new ShopAddresses();
                                 var form = $("#address-form");
                                 var loading = $(".modal .loading-container");
                                 var url = \''.Yii::app()->createUrl('/shop/addresses/add').'\';
-                                submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                submitAjaxForm(
+                                    form,
+                                    url,
+                                    loading,
+                                    "if(html.status){
+                                        $(\'#addresses-list-container\').html(html.content);
+                                        $(\'#add-address-modal #address-form\').reset();
+                                        $(\'#add-address-modal .close\').trigger(\'click\');
+                                    } else
+                                        $(\'#add-address-modal #summary-errors\').html(html.errors);");
                             }
                         }'
                     )
                 ));
                 echo CHtml::hiddenField('ajax','address-form');
                 ?>
-
-                <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center"></p></div>
 
                 <div class="form-group">
                     <?php echo $form->textField($model,'transferee' ,array(
@@ -124,6 +131,8 @@ $model=new ShopAddresses();
                         <?php echo $form->error($model,'landline_tel'); ?>
                     </div>
                 </div>
+
+                <div class="form-group"><p id="summary-errors" class="text-center"></p></div>
 
                 <div class="buttons overflow-hidden">
                     <?= CHtml::submitButton('ورود',array('class'=>"btn-blue pull-left")); ?>
