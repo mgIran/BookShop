@@ -17,7 +17,12 @@ $this->breadcrumbs=array(
 	'itemsCssClass'=>'table',
 	'columns'=>array(
 		'id',
-		'user_id',
+		array(
+			'header' => 'کاربر',
+			'value' => function($data){
+				return $data->user->userDetails->fa_name;
+			}
+		),
 		'delivery_address_id',
 		'billing_address_id',
 		'ordering_date',
