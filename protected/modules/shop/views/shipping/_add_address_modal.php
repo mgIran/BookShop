@@ -30,12 +30,7 @@ $model=new ShopAddresses();
                                     form,
                                     url,
                                     loading,
-                                    "if(html.status){
-                                        $(\'#addresses-list-container\').html(html.content);
-                                        $(\'#add-address-modal #address-form\').reset();
-                                        $(\'#add-address-modal .close\').trigger(\'click\');
-                                    } else
-                                        $(\'#add-address-modal #summary-errors\').html(html.errors);");
+                                    "if(html.status){ $(\'#addresses-list-container\').html(html.content); $(\'#add-address-modal #address-form\').reset(); $(\'#add-address-modal .close\').trigger(\'click\'); }else $(\'#add-address-modal #summary-errors\').html(html.errors);");
                             }
                         }'
                     )
