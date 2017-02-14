@@ -57,29 +57,23 @@ class Shop
 	{
 		$response = [];
 		$price_total = 0;
-		$tax_total = 0;
-		$tax_rate = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+		$discount_total = 0;
+		$payment_total = 0;
 		foreach(Shop::getCartContent() as $book){
 			$model = Books::model()->findByPk($book['book_id']);
-			$price = (double)($model->getOff_printed_price() * $book['qty']);
+			$price = (double)($model->getPrinted_price() * $book['qty']);
 			$price_total += $price;
             // calculate tax
-			$tax = 0;
-			$tax_exempt = false;
-			if($model->publisher && $model->publisher->userDetails && $model->publisher->userDetails->tax_exempt)
-				$tax_exempt = true;
-			if(!$tax_exempt){
-				$tax = ($price * $tax_rate) / 100;
-			}
-			$tax_total += $tax;
+			$discount_price = (double)($model->getOff_printed_price() * $book['qty']);
+			$discount_total += ($price - $discount_price);
+			$payment_total += $discount_price;
 		}
 		if($shipping_method = Shop::getShippingMethod())
-			$price_total += $shipping_method->price;
+			$payment_total += $shipping_method->price;
 
-		$response['taxRate'] = $tax_rate;
 		$response['totalPrice'] = $price_total;
-		$response['totalTax'] = $tax_total;
-		$response['totalPayment'] = $price_total + $tax_total;
+		$response['totalDiscount'] = $discount_total;
+		$response['totalPayment'] = $payment_total;
 		return $response;
 	}
 

@@ -102,7 +102,7 @@ return array(
 			'connectionID' => 'db',
 			'sessionTableName' => 'ym_sessions',
 			'autoCreateSessionTable' => true,
-			'timeout' => 3600*24*30
+			'timeout' => 3600
 		),
 		'userCounter' => array(
 			'class' => 'application.components.UserCounter',
