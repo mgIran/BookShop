@@ -72,6 +72,8 @@ class ShopOrder extends CActiveRecord
 			'deliveryAddress' => array(self::BELONGS_TO, 'ShopAddresses', 'delivery_address_id'),
 			'billingAddress' => array(self::BELONGS_TO, 'ShopAddresses', 'billing_address_id'),
 			'baskets' => array(self::HAS_MANY, 'ShopOrderBasket', 'order_id'),
+			'payment' => array(self::BELONGS_TO, 'ShopPaymentMethod', 'payment_method'),
+			'shipping' => array(self::BELONGS_TO, 'ShopShippingMethod', 'shipping_method'),
 		);
 	}
 
@@ -88,8 +90,8 @@ class ShopOrder extends CActiveRecord
 			'ordering_date' => 'تاریخ ثبت سفارش',
 			'update_date' => 'تاریخ تغییر وضعیت',
 			'status' => 'وضعیت',
-			'payment_method' => 'روش پرداخت',
-			'shipping_method' => 'روش تحویل',
+			'payment_method' => 'شیوه پرداخت',
+			'shipping_method' => 'شیوه تحویل',
 			'comment' => 'توضیحات',
 			'amount' => 'مبلغ فاکتور',
 		);
@@ -117,11 +119,9 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('user_id',$this->user_id,true);
 		$criteria->compare('delivery_address_id',$this->delivery_address_id,true);
 		$criteria->compare('billing_address_id',$this->billing_address_id,true);
-		$criteria->compare('ordering_date',$this->ordering_date,true);
-		$criteria->compare('update_date',$this->update_date,true);
 		$criteria->compare('status',$this->status,true);
-		$criteria->compare('payment_method',$this->payment_method,true);
-		$criteria->compare('shipping_method',$this->shipping_method,true);
+		$criteria->compare('payment_method',$this->payment_method);
+		$criteria->compare('shipping_method',$this->shipping_method);
 		$criteria->compare('comment',$this->comment,true);
 		$criteria->compare('amount',$this->amount);
 
