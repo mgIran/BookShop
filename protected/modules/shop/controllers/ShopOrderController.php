@@ -94,6 +94,7 @@ class ShopOrderController extends Controller
             Yii::app()->end();
         }
 		if(!$shipping_method) {
+			Yii::app()->getModule('places');
 			$this->render('/shipping/choose', array(
                 'user' => Shop::getCustomer(),
                 'shippingMethods' => ShopShippingMethod::model()->findAll('status <> :deactive',array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)),
@@ -181,6 +182,7 @@ class ShopOrderController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->layout = '//layouts/column1';
 		$model=new ShopOrder('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['ShopOrder']))

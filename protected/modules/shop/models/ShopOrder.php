@@ -81,7 +81,7 @@ class ShopOrder extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'شناسه سفارش',
 			'user_id' => 'کاربر',
 			'delivery_address_id' => 'آدرس تحویل کالا',
 			'billing_address_id' => 'آدرس تحویل فاکتور',

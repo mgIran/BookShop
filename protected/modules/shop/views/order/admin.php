@@ -6,12 +6,9 @@ $this->breadcrumbs=array(
 	'مدیریت',
 );
 
-$this->menu=array(
-	array('label'=>'افزودن ShopOrder', 'url'=>array('create')),
-);
 ?>
 
-<h1>مدیریت Shop Orders</h1>
+<h1>مدیریت سفارشات</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'shop-order-grid',
