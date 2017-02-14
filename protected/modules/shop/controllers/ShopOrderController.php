@@ -56,6 +56,8 @@ class ShopOrderController extends Controller
      * @param null $shipping_method
      */
     public function actionCreate($customer = null, $payment_method = null, $shipping_method = null) {
+		Yii::app()->theme="frontend";
+        $this->layout="//layouts/index";
         if(isset($_POST['ShippingMethod']))
             Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
 

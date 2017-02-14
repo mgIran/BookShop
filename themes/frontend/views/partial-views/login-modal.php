@@ -33,7 +33,7 @@
                         echo CHtml::hiddenField('ajax','login-form');
                         echo CHtml::hiddenField('returnUrl',$this->route);
                         ?>
-                        <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center" ></p></div>
+                        <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center"></p></div>
                         <div class="form-group">
                             <?php echo $formL->emailField($loginModel,'email' ,array(
                                 'placeholder' => 'پست الکترونیکی',
@@ -59,7 +59,7 @@
                             <?= CHtml::submitButton('ورود',array('class'=>"btn-blue")); ?>
                         </div>
                         <div class="form-group">
-                            <a href="#" data-target="#login-modal-register-tab" data-toggle="tab">حساب کاربری ندارید؟ ثبت نام کنید</a>
+                            <span style="color: #818181;">حساب کاربری ندارید؟ <a href="#" data-target="#login-modal-register-tab" data-toggle="tab" id="register-tab-trigger">ثبت نام کنید</a></span>
                         </div>
                         <? $this->endWidget(); ?>
                     </div>
@@ -86,6 +86,7 @@
                         )
                     ));
                     echo CHtml::hiddenField('ajax','register-form'); ?>
+                    <div class="form-group"><p id="Users_authenticate_field_em_" class="text-center"></p></div>
                     <div class="form-group">
                         <?php echo $formR->emailField($registerModal,'email' ,array(
                             'placeholder' => 'پست الکترونیکی',
@@ -105,7 +106,7 @@
                         <?= CHtml::submitButton('ثبت نام',array('class'=>"btn-blue")); ?>
                     </div>
                     <div class="form-group">
-                        <a href="#" data-target="#login-modal-login-tab" data-toggle="tab">ورود به حساب کاربری</a>
+                        <a href="#" data-target="#login-modal-login-tab" data-toggle="tab" id="login-tab-trigger">ورود به حساب کاربری</a>
                     </div>
                     <? $this->endWidget(); ?>
                 </div>

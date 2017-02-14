@@ -193,6 +193,14 @@ $(function() {
             });
         }
     });
+
+    $("#register-tab-trigger").click(function(){
+        $("#login-modal .modal-title").text("ثبت نام");
+    });
+
+    $("#login-tab-trigger").click(function(){
+        $("#login-modal .modal-title").text("ورود به پنل کاربری");
+    });
 });
 function initCarousel($this) {
     var nestedItemSelector = $this.data('item-selector'),
