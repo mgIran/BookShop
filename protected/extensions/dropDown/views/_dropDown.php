@@ -1,4 +1,4 @@
-<div class="btn-group btn-input<?= $containerClass?$containerClass:'' ?>" id="<?= $id; ?>-container" >
+<div class="btn-group btn-input<?= $containerClass?' '.$containerClass:'' ?>" id="<?= $id; ?>-container" >
     <button type="button" class="btn btn-default dropdown-toggle form-control wd" data-toggle="dropdown">
         <span data-bind="label" id="<?= $id; ?>-label" >
             <?php

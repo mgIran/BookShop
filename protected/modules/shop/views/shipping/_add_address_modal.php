@@ -55,6 +55,7 @@ $model=new ShopAddresses();
                             'data' => CHtml::listData(Towns::model()->findAll() , 'id' ,'name'),
                             'caret' => '<i class="icon icon-chevron-down"></i>',
                             'selected' => $model->town_id?$model->town_id:false,
+                            'containerClass'=>'dropdown',
                             'onclickAjax' => array(
                                 'url' => Yii::app()->createUrl('/places/cities/getCities'),
                                 'type' => 'GET',
@@ -74,11 +75,20 @@ $model=new ShopAddresses();
                             'attribute' => 'place_id',
                             'label' => 'شهرستان مورد نظر را انتخاب کنید',
                             'selected' => $model->place_id?$model->place_id:false,
+                            'containerClass'=>'dropdown',
                             'data' => $model->town_id?CHtml::listData(Places::model()->findAll('town_id = :id' ,array(':id'=>$model->town_id)) , 'id' ,'name'):null,
                             'caret' => '<i class="icon icon-chevron-down"></i>',
                         )); ?>
                         <?php echo $form->error($model,'place_id'); ?>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <?php echo $form->textField($model,'district' ,array(
+                        'placeholder' => $model->getAttributeLabel("district"),
+                        'class' => 'text-field'
+                    ));
+                    echo $form->error($model,'district'); ?>
                 </div>
 
                 <div class="form-group row">
@@ -115,8 +125,8 @@ $model=new ShopAddresses();
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <?= CHtml::submitButton('ورود',array('class'=>"btn-blue")); ?>
+                <div class="buttons overflow-hidden">
+                    <?= CHtml::submitButton('ورود',array('class'=>"btn-blue pull-left")); ?>
                 </div>
 
                 <? $this->endWidget(); ?>

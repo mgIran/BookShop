@@ -28,7 +28,7 @@ body {
     font-size: 13px;
     overflow-x: hidden !important;
 }
-body.overflow-hidden{
+.overflow-hidden{
     overflow: hidden !important;
 }
 a,
@@ -1682,26 +1682,32 @@ a:active{
     border-left: 1px solid #eee;
 }
 
-#login-modal .modal-content {
+.modal .modal-content {
     border-radius: 0;
+    padding: 20px 40px;
 }
 
 #login-modal .modal-dialog {
-    width: 450px;
+    width: 530px;
+    margin: 70px auto;
+}
+
+#add-address-modal .modal-dialog {
+    width: 600px;
     margin: 100px auto;
 }
 
-#login-modal .modal-header {
+.modal .modal-header {
     padding: 20px;
     border-bottom: none;
 }
 
-#login-modal .close {
+.modal .close {
     opacity: 1;
     margin-top: 5px;
 }
 
-#login-modal .close-icon {
+.modal .close-icon {
     background: url("../svg/close.svg") no-repeat center;
     background-size: 15px;
     width: 15px;
@@ -1709,7 +1715,7 @@ a:active{
     display: block;
 }
 
-#login-modal .modal-body {
+.modal .modal-body {
     padding: 20px;
     overflow: hidden;
 }
@@ -1732,6 +1738,7 @@ a:active{
 .error,
 .error *{
     color: #e84068 !important;
+    font-size: 11px;
 }
 #login-modal label {
     font-weight: normal;
@@ -3496,4 +3503,14 @@ input[type="checkbox"] + label:hover::before {
 }
 #address-form .form-group.row .left-control{
     padding-right: 5px;
+}
+#address-form .dropdown .form-control{
+    background: #fafafa;
+    padding:13px 15px;
+    color: #B9B9BB;
+    border:1px solid #eee;
+    border-radius: 0;
+    width: 100%;
+    height: auto;
+    font-size: 13px;
 }
