@@ -96,7 +96,7 @@ class ShopOrderController extends Controller
 		if(!$shipping_method) {
 			$this->render('/shipping/choose', array(
                 'user' => Shop::getCustomer(),
-                'shipping_methods' => ShopShippingMethod::model()->findAll('status <> :deactive',array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)),
+                'shippingMethods' => ShopShippingMethod::model()->findAll('status <> :deactive',array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)),
 			));
 			Yii::app()->end();
         }
@@ -104,7 +104,7 @@ class ShopOrderController extends Controller
 			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
             $this->render('/payment/choose', array(
 				'user' => Shop::getCustomer(),
-				'payment_methods' => $shipping_object->getPaymentMethodObjects()
+				'paymentMethods' => $shipping_object->getPaymentMethodObjects()
 			));
             Yii::app()->end();
         }
