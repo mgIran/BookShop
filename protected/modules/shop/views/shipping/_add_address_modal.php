@@ -30,7 +30,7 @@ $model=new ShopAddresses();
                                     form,
                                     url,
                                     loading,
-                                    "if(html.status){ $(\'#addresses-list-container\').html(html.content); $(\'#add-address-modal #address-form\').reset(); $(\'#add-address-modal .close\').trigger(\'click\'); }else $(\'#add-address-modal #summary-errors\').html(html.errors);");
+                                    "if(html.status){ $(\'#addresses-list-container\').html(html.content); $(\'#add-address-modal #address-form input[type=\"text\"]\').val(\'\'); $(\'#add-address-modal .close\').trigger(\'click\'); $(\'#places-label\').html(\'شهرستان مورد نظر را انتخاب کنید\'); $(\'#places\').html(\'\'); $(\'#places-hidden\').val(\'\'); $(\'#towns-label\').html(\'استان مورد نظر را انتخاب کنید\'); $(\'#towns-hidden\').val(\'\'); }else $(\'#add-address-modal #summary-errors\').html(html.errors);");
                             }
                         }'
                     )
