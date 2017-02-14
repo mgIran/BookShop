@@ -20,7 +20,8 @@ class Shop
 
 	public static function getPaymentMethod()
 	{
-		return Yii::app()->user->getState('payment_method');
+		if($payment_method = Yii::app()->user->getState('payment_method'))
+			return ShopPaymentMethod::model()->findByPk($payment_method);
 	}
 
 	public static function getShippingMethod()
@@ -78,7 +79,16 @@ class Shop
 		$response['cartPrice'] = $payment_total;
 
 		if($shipping_method = Shop::getShippingMethod())
-			$payment_total += $shipping_method->price;
+		{
+			$response['shippingPrice'] = (double)$shipping_method->price;
+			$payment_total += $response['shippingPrice'];
+		}
+
+		if($payment_method = Shop::getPaymentMethod())
+		{
+			$response['paymentPrice'] = (double)$payment_method->price;
+			$payment_total += $response['paymentPrice'];
+		}
 
 		$response['totalPrice'] = $price_total;
 		$response['totalDiscount'] = $discount_total;

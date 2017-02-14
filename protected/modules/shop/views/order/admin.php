@@ -20,15 +20,34 @@ $this->breadcrumbs=array(
 		array(
 			'header' => 'کاربر',
 			'value' => function($data){
-				return $data->user->userDetails->fa_name;
+				return $data->user && $data->user->userDetails?$data->user->userDetails->getShowName():'';
 			}
 		),
-		'delivery_address_id',
-		'billing_address_id',
-		'ordering_date',
-		'update_date',
+		array(
+			'name' => 'ordering_date',
+			'value' => function($data){
+				return JalaliDate::date('Y/m/d - H:i', $data->ordering_date);
+			},
+            'filter' => false
+		),
+		array(
+            'name' => 'update_date',
+			'value' => function($data){
+				return JalaliDate::date('Y/m/d - H:i', $data->update_date);
+			},
+            'filter' => false
+		),
+		array(
+            'name' => 'payment_method',
+            'value' => '$data->payment->title',
+            'filter' => CHtml::listData(ShopPaymentMethod::model()->findAll(),'id', 'title')
+		),
+		array(
+            'name' => 'shipping_method',
+            'value' => '$data->shipping->title',
+            'filter' => CHtml::listData(ShopShippingMethod::model()->findAll(array('order'=>'t.order')),'id', 'title')
+		),
 		/*
-		'payment_method',
 		'shipping_method',
 		'comment',
 		'amount',
