@@ -202,10 +202,12 @@ $(function() {
         $("#login-modal .modal-title").text("ورود به پنل کاربری");
     });
 
-    $(".address-list .address-item").click(function(){
-        $(".address-list .address-item").removeClass("selected");
-        $(this).addClass("selected");
-        $(this).find("input[type='radio']").prop("checked", true);
+    $(".address-list .address-item").click(function(e){
+        if(!$(e.target).hasClass("edit-link") && !$(e.target).hasClass("remove-link")) {
+            $(".address-list .address-item").removeClass("selected");
+            $(this).addClass("selected");
+            $(this).find("input[type='radio']").prop("checked", true);
+        }
     });
 
     $(".shipping-methods-list .shipping-method-item").click(function(){

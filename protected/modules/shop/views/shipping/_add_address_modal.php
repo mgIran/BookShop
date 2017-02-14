@@ -15,23 +15,11 @@ if(!isset($model))
                 <?php $this->renderPartial('shop.views.shipping._loading')?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'address-form',
-                    'action'=>$model->isNewRecord?array('/shop/addresses/add'):array('/shop/addresses/update'),
+                    'action'=>$model->isNewRecord?array('/shop/addresses/add'):array('/shop/addresses/update', 'id'=>$model->id),
                     'enableAjaxValidation'=>false,
                     'enableClientValidation'=>true,
                     'clientOptions'=>array(
                         'validateOnSubmit'=>true,
-                        'afterValidate' => 'js:function(form ,data ,hasError){
-                            if(!hasError)
-                            {
-                                var form = $("#address-form");
-                                var loading = $(".modal .loading-container");
-                                submitAjaxForm(
-                                    form,
-                                    form.attr("action"),
-                                    loading,
-                                    "if(html.status){ $(\'#addresses-list-container\').html(html.content); $(\'#add-address-modal #address-form input[type=\"text\"]\').val(\'\'); $(\'#add-address-modal .close\').trigger(\'click\'); $(\'#places-label\').html(\'شهرستان مورد نظر را انتخاب کنید\'); $(\'#places\').html(\'\'); $(\'#places-hidden\').val(\'\'); $(\'#towns-label\').html(\'استان مورد نظر را انتخاب کنید\'); $(\'#towns-hidden\').val(\'\'); }else $(\'#add-address-modal #summary-errors\').html(html.errors);");
-                            }
-                        }'
                     )
                 ));
                 echo CHtml::hiddenField('ajax','address-form');
@@ -129,7 +117,7 @@ if(!isset($model))
                 <div class="form-group"><p id="summary-errors" class="text-center"></p></div>
 
                 <div class="buttons overflow-hidden">
-                    <?= CHtml::submitButton('ورود',array('class'=>"btn-blue pull-left")); ?>
+                    <?= CHtml::submitButton('ثبت',array('class'=>"btn-blue pull-left")); ?>
                 </div>
 
                 <? $this->endWidget(); ?>
