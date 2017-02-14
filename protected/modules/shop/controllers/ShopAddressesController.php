@@ -25,12 +25,87 @@ class ShopAddressesController extends Controller
 	{
 		return array(
 			'checkAccess',
-//			'postOnly + add, remove, update',
+			'postOnly + add, remove',
 		);
 	}
 
+	public function actionAdd()
+	{
+		$model = new ShopAddresses();
+		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
+			$errors = CActiveForm::validate($model);
+			if(CJSON::decode($errors)){
+				echo $errors;
+				Yii::app()->end();
+			}
+		}
+		if(isset($_POST['ShopAddresses'])){
+			$model->attributes = $_POST['ShopAddresses'];
+			$model->user_id = Yii::app()->user->getId();
+			Yii::app()->getModule('places');
+			$this->beginClip('address-list');
+			if($model->save())
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'success',
+					'class' => 'address-list',
+					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت ثبت شد.',
+					'autoHide' => true
+				));
+			else
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'danger',
+					'class' => 'address-list',
+					'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
+					'autoHide' => true
+				));
 
+			$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
+			$this->endClip();
+			echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
+		}
+	}
 
+	public function actionUpdate($id)
+	{
+		$model = $this->loadModel($id);
+		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
+			$errors = CActiveForm::validate($model);
+			if(CJSON::decode($errors)){
+				echo $errors;
+				Yii::app()->end();
+			}
+		}
+		Yii::app()->getModule('places');
+		if(isset($_POST['ShopAddresses'])){
+			$model->attributes = $_POST['ShopAddresses'];
+			$model->user_id = Yii::app()->user->getId();
+			$this->beginClip('address-list');
+			if($model->save())
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'success',
+					'class' => 'address-list',
+					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت به روزرسانی شد.',
+					'autoHide' => true
+				));
+			else
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'danger',
+					'class' => 'address-list',
+					'message' => 'متاسفانه در ویرایش آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
+					'autoHide' => true
+				));
+
+			$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
+			$this->endClip();
+			echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
+			Yii::app()->end();
+		}
+
+		$this->beginClip('add-address-modal');
+		$this->renderPartial('shop.views.shipping._add_addresses_modal', array('model' => $model));
+		$this->endClip();
+		echo CJSON::encode(['status' => true, 'content' => $this->clips['add-address-modal']]);
+	}
 
 	public function actionRemove(){
 		if(isset($_POST['id'])){
@@ -42,7 +117,7 @@ class ShopAddressesController extends Controller
 				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'success',
 					'class' => 'address-list',
-					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت حذف گردید.',
+					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت حذف شد.',
 					'autoHide' => true
 				));
 			else
@@ -59,41 +134,6 @@ class ShopAddressesController extends Controller
 		}
 	}
 
-	public function actionAdd()
-	{
-		$model = new ShopAddresses();
-		$model->user_id = Yii::app()->user->getId();
-		if(isset($_POST['ajax']) && $_POST['ajax'] === 'address-form'){
-			$errors = CActiveForm::validate($model);
-			if(CJSON::decode($errors)){
-				echo $errors;
-				Yii::app()->end();
-			}
-		}
-		if(isset($_POST['ShopAddresses'])){
-			$model->attributes = $_POST['ShopAddresses'];
-			Yii::app()->getModule('places');
-			$this->beginClip('address-list');
-			if($model->save())
-				$this->renderPartial('shop.views.shipping._alertMessage', array(
-					'type' => 'success',
-					'class' => 'address-list',
-					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت ثبت گردید.',
-					'autoHide' => true
-				));
-			else
-				$this->renderPartial('shop.views.shipping._alertMessage', array(
-					'type' => 'danger',
-					'class' => 'address-list',
-					'message' => 'متاسفانه در ثبت آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
-					'autoHide' => true
-				));
-
-			$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
-			$this->endClip();
-			echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
-		}
-	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
