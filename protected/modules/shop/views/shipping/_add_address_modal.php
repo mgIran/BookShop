@@ -56,7 +56,7 @@ $model=new ShopAddresses();
                             'caret' => '<i class="icon icon-chevron-down"></i>',
                             'selected' => $model->town_id?$model->town_id:false,
                             'onclickAjax' => array(
-                                'url' => Yii::app()->createUrl('/places/places/getCities'),
+                                'url' => Yii::app()->createUrl('/places/cities/getCities'),
                                 'type' => 'GET',
                                 'dataType' => 'html',
                                 'success' => '

@@ -15,8 +15,8 @@ class PlacesModule extends CWebModule
 		));
 	}
     public $controllerMap = array(
-        'towns' => 'application.modules.places.controllers.TownsManageController',
-        'places' => 'application.modules.places.controllers.PlacesManageController',
+        'towns' => 'places.controllers.PlacesTownsController',
+        'cities' => 'places.controllers.PlacesCitiesController',
 
     );
 	public function beforeControllerAction($controller, $action)
