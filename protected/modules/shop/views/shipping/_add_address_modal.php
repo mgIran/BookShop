@@ -26,7 +26,7 @@ $model=new ShopAddresses();
                                 var form = $("#address-form");
                                 var loading = $(".modal .loading-container");
                                 var url = \''.Yii::app()->createUrl('/shop/addresses/add').'\';
-                                submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                submitAjaxForm(form ,url ,loading);
                             }
                         }'
                     )
