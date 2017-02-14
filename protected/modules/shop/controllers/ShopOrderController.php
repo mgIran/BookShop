@@ -59,6 +59,7 @@ class ShopOrderController extends Controller
     public function actionCreate($customer = null, $payment_method = null, $shipping_method = null, $delivery_address = null) {
 		Yii::app()->theme="frontend";
         $this->layout="//layouts/index";
+		Yii::app()->getModule('users');
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
@@ -73,8 +74,6 @@ class ShopOrderController extends Controller
 
         if(!$customer && !Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
             $customer = Yii::app()->user->getId();
-        if(!Yii::app()->user->isGuest && !$customer)
-            $customer = Users::model()->findByPk(Yii::app()->user->id);
         if(!$shipping_method)
             $shipping_method = Yii::app()->user->getState('shipping_method');
 		if(!$delivery_address)
