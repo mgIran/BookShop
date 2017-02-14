@@ -21,11 +21,22 @@ if(!isset($hideTimer) || empty($hideTimer))
 
 <?php
 if($autoHide){
-    Yii::app()->clientScript->registerScript('alert-hide', "
-        setTimeout(function(){
-            $('#{$id}').fadeOut(function(){
-                $('#{$id}').remove();
-            });
-        }, {$hideTimer});
-    ", CClientScript::POS_READY);
+    if(!Yii::app()->request->isAjaxRequest)
+        Yii::app()->clientScript->registerScript('alert-hide', "
+            setTimeout(function(){
+                $('#{$id}').fadeOut(300, function(){
+                    $('#{$id}').remove();
+                });
+            }, {$hideTimer});
+        ", CClientScript::POS_READY);
+    else
+        echo "<script>
+            $(function() {
+                setTimeout(function(){
+                    $('#$id').fadeOut(300, function(){
+                        $('#$id').remove();
+                    });
+                },$hideTimer);
+            })
+        </script>";
 }

@@ -20,8 +20,18 @@
             </div>
         </div>
         <div class="links pull-left">
-            <a href="#" class="edit-link"></a>
-            <a href="#" class="remove-link"></a>
+            <?php
+            echo CHtml::link('',array("/shop/addresses/update"), array(
+                    'class' => 'edit-link',
+                    'data-id' => $data->id
+                ));
+            ?>
+            <?php
+            echo CHtml::link('',array("/shop/addresses/remove"), array(
+                    'class' => 'remove-link',
+                    'data-id' => $data->id
+                ));
+            ?>
         </div>
     </div>
 </div>

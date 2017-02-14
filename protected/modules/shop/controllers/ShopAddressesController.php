@@ -32,30 +32,31 @@ class ShopAddressesController extends Controller
 
 
 
-	public function actionRemove($id){
-		Yii::app()->theme = 'front-end';
-		$model = $this->loadModel($id);
-		Yii::app()->getModule('places');
-		$this->beginClip('address-list');
+	public function actionRemove(){
+		if(isset($_POST['id'])){
+			$model = $this->loadModel((int)$_POST['id']);
+			Yii::app()->getModule('places');
+			$this->beginClip('address-list');
 
-		if($model->save())
-			$this->renderPartial('shop.views.shipping._alertMessage', array(
-				'type' => 'success',
-				'class' => 'address-list',
-				'message' => '<span class="icon icon-check"></span> آدرس با موفقیت حذف گردید.',
-				'autoHide' => true
-			));
-		else
-			$this->renderPartial('shop.views.shipping._alertMessage', array(
-				'type' => 'danger',
-				'class' => 'address-list',
-				'message' => 'متاسفانه در حذف آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
-				'autoHide' => true
-			));
+			if($model->delete())
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'success',
+					'class' => 'address-list',
+					'message' => '<span class="icon icon-check"></span> آدرس با موفقیت حذف گردید.',
+					'autoHide' => true
+				));
+			else
+				$this->renderPartial('shop.views.shipping._alertMessage', array(
+					'type' => 'danger',
+					'class' => 'address-list',
+					'message' => 'متاسفانه در حذف آدرس مشکلی پیش آمده است! لطفا مجددا تلاش کنید.',
+					'autoHide' => true
+				));
 
-		$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
-		$this->endClip();
-		echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
+			$this->renderPartial('shop.views.shipping._addresses_list', array('addresses' => $model->user->addresses));
+			$this->endClip();
+			echo CJSON::encode(['status' => true, 'content' => $this->clips['address-list']]);
+		}
 	}
 
 	public function actionAdd()
