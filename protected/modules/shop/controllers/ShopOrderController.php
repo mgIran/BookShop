@@ -100,6 +100,7 @@ class ShopOrderController extends Controller
 			));
 			Yii::app()->end();
         }
+		var_dump($shipping_method);exit;
         if(!$payment_method) {
 			$shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
             $this->render('/payment/choose', array(
