@@ -5,23 +5,20 @@
 /* @var $shippingMethods ShopShippingMethod[] */
 
 Yii::app()->clientScript->registerScript('delete-update-address-script','
-//    $("body").on("click", ".edit-link", function(e){
-//        e.preventDefault();
-//        var $this = $(this);
-//        $.ajax({
-//            url: $this.attr("href"),
-//            data: {id: $this.data("id")}
-//            type: "POST",
-//            dataType: "JSON",
-//            beforeSend: function(){
-//                $("#basket-loading").fadeIn();
-//            },
-//            success: function(data){
-//                $("#addresses-list-container").html(data.content);
-//                $("#basket-loading").fadeOut();
-//            }
-//        });
-//    });
+    $("body").on("click", ".edit-link", function(){
+        var $this = $(this);
+        $.ajax({
+            url: $this.attr("href"),
+            dataType: "JSON",
+            beforeSend: function(){
+                $("#basket-loading").fadeIn();
+            },
+            success: function(data){
+                $("#ShopAddresses_transferee").data
+                $("#basket-loading").fadeOut();
+            }
+        });
+    });
     
     $("body").on("click", ".remove-link", function(e){
         e.preventDefault();
