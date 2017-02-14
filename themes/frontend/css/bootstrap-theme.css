@@ -3517,3 +3517,27 @@ input[type="checkbox"] + label:hover::before {
 #add-address-modal input[type="submit"]{
     min-width: 160px;
 }
+.used-discount-code{
+    background: #fcf5f5;
+    color: #e74e40;
+    overflow: hidden;
+    padding: 20px 5px;
+    border: 1px solid #f0f1f2;
+    position: relative;
+    display: block;
+}
+.used-discount-code a.remove{
+    color: #e24d4d;
+    padding-right: 14px;
+    background: url("../svg/close-red.svg") no-repeat center right;
+    background-size: 9px;
+    font-size: 11px;
+    opacity:1;
+    display: inline-block;
+    margin-right: 30px;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
