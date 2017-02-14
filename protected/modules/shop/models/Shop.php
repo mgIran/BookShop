@@ -66,11 +66,14 @@ class Shop
 		$price_total = 0;
 		$discount_total = 0;
 		$payment_total = 0;
+		$payment_price = 0;
+		$shipping_price = 0;
+		$discountCodeAmount = 0;
 		foreach(Shop::getCartContent() as $book){
 			$model = Books::model()->findByPk($book['book_id']);
 			$price = (double)($model->getPrinted_price() * $book['qty']);
 			$price_total += $price;
-            // calculate tax
+			// calculate tax
 			$discount_price = (double)($model->getOff_printed_price() * $book['qty']);
 			$discount_total += ($price - $discount_price);
 			$payment_total += $discount_price;
@@ -78,26 +81,26 @@ class Shop
 
 		$response['cartPrice'] = $payment_total;
 
-		if($shipping_method = Shop::getShippingMethod())
-		{
-			$response['shippingPrice'] = (double)$shipping_method->price;
-			$payment_total += $response['shippingPrice'];
+		if($discount_codes = Users::model()->getDiscountIds()){
+			$discountCodesInSession = Users::model()->getDiscountCodes();
+			$discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+			$discountCodeAmount = (double)$discountObj->getAmount($payment_total);
+			DiscountCodes::calculateDiscountCodes($payment_total);
 		}
 
-		if($payment_method = Shop::getPaymentMethod())
-		{
-			$response['paymentPrice'] = (double)$payment_method->price;
-			$payment_total += $response['paymentPrice'];
-		}
-//		var_dump($payment_total);
-		if($discount_codes = Users::model()->getDiscountIds())
-		{
-//			DiscountCodes::calculateDiscountCodes($payment_total);
-////			var_dump($payment_total);exit;
-//			$response['paymentPrice'] = (double)$payment_method->price;
-//			$payment_total += $response['paymentPrice'];
+		if($shipping_method = Shop::getShippingMethod()){
+			$shipping_price = (double)$shipping_method->price;
+			$payment_total += $shipping_price;
 		}
 
+		if($payment_method = Shop::getPaymentMethod()){
+			$payment_price = (double)$payment_method->price;
+			$payment_total += $payment_price;
+		}
+
+		$response['paymentPrice'] = $payment_price;
+		$response['shippingPrice'] = $shipping_price;
+		$response['discountCodeAmount'] = $discountCodeAmount;
 		$response['totalPrice'] = $price_total;
 		$response['totalDiscount'] = $discount_total;
 		$response['totalPayment'] = $payment_total;

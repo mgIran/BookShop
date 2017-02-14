@@ -197,12 +197,8 @@ class DiscountCodes extends CActiveRecord
                         $criteria = DiscountCodes::ValidCodes();
                         $criteria->compare('code', $code);
                         $discountObj = DiscountCodes::model()->find($criteria);
-                        $disVal = 0;
                         if(!$discountObj->userUsedStatus(Yii::app()->user->getId())){
-                            if($discountObj->off_type == DiscountCodes::DISCOUNT_TYPE_AMOUNT && $discountObj->amount)
-                                $disVal = (double)$discountObj->amount;
-                            elseif($discountObj->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT && $discountObj->percent)
-                                $disVal = (double)($price * (double)((double)$discountObj->percent / 100));
+                            $disVal = $discountObj->getAmount($price);
                             if($price < 100 || $price - $disVal < 100){
                                 $price = 0;
                                 $priceZero = true;
@@ -219,12 +215,8 @@ class DiscountCodes extends CActiveRecord
                 $criteria = DiscountCodes::ValidCodes();
                 $criteria->compare('code', $code);
                 $discountObj = DiscountCodes::model()->find($criteria);
-                $disVal = 0;
                 if(!$discountObj->userUsedStatus(Yii::app()->user->getId())){
-                    if($discountObj->off_type == DiscountCodes::DISCOUNT_TYPE_AMOUNT && $discountObj->amount)
-                        $disVal = (double)$discountObj->amount;
-                    elseif($discountObj->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT && $discountObj->percent)
-                        $disVal = (double)($price * (double)((double)$discountObj->percent / 100));
+					$disVal = $discountObj->getAmount($price);
                     if($price < 100 || $price - $disVal < 100){
                         $price = 0;
                     }else
@@ -305,4 +297,13 @@ class DiscountCodes extends CActiveRecord
         }
         $user->clearDiscountCodesStates();
     }
+
+	public function getAmount($price){
+		$disVal = 0;
+		if($this->off_type == DiscountCodes::DISCOUNT_TYPE_AMOUNT && $this->amount)
+			$disVal = (double)$this->amount;
+		elseif($this->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT && $this->percent)
+			$disVal = (double)($price * (double)((double)$this->percent / 100));
+		return $disVal;
+	}
 }
