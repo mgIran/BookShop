@@ -47,8 +47,9 @@ class Shop
 	{
 		$cart = self::getCartContent();
 		$count = 0;
-		foreach($cart as $item)
-			$count += $item['qty'];
+		if(!is_null($cart))
+			foreach ($cart as $item)
+				$count += $item['qty'];
 		return $count;
 	}
 
