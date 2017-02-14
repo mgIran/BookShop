@@ -9,8 +9,10 @@
  * @property string $description
  * @property double $price
  * @property string $status
+ * @property string $payment_method
+ * @property string $paymentMethods
  */
-class ShopShippingMethod extends CActiveRecord
+class ShopShippingMethod extends SortableCActiveRecord
 {
     const STATUS_DEACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -36,14 +38,14 @@ class ShopShippingMethod extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, price', 'required'),
+			array('title, price, payment_method', 'required'),
 			array('price', 'numerical'),
 			array('title', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>1),
-			array('description', 'safe'),
+			array('description, payment_method', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, price, status', 'safe', 'on'=>'search'),
+			array('id, title, description, price, status, payment_method', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +71,7 @@ class ShopShippingMethod extends CActiveRecord
 			'description' => 'توضیحات',
 			'price' => 'هزینه',
 			'status' => 'وضعیت',
+			'payment_method' => 'روش های پرداخت مجاز',
 		);
 	}
 
@@ -130,5 +133,9 @@ class ShopShippingMethod extends CActiveRecord
 		else if($this->status == self::STATUS_DEACTIVE)
 			$this->status = self::STATUS_ACTIVE;
 		return $this;
+	}
+
+	public function getPaymentMethods(){
+		return CJSON::decode($this->payment_method);
 	}
 }

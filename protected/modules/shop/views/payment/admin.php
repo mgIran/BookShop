@@ -18,13 +18,13 @@ $this->breadcrumbs=array(
 	'columns'=>array(
 		'title',
 		'description',
-//		array(
-//			'name' => 'price',
-//			'value' => function($data){
-//				return Controller::parseNumbers(number_format($data->price)).' تومان';
-//			},
-//			'filter' => false
-//		),
+		array(
+			'name' => 'price',
+			'value' => function($data){
+				return Controller::parseNumbers(number_format($data->price)).' تومان';
+			},
+			'filter' => false
+		),
 		array(
 			'name' => 'status',
 			'value' => '$data->statusLabel',
@@ -74,6 +74,11 @@ $this->breadcrumbs=array(
 					'visible'=>'$data->status',
 				)
 			)
+		),
+		array(
+            'header' => 'تغییر وضعیت',
+			'class'=>'CButtonColumn',
+			'template' => '{update}',
 		),
 	),
 )); ?>
