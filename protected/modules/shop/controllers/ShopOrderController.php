@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'history'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -421,5 +421,13 @@ class ShopOrderController extends Controller
 			}
 		}
 		$this->redirect(array('/shop/order/create'));
+	}
+
+	public function actionHistory()
+	{
+        Yii::app()->theme="frontend";
+        $this->layout="//layouts/panel";
+
+        $this->render("history", array());
 	}
 }

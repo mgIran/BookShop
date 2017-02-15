@@ -3151,7 +3151,10 @@ input[type="checkbox"] + label:hover::before {
 .cart .select-address h5,
 .cart .bill h5,
 .cart .address-info h5,
-.cart .payment-method h5{
+.cart .payment-method h5,
+.cart .order-details h5,
+.cart .shipping-details h5,
+.cart .transaction-details h5{
     font-weight: bold;
     margin: 13px 0;
     line-height:20px;
@@ -3553,4 +3556,79 @@ input[type="checkbox"] + label:hover::before {
     -ms-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
+}
+.cart .order-details .table{
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+.cart .order-details .table td,
+.cart .order-details .table th,
+.cart .shipping-details .table td,
+.cart .shipping-details .table th,
+.cart .transaction-details .table td,
+.cart .transaction-details .table th{
+    width: 25%;
+    max-width: 25%;
+    text-align: center;
+    vertical-align: middle;
+}
+.cart .transaction-details .table td,
+.cart .transaction-details .table th{
+    width: 15%;
+    max-width: 15%;
+}
+.cart .transaction-details .table td:first-child,
+.cart .transaction-details .table th:first-child{
+    width: 10%;
+    max-width: 10%;
+}
+.cart .order-details .green-text,
+.cart .transaction-details .green-text{
+    color: #82b440;
+}
+.cart .order-details .red-text,
+.cart .transaction-details .red-text{
+    color: #e74e40;
+}
+.cart .payment-message .overflow-hidden{
+    margin-top: 30px;
+    padding: 20px;
+}
+.cart .payment-message .overflow-hidden .text-center{
+    font-size: 12px;
+}
+.cart .payment-message .overflow-hidden .buttons{
+    margin-top: 20px;
+}
+.cart .transaction-details{
+    margin-bottom: 80px;
+}
+.steps.after-accept li{
+    width: 20%;
+}
+.steps.in-verify{
+    background: #fafafa;
+    padding-top: 55px;
+    margin-right: -20px;
+    margin-left: -20px;
+}
+.steps.in-verify li::after{
+    border-color: #fafafa;
+}
+.cart .payment-message .btn-blue,
+.cart .payment-message .btn-red,
+.cart .payment-message .btn-green{
+    min-width:150px;
+    margin-right: 10px;
+}
+.cart .payment-message .btn-green{
+    margin-right: 0;
+}
+.cart .alert{
+    border-radius: 0;
+}
+.cart .order-details,
+.cart .shipping-details,
+.cart .transaction-details{
+    margin-top: 80px;
 }
