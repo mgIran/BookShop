@@ -44,14 +44,9 @@ $this->breadcrumbs=array(
 		),
 		array(
             'name' => 'shipping_method',
-            'value' => '$data->shipping->title',
+            'value' => '$data->shippingMethod->title',
             'filter' => CHtml::listData(ShopShippingMethod::model()->findAll(array('order'=>'t.order')),'id', 'title')
 		),
-		/*
-		'shipping_method',
-		'comment',
-		'amount',
-		*/
 		array(
 			'name' => 'status',
 			'value' => '$data->statusLabel',
@@ -104,6 +99,7 @@ $this->breadcrumbs=array(
 		),
 		array(
 			'class'=>'CButtonColumn',
+            'header'=>$this->getPageSizeDropDownTag(),
 		),
 	),
 )); ?>

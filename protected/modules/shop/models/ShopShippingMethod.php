@@ -10,6 +10,7 @@
  * @property double $price
  * @property string $status
  * @property string $payment_method
+ * @property string $order
  * @property string $paymentMethods
  */
 class ShopShippingMethod extends SortableCActiveRecord
@@ -42,10 +43,11 @@ class ShopShippingMethod extends SortableCActiveRecord
 			array('price', 'numerical'),
 			array('title', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>1),
+			array('order', 'length', 'max'=>10),
 			array('description, payment_method', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, price, status, payment_method', 'safe', 'on'=>'search'),
+			array('id, title, description, price, status, payment_method, order', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -98,6 +100,7 @@ class ShopShippingMethod extends SortableCActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);
 		$criteria->compare('status',$this->status,true);
+		$criteria->compare('order',$this->order,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -143,7 +146,7 @@ class ShopShippingMethod extends SortableCActiveRecord
 		$criteria = new CDbCriteria();
 		$criteria->compare('status', ShopPaymentMethod::STATUS_ACTIVE);
 		$criteria->addInCondition('id', $this->getPaymentMethods());
-		$criteria->order;
+		$criteria->order = 't.order';
 		return ShopPaymentMethod::model()->findAll($criteria);
 	}
 }

@@ -14,7 +14,7 @@ class ShopPaymentController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('admin', 'index', 'view', 'delete', 'create', 'update', 'changeStatus')
+			'backend' => array('admin', 'index', 'view', 'delete', 'create', 'update', 'changeStatus', 'order')
 		);
 	}
 
@@ -27,6 +27,15 @@ class ShopPaymentController extends Controller
 			'checkAccess',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
+		);
+	}
+
+	public function actions()
+	{
+		return array(
+			'order' => array(
+				'class' => 'ext.yiiSortableModel.actions.AjaxSortingAction',
+			)
 		);
 	}
 

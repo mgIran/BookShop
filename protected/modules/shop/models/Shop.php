@@ -68,8 +68,11 @@ class Shop
 		Yii::app()->user->setState('basket-position', null);
 	}
 
-
-
+	/**
+	 * 
+	 * @param $cartStatistics
+	 * @return bool
+	 */
 	public static function isEmpty($cartStatistics)
 	{
 		if(
@@ -83,6 +86,10 @@ class Shop
 		return false;
 	}
 
+	/**
+	 * Return Prices of cart and order
+	 * @return array of order cart statistics
+	 */
 	public static function getPriceTotal()
 	{
 		$response = [];

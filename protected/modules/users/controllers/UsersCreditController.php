@@ -106,7 +106,7 @@ class UsersCreditController extends Controller
             $model->amount = $_POST['amount'];
             $model->date = time();
             $model->gateway_name='زرین پال';
-            $model->type='credit';
+            $model->type=UserTransactions::TRANSACTION_TYPE_CREDIT;
             if ($model->save()) {
                 $gateway = new ZarinPal();
                 $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/users/credit/verify';
@@ -145,7 +145,7 @@ class UsersCreditController extends Controller
             'authority' => $Authority,
             'user_id' => Yii::app()->user->getId(),
             'status' => 'unpaid',
-            'type' => 'credit'
+            'type' => UserTransactions::TRANSACTION_TYPE_CREDIT
         ));
         $userDetails = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
         $Amount = $model->amount;
