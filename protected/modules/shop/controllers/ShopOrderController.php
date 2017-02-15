@@ -69,24 +69,25 @@ class ShopOrderController extends Controller
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
-
 		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
 		{
 			$customer = Yii::app()->user->getId();
-			Yii::app()->user->setState('basket-position', 2);
+			if(Yii::app()->user->getState('basket-position') < 2)
+				Yii::app()->user->setState('basket-position', 2);
 		}
-		if(isset($_POST['ShippingMethod']))
-			Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
 		if(isset($_POST['DeliveryAddress']))
 			Yii::app()->user->setState('delivery_address', $_POST['DeliveryAddress']);
-		if(Yii::app()->user->hasState('shipping_method') && Yii::app()->user->hasState('delivery_address'))
-			Yii::app()->user->setState('basket-position', 3);
+		if(isset($_POST['ShippingMethod']))
+		{
+			Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
+			if(Yii::app()->user->hasState('delivery_address'))
+				Yii::app()->user->setState('basket-position', 3);
+		}
 		if(isset($_POST['PaymentMethod']))
 		{
 			Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
 			Yii::app()->user->setState('basket-position', 4);
 		}
-
 		if(!$shipping_method)
 			$shipping_method = Yii::app()->user->getState('shipping_method');
 		if(!$delivery_address)
@@ -153,7 +154,7 @@ class ShopOrderController extends Controller
 		elseif($position == 2)
 			$this->redirect(array('/shop/cart/view'));
 		Yii::app()->user->setState('basket-position',$position);
-		$this->redirect(array('create'));
+		$this->redirect(array('/shop/order/create'));
 	}
 
 	/**

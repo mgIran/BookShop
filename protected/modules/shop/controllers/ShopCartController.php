@@ -33,6 +33,7 @@ class ShopCartController extends Controller
 	{
 		Yii::app()->theme="frontend";
 		$this->layout="//layouts/index";
+		Yii::app()->user->setState('basket-position',1);
 		$cart = Shop::getCartContent();
 		$this->render('view',array(
 			'books'=>$cart
