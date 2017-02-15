@@ -42,11 +42,11 @@
 					<li class="list-group-item">این سفارش به <span class="green-label"><?php echo CHtml::encode($deliveryAddress->transferee);?></span> به آدرس <span class="green-label"><?php echo CHtml::encode($deliveryAddress->postal_address);?></span> و شماره تماس <span class="green-label"><?php echo CHtml::encode($deliveryAddress->emergency_tel);?></span> تحویل می گردد.</li>
 					<li class="list-group-item">این سفارش از طریق <span class="green-label"><?php echo CHtml::encode($shippingMethod->title);?></span> با هزینه <span class="green-label"><?php echo Controller::parseNumbers(number_format($shippingMethod->price));?></span> تومان به شما تحویل داده خواهد شد.</li>
 				</ul>
-			</div>
-			<small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابیک، اعلام نموده‌اید. </small>
-			<div class="buttons">
-				<input type="submit" class="btn-black pull-right" value="بازگشت">
-				<input type="submit" class="btn-blue pull-left" value="پرداخت و ثبت سفارش">
+            </div>
+            <small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابیک، اعلام نموده‌اید. </small>
+            <div class="buttons">
+                <a href="<?= $this->createUrl('/shop/order/back') ?>" class="btn-black pull-right">بازگشت</a>
+				<input type="submit" class="btn-green pull-left" value="پرداخت و ثبت سفارش">
 			</div>
 		</div>
 	</div>

@@ -2979,6 +2979,9 @@ input[type="checkbox"] + label:hover::before {
 .cart .price{
     font-weight: bold;
 }
+.cart .price.center-block{
+    margin-top: 7px;
+}
 .cart .price small{
     font-weight: lighter;
     font-size: 12px;
@@ -3407,6 +3410,9 @@ input[type="checkbox"] + label:hover::before {
     padding: 20px 5px;
     border:1px solid #f0f1f2;
 }
+.cart .address-info .list-group-item{
+    padding: 20px 25px;
+}
 .cart .bill .list-group-item:first-child,
 .cart .bill .list-group-item:last-child,
 .cart .address-info .list-group-item:first-child,
@@ -3475,12 +3481,12 @@ input[type="checkbox"] + label:hover::before {
 .payment-method .payment-method-item > div{
     height:90px;
 }
-.payment-method .note{
+.cart .note{
     color: #e74e40;
-    margin-top: 20px;
+    margin: 20px 0;
     display: block;
 }
-.payment-method .note a{
+.cart .note a{
     color: #e74e40;
     font-weight: bold;
     border-bottom: 1px dotted;
