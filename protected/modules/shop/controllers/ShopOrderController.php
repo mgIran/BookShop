@@ -492,6 +492,10 @@ class ShopOrderController extends Controller
         Yii::app()->theme="frontend";
         $this->layout="//layouts/panel";
 
-        $this->render("history", array());
+        $model=new ShopOrder("search");
+
+        $this->render("history", array(
+            "model"=>$model,
+        ));
 	}
 }
