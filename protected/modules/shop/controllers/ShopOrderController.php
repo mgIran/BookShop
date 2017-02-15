@@ -219,7 +219,7 @@ class ShopOrderController extends Controller
 				$this->redirect(array('create'));
 			}
 
-			DiscountCodes::InsertCodes($order->user);
+//			DiscountCodes::InsertCodes($order->user);
 			
 			// clear cart content and all order states
 			Shop::clearCartContent();
