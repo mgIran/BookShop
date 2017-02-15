@@ -13,6 +13,7 @@
 		<?php $this->renderPartial('shop.views.shipping._loading', array('id' => 'basket-loading')) ?>
 		<div class="white-box cart">
 			<?php $this->renderPartial('/order/_steps', array('point' => 3));?>
+			<?php $this->renderPartial('//partial-views/_flashMessage');?>
 			<?php $this->renderPartial('/payment/_basket_table', array('books' => Shop::getCartContent()));?>
 			<div class="bill">
 				<?php $cartStatistics=Shop::getPriceTotal(); ?>
@@ -46,7 +47,7 @@
             <small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابیک، اعلام نموده‌اید. </small>
             <div class="buttons">
                 <a href="<?= $this->createUrl('/shop/order/back') ?>" class="btn-black pull-right">بازگشت</a>
-				<input type="submit" class="btn-green pull-left" value="پرداخت و ثبت سفارش">
+                <a href="<?= $this->createUrl('/shop/order/confirm') ?>" class="btn-green pull-left">پرداخت و ثبت سفارش</a>
 			</div>
 		</div>
 	</div>

@@ -39,7 +39,7 @@ $this->breadcrumbs=array(
 		),
 		array(
             'name' => 'payment_method',
-            'value' => '$data->payment->title',
+            'value' => '$data->paymentMethod->title',
             'filter' => CHtml::listData(ShopPaymentMethod::model()->findAll(),'id', 'title')
 		),
 		array(

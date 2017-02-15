@@ -1,22 +1,7 @@
 <?php
 class Shop
 {
-	public static $qtyList = array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10);
-
-	public static function mailNotification($order)
-	{
-		$email = Shop::module()->notifyAdminEmail;
-		if($email !== null){
-			$appTitle = Yii::app()->name;
-//			$headers = "From: {$title}\r\nReply-To: {do@not-reply.org}";
-
-			mail($email,
-				Shop::t('Order #{order_id} has been made in your Webshop', array(
-					'{order_id}' => $order->id)),
-				CHtml::link(Shop::t('direct link'), array(
-					'//shop/order/view', 'id' => $order->id)));
-		}
-	}
+	public static $qtyList = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10);
 
 	public static function getPaymentMethod()
 	{
@@ -38,7 +23,7 @@ class Shop
 
 
 	public static function getCartContent()
-    {
+	{
 		if(Yii::app()->user->hasState('cart')){
 			if(is_string(Yii::app()->user->getState('cart')))
 				return json_decode(Yii::app()->user->getState('cart'), true);
@@ -46,12 +31,12 @@ class Shop
 				return Yii::app()->user->getState('cart');
 		}elseif(Yii::app()->request->cookies['shop-basket'])
 			return CJSON::decode(base64_decode(Yii::app()->request->cookies['shop-basket']->value));
-    }
+	}
 
 	public static function setCartContent($cart)
 	{
 		Yii::app()->request->cookies['shop-basket'] = new CHttpCookie('shop-basket',
-			base64_encode(json_encode($cart)),array());
+			base64_encode(json_encode($cart)), array());
 		$cart = Yii::app()->user->setState('cart', json_encode($cart));
 		return $cart;
 	}
@@ -61,9 +46,22 @@ class Shop
 		$cart = self::getCartContent();
 		$count = 0;
 		if(!is_null($cart))
-			foreach ($cart as $item)
+			foreach($cart as $item)
 				$count += $item['qty'];
 		return $count;
+	}
+
+	public static function isEmpty($cartStatistics)
+	{
+		if(
+			!$cartStatistics ||
+			$cartStatistics['shippingPrice'] == 0 ||
+			$cartStatistics['totalPrice'] == 0 ||
+			$cartStatistics['totalDiscount'] == 0 ||
+			$cartStatistics['totalPayment'] == 0
+		)
+			return true;
+		return false;
 	}
 
 	public static function getPriceTotal()
@@ -113,69 +111,15 @@ class Shop
 		return $response;
 	}
 
-	public static function register($file)
-	{
-//		$url = Yii::app()->getAssetManager()->publish(
-//			Yii::getPathOfAlias('application.modules.shop.assets'));
-//
-//		$path = $url . '/' . $file;
-//		if(strpos($file, 'js') !== false)
-//			return Yii::app()->clientScript->registerScriptFile($path);
-//		else if(strpos($file, 'css') !== false)
-//			return Yii::app()->clientScript->registerCssFile($path);
-//
-//		return $path;
-	}
-
-    /**
-     * Return User
-     * @return Users
-     */
+	/**
+	 * Return User
+	 * @return Users
+	 */
 	public static function getCustomer()
-    {
-        if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-            if($customer = Users::model()->findByPk(Yii::app()->user->getId()))
-                return $customer;
-
-        if($customer_id = Yii::app()->user->getState('customer_id'))
-            return Users::model()->findByPk($customer_id);
-    }
-
-	public static function t($string, $params = array())
 	{
-		Yii::import('application.modules.shop.ShopModule');
-
-		return Yii::t('ShopModule.shop', $string, $params);
-	}
-
-	/* set a flash message to display after the request is done */
-	public static function setFlash($message)
-	{
-		Yii::app()->user->setFlash('yiishop', Shop::t($message));
-	}
-
-	public static function hasFlash()
-	{
-		return Yii::app()->user->hasFlash('yiishop');
-	}
-
-	/* retrieve the flash message again */
-	public static function getFlash()
-	{
-		if(Yii::app()->user->hasFlash('yiishop')){
-			return Yii::app()->user->getFlash('yiishop');
-		}
-	}
-
-	public static function renderFlash()
-	{
-		if(Yii::app()->user->hasFlash('yiishop')){
-			echo '<div class="info">';
-			echo Shop::getFlash();
-			echo '</div>';
-			Yii::app()->clientScript->registerScript('fade', "
-					setTimeout(function() { $('.info').fadeOut('slow'); }, 5000);	
-					");
-		}
+		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+			if($customer = Users::model()->findByPk(Yii::app()->user->getId()))
+				return $customer;
+		return false;
 	}
 }

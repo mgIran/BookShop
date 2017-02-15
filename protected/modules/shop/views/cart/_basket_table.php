@@ -29,7 +29,7 @@ if($books):?>
                     </td>
                     <td class="vertical-middle text-center">
                         <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], Shop::$qtyList, array("class"=>"quantity", "data-id"=>$position));?>
-                        <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟'), 'data-id' => $position));?>
+                        <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
                         <?php $price = $model->getPrinted_price();?>
@@ -45,7 +45,7 @@ if($books):?>
                         <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$price)))?><small> تومان</small></span>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
-                        <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟'), 'data-id' => $position));?>
+                        <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'confirm' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
                     </td>
                 </tr>
             <?php endif;?>

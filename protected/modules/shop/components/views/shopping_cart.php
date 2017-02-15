@@ -2,7 +2,7 @@
 <div id="shopping-cart-content">
 <?php
 if($products) {
-	echo '<h3>'.CHtml::link(Shop::t('Shopping cart'), array(
+	echo '<h3>'.CHtml::link('Shopping cart', array(
 				'//shop/shoppingCart/view')) . '</h3>';
 
 	echo '<table cellpadding="0" cellspacing="0">';	
@@ -23,7 +23,7 @@ if($products) {
 				<td class="cart-left">1</td>
 				<td class="cart-middle">%s</td>
 				<td class="cart-right">%s</td></tr>',
-				Shop::t('Shipping costs'),
+				'Shipping costs',
 				Shop::priceFormat($shippingMethod->price)
 				);
 	} 

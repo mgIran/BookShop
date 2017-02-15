@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create, addDiscount, removeDiscount, back',
+			'checkAccess - create, addDiscount, removeDiscount, back, confirm',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -65,13 +65,13 @@ class ShopOrderController extends Controller
 
 		if(!Yii::app()->user->hasState('basket-position'))
 			Yii::app()->user->setState('basket-position', 1);
-
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
 		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
 		{
 			$customer = Yii::app()->user->getId();
+			Yii::app()->user->setState('customer_id', $customer);
 			if(Yii::app()->user->getState('basket-position') < 2)
 				Yii::app()->user->setState('basket-position', 2);
 		}
@@ -89,11 +89,11 @@ class ShopOrderController extends Controller
 			Yii::app()->user->setState('basket-position', 4);
 		}
 		if(!$shipping_method)
-			$shipping_method = Yii::app()->user->getState('shipping_method');
+			$shipping_method = (int)Yii::app()->user->getState('shipping_method');
 		if(!$delivery_address)
-			$delivery_address = Yii::app()->user->getState('delivery_address');
+			$delivery_address = (int)Yii::app()->user->getState('delivery_address');
 		if(!$payment_method)
-			$payment_method = Yii::app()->user->getState('payment_method');
+			$payment_method = (int)Yii::app()->user->getState('payment_method');
 		if(Yii::app()->user->getState('basket-position') == 1){
 			$this->render('login');
 			Yii::app()->end();
@@ -126,8 +126,7 @@ class ShopOrderController extends Controller
 			));
 			Yii::app()->end();
 		}
-
-
+		
 		if(Yii::app()->user->getState('basket-position') == 4){
 			if(is_numeric($customer))
 				$customer = Users::model()->findByPk($customer);
@@ -155,6 +154,93 @@ class ShopOrderController extends Controller
 			$this->redirect(array('/shop/cart/view'));
 		Yii::app()->user->setState('basket-position',$position);
 		$this->redirect(array('/shop/order/create'));
+	}
+
+	public function actionConfirm($customer = null){
+		Yii::app()->theme = "frontend";
+		$this->layout = "//layouts/index";
+		Yii::app()->getModule('users');
+		Yii::app()->getModule('discountCodes');
+		// check cart content and statistics
+		$cartStatistics = Shop::getPriceTotal();
+		$cart = Shop::getCartContent();
+		if(!$cart || Shop::isEmpty($cartStatistics))
+			$this->redirect(array('/shop/cart/view'));
+
+		// check order fields that is correct to be send
+		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+			$customer = Yii::app()->user->getId();
+		elseif(Yii::app()->user->hasState('customer_id'))
+			$customer = Yii::app()->user->getState('customer_id');
+
+		$shipping_method = Yii::app()->user->getState('shipping_method');
+		$delivery_address = Yii::app()->user->getState('delivery_address');
+		$payment_method = Yii::app()->user->getState('payment_method');
+		if(!$customer || !$shipping_method || !$delivery_address || !$payment_method)
+			$this->redirect(array('/shop/order/create'));
+		// order save in db
+		$order = new ShopOrder();
+		$order->user_id = $customer;
+		$order->shipping_method = $shipping_method;
+		$order->payment_method = $payment_method;
+		$order->delivery_address_id = $delivery_address;
+		$order->ordering_date = time();
+		$order->update_date = time();
+		$order->status = ShopOrder::STATUS_ACCEPTED;
+		$order->payment_amount = (double)$cartStatistics['totalPayment'];
+		$order->price_amount = (double)$cartStatistics['totalPrice'];
+		$order->discount_amount = (double)$cartStatistics['totalDiscount'] + (double)$cartStatistics['discountCodeAmount'];
+		$order->shipping_price = (double)$cartStatistics['shippingPrice'];
+		$order->payment_price = (double)$cartStatistics['paymentPrice'];
+		if($order->save())
+		{
+			// order items save in db
+			$flag = true;
+			foreach($cart as $id => $array)
+			{
+				$id = $array['book_id'];
+				$qty = $array['qty'];
+				$model = Books::model()->findByPk($id);
+				$orderItem = new ShopOrderItems();
+				$orderItem->order_id = $order->id;
+				$orderItem->model_name = get_class($model);
+				$orderItem->model_id = $id;
+				$orderItem->fee = $model->printed_price;
+				$orderItem->qty = $qty;
+				$flag = @$orderItem->save();
+				if(!$flag)
+					break;
+			}
+			if(!$flag)
+			{
+				$order->delete();
+				Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
+				Yii::app()->user->setState('basket-position',4);
+				$this->redirect(array('create'));
+			}
+		}else
+		{
+			Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
+			Yii::app()->user->setState('basket-position',4);
+			$this->redirect(array('create'));
+		}
+		if(Yii::app()->user->getState('basket-position') == 4){
+			if(is_numeric($customer))
+				$customer = Users::model()->findByPk($customer);
+			if(is_numeric($shipping_method))
+				$shipping_method = ShopShippingMethod::model()->findByPk($shipping_method);
+			if(is_numeric($delivery_address))
+				$delivery_address = ShopAddresses::model()->findByPk($delivery_address);
+			if(is_numeric($payment_method))
+				$payment_method = ShopPaymentMethod::model()->findByPk($payment_method);
+
+			$this->render('/order/create', array(
+				'user' => $customer,
+				'shippingMethod' => $shipping_method,
+				'deliveryAddress' => $delivery_address,
+				'paymentMethod' => $payment_method
+			));
+		}
 	}
 
 	/**
