@@ -157,7 +157,7 @@ class ShopOrderController extends Controller
 		if($position > 2)
 			$position--;
 		elseif($position == 2)
-			$this->redirect(array('/order/cart/view'));
+			$this->redirect(array('/shop/cart/view'));
 		Yii::app()->user->setState('basket-position',$position);
 		$this->redirect(array('create'));
 	}

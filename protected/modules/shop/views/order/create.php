@@ -45,7 +45,7 @@
 			</div>
 			<small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابیک، اعلام نموده‌اید. </small>
 			<div class="buttons">
-				<input type="submit" class="btn-black pull-right" value="بازگشت">
+                <a href="<?= $this->createUrl('/shop/order/back') ?>" class="btn-black pull-right">بازگشت</a>
 				<input type="submit" class="btn-blue pull-left" value="پرداخت و ثبت سفارش">
 			</div>
 		</div>

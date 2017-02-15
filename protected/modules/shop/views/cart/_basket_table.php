@@ -32,10 +32,17 @@ if($books):?>
                         <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟'), 'data-id' => $position));?>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
-                        <span class="price"><?php echo Controller::parseNumbers(number_format($model->getPrinted_price()))?><small> تومان</small></span>
+                        <?php $price = $model->getPrinted_price();?>
+                        <?php if($model->hasDiscount() && $model->discount->hasPrintedPriceDiscount()):?>
+                            <?php $price = $model->off_printed_price;?>
+                            <span class="price text-danger text-line-through"><?= Controller::parseNumbers(number_format($model->printed_price, 0)); ?><small> تومان</small></span>
+                            <span class="price center-block"><?= Controller::parseNumbers(number_format($model->off_printed_price, 0)); ?><small> تومان</small></span>
+                        <?php else:?>
+                            <span class="price"><?php echo Controller::parseNumbers(number_format($model->getPrinted_price()))?><small> تومان</small></span>
+                        <?php endif;?>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
-                        <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$model->getPrinted_price())))?><small> تومان</small></span>
+                        <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$price)))?><small> تومان</small></span>
                     </td>
                     <td class="vertical-middle text-center hidden-xs">
                         <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'confirm' => Shop::t('آیا از حذف این کتاب مطمئن هستید؟'), 'data-id' => $position));?>

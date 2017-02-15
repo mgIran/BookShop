@@ -77,7 +77,7 @@ $cartStatistics = Shop::getPriceTotal();
                     )); ?>
                 </div>
                 <div class="buttons">
-                    <a href="<?= $this->createUrl('/shop/order/back') ?>" class="btn-black pull-right">بازگشت به محله</a>
+                    <a href="<?= $this->createUrl('/shop/order/back') ?>" class="btn-black pull-right">بازگشت</a>
                     <?php echo CHtml::submitButton("بازبینی سفارش", array("class"=>"btn-blue pull-left"));?>
                 </div>
             <?php echo CHtml::endForm();?>

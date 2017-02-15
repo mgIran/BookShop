@@ -2979,6 +2979,9 @@ input[type="checkbox"] + label:hover::before {
 .cart .price{
     font-weight: bold;
 }
+.cart .price.center-block{
+    margin-top: 7px;
+}
 .cart .price small{
     font-weight: lighter;
     font-size: 12px;
