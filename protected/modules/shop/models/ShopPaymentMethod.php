@@ -10,9 +10,14 @@
  * @property string $description
  * @property double $price
  * @property string $status
+ * @property string $order
  */
-class ShopPaymentMethod extends CActiveRecord
+class ShopPaymentMethod extends SortableCActiveRecord
 {
+	const METHOD_CASH = 'cash';
+	const METHOD_GATEWAY = 'gateway';
+	const METHOD_CREDIT = 'credit';
+
 	const STATUS_DEACTIVE = 0;
 	const STATUS_ACTIVE = 1;
 
@@ -42,10 +47,11 @@ class ShopPaymentMethod extends CActiveRecord
 			array('name', 'length', 'max'=>50),
 			array('title', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>1),
+			array('order', 'length', 'max'=>10),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, title, description, price, status', 'safe', 'on'=>'search'),
+			array('id, name, title, description, price, status, order', 'safe', 'on'=>'search'),
 		);
 	}
 

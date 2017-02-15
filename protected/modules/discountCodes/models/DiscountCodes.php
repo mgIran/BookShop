@@ -282,7 +282,7 @@ class DiscountCodes extends CActiveRecord
                 $discountUsed->date = time();
                 @$discountUsed->save();
             }
-        }else// exists single discount code
+        }elseif($discountIdsInSession)// exists single discount code
         {
             $discountUsed = new DiscountUsed();
             $discountUsed->user_id = $user->id;

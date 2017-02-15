@@ -10,6 +10,7 @@
  * @property string $billing_address_id
  * @property string $ordering_date
  * @property string $update_date
+ * @property string $transaction_id
  * @property string $status
  * @property string $payment_method
  * @property string $shipping_method
@@ -26,6 +27,7 @@
  * @property ShopShippingMethod $shippingMethod
  * @property ShopPaymentMethod $paymentMethod
  * @property ShopOrderItems[] $items
+ * @property UserTransactions $transaction
  */
 class ShopOrder extends CActiveRecord
 {
@@ -33,7 +35,7 @@ class ShopOrder extends CActiveRecord
 	const STATUS_ACCEPTED = 1;
 	const STATUS_PAID = 2;
 	const STATUS_STOCK_PROCESS = 3;
-	const STATUS_SEND_READY = 4;
+	const STATUS_SENDING = 4;
 	const STATUS_DELIVERED = 5;
 
 	/**
@@ -45,8 +47,12 @@ class ShopOrder extends CActiveRecord
 	}
 
     public $statusLabels = [
-//        self::STATUS_DEACTIVE => 'غیرفعال',
-//        self::STATUS_ACTIVE => 'فعال',
+        self::STATUS_PENDING => 'در انتظار بررسی',
+        self::STATUS_ACCEPTED => 'تایید تراکنش',
+        self::STATUS_PAID => 'پرداخت شده',
+        self::STATUS_STOCK_PROCESS => 'پردازش انبار',
+        self::STATUS_SENDING => 'در حال ارسال',
+        self::STATUS_DELIVERED => 'تحویل شده',
     ];
 
 	/**
@@ -61,8 +67,9 @@ class ShopOrder extends CActiveRecord
 			array('payment_amount, discount_amount, price_amount, shipping_price, payment_price', 'numerical'),
 			array('user_id, delivery_address_id, billing_address_id, payment_method, shipping_method', 'length', 'max' => 10),
 			array('ordering_date, update_date', 'length', 'max' => 20),
+			array('transaction_id', 'length', 'max' => 10),
 			array('status', 'length', 'max' => 1),
-			array('comment', 'safe'),
+			array('transaction_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price', 'safe', 'on' => 'search'),
@@ -83,6 +90,7 @@ class ShopOrder extends CActiveRecord
 			'items' => array(self::HAS_MANY, 'ShopOrderItems', 'order_id'),
 			'paymentMethod' => array(self::BELONGS_TO, 'ShopPaymentMethod', 'payment_method'),
 			'shippingMethod' => array(self::BELONGS_TO, 'ShopShippingMethod', 'shipping_method'),
+			'transaction' => array(self::BELONGS_TO, 'UserTransactions', 'transaction_id'),
 		);
 	}
 
@@ -106,6 +114,7 @@ class ShopOrder extends CActiveRecord
 			'price_amount' => 'مبلغ پایه فاکتور',
 			'shipping_price' => 'هزینه ارسال',
 			'payment_price' => 'هزینه اضافی پرداخت',
+			'transaction_id' => 'تراکنش',
 		);
 	}
 
@@ -142,6 +151,7 @@ class ShopOrder extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
+			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
 		));
 	}
 
@@ -167,14 +177,19 @@ class ShopOrder extends CActiveRecord
 	/**
 	 * Change Payment Method Status
 	 *
-	 * @return $this
+	 * @param $new_status integer
+	 * @return $this ShopOrder
 	 */
-	public function changeStatus()
+	public function setStatus($new_status)
 	{
-//		if($this->status == self::STATUS_ACTIVE)
-//			$this->status = self::STATUS_DEACTIVE;
-//		else if($this->status == self::STATUS_DEACTIVE)
-//			$this->status = self::STATUS_ACTIVE;
-//		return $this;
+		if(in_array($new_status, $this->statusLabels)){
+			if($this->status !== $new_status)
+				$this->status = $new_status;
+		}
+		return $this;
+	}
+
+	public function getOrderID(){
+		return 'kbc-'.$this->id;
 	}
 }

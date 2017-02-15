@@ -10,8 +10,11 @@ $this->breadcrumbs=array(
 
 <h1>مدیریت روش های پرداخت</h1>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('ext.yiiSortableModel.widgets.SortableCGridView', array(
 	'id'=>'shop-payment-method-grid',
+	'orderField' => 'order',
+	'idField' => 'id',
+	'orderUrl' => 'order',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
     'itemsCssClass'=>'table',

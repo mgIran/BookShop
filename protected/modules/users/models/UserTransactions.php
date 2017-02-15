@@ -21,34 +21,37 @@
  */
 class UserTransactions extends CActiveRecord
 {
-    const TRANSACTION_TYPE_CREDIT = 'credit';
-    const TRANSACTION_TYPE_BOOK = 'book';
-    const TRANSACTION_STATUS_PAID = 'paid';
-    const TRANSACTION_STATUS_UNPAID = 'unpaid';
+	const TRANSACTION_TYPE_CREDIT = 'credit';
+	const TRANSACTION_TYPE_BOOK = 'book';
+	const TRANSACTION_TYPE_SHOP = 'shop';
 
-    public $statusLabels=array(
-        'paid'=>'پرداخت کامل',
-        'unpaid'=>'پرداخت ناقص',
-    );
+	const TRANSACTION_STATUS_PAID = 'paid';
+	const TRANSACTION_STATUS_UNPAID = 'unpaid';
 
-    public $typeLabels=array(
-        'credit'=>'خرید اعتبار',
-        'book'=>'خرید کتاب',
-    );
+	public $statusLabels = array(
+		'paid' => 'پرداخت کامل',
+		'unpaid' => 'پرداخت ناقص',
+	);
 
-    public $user_name;
+	public $typeLabels = array(
+		self::TRANSACTION_TYPE_CREDIT => 'خرید اعتبار',
+		self::TRANSACTION_TYPE_BOOK => 'خرید کتاب',
+		self::TRANSACTION_TYPE_SHOP => 'فروش نسخه چاپی کتاب',
+	);
+
+	public $user_name;
 	public $methodLabels = [
 		'credit' => 'اعتبار',
 		'gateway' => 'درگاه'
 	];
-    public $year_altField;
-    public $month_altField;
-    public $from_date_altField;
-    public $to_date_altField;
-    public $report_type;
+	public $year_altField;
+	public $month_altField;
+	public $from_date_altField;
+	public $to_date_altField;
+	public $report_type;
 
-    public $totalAmount;
-    
+	public $totalAmount;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -65,18 +68,18 @@ class UserTransactions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('authority', 'required', 'on'=>'set-authority'),
-			array('user_id, amount', 'length', 'max'=>10),
-			array('date, type', 'length', 'max'=>20),
-			array('status', 'length', 'max'=>6),
-			array('token, gateway_name', 'length', 'max'=>50),
-			array('description', 'length', 'max'=>200),
-			array('authority', 'length', 'max'=>255),
-            array('report_type', 'filter', 'filter'=> 'strip_tags'),
-            array('report_type', 'safe'),
+			array('authority', 'required', 'on' => 'set-authority'),
+			array('user_id, amount', 'length', 'max' => 10),
+			array('date, type', 'length', 'max' => 20),
+			array('status', 'length', 'max' => 6),
+			array('token, gateway_name', 'length', 'max' => 50),
+			array('description', 'length', 'max' => 200),
+			array('authority', 'length', 'max' => 255),
+			array('report_type', 'filter', 'filter' => 'strip_tags'),
+			array('report_type', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, amount, date, status, token, authority, description, gateway_name, type, user_name, year_altField, month_altField, to_date_altField, from_date_altField, report_type', 'safe', 'on'=>'search'),
+			array('id, user_id, amount, date, status, token, authority, description, gateway_name, type, user_name, year_altField, month_altField, to_date_altField, from_date_altField, report_type', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -112,7 +115,6 @@ class UserTransactions extends CActiveRecord
 	}
 
 	/**
-	 * @param int $pageSize
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
 	 * Typical usecase:
@@ -128,67 +130,67 @@ class UserTransactions extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
-        $this->reportConditions($criteria);
-        $criteria->order='t.date DESC';
+		$criteria = new CDbCriteria;
+		$this->reportConditions($criteria);
+		$criteria->order = 't.date DESC';
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-            'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
+			'criteria' => $criteria,
+			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
 		));
 	}
 
-    /**
-     * @param $criteria
-     */
-    public function reportConditions(&$criteria)
-    {
-        $criteria->compare('id',$this->id,true);
-        $criteria->compare('user_id',$this->user_id,true);
-        $criteria->compare('amount',$this->amount,true);
-        $criteria->compare('date',$this->date,true);
-        $criteria->compare('status',$this->status);
-        $criteria->compare('token',$this->token,true);
-        $criteria->compare('authority',$this->authority,true);
-        $criteria->compare('description',$this->description,true);
-        $criteria->compare('gateway_name',$this->gateway_name,true);
-        $criteria->compare('type',$this->type,true);
-        if($this->user_name) {
-            $criteria->with=array('user','user.userDetails');
-            $criteria->addSearchCondition('userDetails.fa_name', $this->user_name);
-            $criteria->addSearchCondition('user.email', $this->user_name, true, 'OR');
-        }
-        if($this->report_type){
-            switch($this->report_type){
-                case 'yearly':
-                    $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->year_altField, false), 1, 1);
-                    $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
-                    $endTime = $startTime + (60 * 60 * 24 * 365);
-                    $criteria->addCondition('date >= :start_date');
-                    $criteria->addCondition('date <= :end_date');
-                    $criteria->params[':start_date'] = $startTime;
-                    $criteria->params[':end_date'] = $endTime;
-                    break;
-                case 'monthly':
-                    $startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->month_altField, false), JalaliDate::date('m', $this->month_altField, false), 1);
-                    $startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
-                    if(JalaliDate::date('m', $this->month_altField, false) <= 6)
-                        $endTime = $startTime + (60 * 60 * 24 * 31);
-                    else
-                        $endTime = $startTime + (60 * 60 * 24 * 30);
-                    $criteria->addCondition('date >= :start_date');
-                    $criteria->addCondition('date <= :end_date');
-                    $criteria->params[':start_date'] = $startTime;
-                    $criteria->params[':end_date'] = $endTime;
-                    break;
-                case 'by-date':
-                    $criteria->addCondition('date >= :start_date');
-                    $criteria->addCondition('date <= :end_date');
-                    $criteria->params[':start_date'] = $this->from_date_altField;
-                    $criteria->params[':end_date'] = $this->to_date_altField;
-                    break;
-            }
-        }
-    }
+	/**
+	 * @param $criteria
+	 */
+	public function reportConditions(&$criteria)
+	{
+		$criteria->compare('id', $this->id, true);
+		$criteria->compare('user_id', $this->user_id, true);
+		$criteria->compare('amount', $this->amount, true);
+		$criteria->compare('date', $this->date, true);
+		$criteria->compare('status', $this->status);
+		$criteria->compare('token', $this->token, true);
+		$criteria->compare('authority', $this->authority, true);
+		$criteria->compare('description', $this->description, true);
+		$criteria->compare('gateway_name', $this->gateway_name, true);
+		$criteria->compare('type', $this->type, true);
+		if($this->user_name){
+			$criteria->with = array('user', 'user.userDetails');
+			$criteria->addSearchCondition('userDetails.fa_name', $this->user_name);
+			$criteria->addSearchCondition('user.email', $this->user_name, true, 'OR');
+		}
+		if($this->report_type){
+			switch($this->report_type){
+				case 'yearly':
+					$startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->year_altField, false), 1, 1);
+					$startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
+					$endTime = $startTime + (60 * 60 * 24 * 365);
+					$criteria->addCondition('date >= :start_date');
+					$criteria->addCondition('date <= :end_date');
+					$criteria->params[':start_date'] = $startTime;
+					$criteria->params[':end_date'] = $endTime;
+					break;
+				case 'monthly':
+					$startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->month_altField, false), JalaliDate::date('m', $this->month_altField, false), 1);
+					$startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
+					if(JalaliDate::date('m', $this->month_altField, false) <= 6)
+						$endTime = $startTime + (60 * 60 * 24 * 31);
+					else
+						$endTime = $startTime + (60 * 60 * 24 * 30);
+					$criteria->addCondition('date >= :start_date');
+					$criteria->addCondition('date <= :end_date');
+					$criteria->params[':start_date'] = $startTime;
+					$criteria->params[':end_date'] = $endTime;
+					break;
+				case 'by-date':
+					$criteria->addCondition('date >= :start_date');
+					$criteria->addCondition('date <= :end_date');
+					$criteria->params[':start_date'] = $this->from_date_altField;
+					$criteria->params[':end_date'] = $this->to_date_altField;
+					break;
+			}
+		}
+	}
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -196,17 +198,17 @@ class UserTransactions extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return UserTransactions the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}
 
-    public function getTotalAmount()
-    {
-        $criteria = new CDbCriteria;
-        $criteria->select = 'SUM(amount) as totalAmount';
-        $this->reportConditions($criteria);
-        $record = $this->find($criteria);
-        return $record?$record->totalAmount:0;
-    }
+	public function getTotalAmount()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->select = 'SUM(amount) as totalAmount';
+		$this->reportConditions($criteria);
+		$record = $this->find($criteria);
+		return $record?$record->totalAmount:0;
+	}
 }

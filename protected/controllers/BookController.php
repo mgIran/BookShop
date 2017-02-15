@@ -159,7 +159,7 @@ class BookController extends Controller
                         $transaction->amount = $price;
                         $transaction->date = time();
                         $transaction->gateway_name = 'زرین پال';
-                        $transaction->type = 'book';
+                        $transaction->type = UserTransactions::TRANSACTION_TYPE_BOOK;
 
                         if($transaction->save()){
                             $gateway = new ZarinPal();
@@ -209,7 +209,7 @@ class BookController extends Controller
         $model = UserTransactions::model()->findByAttributes(array(
             'authority' => $Authority,
             'user_id' => Yii::app()->user->getId(),
-            'type' => 'book'
+            'type' => UserTransactions::TRANSACTION_TYPE_BOOK
         ));
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());

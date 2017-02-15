@@ -68,8 +68,7 @@ class ShopOrderController extends Controller
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
-		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-		{
+		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'){
 			$customer = Yii::app()->user->getId();
 			Yii::app()->user->setState('customer_id', $customer);
 			if(Yii::app()->user->getState('basket-position') < 2)
@@ -77,14 +76,12 @@ class ShopOrderController extends Controller
 		}
 		if(isset($_POST['DeliveryAddress']))
 			Yii::app()->user->setState('delivery_address', $_POST['DeliveryAddress']);
-		if(isset($_POST['ShippingMethod']))
-		{
+		if(isset($_POST['ShippingMethod'])){
 			Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
 			if(Yii::app()->user->hasState('delivery_address'))
 				Yii::app()->user->setState('basket-position', 3);
 		}
-		if(isset($_POST['PaymentMethod']))
-		{
+		if(isset($_POST['PaymentMethod'])){
 			Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
 			Yii::app()->user->setState('basket-position', 4);
 		}
@@ -110,7 +107,11 @@ class ShopOrderController extends Controller
 			}
 			$this->render('/shipping/choose', array(
 				'user' => Shop::getCustomer(),
-				'shippingMethods' => ShopShippingMethod::model()->findAll('status <> :deactive', array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)),
+				'shippingMethods' => ShopShippingMethod::model()->findAll(array(
+					'condition' => 'status <> :deactive',
+					'order' => 't.order',
+					'params' => array(':deactive' => ShopShippingMethod::STATUS_DEACTIVE)
+				)),
 			));
 			Yii::app()->end();
 		}
@@ -126,7 +127,7 @@ class ShopOrderController extends Controller
 			));
 			Yii::app()->end();
 		}
-		
+
 		if(Yii::app()->user->getState('basket-position') == 4){
 			if(is_numeric($customer))
 				$customer = Users::model()->findByPk($customer);
@@ -146,17 +147,19 @@ class ShopOrderController extends Controller
 		}
 	}
 
-	public function actionBack(){
+	public function actionBack()
+	{
 		$position = Yii::app()->user->getState('basket-position');
 		if($position > 2)
 			$position--;
 		elseif($position == 2)
 			$this->redirect(array('/shop/cart/view'));
-		Yii::app()->user->setState('basket-position',$position);
+		Yii::app()->user->setState('basket-position', $position);
 		$this->redirect(array('/shop/order/create'));
 	}
 
-	public function actionConfirm($customer = null){
+	public function actionConfirm($customer = null)
+	{
 		Yii::app()->theme = "frontend";
 		$this->layout = "//layouts/index";
 		Yii::app()->getModule('users');
@@ -192,12 +195,10 @@ class ShopOrderController extends Controller
 		$order->discount_amount = (double)$cartStatistics['totalDiscount'] + (double)$cartStatistics['discountCodeAmount'];
 		$order->shipping_price = (double)$cartStatistics['shippingPrice'];
 		$order->payment_price = (double)$cartStatistics['paymentPrice'];
-		if($order->save())
-		{
+		if($order->save()){
 			// order items save in db
 			$flag = true;
-			foreach($cart as $id => $array)
-			{
+			foreach($cart as $id => $array){
 				$id = $array['book_id'];
 				$qty = $array['qty'];
 				$model = Books::model()->findByPk($id);
@@ -211,43 +212,100 @@ class ShopOrderController extends Controller
 				if(!$flag)
 					break;
 			}
-			if(!$flag)
-			{
+			if(!$flag){
 				$order->delete();
 				Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
-				Yii::app()->user->setState('basket-position',4);
+				Yii::app()->user->setState('basket-position', 4);
 				$this->redirect(array('create'));
 			}
 
-//			DiscountCodes::InsertCodes($order->user);
-			
 			// clear cart content and all order states
 			Shop::clearCartContent();
 			Shop::clearOrderStates();
-			
-		}else
-		{
+
+			// @todo payment order redirects
+
+
+			if($order->payment_amount !== 0){
+				if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
+					DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+					$order->setStatus(ShopOrder::STATUS_STOCK_PROCESS)->save();
+					Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
+					if($order->user->userDetails->credit < $order->payment_amount){
+						Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
+						$this->refresh();
+					}
+					$userDetails = UserDetails::model()->findByAttributes(array('user_id' => $order->user_id));
+					$userDetails->setScenario('update-credit');
+					$userDetails->credit = $userDetails->credit - $order->payment_amount;
+					if($userDetails->save()){
+						DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+						$order->setStatus(ShopOrder::STATUS_PAID)->save();
+						Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+					}else
+						Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY){
+					// Save transaction
+					$transaction = new UserTransactions();
+					$transaction->user_id = $order->user_id;
+					$transaction->amount = $order->payment_amount;
+					$transaction->date = time();
+					$transaction->gateway_name = 'زرین پال';
+					$transaction->type = UserTransactions::TRANSACTION_TYPE_SHOP;
+
+					if($transaction->save()){
+						$gateway = new ZarinPal();
+						$gateway->callback_url = Yii::app()->getBaseUrl(true) . '/shop/order/verify/' . $order->id;
+						$siteName = Yii::app()->name;
+						$description = "پرداخت فاکتور {$order->getOrderID()} در وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
+						$result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+						$transaction->scenario = 'set-authority';
+						$transaction->description = $description;
+						$transaction->authority = $result->getAuthority();
+						$transaction->save();
+						//Redirect to URL You can do it also by creating a form
+						if($result->getStatus() == 100)
+							$this->redirect($gateway->getRedirectUrl());
+						else
+							throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
+					}
+				}
+			}else{
+				DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+				Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+			}
+		}else{
 			Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
-			Yii::app()->user->setState('basket-position',4);
+			Yii::app()->user->setState('basket-position', 4);
 			$this->redirect(array('create'));
 		}
-		if(Yii::app()->user->getState('basket-position') == 4){
-			if(is_numeric($customer))
-				$customer = Users::model()->findByPk($customer);
-			if(is_numeric($shipping_method))
-				$shipping_method = ShopShippingMethod::model()->findByPk($shipping_method);
-			if(is_numeric($delivery_address))
-				$delivery_address = ShopAddresses::model()->findByPk($delivery_address);
-			if(is_numeric($payment_method))
-				$payment_method = ShopPaymentMethod::model()->findByPk($payment_method);
+	}
 
-			$this->render('/order/create', array(
-				'user' => $customer,
-				'shippingMethod' => $shipping_method,
-				'deliveryAddress' => $delivery_address,
-				'paymentMethod' => $payment_method
-			));
-		}
+	public function actionPayment($id)
+	{
+		Yii::app()->theme = "frontend";
+		$this->layout = "//layouts/index";
+		Yii::app()->getModule('users');
+		Yii::app()->getModule('discountCodes');
+		$order = $this->loadModel($id);
+		// @todo payment order redirects
+
+		$this->render('confirm', array(
+			'order' => $order,
+		));
+	}
+
+	public function actionVerify()
+	{
+		Yii::app()->theme = "frontend";
+		$this->layout = "//layouts/index";
+
+		// @todo payment order redirects
+
+		$this->render('confirm', array(
+			'order' => $order,
+		));
 	}
 
 	/**
@@ -357,6 +415,9 @@ class ShopOrderController extends Controller
 		}
 	}
 
+	/**
+	 * Add discount code to order invoice
+	 */
 	public function actionAddDiscount()
 	{
 		Yii::app()->user->setState('basket-position', 3);
@@ -399,6 +460,9 @@ class ShopOrderController extends Controller
 		}
 	}
 
+	/**
+	 * Remove added discount code to order invoice
+	 */
 	public function actionRemoveDiscount()
 	{
 		Yii::app()->user->setState('basket-position', 3);
