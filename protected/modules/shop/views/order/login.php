@@ -14,7 +14,7 @@
                         <div class="text">
                             <p>عضو سایت ما هستید؟</p>
                             <p>برای تکمیل فرایند خرید وارد شوید</p>
-                            <button href="#" data-toggle="modal" data-target="#login-modal" class="btn-blue" id="login-modal-trigger">ورود به حساب کاربری</button>
+                            <button href="#" data-toggle="modal" data-target="#login-modal" class="btn-blue" id="login-modal-trigger" data-return-url="<?= $this->route; ?>">ورود به حساب کاربری</button>
                         </div>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                         <div class="text">
                             <p>تازه وارد هستید؟</p>
                             <p>برای تکمیل فرایند خرید ثبت نام کنید</p>
-                            <button href="#" data-toggle="modal" data-target="#login-modal" class="btn-green" id="register-modal-trigger">ساخت حساب کاربری</button>
+                            <button href="#" data-toggle="modal" data-target="#login-modal" class="btn-green" id="register-modal-trigger" data-return-url="<?= $this->route; ?>">ساخت حساب کاربری</button>
                         </div>
                     </div>
                 </div>
