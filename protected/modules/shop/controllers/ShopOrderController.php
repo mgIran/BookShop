@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create, addDiscount, removeDiscount',
+			'checkAccess - create, addDiscount, removeDiscount, back',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -63,20 +63,35 @@ class ShopOrderController extends Controller
 		Yii::app()->getModule('users');
 		Yii::app()->getModule('discountCodes');
 
+		if(!Yii::app()->user->hasState('basket-position'))
+			Yii::app()->user->setState('basket-position', 1);
+
 		$cart = Shop::getCartContent();
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
 		if(isset($_POST['ShippingMethod']))
+		{
 			Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
+			Yii::app()->user->setState('basket-position', 3);
+		}
 
 		if(isset($_POST['DeliveryAddress']))
+		{
 			Yii::app()->user->setState('delivery_address', $_POST['DeliveryAddress']);
+			Yii::app()->user->setState('basket-position', 3);
+		}
 
 		if(isset($_POST['PaymentMethod']))
+		{
 			Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
+			Yii::app()->user->setState('basket-position', 4);
+		}
 
 		if(!$customer && !Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+		{
 			$customer = Yii::app()->user->getId();
+			Yii::app()->user->setState('basket-position', 2);
+		}
 		if(!$shipping_method)
 			$shipping_method = Yii::app()->user->getState('shipping_method');
 		if(!$delivery_address)
@@ -87,7 +102,7 @@ class ShopOrderController extends Controller
 			$this->render('login');
 			Yii::app()->end();
 		}
-		if(!$shipping_method || !$delivery_address){
+		if(Yii::app()->user->getState('basket-position') == 2){
 			Yii::app()->getModule('places');
 			if(isset($_POST['form']) && $_POST['form'] == 'shipping-form'){
 				if(!$shipping_method && !$delivery_address)
@@ -103,7 +118,8 @@ class ShopOrderController extends Controller
 			));
 			Yii::app()->end();
 		}
-		if(!$payment_method){
+		if(Yii::app()->user->getState('basket-position') == 3){
+			Yii::app()->user->setState('basket-position', 3);
 			if(isset($_POST['form']) && $_POST['form'] == 'payment-form'){
 				if(!$payment_method)
 					Yii::app()->user->setFlash('warning', 'لطفا شیوه پرداخت را انتخاب کنید.');
@@ -117,7 +133,7 @@ class ShopOrderController extends Controller
 		}
 
 
-		if($customer && $payment_method && $shipping_method && $delivery_address){
+		if(Yii::app()->user->getState('basket-position') == 4){
 			if(is_numeric($customer))
 				$customer = Users::model()->findByPk($customer);
 			if(is_numeric($shipping_method))
@@ -134,6 +150,16 @@ class ShopOrderController extends Controller
 				'paymentMethod' => $payment_method
 			));
 		}
+	}
+
+	public function actionBack(){
+		$position = Yii::app()->user->getState('basket-position');
+		if($position > 2)
+			$position--;
+		elseif($position == 2)
+			$this->redirect(array('/order/cart/view'));
+		Yii::app()->user->setState('basket-position',$position);
+		$this->redirect(array('create'));
 	}
 
 	/**
