@@ -45,7 +45,7 @@ class UsersPublicController extends Controller
     public function actionLogout()
     {
         Yii::app()->user->logout();
-        $this->redirect(array('/login'));
+        $this->redirect(array('//'));
     }
 
     /**
@@ -433,7 +433,7 @@ class UsersPublicController extends Controller
             // validate user input and redirect to the previous page if valid
             if ($login->validate() && $login->login()) {
                 if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/')
-                    $redirect = Yii::app()->user->returnUrl;
+                    $redirect = Yii::app()->createUrl('/'.Yii::app()->user->returnUrl);
                 else
                     $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
                 if (isset($_POST['ajax'])) {

@@ -39,15 +39,21 @@ class Shop
 
 	public static function getCartContent()
     {
-        if(is_string(Yii::app()->user->getState('cart')))
-            return json_decode(Yii::app()->user->getState('cart'), true);
-        else
-            return Yii::app()->user->getState('cart');
+		if(Yii::app()->user->hasState('cart')){
+			if(is_string(Yii::app()->user->getState('cart')))
+				return json_decode(Yii::app()->user->getState('cart'), true);
+			else
+				return Yii::app()->user->getState('cart');
+		}elseif(Yii::app()->request->cookies['shop-basket'])
+			return CJSON::decode(base64_decode(Yii::app()->request->cookies['shop-basket']->value));
     }
 
 	public static function setCartContent($cart)
 	{
-		return Yii::app()->user->setState('cart', json_encode($cart));
+		Yii::app()->request->cookies['shop-basket'] = new CHttpCookie('shop-basket',
+			base64_encode(json_encode($cart)),array());
+		$cart = Yii::app()->user->setState('cart', json_encode($cart));
+		return $cart;
 	}
 
 	public static function getCartCount()

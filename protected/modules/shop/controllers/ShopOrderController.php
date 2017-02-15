@@ -84,7 +84,6 @@ class ShopOrderController extends Controller
 		if(!$payment_method)
 			$payment_method = Yii::app()->user->getState('payment_method');
 		if(!$customer){
-			Yii::app()->user->returnUrl = Yii::app()->createUrl('/shop/cart/view');
 			$this->render('login');
 			Yii::app()->end();
 		}
@@ -129,9 +128,9 @@ class ShopOrderController extends Controller
 				$payment_method = ShopPaymentMethod::model()->findByPk($payment_method);
 
 			$this->render('/order/create', array(
-				'customer' => $customer,
+				'user' => $customer,
 				'shippingMethod' => $shipping_method,
-				'delivery_address' => $delivery_address,
+				'deliveryAddress' => $delivery_address,
 				'paymentMethod' => $payment_method
 			));
 		}

@@ -107,7 +107,7 @@ class GoogleOAuth extends CComponent
         }
         if ($loginFlag) {
             if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl.'/')
-                $redirect = Yii::app()->user->returnUrl;
+                $redirect = Yii::app()->createUrl('/'.Yii::app()->user->returnUrl);
             else
                 $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
             if (isset($_POST['ajax'])) {
