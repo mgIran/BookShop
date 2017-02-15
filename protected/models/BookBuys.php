@@ -25,7 +25,6 @@
  * @property Users $user
  * @property BookPackages $package
  * @property UserTransactions $transaction
- * @property DiscountUsed $discountUsed
  */
 class BookBuys extends CActiveRecord
 {
@@ -92,7 +91,6 @@ class BookBuys extends CActiveRecord
             'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
             'package' => array(self::BELONGS_TO, 'BookPackages', 'package_id'),
             'transaction' => array(self::BELONGS_TO, 'UserTransactions', 'rel_id'),
-            'discountUsed' => array(self::HAS_ONE, 'DiscountUsed', 'buy_id'),
         );
     }
 

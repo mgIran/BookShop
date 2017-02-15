@@ -218,6 +218,13 @@ class ShopOrderController extends Controller
 				Yii::app()->user->setState('basket-position',4);
 				$this->redirect(array('create'));
 			}
+
+			DiscountCodes::InsertCodes($order->user);
+			
+			// clear cart content and all order states
+			Shop::clearCartContent();
+			Shop::clearOrderStates();
+			
 		}else
 		{
 			Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');

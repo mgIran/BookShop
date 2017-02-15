@@ -36,7 +36,9 @@ class Shop
 	public static function setCartContent($cart)
 	{
 		Yii::app()->request->cookies['shop-basket'] = new CHttpCookie('shop-basket',
-			base64_encode(json_encode($cart)), array());
+			base64_encode(json_encode($cart)), array(
+				'path' => '/',
+			));
 		$cart = Yii::app()->user->setState('cart', json_encode($cart));
 		return $cart;
 	}
@@ -50,6 +52,23 @@ class Shop
 				$count += $item['qty'];
 		return $count;
 	}
+
+	public static function clearCartContent()
+	{
+		unset(Yii::app()->request->cookies['shop-basket']);
+		Yii::app()->user->setState('cart', null);
+	}
+
+	public static function clearOrderStates()
+	{
+		Yii::app()->user->setState('payment_method', null);
+		Yii::app()->user->setState('shipping_method', null);
+		Yii::app()->user->setState('delivery_address', null);
+		Yii::app()->user->setState('customer_id', null);
+		Yii::app()->user->setState('basket-position', null);
+	}
+
+
 
 	public static function isEmpty($cartStatistics)
 	{

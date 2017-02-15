@@ -147,7 +147,7 @@ class BookController extends Controller
                             $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
                             Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
                             if($discountCodesInSession)
-                                DiscountCodes::InsertCodes($user, $buyId); // insert used discount code in db
+                                DiscountCodes::InsertCodes($user); // insert used discount code in db
                             Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
                             $this->redirect(array('/library'));
                         }else
@@ -182,7 +182,7 @@ class BookController extends Controller
                     $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
                     Library::AddToLib($model->id, $model->lastPackage->id, $userID);
                     if($discountCodesInSession)
-                        DiscountCodes::InsertCodes($user, $buyId); // insert used discount code in db
+                        DiscountCodes::InsertCodes($user); // insert used discount code in db
                     Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
                     $this->redirect(array('/library'));
                 }
@@ -234,7 +234,7 @@ class BookController extends Controller
                 $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj,$model->id);
                 Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
                 if($discountCodesInSession)
-                    DiscountCodes::InsertCodes($user, $buyId); // insert used discount code in db
+                    DiscountCodes::InsertCodes($user); // insert used discount code in db
                 Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
             } else {
                 Yii::app()->user->setFlash('failed', $gateway->getError());

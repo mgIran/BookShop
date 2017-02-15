@@ -7,7 +7,6 @@
  * @property string $id
  * @property string $discount_id
  * @property integer $user_id
- * @property string $buy_id
  * @property string $date
  *
  * The followings are the available model relations:
@@ -35,11 +34,11 @@ class DiscountUsed extends CActiveRecord
 		return array(
 			array('discount_id, user_id', 'required'),
 			array('user_id', 'numerical', 'integerOnly'=>true),
-			array('discount_id, buy_id', 'length', 'max'=>10),
+			array('discount_id', 'length', 'max'=>10),
 			array('date', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, discount_id, user_id, buy_id, date', 'safe', 'on'=>'search'),
+			array('id, discount_id, user_id, date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,7 +48,6 @@ class DiscountUsed extends CActiveRecord
 	public function relations()
 	{
 		return array(
-			'buy' => array(self::BELONGS_TO, 'BookBuys', 'buy_id'),
 			'discount' => array(self::BELONGS_TO, 'DiscountCodes', 'discount_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
@@ -64,7 +62,6 @@ class DiscountUsed extends CActiveRecord
 			'id' => 'ID',
 			'discount_id' => 'Discount',
 			'user_id' => 'User',
-			'buy_id' => 'Transaction',
 			'date' => 'Date',
 		);
 	}
@@ -90,7 +87,6 @@ class DiscountUsed extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('discount_id',$this->discount_id,true);
 		$criteria->compare('user_id',$this->user_id);
-		$criteria->compare('buy_id',$this->buy_id,true);
 		$criteria->compare('date',$this->date,true);
 
 		return new CActiveDataProvider($this, array(

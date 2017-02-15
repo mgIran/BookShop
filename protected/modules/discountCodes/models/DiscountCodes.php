@@ -271,17 +271,14 @@ class DiscountCodes extends CActiveRecord
 
     /**
      * @param $user Users
-     * @param bool|integer $buy_id
      */
-    public static function InsertCodes($user, $buy_id = false){
+    public static function InsertCodes($user){
         $discountIdsInSession = $user->getDiscountIds();
         if(is_array($discountIdsInSession)){ // exists multiple discount code
             foreach($discountIdsInSession as $dis_id){
                 $discountUsed = new DiscountUsed();
                 $discountUsed->user_id = $user->id;
                 $discountUsed->discount_id = $dis_id;
-                if($buy_id)
-                    $discountUsed->buy_id = $buy_id;
                 $discountUsed->date = time();
                 @$discountUsed->save();
             }
@@ -290,8 +287,6 @@ class DiscountCodes extends CActiveRecord
             $discountUsed = new DiscountUsed();
             $discountUsed->user_id = $user->id;
             $discountUsed->discount_id = $discountIdsInSession;
-            if($buy_id)
-                $discountUsed->buy_id = $buy_id;
             $discountUsed->date = time();
             @$discountUsed->save();
         }
