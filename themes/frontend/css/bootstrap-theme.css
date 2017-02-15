@@ -3459,14 +3459,21 @@ input[type="checkbox"] + label:hover::before {
 .cart .discount-code .checkbox-container{
     margin-bottom: 20px;
 }
-.payment-methods-list .payment-method-item .name{
-    padding: 0 20px;
-    height:70px;
-    line-height: 70px;
+.payment-methods-list .payment-method-item .name,
+.payment-methods-list .payment-method-item .desc{
+    line-height: 30px;
+    height:30px;
+}
+.payment-methods-list .payment-method-item .desc,
+.shipping-methods-list .shipping-method-item .desc{
+    font-weight: lighter;
+}
+.payment-method .payment-method-item > div{
+    padding: 15px;
 }
 .payment-method .payment-method-item,
 .payment-method .payment-method-item > div{
-    height:70px;
+    height:90px;
 }
 .payment-method .note{
     color: #e74e40;

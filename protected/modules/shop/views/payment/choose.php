@@ -53,7 +53,7 @@ $cartStatistics = Shop::getPriceTotal();
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['shippingPrice'])) ?><small> تومان</small></div>
                     </li>
                     <li class="list-group-item red-item">
-                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">تخفیف کتاب + کد تخفیف نوروزی</div>
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">تخفیف کتاب<?php echo ($discountCodesInSession)?" + ".CHtml::encode($discountObj->title):"";?></div>
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['totalDiscount'] + $cartStatistics['discountCodeAmount'])) ?><small> تومان</small></div>
                     </li>
                     <li class="list-group-item green-item">
@@ -75,7 +75,6 @@ $cartStatistics = Shop::getPriceTotal();
                         'template' => '{items}',
                         'itemsCssClass' => 'payment-methods-list'
                     )); ?>
-                    <small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابیک، اعلام نموده‌اید. </small>
                 </div>
                 <div class="buttons">
                     <a href="<?= $this->createUrl('/shop/cart/view') ?>" class="btn-black pull-right">بازگشت به سبد خرید</a>
