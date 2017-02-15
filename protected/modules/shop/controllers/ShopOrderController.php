@@ -70,23 +70,17 @@ class ShopOrderController extends Controller
 		if(!$cart)
 			$this->redirect(array('/shop/cart/view'));
 
-		if(!$customer && !Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
 		{
 			$customer = Yii::app()->user->getId();
 			Yii::app()->user->setState('basket-position', 2);
 		}
-
 		if(isset($_POST['ShippingMethod']))
-		{
 			Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
-			Yii::app()->user->setState('basket-position', 3);
-		}
 		if(isset($_POST['DeliveryAddress']))
-		{
 			Yii::app()->user->setState('delivery_address', $_POST['DeliveryAddress']);
+		if(Yii::app()->user->hasState('shipping_method') && Yii::app()->user->hasState('delivery_address'))
 			Yii::app()->user->setState('basket-position', 3);
-		}
-
 		if(isset($_POST['PaymentMethod']))
 		{
 			Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
@@ -99,7 +93,7 @@ class ShopOrderController extends Controller
 			$delivery_address = Yii::app()->user->getState('delivery_address');
 		if(!$payment_method)
 			$payment_method = Yii::app()->user->getState('payment_method');
-		if(!$customer){
+		if(Yii::app()->user->getState('basket-position') == 1){
 			$this->render('login');
 			Yii::app()->end();
 		}
@@ -120,7 +114,6 @@ class ShopOrderController extends Controller
 			Yii::app()->end();
 		}
 		if(Yii::app()->user->getState('basket-position') == 3){
-			Yii::app()->user->setState('basket-position', 3);
 			if(isset($_POST['form']) && $_POST['form'] == 'payment-form'){
 				if(!$payment_method)
 					Yii::app()->user->setFlash('warning', 'لطفا شیوه پرداخت را انتخاب کنید.');
@@ -272,6 +265,7 @@ class ShopOrderController extends Controller
 
 	public function actionAddDiscount()
 	{
+		Yii::app()->user->setState('basket-position', 3);
 		Yii::app()->getModule('discountCodes');
 		// use Discount codes
 		if(isset($_POST['DiscountCodes'])){
@@ -313,6 +307,7 @@ class ShopOrderController extends Controller
 
 	public function actionRemoveDiscount()
 	{
+		Yii::app()->user->setState('basket-position', 3);
 		Yii::app()->getModule('discountCodes');
 		// use Discount codes
 		if(isset($_GET['code'])){
