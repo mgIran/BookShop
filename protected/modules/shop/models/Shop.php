@@ -79,7 +79,6 @@ class Shop
 			!$cartStatistics ||
 			$cartStatistics['shippingPrice'] == 0 ||
 			$cartStatistics['totalPrice'] == 0 ||
-			$cartStatistics['totalDiscount'] == 0 ||
 			$cartStatistics['totalPayment'] == 0
 		)
 			return true;

@@ -177,7 +177,6 @@ class ShopOrderController extends Controller
 		$cart = Shop::getCartContent();
 		if(!$cart || Shop::isEmpty($cartStatistics))
 			$this->redirect(array('/shop/cart/view'));
-
 		// check order fields that is correct to be send
 		if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
 			$customer = Yii::app()->user->getId();
