@@ -24,7 +24,7 @@
                     </div>
                 </td>
                 <td class="vertical-middle text-center">
-                    <strong><?php echo Controller::parseNumbers($book["qty"]);?></strong>
+                    <strong><?php echo Controller::parseNumbers($book["qty"]);?></strong> عدد
                 </td>
                 <td class="vertical-middle text-center hidden-xs">
                     <?php $price = $model->getPrinted_price();?>

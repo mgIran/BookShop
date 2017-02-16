@@ -100,7 +100,7 @@ class ShopOrder extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'شناسه سفارش',
+			'id' => 'شماره رسید',
 			'user_id' => 'کاربر',
 			'delivery_address_id' => 'آدرس تحویل کالا',
 			'billing_address_id' => 'آدرس تحویل فاکتور',
@@ -190,6 +190,6 @@ class ShopOrder extends CActiveRecord
 	}
 
 	public function getOrderID(){
-		return 'kbc-'.$this->id;
+		return 'KBC-'.$this->id;
 	}
 }

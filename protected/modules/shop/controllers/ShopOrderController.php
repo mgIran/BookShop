@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'history'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'history', 'getInfo'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -488,14 +488,35 @@ class ShopOrderController extends Controller
 	}
 
 	public function actionHistory()
-	{
-        Yii::app()->theme="frontend";
-        $this->layout="//layouts/panel";
+    {
+        Yii::app()->theme = "frontend";
+        $this->layout = "//layouts/panel";
 
-        $model=new ShopOrder("search");
+        $model = new ShopOrder("search");
 
         $this->render("history", array(
-            "model"=>$model,
+            "model" => $model,
         ));
-	}
+    }
+
+	public function actionGetInfo($id)
+    {
+        $model = $this->loadModel($id);
+
+        if ($model) {
+            $this->beginClip("order-item");
+            $this->renderPartial("_order_item", array(
+                "model" => $model,
+            ));
+            $this->endClip();
+
+            echo CJSON::encode(array(
+                "status" => true,
+                "content" => $this->clips["order-item"]
+            ));
+        } else
+            echo CJSON::encode(array(
+                "status" => false,
+            ));
+    }
 }

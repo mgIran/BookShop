@@ -14,7 +14,7 @@
 		<div class="white-box cart">
 			<?php $this->renderPartial('/order/_steps', array('point' => 3));?>
 			<?php $this->renderPartial('//partial-views/_flashMessage');?>
-			<?php $this->renderPartial('/payment/_basket_table', array('books' => Shop::getCartContent()));?>
+			<?php $this->renderPartial('_basket_table', array('books' => Shop::getCartContent()));?>
 			<div class="bill">
 				<?php $cartStatistics=Shop::getPriceTotal(); ?>
 				<h5>خلاصه صورتحساب شما</h5>
