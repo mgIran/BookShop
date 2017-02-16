@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'history', 'getInfo'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'history', 'details', 'getInfo'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create, addDiscount, removeDiscount, back, confirm',
+			'checkAccess + admin, index, view, delete, update, changeStatus',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -147,6 +147,9 @@ class ShopOrderController extends Controller
 		}
 	}
 
+	/**
+	 * Back to last position in shop
+	 */
 	public function actionBack()
 	{
 		$position = Yii::app()->user->getState('basket-position');
@@ -158,6 +161,11 @@ class ShopOrderController extends Controller
 		$this->redirect(array('/shop/order/create'));
 	}
 
+	/**
+	 * Save Order in database and clear all cookie and session states that in set in shop
+	 * @param null $customer
+	 * @throws CDbException
+	 */
 	public function actionConfirm($customer = null)
 	{
 		Yii::app()->theme = "frontend";
@@ -206,7 +214,7 @@ class ShopOrderController extends Controller
 				$orderItem->order_id = $order->id;
 				$orderItem->model_name = get_class($model);
 				$orderItem->model_id = $id;
-				$orderItem->fee = $model->printed_price;
+				$orderItem->fee = $model->off_printed_price;
 				$orderItem->qty = $qty;
 				$flag = @$orderItem->save();
 				if(!$flag)
@@ -223,28 +231,47 @@ class ShopOrderController extends Controller
 			Shop::clearCartContent();
 			Shop::clearOrderStates();
 
-			// @todo payment order redirects
+			// redirect to payment method runs action
+			$this->redirect(array('payment', 'id' => $order->id));
+		}else{
+			Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
+			Yii::app()->user->setState('basket-position', 4);
+			$this->redirect(array('create'));
+		}
+	}
 
-
+	/**
+	 * Payment action
+	 * @param $id
+	 * @throws CHttpException
+	 */
+	public function actionPayment($id)
+	{
+		Yii::app()->theme = "frontend";
+		$this->layout = "//layouts/index";
+		Yii::app()->getModule('users');
+		Yii::app()->getModule('discountCodes');
+		$order = $this->loadModel($id);
+		if($order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID){
 			if($order->payment_amount !== 0){
 				if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
 					DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-					$order->setStatus(ShopOrder::STATUS_STOCK_PROCESS)->save();
-					Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+					$order->setStatus(ShopOrder::STATUS_STOCK_PROCESS)->setPaid()->save();
+					Shop::SetSuccessFlash();
 				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
 					if($order->user->userDetails->credit < $order->payment_amount){
 						Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
-						$this->refresh();
+						$this->redirect(array('details','id'=>$order->id));
 					}
 					$userDetails = UserDetails::model()->findByAttributes(array('user_id' => $order->user_id));
 					$userDetails->setScenario('update-credit');
 					$userDetails->credit = $userDetails->credit - $order->payment_amount;
 					if($userDetails->save()){
 						DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-						$order->setStatus(ShopOrder::STATUS_PAID)->save();
-						Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+						$order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
+						Shop::SetSuccessFlash();
 					}else
-						Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+						Shop::SetFailedFlash();
 				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY){
 					// Save transaction
 					$transaction = new UserTransactions();
@@ -253,6 +280,7 @@ class ShopOrderController extends Controller
 					$transaction->date = time();
 					$transaction->gateway_name = 'زرین پال';
 					$transaction->type = UserTransactions::TRANSACTION_TYPE_SHOP;
+					$transaction->type_id= $order->id;
 
 					if($transaction->save()){
 						$gateway = new ZarinPal();
@@ -264,6 +292,8 @@ class ShopOrderController extends Controller
 						$transaction->description = $description;
 						$transaction->authority = $result->getAuthority();
 						$transaction->save();
+						$order->transaction_id = $transaction->id;
+						@$order->save(false);
 						//Redirect to URL You can do it also by creating a form
 						if($result->getStatus() == 100)
 							$this->redirect($gateway->getRedirectUrl());
@@ -273,37 +303,54 @@ class ShopOrderController extends Controller
 				}
 			}else{
 				DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-				Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+				Shop::SetSuccessFlash();
 			}
-		}else{
-			Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
-			Yii::app()->user->setState('basket-position', 4);
-			$this->redirect(array('create'));
 		}
+		$this->redirect(array('details','id'=>$order->id));
 	}
 
-	public function actionPayment($id)
+	/**
+	 * Verify Bank Transaction after bank callback
+	 * @param $id
+	 * @throws CHttpException
+	 */
+	public function actionVerify($id)
 	{
-		Yii::app()->theme = "frontend";
-		$this->layout = "//layouts/index";
-		Yii::app()->getModule('users');
+		if(!isset($_GET['Authority']))
+			$this->redirect(array('/shop/order/create'));
 		Yii::app()->getModule('discountCodes');
-		$order = $this->loadModel($id);
-		// @todo payment order redirects
-
-		$this->render('confirm', array(
-			'order' => $order,
+		$Authority = $_GET['Authority'];
+		$model = UserTransactions::model()->findByAttributes(array(
+			'authority' => $Authority,
+			'user_id' => Yii::app()->user->getId(),
+			'type' => UserTransactions::TRANSACTION_TYPE_SHOP
 		));
+		$order = $this->loadModel($id);
+		$Amount = $model->amount; //Amount will be based on Toman
+		if ($_GET['Status'] == 'OK') {
+			$gateway = new ZarinPal();
+			$gateway->verify($Authority, $Amount);
+			if ($gateway->getStatus() == 100) {
+				$model->scenario = 'update';
+				$model->status = 'paid';
+				$model->token = $gateway->getRefId();
+				$model->save();
+				DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+				$order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
+				Shop::SetSuccessFlash();
+			} else
+				Shop::SetFailedFlash($gateway->getError());
+		} else
+			Shop::SetFailedFlash('عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+		$this->redirect(array('details','id'=>$order->id));
 	}
 
-	public function actionVerify()
+	public function actionDetails($id)
 	{
 		Yii::app()->theme = "frontend";
 		$this->layout = "//layouts/index";
-
-		// @todo payment order redirects
-
-		$this->render('confirm', array(
+		$order = $this->loadModel($id);
+		$this->render('details', array(
 			'order' => $order,
 		));
 	}

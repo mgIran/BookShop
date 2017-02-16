@@ -14,6 +14,7 @@
  * @property string $description
  * @property string $gateway_name
  * @property string $type
+ * @property string $type_id
  * @property string $user_name
  *
  * The followings are the available model relations:
@@ -29,8 +30,8 @@ class UserTransactions extends CActiveRecord
 	const TRANSACTION_STATUS_UNPAID = 'unpaid';
 
 	public $statusLabels = array(
-		'paid' => 'پرداخت کامل',
-		'unpaid' => 'پرداخت ناقص',
+		'paid' => 'پرداخت موفق',
+		'unpaid' => 'پرداخت ناموفق',
 	);
 
 	public $typeLabels = array(
@@ -69,7 +70,7 @@ class UserTransactions extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('authority', 'required', 'on' => 'set-authority'),
-			array('user_id, amount', 'length', 'max' => 10),
+			array('user_id, amount, type_id', 'length', 'max' => 10),
 			array('date, type', 'length', 'max' => 20),
 			array('status', 'length', 'max' => 6),
 			array('token, gateway_name', 'length', 'max' => 50),
@@ -79,7 +80,7 @@ class UserTransactions extends CActiveRecord
 			array('report_type', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, amount, date, status, token, authority, description, gateway_name, type, user_name, year_altField, month_altField, to_date_altField, from_date_altField, report_type', 'safe', 'on' => 'search'),
+			array('id, user_id, amount, date, status, token, authority, description, gateway_name, type, type_id, user_name, year_altField, month_altField, to_date_altField, from_date_altField, report_type', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -110,6 +111,7 @@ class UserTransactions extends CActiveRecord
 			'description' => 'توضیحات',
 			'gateway_name' => 'نام درگاه',
 			'type' => 'نوع تراکنش',
+			'type_id' => 'شناسه',
 			'authority' => 'رشته احراز هویت بانک',
 		);
 	}
@@ -154,6 +156,7 @@ class UserTransactions extends CActiveRecord
 		$criteria->compare('description', $this->description, true);
 		$criteria->compare('gateway_name', $this->gateway_name, true);
 		$criteria->compare('type', $this->type, true);
+		$criteria->compare('type_id', $this->type, true);
 		if($this->user_name){
 			$criteria->with = array('user', 'user.userDetails');
 			$criteria->addSearchCondition('userDetails.fa_name', $this->user_name);
