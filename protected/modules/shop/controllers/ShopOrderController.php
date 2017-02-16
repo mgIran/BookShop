@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'history'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create, addDiscount, removeDiscount, back, confirm, payment, verify',
+			'checkAccess - create, addDiscount, removeDiscount, back, confirm, payment, verify, history',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -485,5 +485,17 @@ class ShopOrderController extends Controller
 			}
 		}
 		$this->redirect(array('/shop/order/create'));
+	}
+
+	public function actionHistory()
+	{
+        Yii::app()->theme="frontend";
+        $this->layout="//layouts/panel";
+
+        $model=new ShopOrder("search");
+
+        $this->render("history", array(
+            "model"=>$model,
+        ));
 	}
 }

@@ -1002,6 +1002,15 @@ a:active{
     vertical-align: middle;
     margin-left: 15px;
 }
+.cart-icon{
+    background: url("../svg/cart-blue.svg") no-repeat center;
+    background-size: 15px;
+    width: 15px;
+    height:15px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+}
 .transaction-icon{
     background: url("../svg/transaction.svg") no-repeat center;
     background-size: 15px;
