@@ -69,7 +69,7 @@ class Shop
 	}
 
 	/**
-	 * 
+	 *
 	 * @param $cartStatistics
 	 * @return bool
 	 */
@@ -147,5 +147,35 @@ class Shop
 			if($customer = Users::model()->findByPk(Yii::app()->user->getId()))
 				return $customer;
 		return false;
+	}
+
+	public static function PrintStatusLine($status)
+	{
+		$labels = ShopOrder::model()->statusLabels;
+		$keys = array_keys($labels);
+		if($status > 5)
+			$status = 5;
+		for($i = 1;$i < count($keys);$i++){
+			$class = '';
+			if($status >= $i)
+				$class = ' class="done"';
+			if($status + 1 == $i)
+				$class = ' class="doing"';
+			echo "<li{$class}>
+                    <div>{$labels[$i]}</div>
+                </li>";
+		}
+	}
+
+	public static function SetSuccessFlash()
+	{
+		Yii::app()->user->setFlash('success', 'خرید شما با موفقیت ثبت شد.');
+		Yii::app()->user->setFlash('message' ,'سفارش شما جهت انجام مراحل بعدی در اختیار تیم کتابیک قرار گرفت. جهت پیگیری وضعیت سفارش خود از طریق پنل کاربری اقدام نمایید.');
+	}
+
+	public static function SetFailedFlash($message=null)
+	{
+		Yii::app()->user->setFlash('failed', $message?$message:'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+		Yii::app()->user->setFlash('message' ,'درصورتیکه طی این فرآیند، مبلغی از حساب شما کسر شده است، طی 72 ساعت آینده، به حساب شما باز خواهد گشت.');
 	}
 }

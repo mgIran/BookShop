@@ -19,6 +19,7 @@
  * @property double $price_amount
  * @property double $shipping_price
  * @property double $payment_price
+ * @property integer $payment_status
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -28,9 +29,13 @@
  * @property ShopPaymentMethod $paymentMethod
  * @property ShopOrderItems[] $items
  * @property UserTransactions $transaction
+ * @property UserTransactions[] $transactions
  */
 class ShopOrder extends CActiveRecord
 {
+	const PAYMENT_STATUS_UNPAID = 0;
+	const PAYMENT_STATUS_PAID = 1;
+
 	const STATUS_PENDING = 0;
 	const STATUS_ACCEPTED = 1;
 	const STATUS_PAID = 2;
@@ -48,11 +53,16 @@ class ShopOrder extends CActiveRecord
 
     public $statusLabels = [
         self::STATUS_PENDING => 'در انتظار بررسی',
-        self::STATUS_ACCEPTED => 'تایید تراکنش',
+        self::STATUS_ACCEPTED => 'تایید سفارش',
         self::STATUS_PAID => 'پرداخت شده',
         self::STATUS_STOCK_PROCESS => 'پردازش انبار',
         self::STATUS_SENDING => 'در حال ارسال',
         self::STATUS_DELIVERED => 'تحویل شده',
+    ];
+
+	public $paymentStatusLabels = [
+        self::PAYMENT_STATUS_UNPAID => 'در انتظار پرداخت',
+        self::PAYMENT_STATUS_PAID => 'پرداخت موفق'
     ];
 
 	/**
@@ -68,11 +78,13 @@ class ShopOrder extends CActiveRecord
 			array('user_id, delivery_address_id, billing_address_id, payment_method, shipping_method', 'length', 'max' => 10),
 			array('ordering_date, update_date', 'length', 'max' => 20),
 			array('transaction_id', 'length', 'max' => 10),
+			array('payment_status', 'length', 'max' => 1),
+			array('payment_status', 'default', 'value' => 0),
 			array('status', 'length', 'max' => 1),
 			array('transaction_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price', 'safe', 'on' => 'search'),
+			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price, payment_status', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -91,6 +103,7 @@ class ShopOrder extends CActiveRecord
 			'paymentMethod' => array(self::BELONGS_TO, 'ShopPaymentMethod', 'payment_method'),
 			'shippingMethod' => array(self::BELONGS_TO, 'ShopShippingMethod', 'shipping_method'),
 			'transaction' => array(self::BELONGS_TO, 'UserTransactions', 'transaction_id'),
+			'transactions' => array(self::HAS_MANY, 'UserTransactions', 'type_id', 'order' => 'date DESC'),
 		);
 	}
 
@@ -115,6 +128,7 @@ class ShopOrder extends CActiveRecord
 			'shipping_price' => 'هزینه ارسال',
 			'payment_price' => 'هزینه اضافی پرداخت',
 			'transaction_id' => 'تراکنش',
+			'payment_status' => 'وضعیت پرداخت',
 		);
 	}
 
@@ -148,6 +162,7 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('price_amount', $this->price_amount);
 		$criteria->compare('shipping_price', $this->shipping_price);
 		$criteria->compare('payment_price', $this->payment_price);
+		$criteria->compare('payment_status', $this->payment_status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
@@ -175,6 +190,14 @@ class ShopOrder extends CActiveRecord
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getPaymentStatusLabel()
+	{
+		return $this->paymentStatusLabels[$this->payment_status];
+	}
+
+	/**
 	 * Change Payment Method Status
 	 *
 	 * @param $new_status integer
@@ -189,7 +212,27 @@ class ShopOrder extends CActiveRecord
 		return $this;
 	}
 
+	/**
+	 * Change Payment Status
+	 * @return $this
+	 */
+	public function setPaid()
+	{
+		$this->payment_status = self::PAYMENT_STATUS_PAID;
+		return $this;
+	}
+
+	/**
+	 * Change Payment Status
+	 * @return $this
+	 */
+	public function setUnpaid()
+	{
+		$this->payment_status = self::PAYMENT_STATUS_UNPAID;
+		return $this;
+	}
+
 	public function getOrderID(){
-		return 'kbc-'.$this->id;
+		return 'KBC-'.$this->id;
 	}
 }
