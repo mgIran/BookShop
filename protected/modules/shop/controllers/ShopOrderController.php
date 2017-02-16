@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess - create, addDiscount, removeDiscount, back, confirm',
+			'checkAccess - create, addDiscount, removeDiscount, back, confirm, payment, verify',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -223,58 +223,8 @@ class ShopOrderController extends Controller
 			Shop::clearCartContent();
 			Shop::clearOrderStates();
 
-			// @todo payment order redirects
-
-
-			if($order->payment_amount !== 0){
-				if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
-					DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-					$order->setStatus(ShopOrder::STATUS_STOCK_PROCESS)->save();
-					Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
-					if($order->user->userDetails->credit < $order->payment_amount){
-						Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
-						$this->refresh();
-					}
-					$userDetails = UserDetails::model()->findByAttributes(array('user_id' => $order->user_id));
-					$userDetails->setScenario('update-credit');
-					$userDetails->credit = $userDetails->credit - $order->payment_amount;
-					if($userDetails->save()){
-						DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-						$order->setStatus(ShopOrder::STATUS_PAID)->save();
-						Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-					}else
-						Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
-				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY){
-					// Save transaction
-					$transaction = new UserTransactions();
-					$transaction->user_id = $order->user_id;
-					$transaction->amount = $order->payment_amount;
-					$transaction->date = time();
-					$transaction->gateway_name = 'زرین پال';
-					$transaction->type = UserTransactions::TRANSACTION_TYPE_SHOP;
-
-					if($transaction->save()){
-						$gateway = new ZarinPal();
-						$gateway->callback_url = Yii::app()->getBaseUrl(true) . '/shop/order/verify/' . $order->id;
-						$siteName = Yii::app()->name;
-						$description = "پرداخت فاکتور {$order->getOrderID()} در وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
-						$result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
-						$transaction->scenario = 'set-authority';
-						$transaction->description = $description;
-						$transaction->authority = $result->getAuthority();
-						$transaction->save();
-						//Redirect to URL You can do it also by creating a form
-						if($result->getStatus() == 100)
-							$this->redirect($gateway->getRedirectUrl());
-						else
-							throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
-					}
-				}
-			}else{
-				DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-				Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
-			}
+			// redirect to payment method runs action
+			$this->redirect(array('payment', 'id' => $order->id));
 		}else{
 			Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
 			Yii::app()->user->setState('basket-position', 4);
@@ -289,8 +239,58 @@ class ShopOrderController extends Controller
 		Yii::app()->getModule('users');
 		Yii::app()->getModule('discountCodes');
 		$order = $this->loadModel($id);
-		// @todo payment order redirects
+		if($order->payment_amount !== 0){
+			if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
+				DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+				$order->setStatus(ShopOrder::STATUS_STOCK_PROCESS)->save();
+				Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+			}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
+				if($order->user->userDetails->credit < $order->payment_amount){
+					Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
+					$this->render('confirm', array(
+						'order' => $order,
+					));
+					Yii::app()->end();
+				}
+				$userDetails = UserDetails::model()->findByAttributes(array('user_id' => $order->user_id));
+				$userDetails->setScenario('update-credit');
+				$userDetails->credit = $userDetails->credit - $order->payment_amount;
+				if($userDetails->save()){
+					DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+					$order->setStatus(ShopOrder::STATUS_PAID)->save();
+					Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+				}else
+					Yii::app()->user->setFlash('failed', 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.');
+			}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY){
+				// Save transaction
+				$transaction = new UserTransactions();
+				$transaction->user_id = $order->user_id;
+				$transaction->amount = $order->payment_amount;
+				$transaction->date = time();
+				$transaction->gateway_name = 'زرین پال';
+				$transaction->type = UserTransactions::TRANSACTION_TYPE_SHOP;
 
+				if($transaction->save()){
+					$gateway = new ZarinPal();
+					$gateway->callback_url = Yii::app()->getBaseUrl(true) . '/shop/order/verify/' . $order->id;
+					$siteName = Yii::app()->name;
+					$description = "پرداخت فاکتور {$order->getOrderID()} در وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
+					$result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+					$transaction->scenario = 'set-authority';
+					$transaction->description = $description;
+					$transaction->authority = $result->getAuthority();
+					$transaction->save();
+					//Redirect to URL You can do it also by creating a form
+					if($result->getStatus() == 100)
+						$this->redirect($gateway->getRedirectUrl());
+					else
+						throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
+				}
+			}
+		}else{
+			DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+			Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+		}
 		$this->render('confirm', array(
 			'order' => $order,
 		));

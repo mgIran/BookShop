@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "ym_user_details".
+ * This is the model class for table "{{user_details}}".
  *
- * The followings are the available columns in table 'ym_user_details':
+ * The followings are the available columns in table '{{user_details}}':
  * @property string $user_id
  * @property string $fa_name
  * @property string $en_name
@@ -54,7 +54,7 @@ class UserDetails extends CActiveRecord
      */
     public function tableName()
     {
-        return 'ym_user_details';
+        return '{{user_details}}';
     }
 
     public $roleLabels = array(

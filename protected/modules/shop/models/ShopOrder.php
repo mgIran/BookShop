@@ -182,7 +182,7 @@ class ShopOrder extends CActiveRecord
 	 */
 	public function setStatus($new_status)
 	{
-		if(in_array($new_status, $this->statusLabels)){
+		if(key_exists($new_status, $this->statusLabels)){
 			if($this->status !== $new_status)
 				$this->status = $new_status;
 		}

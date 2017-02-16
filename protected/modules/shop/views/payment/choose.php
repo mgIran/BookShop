@@ -73,6 +73,7 @@ $cartStatistics = Shop::getPriceTotal();
                         )),
                         'itemView' => 'shop.views.payment._payment_item',
                         'template' => '{items}',
+                        'viewData' => array('credit' => $user->userDetails->credit),
                         'itemsCssClass' => 'payment-methods-list'
                     )); ?>
                 </div>
