@@ -151,7 +151,6 @@ class ShopOrder extends CActiveRecord
 		$criteria = new CDbCriteria;
 
 		$criteria->compare('id', $this->id, true);
-		$criteria->compare('user_id', $this->user_id, true);
 		$criteria->compare('delivery_address_id', $this->delivery_address_id, true);
 		$criteria->compare('billing_address_id', $this->billing_address_id, true);
 		$criteria->compare('status', $this->status, true);

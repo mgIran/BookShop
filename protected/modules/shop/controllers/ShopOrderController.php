@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'history', 'details', 'getInfo'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'details', 'history', 'getInfo'),
 			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess + admin, index, view, delete, update, changeStatus',
+			'checkAccess + admin, index, view, delete, update, changeStatus, history, getInfo',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -539,6 +539,10 @@ class ShopOrderController extends Controller
         $this->layout = "//layouts/panel";
 
         $model = new ShopOrder("search");
+		$model->unsetAttributes();
+		if(isset($_POST['ShopOrder']))
+			$model->attributes = $_POST['ShopOrder'];
+		$model->user_id=Yii::app()->user->getId();
 
         $this->render("history", array(
             "model" => $model,

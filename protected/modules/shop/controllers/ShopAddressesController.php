@@ -112,13 +112,14 @@ class ShopAddressesController extends Controller
 	public function actionRemove(){
 		if(isset($_POST['id'])){
 			$model = $this->loadModel((int)$_POST['id']);
+			$model->deleted = 1;
 			Yii::app()->getModule('places');
 
 			if(Yii::app()->user->getState('delivery_address') == $model->id)
 				Yii::app()->user->setState('delivery_address', null);
 
 			$this->beginClip('address-list');
-			if($model->delete())
+			if($model->save(false))
 				$this->renderPartial('shop.views.shipping._alertMessage', array(
 					'type' => 'success',
 					'class' => 'address-list',
@@ -144,7 +145,7 @@ class ShopAddressesController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return ShopOrder the loaded model
+	 * @return ShopAddresses the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
