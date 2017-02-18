@@ -20,6 +20,7 @@
  * @property double $shipping_price
  * @property double $payment_price
  * @property integer $payment_status
+ * @property integer $export_code
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -83,10 +84,11 @@ class ShopOrder extends CActiveRecord
 			array('payment_status', 'length', 'max' => 1),
 			array('payment_status', 'default', 'value' => 0),
 			array('status', 'length', 'max' => 1),
+			array('export_code', 'length', 'max' => 100),
 			array('transaction_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price, payment_status', 'safe', 'on' => 'search'),
+			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price, payment_status, export_code', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -131,6 +133,7 @@ class ShopOrder extends CActiveRecord
 			'payment_price' => 'هزینه اضافی پرداخت',
 			'transaction_id' => 'تراکنش',
 			'payment_status' => 'وضعیت پرداخت',
+			'export_code' => 'کد مرسوله',
 		);
 	}
 
@@ -166,6 +169,7 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('shipping_price', $this->shipping_price);
 		$criteria->compare('payment_price', $this->payment_price);
 		$criteria->compare('payment_status', $this->payment_status);
+		$criteria->compare('export_code', $this->export_code);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,

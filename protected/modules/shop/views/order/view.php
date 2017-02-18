@@ -156,6 +156,11 @@ $this->menu=array(
                     'type' => 'raw'
                 ),
                 array(
+                    'name' => 'export_code',
+                    'value' => $model->export_code,
+                    'cssClass' => 'token-text text-lg',
+                ),
+                array(
                     'name' => 'deliveryAddress.transferee',
                     'value' => $model->deliveryAddress->transferee,
                 ),
