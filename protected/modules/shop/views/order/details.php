@@ -67,7 +67,15 @@ if(Yii::app()->user->hasFlash('message'))
                             <td><?= CHtml::encode($order->deliveryAddress->transferee) ?></td>
                             <td><?= CHtml::encode($order->deliveryAddress->postal_address) ?></td>
                             <td><?= CHtml::encode(Controller::parseNumbers($order->deliveryAddress->emergency_tel)) ?> - <?= CHtml::encode(Controller::parseNumbers($order->deliveryAddress->landline_tel)) ?></td>
-                            <td><?= CHtml::encode($order->shippingMethod->title)?> <small>( هزینه ارسال <?= CHtml::encode(Controller::parseNumbers(number_format($order->shipping_price))) ?> تومان )</small></td>
+                            <td><?= CHtml::encode($order->shippingMethod->title)?> <small>( <?php
+                                    if($order->shipping_price == 0):
+                                        echo 'ارسال رایگان';
+                                    else:
+                                        ?>
+هزینه <?= Controller::parseNumbers(number_format($order->shipping_price)) ?>تومان
+                                        <?
+                                    endif;
+                                    ?> )</small></td>
                         </tr>
                     </tbody>
                 </table>

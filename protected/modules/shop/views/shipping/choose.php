@@ -34,7 +34,7 @@ $cartStatistics = Shop::getPriceTotal();
                             )),
                             'itemView' => 'shop.views.shipping._shipping_item',
                             'template' => '{items}',
-                            'viewData' => array('payment_total' => $cartStatistics['payment_total']),
+                            'viewData' => array('payment_total' => $cartStatistics['totalPayment']),
                             'itemsCssClass' => 'shipping-methods-list'
                         )); ?>
                     </div>

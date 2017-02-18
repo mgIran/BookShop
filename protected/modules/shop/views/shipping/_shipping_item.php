@@ -24,8 +24,7 @@
                     <?= Controller::parseNumbers(number_format($data->price)) ?><small> تومان</small>
                 <?
                 endif;
-                ?>
-            </div>
+                ?></div>
         </div>
     </div>
 </div>

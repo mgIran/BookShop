@@ -77,7 +77,6 @@ class Shop
 	{
 		if(
 			!$cartStatistics ||
-			$cartStatistics['shippingPrice'] == 0 ||
 			$cartStatistics['totalPrice'] == 0 ||
 			$cartStatistics['totalPayment'] == 0
 		)
@@ -118,9 +117,11 @@ class Shop
 		}
 
 		if($shipping_method = Shop::getShippingMethod()){
-			$shipping_price = (double)$shipping_method->price;
             if(!$shipping_method->limit_price || ($shipping_method->limit_price && $payment_total < $shipping_method->limit_price))
-			    $payment_total += $shipping_price;
+            {
+                $shipping_price = (double)$shipping_method->price;
+                $payment_total += $shipping_price;
+            }
 		}
 
 		if($payment_method = Shop::getPaymentMethod()){
