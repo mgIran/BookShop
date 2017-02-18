@@ -49,7 +49,15 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">روش ارسال</div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"><?php echo CHtml::encode($model->shippingMethod->title)?><small> (هزینه ارسال <?php echo Controller::parseNumbers(number_format($model->shippingMethod->price));?> تومان)</small></div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"><?php echo CHtml::encode($model->shippingMethod->title)?><?php
+                            if($model->shipping_price == 0):
+                                echo '<small>(ارسال رایگان)</small>';
+                            else:
+                                ?>
+                                <small> (هزینه ارسال <?php echo Controller::parseNumbers(number_format($model->shipping_price));?> تومان)</small>
+                                <?
+                            endif;
+                            ?></div>
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">مبلغ قابل پرداخت</div>
@@ -74,7 +82,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">کد مرسوله</div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">-<?php //echo CHtml::encode($model->export_code);?></div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">-<?php echo CHtml::encode($model->export_code);?></div>
                     </div>
                 </div>
             </div>
