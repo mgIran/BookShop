@@ -25,7 +25,7 @@
                                         var form = $("#login-form");
                                         var loading = $(".modal .loading-container");
                                         var url = \''.Yii::app()->createUrl('/login').'\';
-                                        submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                        submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ $(\'#UserLoginForm_authenticate_field\').html(html.msg); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
                                     }
                                 }'
                             )
@@ -80,7 +80,7 @@
                                     var form = $("#register-form");
                                     var loading = $(".modal .loading-container");
                                     var url = \''.Yii::app()->createUrl('/register').'\';
-                                    submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                    submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#Users_authenticate_field_em_\').html(html.errors);");
                                 }
                             }'
                         )
