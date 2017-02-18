@@ -27,8 +27,15 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'price'); ?>
-		<?php echo $form->textField($model,'price'); ?>
+		<?php echo $form->textField($model,'price'); ?>تومان
 		<?php echo $form->error($model,'price'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'limit_price'); ?>
+		<?php echo $form->textField($model,'limit_price'); ?>تومان
+        <small class="description">در صورت خالی بودن و یا وارد کردن 0 شرط رایگان بودن اعمال نمیشود.</small>
+		<?php echo $form->error($model,'limit_price'); ?>
 	</div>
 
 	<div class="row"><br>

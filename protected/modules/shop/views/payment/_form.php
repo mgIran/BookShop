@@ -25,7 +25,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'price'); ?>
-		<?php echo $form->textField($model,'price'); ?>
+		<?php echo $form->textField($model,'price'); ?>تومان
 		<?php echo $form->error($model,'price'); ?>
 	</div>
 

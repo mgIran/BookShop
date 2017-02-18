@@ -10,6 +10,7 @@
  * @property double $price
  * @property string $status
  * @property string $payment_method
+ * @property string $limit_price
  * @property string $order
  * @property string $paymentMethods
  */
@@ -43,11 +44,11 @@ class ShopShippingMethod extends SortableCActiveRecord
 			array('price', 'numerical'),
 			array('title', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>1),
-			array('order', 'length', 'max'=>10),
+			array('order, limit_price', 'length', 'max'=>10),
 			array('description, payment_method', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, price, status, payment_method, order', 'safe', 'on'=>'search'),
+			array('id, title, description, price, status, payment_method, order, limit_price', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +75,7 @@ class ShopShippingMethod extends SortableCActiveRecord
 			'price' => 'هزینه',
 			'status' => 'وضعیت',
 			'payment_method' => 'روش های پرداخت مجاز',
+			'limit_price' => 'سقف خرید برای ارسال رایگان',
 		);
 	}
 
@@ -101,6 +103,7 @@ class ShopShippingMethod extends SortableCActiveRecord
 		$criteria->compare('price',$this->price);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('order',$this->order,true);
+		$criteria->compare('limit_price',$this->limit_price,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

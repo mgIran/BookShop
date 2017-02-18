@@ -119,7 +119,8 @@ class Shop
 
 		if($shipping_method = Shop::getShippingMethod()){
 			$shipping_price = (double)$shipping_method->price;
-			$payment_total += $shipping_price;
+            if(!$shipping_method->limit_price || ($shipping_method->limit_price && $payment_total < $shipping_method->limit_price))
+			    $payment_total += $shipping_price;
 		}
 
 		if($payment_method = Shop::getPaymentMethod()){

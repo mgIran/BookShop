@@ -1,4 +1,7 @@
-<?php /* @var $data ShopShippingMethod */ ?>
+<?php
+/* @var $data ShopShippingMethod */
+/* @var $payment_total double */
+?>
 <div class="shipping-method-item<?= Yii::app()->user->getState('shipping_method') == $data->id?" selected":'' ?>">
     <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 radio-container">
         <div class="radio-control">
@@ -13,7 +16,16 @@
         </div>
         <div class="pull-left">
             <span>هزینه ارسال</span>
-            <div class="price"><?= Controller::parseNumbers(number_format($data->price)) ?><small> تومان</small></div>
+            <div class="price"><?php
+                if($data->limit_price && $payment_total >= $data->limit_price):
+                    echo 'رایگان';
+                else:
+                ?>
+                    <?= Controller::parseNumbers(number_format($data->price)) ?><small> تومان</small>
+                <?
+                endif;
+                ?>
+            </div>
         </div>
     </div>
 </div>

@@ -170,6 +170,7 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('payment_price', $this->payment_price);
 		$criteria->compare('payment_status', $this->payment_status);
 		$criteria->compare('export_code', $this->export_code);
+		$criteria->compare('user_id', $this->user_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
