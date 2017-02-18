@@ -16,7 +16,12 @@ $this->menu=array(
 );
 ?>
 
-<h1>نمایش اطلاعات سفارش #<?php echo $model->getOrderID(); ?></h1>
+<h1>نمایش اطلاعات سفارش #<?php echo $model->getOrderID(); ?>
+<!--    <button type="button" onclick="window.print();" class="btn btn-info pull-left">-->
+<!--        <i class="icon-print" ></i>-->
+<!--        چاپ-->
+<!--    </button>-->
+</h1>
 <br>
 <br>
 <div class="order-details">
@@ -114,8 +119,7 @@ $this->menu=array(
                 array(
                     'label' => 'کد رهگیری تراکنش',
                     'value' => $model->transaction?$model->transaction->token:'',
-                    'cssClass' => 'token-text text-lg',
-                    'visible' => $model->transaction
+                    'cssClass' => 'token-text text-lg'
                 ),
                 array(
                     'name' => 'price_amount',
