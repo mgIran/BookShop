@@ -37,6 +37,8 @@ class ShopOrderController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$this->layout = '//layouts/column1';
+        Yii::app()->getModule('places');
 		$this->render('view', array(
 			'model' => $this->loadModel($id),
 		));
@@ -266,9 +268,9 @@ class ShopOrderController extends Controller
 					$userDetails->setScenario('update-credit');
 					$userDetails->credit = $userDetails->credit - $order->payment_amount;
 					if($userDetails->save()){
-						DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-						$order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
-						Shop::SetSuccessFlash();
+                        $order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
+                        DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+                        Shop::SetSuccessFlash();
 					}else
 						Shop::SetFailedFlash();
 				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY){
@@ -451,10 +453,11 @@ class ShopOrderController extends Controller
 	 */
 	public function actionChangeStatus()
 	{
-		if(isset($_GET['id']) && !empty($_GET['id'])){
-			$id = (int)$_GET['id'];
+		if(isset($_POST['id']) && !empty($_POST['id'])){
+			$id = (int)$_POST['id'];
 			$model = $this->loadModel($id);
-			if($model->changeStatus()->save())
+			$model->update_date = time();
+			if($model->setStatus($_POST['value'])->save())
 				echo CJSON::encode(['status' => true]);
 			else
 				echo CJSON::encode(['status' => false, 'msg' => 'در تغییر وضعیت این آیتم مشکلی بوجود آمده است! لطفا مجددا بررسی کنید.']);
@@ -540,8 +543,8 @@ class ShopOrderController extends Controller
 
         $model = new ShopOrder("search");
 		$model->unsetAttributes();
-		if(isset($_POST['ShopOrder']))
-			$model->attributes = $_POST['ShopOrder'];
+		if(isset($_GET['ShopOrder']))
+			$model->attributes = $_GET['ShopOrder'];
 		$model->user_id=Yii::app()->user->getId();
 
         $this->render("history", array(

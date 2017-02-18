@@ -300,4 +300,7 @@ class Users extends CActiveRecord
             ->where("user_type = 'user' AND user_id = {$this->id}")
             ->queryScalar();
     }
+    public function getFullName(){
+
+    }
 }

@@ -6,6 +6,23 @@
     <h3>سفارشات من</h3>
     <p class="description">لیست سفارشات که تا کنون ثبت کرده اید.</p>
     <?php $this->renderPartial('//partial-views/_flashMessage') ?>
+    <?php
+    echo CHtml::beginForm($this->route,'GET',array('class' => 'form-inline form'));
+    ?>
+    <div class="filters">
+
+        <div class="form-group">
+            <div class="input-group">
+            </div>
+            <div class="input-group">
+                <?php echo CHtml::activeTextField($model, 'id', array('sytle'=> 'direction: ltr;','aria-describedby'=>'basic-addon1','class' => 'form-control ajax-grid-search', 'placeholder' => 'شناسه سفارش را جستجو کنید'));?>
+                <span class="input-group-addon" style="direction: ltr;" id="basic-addon1">KBC-</span>
+            </div>
+        </div>
+        <div class="form-group">
+<!--            --><?php //echo CHtml::activeTextField($model, 'token', array('class' => 'form-control ajax-grid-search', 'placeholder' => 'کدرهگیری را جستجو کنید'));?>
+        </div>
+    </div>
     <?php $this->widget('zii.widgets.grid.CGridView', array(
         'id'=>'orders-grid',
         'dataProvider'=>$model->search(),
@@ -35,6 +52,7 @@
             ),
             array(
                 'class' => 'CButtonColumn',
+                'header'=>$this->getPageSizeDropDownTag(),
                 'template' => '{details}',
                 'buttons' => array(
                     'details' => array(
@@ -49,6 +67,9 @@
             )
         )
     )); ?>
+    <?php
+    echo CHtml::endForm();
+    ?>
     <?php $this->renderPartial("//partial-views/_loading");?>
 </div>
 <div id="order-details-modal" class="modal fade" role="dialog">

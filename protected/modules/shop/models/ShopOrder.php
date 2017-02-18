@@ -51,6 +51,8 @@ class ShopOrder extends CActiveRecord
 		return '{{shop_order}}';
 	}
 
+    private $prefixId = 'KBC-';
+
     public $statusLabels = [
         self::STATUS_PENDING => 'در انتظار بررسی',
         self::STATUS_ACCEPTED => 'تایید سفارش',
@@ -121,7 +123,7 @@ class ShopOrder extends CActiveRecord
 			'update_date' => 'تاریخ تغییر وضعیت',
 			'status' => 'وضعیت',
 			'payment_method' => 'شیوه پرداخت',
-			'shipping_method' => 'شیوه تحویل',
+			'shipping_method' => 'شیوه ارسال',
 			'payment_amount' => 'مبلغ پرداختی',
 			'discount_amount' => 'تخفیف',
 			'price_amount' => 'مبلغ پایه فاکتور',
@@ -150,7 +152,9 @@ class ShopOrder extends CActiveRecord
 
 		$criteria = new CDbCriteria;
 
-		$criteria->compare('id', $this->id, true);
+		$id = $this->id;
+		$id = str_ireplace($this->prefixId,'',$id);
+		$criteria->compare('id', $id, true);
 		$criteria->compare('delivery_address_id', $this->delivery_address_id, true);
 		$criteria->compare('billing_address_id', $this->billing_address_id, true);
 		$criteria->compare('status', $this->status, true);
@@ -232,6 +236,6 @@ class ShopOrder extends CActiveRecord
 	}
 
 	public function getOrderID(){
-		return 'KBC-'.$this->id;
+		return $this->prefixId.$this->id;
 	}
 }

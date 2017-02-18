@@ -16,7 +16,11 @@ $this->breadcrumbs=array(
 	'filter'=>$model,
 	'itemsCssClass'=>'table',
 	'columns'=>array(
-		'id',
+        array(
+            'name' => 'id',
+            'value' => '$data->getOrderId()',
+            'htmlOptions' => array('style' => 'width:80px')
+        ),
 		array(
 			'header' => 'کاربر',
 			'value' => function($data){
@@ -53,6 +57,15 @@ $this->breadcrumbs=array(
 			'filter' => false
 		),
 		array(
+			'header'=>'تغییر وضعیت',
+			'value'=>function($data){
+				$form=CHtml::dropDownList("stauts", $data->status, $data->statusLabels, array("class"=>"change-order-status", "data-id"=>$data->id));
+				$form.=CHtml::button("ثبت", array("class"=>"btn btn-success order-change-status", 'style'=>'margin-right:5px;'));
+				return $form;
+			},
+			'type'=>'raw'
+		),
+/*		array(
 			'header' => 'تغییر وضعیت',
 			'class'=>'CButtonColumn',
 			'template' => '{active} {deactive}',
@@ -96,10 +109,29 @@ $this->breadcrumbs=array(
 					'visible'=>'$data->status',
 				)
 			)
-		),
+        ),*/
 		array(
 			'class'=>'CButtonColumn',
             'header'=>$this->getPageSizeDropDownTag(),
 		),
 	),
-)); ?>
+));
+
+Yii::app()->clientScript->registerScript('changeFinanceStatus', "
+	$('body').on('click', '.order-change-status', function(){
+	    var el = $(this),
+            tr = el.parents('tr');
+		$.ajax({
+			url:'".$this->createUrl('/shop/order/changeStatus')."',
+			type:'POST',
+			dataType:'JSON',
+			data:{id:tr.find('.change-order-status').data('id'), value:tr.find('.change-order-status').val()},
+			success:function(data){
+				if(data.status)
+					$.fn.yiiGridView.update('shop-order-grid');
+				else
+					alert(data.msg);
+			}
+		});
+	});
+");

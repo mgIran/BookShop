@@ -25,10 +25,10 @@
                         <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
                     </td>
                     <td class="text-center hidden-xs">
-                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->fee)));?> عدد
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->fee)));?>تومان
                     </td>
                     <td class="text-center hidden-xs">
-                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->fee*$item->qty)));?> عدد
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->fee*$item->qty)));?>تومان
                     </td>
                 </tr>
             <?php endforeach;?>

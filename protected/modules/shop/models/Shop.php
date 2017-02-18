@@ -148,23 +148,52 @@ class Shop
 		return false;
 	}
 
-	public static function PrintStatusLine($status)
-	{
-		$labels = ShopOrder::model()->statusLabels;
-		$keys = array_keys($labels);
-		if($status > 5)
-			$status = 5;
-		for($i = 1;$i < count($keys);$i++){
-			$class = '';
-			if($status >= $i)
-				$class = ' class="done"';
-			if($status + 1 == $i)
-				$class = ' class="doing"';
-			echo "<li{$class}>
+	public static function PrintStatusLine($status,$adminSide=false)
+    {
+        $labels = ShopOrder::model()->statusLabels;
+        $keys = array_keys($labels);
+        if($status > 5)
+            $status = 5;
+        $start = 1;
+        if($adminSide)
+            $start = 0;
+        for($i = $start;$i < count($keys);$i++){
+            $class = '';
+            $data = '';
+            if($adminSide)
+                $data = " data-status-id='{$i}'";
+            if($status >= $i)
+                $class = ' class="done"';
+            if($status + 1 == $i)
+                $class = ' class="doing"';
+            echo "<li{$class}{$data}>
                     <div>{$labels[$i]}</div>
                 </li>";
-		}
-	}
+        }
+
+        if($adminSide)
+            Yii::app()->clientScript->registerScript('change-status','
+                $("body").on("click", "[data-status-id]",function(){
+                    var $this = $(this);
+                        $id = $this.parents("ul").data("id");
+                        $val = $this.data("status-id");
+                    $.ajax({
+                        url: "'.Yii::app()->createUrl('/shop/order/changeStatus').'",
+                        type: "POST",
+                        data: {id: $id, value: $val},
+                        dataType: "JSON",
+                        beforeSend: function(){
+                        },
+                        success: function(data){
+                            if(data.status)
+                                location.reload();
+                            else
+                                alert(data.msg);
+                        }
+                    });
+                });
+            ');
+    }
 
 	public static function SetSuccessFlash()
 	{
