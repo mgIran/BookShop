@@ -1,6 +1,7 @@
 <?php
 /* @var $this ShopOrderController */
 /* @var $model ShopOrder */
+/* @var $form CActiveForm */
 
 $this->breadcrumbs=array(
 	'مدیریت سفارشات'=>array('admin'),
@@ -16,12 +17,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>نمایش اطلاعات سفارش #<?php echo $model->getOrderID(); ?>
-<!--    <button type="button" onclick="window.print();" class="btn btn-info pull-left">-->
-<!--        <i class="icon-print" ></i>-->
-<!--        چاپ-->
-<!--    </button>-->
-</h1>
+<h1>نمایش اطلاعات سفارش #<?php echo $model->getOrderID(); ?></h1>
 <br>
 <br>
 <div class="order-details">
@@ -146,6 +142,43 @@ $this->menu=array(
     <div class="clearfix"></div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h4>اطلاعات ارسال سفارش</h4>
+        <div class="row">
+            <h3>ثبت کد مرسوله</h3>
+            <div class="form">
+                <?php
+                $model->scenario='export-code';
+                $form = $this->beginWidget('CActiveForm',array(
+                    'id' =>'export-code-form',
+                    'action' => array('exportCode','id' => $model->id),
+                    'enableAjaxValidation' => false,
+                    'enableClientValidation' => true,
+                    'clientOptions' => array(
+                        'validateOnSubmit' => true,
+                        'afterValidate' => 'js: function(form, data, hasError){
+                            if(!hasError)
+                                return true;
+                            return false;
+                        }'
+                )));
+                ?>
+                <div class="form-group" style='width:200px'>
+                    <?php
+                    echo $form->labelEx($model, 'export_code',array('class' => 'control-label'));
+                    echo $form->textField($model, 'export_code',array('maxLength'=>100, 'class' => 'form-control'));
+                    echo $form->error($model, 'export_code');
+                    ?>
+                </div>
+                <div class="buttons">
+                    <?php
+                    echo CHtml::submitButton($model->export_code?'ویرایش کد مرسوله':'ثبت کد مرسوله',array('class' => 'btn btn-success'));
+                    ?>
+                </div>
+                <?php
+                $this->endWidget();
+                ?>
+            </div>
+        </div>
+        <br>
         <?php $this->widget('zii.widgets.CDetailView', array(
             'data'=>$model,
             'htmlOptions' => array('class'=>'detail-view table table-striped','style' => 'margin-top:30px'),

@@ -26,7 +26,7 @@ $this->breadcrumbs=array(
 			'value' => function($data){
 				return $data->user && $data->user->userDetails?$data->user->userDetails->getShowName():'';
 			},
-            'htmlOptions' => array('style' => 'width:80px')
+            'htmlOptions' => array('style' => 'width:200px')
 		),
 		array(
 			'name' => 'ordering_date',
@@ -34,7 +34,7 @@ $this->breadcrumbs=array(
 				return JalaliDate::date('Y/m/d - H:i', $data->ordering_date);
 			},
             'filter' => false,
-            'htmlOptions' => array('style' => 'width:80px')
+            'htmlOptions' => array('style' => 'width:130px')
 		),
 		array(
             'name' => 'update_date',
@@ -42,27 +42,20 @@ $this->breadcrumbs=array(
 				return JalaliDate::date('Y/m/d - H:i', $data->update_date);
 			},
             'filter' => false,
-            'htmlOptions' => array('style' => 'width:80px')
+            'htmlOptions' => array('style' => 'width:130px')
 		),
 		array(
             'name' => 'payment_method',
             'value' => '$data->paymentMethod->title',
             'filter' => CHtml::listData(ShopPaymentMethod::model()->findAll(),'id', 'title'),
+            'htmlOptions' => array('style' => 'width:100px')
 		),
 		array(
             'name' => 'shipping_method',
             'value' => '$data->shippingMethod->title',
             'filter' => CHtml::listData(ShopShippingMethod::model()->findAll(array('order'=>'t.order')),'id', 'title'),
-            'htmlOptions' => array('style' => 'width:80px')
+            'htmlOptions' => array('style' => 'width:100px')
 		),
-//		array(
-//			'name' => 'payment_status',
-//			'value' => '$data->paymentStatusLabel',
-//			'htmlOptionsExperissions' => array(
-//                
-//            ),
-//			'filter' => $model->paymentStatusLabels,
-//		),
 		array(
 			'name' => 'status',
 			'value' => '$data->statusLabel',

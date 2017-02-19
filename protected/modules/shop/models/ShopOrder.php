@@ -85,6 +85,8 @@ class ShopOrder extends CActiveRecord
 			array('payment_status', 'default', 'value' => 0),
 			array('status', 'length', 'max' => 1),
 			array('export_code', 'length', 'max' => 100),
+			array('export_code', 'required', 'on' => 'export-code'),
+			array('export_code', 'numerical', 'integerOnly' => true),
 			array('transaction_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -15,7 +15,7 @@ class ShopOrderController extends Controller
 	{
 		return array(
 			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'details', 'history', 'getInfo'),
-			'backend' => array('admin', 'adminUnpaid', 'index', 'view', 'delete', 'update', 'changeStatus')
+			'backend' => array('admin', 'adminUnpaid', 'index', 'view', 'delete', 'update', 'changeStatus', 'exportCode')
 		);
 	}
 
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess + admin, adminUnpaid, index, view, delete, update, changeStatus, history, getInfo',
+			'checkAccess + admin, adminUnpaid, index, view, delete, update, changeStatus, history, getInfo, exportCode',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -589,5 +589,17 @@ class ShopOrderController extends Controller
             echo CJSON::encode(array(
                 "status" => false,
             ));
+    }
+    
+    public function actionExportCode($id){
+        $model = $this->loadModel($id);
+        if(isset($_POST['ShopOrder'])){
+            $model->export_code = $_POST['ShopOrder']['export_code'];
+            if($model->save())
+                Yii::app()->user->setFlash('success', 'کد مرسوله با موفقیت ثبت شد.');
+            else
+                Yii::app()->user->setFlash('success', 'در ثبت کد مرسوله مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
+        }
+        $this->redirect(array('view','id' => $model->id));
     }
 }
