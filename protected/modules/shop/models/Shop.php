@@ -150,15 +150,19 @@ class Shop
 		return false;
 	}
 
-	public static function PrintStatusLine($status,$adminSide=false)
+	public static function PrintStatusLine($status,$adminSide=false,$modelId=null)
     {
         $labels = ShopOrder::model()->statusLabels;
         $keys = array_keys($labels);
         if($status > 5)
             $status = 5;
         $start = 1;
-        if($adminSide)
+        $data = '';
+        if($adminSide){
             $start = 0;
+            $data = " data-id='{$modelId}'";
+        }
+        echo "<ul class='steps after-accept in-verify nav nav-justified'{$data}>";
         for($i = $start;$i < count($keys);$i++){
             $class = '';
             $data = '';
@@ -172,7 +176,7 @@ class Shop
                     <div>{$labels[$i]}</div>
                 </li>";
         }
-
+        echo '</ul>';
         if($adminSide)
             Yii::app()->clientScript->registerScript('change-status','
                 $("body").on("click", "[data-status-id]",function(){

@@ -82,9 +82,15 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">کد مرسوله</div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">-<?php echo CHtml::encode($model->export_code);?></div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"><strong><?php echo $model->export_code?CHtml::encode($model->export_code):'-';?></strong></div>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>وضعیت سفارش</h4>
+                <?php
+                Shop::PrintStatusLine($model->status);
+                ?>
             </div>
         </div>
     </div>

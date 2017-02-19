@@ -24,11 +24,9 @@ $this->menu=array(
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h4>وضعیت سفارش</h4>
         <span class="description">برای تغییر وضعیت سفارش روی وضعیت موردنظر کلیک کنید</span>
-        <ul class="steps after-accept in-verify nav nav-justified" data-id="<?= $model->id?>">
-            <?php
-            Shop::PrintStatusLine($model->status,true);
-            ?>
-        </ul>
+        <?php
+        Shop::PrintStatusLine($model->status,true,$model->id);
+        ?>
     </div>
     <br>
     <br>

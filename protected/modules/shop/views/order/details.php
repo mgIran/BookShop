@@ -120,11 +120,9 @@ if(Yii::app()->user->hasFlash('message'))
             <?php
             endif;
             ?>
-            <ul class="steps after-accept in-verify">
-                <?php
-                Shop::PrintStatusLine($order->status);
-                ?>
-            </ul>
+            <?php
+            Shop::PrintStatusLine($order->status);
+            ?>
         </div>
     </div>
 </div>
