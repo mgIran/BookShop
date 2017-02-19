@@ -2133,6 +2133,13 @@ tfoot {
     background-size: 12.15px !important;
     margin-top: 0;
 }
+.modal{
+    direction: ltr !important;
+}
+.modal-dialog{
+    direction: rtl !important;
+}
+
 .modal-content{
     box-shadow:none;
     border-radius: 5px;

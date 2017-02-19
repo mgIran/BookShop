@@ -257,7 +257,7 @@ class ShopOrderController extends Controller
 			if($order->payment_amount !== 0){
 				if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
 					DiscountCodes::InsertCodes($order->user); // insert used discount code in db
-					$order->setStatus(ShopOrder::STATUS_STOCK_PROCESS)->setPaid()->save();
+					$order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
 					Shop::SetSuccessFlash();
 				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
 					if($order->user->userDetails->credit < $order->payment_amount){

@@ -1,3 +1,6 @@
+<?php
+/* @var $this Controller*/
+?>
 <div id="login-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -31,7 +34,8 @@
                             )
                         ));
                         echo CHtml::hiddenField('ajax','login-form');
-                        echo CHtml::hiddenField('returnUrl',$this->route);
+                        if($this->route != 'site/index')
+                            echo CHtml::hiddenField('returnUrl',$this->route);
                         ?>
                         <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center"></p></div>
                         <div class="form-group">

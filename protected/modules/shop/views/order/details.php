@@ -53,6 +53,7 @@ if(Yii::app()->user->hasFlash('message'))
                         <tr>
                             <th class="green-text">شماره رسید</th>
                             <th>قیمت کل</th>
+                            <th>شیوه پرداخت</th>
                             <th<?= $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID?' class="red-text"':' class="green-text"' ?>>وضعیت پرداخت</th>
                             <th>وضعیت سفارش</th>
                         </tr>
@@ -61,6 +62,7 @@ if(Yii::app()->user->hasFlash('message'))
                         <tr>
                             <td class="green-text"><?= $order->getOrderID() ?></td>
                             <td><span class="price"><?= Controller::parseNumbers(number_format($order->payment_amount)) ?><small> تومان</small></span></td>
+                            <td><?= $order->paymentMethod->title ?></td>
                             <td<?= $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID?' class="red-text"':' class="green-text"' ?>><?= $order->getPaymentStatusLabel() ?></td>
                             <td><?= $order->getStatusLabel() ?></td>
                         </tr>
