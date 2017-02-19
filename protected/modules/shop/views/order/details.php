@@ -23,7 +23,23 @@ if(Yii::app()->user->hasFlash('message'))
                     <div class="overflow-hidden alert-warning alert">
                         <div class="text-center">شما می توانید مجددا مبلغ سفارش را با یکی از روش های زیر پرداخت نمایید تا سفارش شما تکمیل شود.</div>
                         <div class="buttons center-block text-center">
-                            <input type="button" class="btn-green btn-sm" value="پرداخت اینترنتی"><input type="button" class="btn-blue btn-sm" value="پرداخت در محل"><input type="button" class="btn-red btn-sm" value="کسر از اعتبار">
+                            <?php
+                            foreach(ShopPaymentMethod::model()->findAll(array(
+                                'order' => 't.order',
+                                'condition' => 'status <> :deactive',
+                                'params' => array(':deactive' => ShopPaymentMethod::STATUS_DEACTIVE)
+                            )) as $key => $item):
+                                if($key%3 == 1)
+                                    $class = 'green';
+                                if($key%3 == 2)
+                                    $class = 'blue';
+                                if($key%3 == 0)
+                                    $class = 'red';
+                            ?>
+                                <a href="<?= $this->createUrl('changePayment',array('id' => $order->id, 'method' => $item->name )) ?>" class="btn-<?= $class ?> btn-sm" ><?= $item->title ?></a>
+                            <?php
+                            endforeach;
+                            ?>
                         </div>
                     </div>
                 <?php
@@ -84,7 +100,7 @@ if(Yii::app()->user->hasFlash('message'))
             if($order->transactions):
             ?>
                 <div class="transaction-details table-responsive">
-                    <h5>جزییات پرداخت شما</h5>
+                    <h5>جزییات تراکنش های بانکی شما</h5>
                     <table class="table">
                         <thead>
                             <tr>

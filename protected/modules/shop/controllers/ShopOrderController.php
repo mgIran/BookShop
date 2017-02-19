@@ -14,7 +14,7 @@ class ShopOrderController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'details', 'history', 'getInfo'),
+			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'details', 'history', 'getInfo', 'changePayment'),
 			'backend' => array('admin', 'adminUnpaid', 'index', 'view', 'delete', 'update', 'changeStatus', 'exportCode')
 		);
 	}
@@ -554,6 +554,9 @@ class ShopOrderController extends Controller
 		$this->redirect(array('/shop/order/create'));
 	}
 
+    /**
+     * Show user order histoy.
+     */
 	public function actionHistory()
     {
         Yii::app()->theme = "frontend";
@@ -570,6 +573,12 @@ class ShopOrderController extends Controller
         ));
     }
 
+    /**
+     * Get order info.
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
 	public function actionGetInfo($id)
     {
         $model = $this->loadModel($id);
@@ -590,10 +599,16 @@ class ShopOrderController extends Controller
                 "status" => false,
             ));
     }
-    
+
+    /**
+     * Save Export Code in model.
+     * @param $id
+     * @throws CHttpException
+     */
     public function actionExportCode($id){
         $model = $this->loadModel($id);
         if(isset($_POST['ShopOrder'])){
+            $model->scenario = 'export-code';
             $model->export_code = $_POST['ShopOrder']['export_code'];
             if($model->save())
                 Yii::app()->user->setFlash('success', 'کد مرسوله با موفقیت ثبت شد.');
@@ -601,5 +616,23 @@ class ShopOrderController extends Controller
                 Yii::app()->user->setFlash('success', 'در ثبت کد مرسوله مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
         }
         $this->redirect(array('view','id' => $model->id));
+    }
+
+    public function actionChangePayment($id){
+        $model = $this->loadModel($id);
+        if(isset($_GET['method'])){
+            $payment = ShopPaymentMethod::model()->findByAttributes(array('name' => $_GET['method']));
+            if($payment && $payment->status == ShopPaymentMethod::STATUS_ACTIVE){
+                $model->scenario = 'change-payment';
+                $payment_amount = (double)($model->payment_amount-$model->payment_price);
+                $model->payment_method = $payment->id;
+                $model->payment_price = $payment->price;
+                $model->payment_amount = $payment_amount+$payment->price;
+                if($model->save())
+                    $this->redirect(array('payment', 'id' => $model->id));
+            }
+            Yii::app()->user->setFlash('failed', 'در پرداخت سفارش مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
+            $this->redirect(array('details','id' => $model->id));
+        }
     }
 }

@@ -3133,6 +3133,12 @@ input[type="checkbox"] + label:hover::before {
     font-weight: bold;
     color: #cbd3de;
     line-height: 25px;
+    width: 25%;
+    float: right;
+}
+.steps.nav-justified li{
+    width: 1% !important;
+    float: none !important;
 }
 .steps li.doing::after {
     background: #e74e40;
