@@ -3133,8 +3133,6 @@ input[type="checkbox"] + label:hover::before {
     font-weight: bold;
     color: #cbd3de;
     line-height: 25px;
-    width: 25%;
-    float: right;
 }
 .steps li.doing::after {
     background: #e74e40;
@@ -3602,9 +3600,6 @@ input[type="checkbox"] + label:hover::before {
 }
 .cart .transaction-details{
     margin-bottom: 80px;
-}
-.steps.after-accept li{
-    width: 20%;
 }
 .steps.in-verify{
     background: #fafafa;

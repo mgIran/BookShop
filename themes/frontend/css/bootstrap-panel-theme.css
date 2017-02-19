@@ -2282,13 +2282,6 @@ tfoot {
     color: #fff;
     line-height: 28px;
 }
-.steps li:hover{
-    background-color: #ddd !important;
-    cursor: pointer;
-}
-.steps li:hover::after {
-    content:"\2713";
-}
 .steps li {
     list-style: outside none none;
     margin: 0;
@@ -2300,8 +2293,6 @@ tfoot {
     font-weight: bold;
     color: #cbd3de;
     line-height: 25px;
-    /*width: 25%;*/
-    /*float: right;*/
 }
 .steps li.doing::after {
     background: #e74e40;
