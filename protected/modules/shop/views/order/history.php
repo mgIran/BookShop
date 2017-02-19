@@ -13,12 +13,12 @@
 
         <div class="form-group">
             <div class="input-group">
-                <?php echo CHtml::activeTextField($model, 'id', array('sytle'=> 'direction: ltr;','aria-describedby'=>'basic-addon1','class' => 'form-control ajax-grid-search', 'placeholder' => 'شناسه سفارش را جستجو کنید'));?>
-                <span class="input-group-addon" style="direction: ltr;" id="basic-addon1">KBC-</span>
+                <?php echo CHtml::activeTextField($model, 'id', array('sytle'=> 'border-left-color:#aaa !important;direction: ltr;','aria-describedby'=>'basic-addon1','class' => 'form-control ajax-grid-search', 'placeholder' => 'شماره رسید را جستجو کنید'));?>
+                <span class="input-group-addon" style="direction: ltr;border-color:#aaa" id="basic-addon1">KBC-</span>
             </div>
         </div>
         <div class="form-group">
-            <?php echo CHtml::activeTextField($model, 'export_code', array('sytle'=> 'direction: ltr;','aria-describedby'=>'basic-addon1','class' => 'form-control ajax-grid-search', 'placeholder' => 'کد مرسوله سفارش را جستجو کنید'));?>
+            <?php echo CHtml::activeTextField($model, 'export_code', array('sytle'=> 'direction: ltr;','aria-describedby'=>'basic-addon1','class' => 'form-control ajax-grid-search', 'placeholder' => 'کد مرسوله را جستجو کنید'));?>
         </div>
     </div>
     <?php $this->widget('zii.widgets.grid.CGridView', array(
