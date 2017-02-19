@@ -55,11 +55,14 @@ $this->breadcrumbs=array(
             'filter' => CHtml::listData(ShopShippingMethod::model()->findAll(array('order'=>'t.order')),'id', 'title'),
             'htmlOptions' => array('style' => 'width:80px')
 		),
-		array(
-			'name' => 'payment_status',
-			'value' => '$data->paymentStatusLabel',
-			'filter' => $model->paymentStatusLabels,
-		),
+//		array(
+//			'name' => 'payment_status',
+//			'value' => '$data->paymentStatusLabel',
+//			'htmlOptionsExperissions' => array(
+//                
+//            ),
+//			'filter' => $model->paymentStatusLabels,
+//		),
 		array(
 			'name' => 'status',
 			'value' => '$data->statusLabel',

@@ -15,7 +15,7 @@ class ShopOrderController extends Controller
 	{
 		return array(
 			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'details', 'history', 'getInfo'),
-			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus')
+			'backend' => array('admin', 'adminUnpaid', 'index', 'view', 'delete', 'update', 'changeStatus')
 		);
 	}
 
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess + admin, index, view, delete, update, changeStatus, history, getInfo',
+			'checkAccess + admin, adminUnpaid, index, view, delete, update, changeStatus, history, getInfo',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -414,6 +414,24 @@ class ShopOrderController extends Controller
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['ShopOrder']))
 			$model->attributes = $_GET['ShopOrder'];
+        $model->payment_status = ShopOrder::PAYMENT_STATUS_PAID;
+
+		$this->render('admin', array(
+			'model' => $model,
+		));
+	}
+
+    /**
+	 * Manages all models.
+	 */
+	public function actionAdminUnpaid()
+	{
+		$this->layout = '//layouts/column1';
+		$model = new ShopOrder('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['ShopOrder']))
+			$model->attributes = $_GET['ShopOrder'];
+        $model->payment_status = ShopOrder::PAYMENT_STATUS_UNPAID;
 
 		$this->render('admin', array(
 			'model' => $model,
