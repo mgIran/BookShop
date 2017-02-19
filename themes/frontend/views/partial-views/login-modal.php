@@ -28,7 +28,7 @@
                                         var form = $("#login-form");
                                         var loading = $(".modal .loading-container");
                                         var url = \''.Yii::app()->createUrl('/login').'\';
-                                        submitAjaxForm(form ,url ,loading ,"if(html.status){ $(\'#UserLoginForm_authenticate_field_em_\').text(html.msg); if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload();}else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                        submitAjaxForm(form ,url ,loading ,"if(html.status){ $(\'#UserLoginForm_authenticate_field_em_\').text(html.msg); if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload();}else{ if(typeof html === \'object\') $(\'#UserLoginForm_authenticate_field_em_\').html(html.errors); else console.log(html); /*$(\'#UserLoginForm_authenticate_field_em_\').text( html );*/ } ");
                                     }
                                 }'
                             )

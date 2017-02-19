@@ -97,7 +97,7 @@ return array(
 			'class' => 'ext.yexcel.Yexcel'
 		),
 		'session' => array(
-			'class' => 'CDbHttpSession',
+			'class' => 'YmDbHttpSession',
 			'autoStart' => false,
 			'connectionID' => 'db',
 			'sessionTableName' => 'ym_sessions',
@@ -115,7 +115,7 @@ return array(
 			'allowAutoLogin'=>true,
 			'class' => 'WebUser',
 			'loginUrl'=>array('/login'),
-			'allowActiveSessions'=>2,
+			'allowActiveSessions'=>1,
 		),
 		'authManager'=>array(
 			'class'=>'CDbAuthManager',

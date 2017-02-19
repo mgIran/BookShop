@@ -91,16 +91,15 @@ class WebUser extends CWebUser
 
     protected function afterLogin($fromCookie, $id = false, $type = false)
     {
-        $device = new DetectDevice();
-//        var_dump(1);exit;
-        Yii::app()->db->createCommand()
-            ->update('ym_sessions', array(
-                'user_id' => $id?$id:Yii::app()->user->getId(),
-                'user_type' => $type?$type:Yii::app()->user->type,
-                'device_platform' => 'web',
-                'device_ip' => $this->getRealIp(),
-                'device_type' => $device->getDeviceType(),
-            ), 'id = :id', array(':id' => session_id()));
+//        $device = new DetectDevice();
+//        Yii::app()->db->createCommand()
+//            ->update('ym_sessions', array(
+//                'user_id' => $id?$id:Yii::app()->user->getId(),
+//                'user_type' => $type?$type:Yii::app()->user->type,
+//                'device_platform' => 'web',
+//                'device_ip' => $this->getRealIp(),
+//                'device_type' => $device->getDeviceType(),
+//            ), 'id = :id', array(':id' => session_id()));
     }
 
     protected function restoreFromCookie()
