@@ -162,7 +162,7 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('id', $id, true);
 		$criteria->compare('delivery_address_id', $this->delivery_address_id, true);
 		$criteria->compare('billing_address_id', $this->billing_address_id, true);
-		$criteria->compare('status', $this->status, true);
+		$criteria->compare('status', $this->status);
 		$criteria->compare('payment_method', $this->payment_method);
 		$criteria->compare('shipping_method', $this->shipping_method);
 		$criteria->compare('payment_amount', $this->payment_amount);

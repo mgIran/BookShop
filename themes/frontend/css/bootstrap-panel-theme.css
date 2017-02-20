@@ -1734,15 +1734,19 @@ ul.tagit li{
     width: 120px;
 }
 
-.btn-red {
+.btn-green,
+.btn-blue,
+.btn-red{
     width: 100%;
     display: block;
     padding: 13px 15px;
-    background: #c8385e;
     color: #fff;
     font-size: 16px;
     text-align: center;
     border: none;
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    border-radius:0;
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
     -webkit-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
@@ -1750,13 +1754,37 @@ ul.tagit li{
     -o-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
 }
-
+.btn-sm{
+    padding:6px 15px !important;
+}
+.btn-red{
+    background: #c8385e;
+}
+.btn-green{
+    background: #82b440;
+}
+.btn-blue{
+    background: #05c3f9;
+}
 .btn-red:hover,
 .btn-red:focus,
 .btn-red:active {
-    background: #9f3752;
+    background: #9f3752 !important;
     color: #fff;
 }
+.btn-green:hover,
+.btn-green:focus,
+.btn-green:active {
+    background: #658b32 !important;
+    color: #fff;
+}
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue:active {
+    background: #128bae !important;
+    color: #fff;
+}
+
 .or-text{
     display: block;
     overflow: hidden;

@@ -86,12 +86,84 @@
                     </div>
                 </div>
             </div>
+
+
+            <?php
+            if($model->transactions):
+                ?>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 transaction-details table-responsive">
+                    <h4>جزییات تراکنش های بانکی شما</h4>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نوع پرداخت</th>
+                            <th>درگاه پرداخت</th>
+                            <th>کد رهگیری</th>
+                            <th>تاریخ</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach($model->transactions as $key => $transaction):
+                            ?>
+
+                            <tr>
+                                <td><?= $key+1 ?></td>
+                                <td><?= CHtml::encode($model->paymentMethod->title) ?></td>
+                                <td><?= CHtml::encode($transaction->gateway_name) ?></td>
+                                <td><?= $transaction->token?CHtml::encode($transaction->token):"-" ?></td>
+                                <td><?= CHtml::encode(JalaliDate::date('d F Y',$transaction->date)) ?></td>
+                                <td><span class="price"><?= Controller::parseNumbers(number_format($transaction->amount)) ?><small> تومان</small></span></td>
+                                <td<?= $transaction->status == UserTransactions::TRANSACTION_STATUS_UNPAID?' class="red-text"':' class="green-text"' ?>><?= $transaction->statusLabels[$transaction->status] ?></td>
+                            </tr>
+                            <?php
+                        endforeach;
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php
+            endif;
+            ?>
+
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>وضعیت سفارش</h4>
                 <?php
                 Shop::PrintStatusLine($model->status);
                 ?>
             </div>
+            <?php
+            if($model->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID):
+                ?>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <ul class="nav nav-justified">
+                    <?php
+                    foreach(ShopPaymentMethod::model()->findAll(array(
+                        'order' => 't.order',
+                        'condition' => 'status <> :deactive',
+                        'params' => array(':deactive' => ShopPaymentMethod::STATUS_DEACTIVE)
+                    )) as $key => $item):
+                        if($key%3 == 1)
+                            $class = 'green';
+                        if($key%3 == 2)
+                            $class = 'blue';
+                        if($key%3 == 0)
+                            $class = 'red';
+                        ?>
+                        <li>
+                            <a href="<?= $this->createUrl('changePayment',array('id' => $model->id, 'method' => $item->name )) ?>" class="btn-<?= $class ?> btn btn-sm" ><?= $item->title ?></a>
+                        </li>
+                        <?php
+                    endforeach;
+                    ?>
+                    </ul>
+                </div>
+                <?php
+            endif;
+            ?>
         </div>
     </div>
 </div>

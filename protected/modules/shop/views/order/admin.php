@@ -6,11 +6,42 @@ $this->breadcrumbs=array(
 	'مدیریت',
 );
 
+Yii::app()->clientScript->registerScript('changeNav', "
+    $(\"body\").on(\"submit\", \"#filter-form\", function(e){
+        e.preventDefault();
+        var filters = $(this).serialize();
+        $.fn.yiiGridView.update(\"shop-order-grid\",{
+            data: filters
+        });
+    });
+
+	$('body').on('click', '.status-change', function(){
+	    var el = $(this);
+	    $('.nav li.active').removeClass('active');
+	    el.parent().addClass('active');
+        $('#ShopOrder_status').val(el.data('status'));
+        $(\"#filter-form\").submit();
+	});
+");
+
 ?>
 
 <h1>مدیریت سفارشات</h1>
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<ul class="nav nav-tabs nav-justified">
+	<?php
+	foreach(ShopOrder::model()->statusLabels as $key => $status):
+	?>
+	<li>
+		<a href="#" class="status-change" style="outline: 0 none !important;" data-status="<?= $key ?>"><?= $status ?></a>
+	</li>
+	<?php
+	endforeach;
+	?>
+</ul>
+<?php
+echo CHtml::beginForm('','GET',array('id' => 'filter-form'));
+echo CHtml::hiddenField('ShopOrder[status]', (isset($_GET['ShopOrder']['status'])?$_GET['ShopOrder']['status']:1));
+$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'shop-order-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
@@ -78,7 +109,9 @@ $this->breadcrumbs=array(
 	),
 ));
 
-Yii::app()->clientScript->registerScript('changeFinanceStatus', "
+echo CHtml::endForm();
+
+Yii::app()->clientScript->registerScript('changeOrderStatus', "
 	$('body').on('click', '.order-change-status', function(){
 	    var el = $(this),
             tr = el.parents('tr');
