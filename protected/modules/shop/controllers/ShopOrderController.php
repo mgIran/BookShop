@@ -261,7 +261,7 @@ class ShopOrderController extends Controller
 					Shop::SetSuccessFlash();
 				}else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
 					if($order->user->userDetails->credit < $order->payment_amount){
-						Yii::app()->user->setFlash('credit-failed', 'اعتبار فعلی شما کافی نیست!');
+						Yii::app()->user->setFlash('failed', 'اعتبار فعلی شما برای پرداخت مبلغ فاکتور کافی نیست! لطفا برای افزایش اعتبار از پنل کاربری خود اقدام کنید.');
 						$this->redirect(array('details','id'=>$order->id));
 					}
 					$userDetails = UserDetails::model()->findByAttributes(array('user_id' => $order->user_id));

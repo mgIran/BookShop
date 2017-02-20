@@ -56,7 +56,7 @@ class ShopOrder extends CActiveRecord
 
     public $statusLabels = [
         self::STATUS_PENDING => 'در انتظار بررسی',
-        self::STATUS_ACCEPTED => 'تایید سفارش',
+        self::STATUS_ACCEPTED => 'در انتظار پرداخت',
         self::STATUS_PAID => 'پرداخت شده',
         self::STATUS_STOCK_PROCESS => 'پردازش انبار',
         self::STATUS_SENDING => 'در حال ارسال',

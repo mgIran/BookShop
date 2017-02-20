@@ -36,7 +36,7 @@ if(Yii::app()->user->hasFlash('message'))
                                 if($key%3 == 0)
                                     $class = 'red';
                             ?>
-                                <a href="<?= $this->createUrl('changePayment',array('id' => $order->id, 'method' => $item->name )) ?>" class="btn-<?= $class ?> btn-sm" ><?= $item->title ?></a>
+                                <a href="<?= $this->createUrl('changePayment',array('id' => $order->id, 'method' => $item->name )) ?>" class="btn-<?= $class ?> btn" ><?= $item->title ?></a>
                             <?php
                             endforeach;
                             ?>

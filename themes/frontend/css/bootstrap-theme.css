@@ -1790,9 +1790,12 @@ input[type="checkbox"] + label:hover::before {
     padding: 13px 15px;
     background: #05c3f9;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     border: none;
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    border-radius:0;
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
     -webkit-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
@@ -1835,9 +1838,12 @@ input[type="checkbox"] + label:hover::before {
     padding: 13px 15px;
     background: #c8385e;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     border: none;
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    border-radius:0;
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
     -webkit-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
@@ -3067,9 +3073,12 @@ input[type="checkbox"] + label:hover::before {
     padding: 13px 15px;
     background: #82b440;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     border: none;
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    border-radius:0;
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
     -webkit-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
@@ -3620,7 +3629,7 @@ input[type="checkbox"] + label:hover::before {
 .cart .payment-message .btn-red,
 .cart .payment-message .btn-green{
     min-width:150px;
-    margin-right: 10px;
+    margin-right: 10px !important;
 }
 .cart .payment-message .btn-green{
     margin-right: 0;

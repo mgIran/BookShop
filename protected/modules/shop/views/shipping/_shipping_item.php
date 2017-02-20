@@ -12,7 +12,6 @@
     <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 info-container">
         <div class="pull-right">
             <h5 class="name"><?= CHtml::encode($data->title) ?>
-
                 <?php if($data->limit_price){
                     $limit_price = Controller::parseNumbers(number_format($data->limit_price));
                     echo "<small>به ازای خرید بالاتر از {$limit_price} تومان هزینه این     ارسال رایگان است</small>";
@@ -22,7 +21,15 @@
         <div class="pull-left">
             <span>هزینه ارسال</span>
             <div class="price">
-                <?= Controller::parseNumbers(number_format($data->price)) ?><small> تومان</small>
+                <?php if($data->limit_price): ?>
+                    <span class="text-danger text-line-through">
+                    <?= Controller::parseNumbers(number_format($data->price)) ?>
+                    <small> تومان</small>
+                    </span>&nbsp;<span><strong>رایگان</strong></span>
+                <?php else: ?>
+                    <?= Controller::parseNumbers(number_format($data->price)) ?>
+                    <small> تومان</small>
+                <?php endif; ?>
             </div>
         </div>
     </div>
