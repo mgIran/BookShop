@@ -25,15 +25,15 @@
     $cs->registerCssFile($baseUrl.'/css/owl.carousel.css');
     $cs->registerCssFile($baseUrl.'/css/owl.theme.default.min.css');
     $cs->registerCssFile($baseUrl.'/css/animate.min.css');
-    $cs->registerCssFile($baseUrl.'/css/bootstrap-theme.css?3.7');
-    $cs->registerCssFile($baseUrl.'/css/responsive-theme.css?3.7');
+    $cs->registerCssFile($baseUrl.'/css/bootstrap-theme.css?3.8');
+    $cs->registerCssFile($baseUrl.'/css/responsive-theme.css?3.8');
 
     $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/owl.carousel.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/parallax.min.js', CClientScript::POS_END);
     $cs->registerScriptFile($baseUrl.'/js/jquery.nicescroll.min.js', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/shop.script.js?3.7', CClientScript::POS_END);
-    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3.7', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/shop.script.js?3.8', CClientScript::POS_END);
+    $cs->registerScriptFile($baseUrl.'/js/jquery.script.js?3.8', CClientScript::POS_END);
     $cs->registerScript('scroll-mode', '
     if($(window).scrollTop() > 85)
             $(".navbar.navbar-default").addClass(\'scroll-mode\');
