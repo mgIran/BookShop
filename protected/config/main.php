@@ -115,7 +115,7 @@ return array(
 			'allowAutoLogin'=>true,
 			'class' => 'WebUser',
 			'loginUrl'=>array('/login'),
-			'allowActiveSessions'=>1,
+			'allowActiveSessions'=>2,
 		),
 		'authManager'=>array(
 			'class'=>'CDbAuthManager',

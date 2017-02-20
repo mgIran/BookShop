@@ -257,6 +257,11 @@ function submitAjaxForm(form ,url ,loading ,callback) {
                 });
             }else
                 eval(callback);
+        },
+        error: function (data) {
+            if(loading)
+                loading.hide();
+            alert(data.responseText);
         }
     });
 }
