@@ -156,12 +156,11 @@ class Shop
         $keys = array_keys($labels);
         if($status > 5)
             $status = 5;
-        $start = 1;
+		$start = 0;
         $data = '';
-        if($adminSide){
-            $start = 0;
+        if($adminSide)
             $data = " data-id='{$modelId}'";
-        }
+
         echo "<ul class='steps after-accept in-verify nav nav-justified'{$data}>";
         for($i = $start;$i < count($keys);$i++){
             $class = '';
