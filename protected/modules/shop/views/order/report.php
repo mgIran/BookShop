@@ -27,7 +27,7 @@ Yii::app()->clientScript->registerScript("send-form", '
 ');
 ?>
 
-<h1>گزارش فروش نشخه های چاپی کتاب ها</h1>
+<h1 xmlns="http://www.w3.org/1999/html">گزارش فروش نشخه های چاپی کتاب ها</h1>
 
 <?php
 echo CHtml::beginForm('','GET',array('class' => 'form-inline', 'id' => 'filter-form'));
@@ -55,6 +55,17 @@ echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET[
             'data-width' => '100%',
             'prompt' => 'همه پرداخت ها'
         ));?>
+    </div>
+    <div class="row">
+        <div class="form-group"><label style="line-height: 30px;margin-bottom: 0">وضعیت پرداخت:</label></div>
+        <?php
+        echo CHtml::radioButtonList('ShopOrder[payment_status]',$model->payment_status?$model->payment_status:1, $model->paymentStatusLabels,array(
+                'class' => 'form-control',
+                'style' => 'width:auto !important; margin-left: 5px;',
+                'template' => '<div class="form-group">{input} {label}</div>',
+            'separator' => ''
+        ));
+        ?>
     </div>
     <div class="row">
         <div class="form-group"><label style="line-height: 30px;margin-bottom: 0">نمایش براساس:</label></div>
@@ -236,15 +247,27 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'payment_method',
-            'value' => '$data->paymentMethod->title',
+            'value' => function($data){
+                $p = '';
+                if($data->payment_price)
+                    $p = '<br><small>('.Controller::parseNumbers(number_format($data->payment_price)).' تومان)</small>';
+                return $data->paymentMethod->title.$p;
+            },
+            'type' => 'raw',
             'filter' => CHtml::listData(ShopPaymentMethod::model()->findAll(),'id', 'title'),
             'footer'=> Controller::parseNumbers(number_format($model->getTotalPaymentPrice())).' تومان',
         ),
         array(
             'name' => 'shipping_method',
-            'value' => '$data->shippingMethod->title',
+            'value' => function($data){
+                $p = '<br><small>(رایگان)</small>';
+                if($data->shipping_price)
+                    $p = '<br><small>('.Controller::parseNumbers(number_format($data->shipping_price)).' تومان)</small>';
+                return $data->shippingMethod->title.$p;
+            },
             'filter' => CHtml::listData(ShopShippingMethod::model()->findAll(array('order'=>'t.order')),'id', 'title'),
             'footer'=> Controller::parseNumbers(number_format($model->getTotalShippingPrice())).' تومان',
+            'type' => 'raw'
         ),
         array(
             'header' => 'مبلغ پایه',
