@@ -15,7 +15,7 @@ class ShopOrderController extends Controller
 	{
 		return array(
 			'frontend' => array('create', 'addDiscount', 'removeDiscount', 'back', 'confirm', 'payment', 'verify', 'details', 'history', 'getInfo', 'changePayment'),
-			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus', 'exportCode')
+			'backend' => array('admin', 'index', 'view', 'delete', 'update', 'changeStatus', 'exportCode', 'report')
 		);
 	}
 
@@ -25,7 +25,7 @@ class ShopOrderController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess + admin, index, view, delete, update, changeStatus, history, getInfo, exportCode',
+			'checkAccess + admin, index, view, delete, update, changeStatus, history, getInfo, exportCode, report',
 			'postOnly + delete',
 			'ajaxOnly + changeStatus',
 		);
@@ -616,5 +616,21 @@ class ShopOrderController extends Controller
             Yii::app()->user->setFlash('failed', 'در پرداخت سفارش مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
             $this->redirect(array('details','id' => $model->id));
         }
+    }
+
+
+
+    public function actionReport(){
+        Yii::app()->theme = 'abound';
+        $this->layout = '//layouts/column1';
+
+        $model = new ShopOrder('search');
+        $model->unsetAttributes();
+        if(isset($_GET['ShopOrder']))
+            $model->attributes = $_GET['ShopOrder'];
+//        $model->payment_status = ShopOrder::PAYMENT_STATUS_PAID;
+        $this->render('report', array(
+            'model' => $model,
+        ));
     }
 }
