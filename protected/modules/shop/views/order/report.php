@@ -24,11 +24,18 @@ Yii::app()->clientScript->registerScript("send-form", '
         $($target).addClass("in");
         report_type = $(this).data("report");
     });
+    
+    $(\'body\').on(\'click\', \'.status-change\', function(){
+	    var el = $(this);
+	    $(\'.nav li.active\').removeClass(\'active\');
+	    el.parent().addClass(\'active\');
+        $(\'#ShopOrder_status\').val(el.data(\'status\'));
+        $("#filter-form").submit();
+	});
 ');
 ?>
 
-<h1 xmlns="http://www.w3.org/1999/html">گزارش فروش نشخه های چاپی کتاب ها</h1>
-
+<h1>گزارش فروش نشخه های چاپی کتاب ها</h1>
 <?php
 echo CHtml::beginForm('','GET',array('class' => 'form-inline', 'id' => 'filter-form'));
 echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET['pageSize'], $this->pageSizes)?$_GET['pageSize']:20));
@@ -57,9 +64,20 @@ echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET[
         ));?>
     </div>
     <div class="row">
+        <div class="form-group"><label style="line-height: 30px;margin-bottom: 0">وضعیت سفارش:</label></div>
+        <?php
+        echo CHtml::radioButtonList('ShopOrder[status]',$model->status?$model->status:0, $model->statusLabels,array(
+            'class' => 'form-control',
+            'style' => 'width:auto !important; margin-left: 5px;',
+            'template' => '<div class="form-group">{input} {label}</div>',
+            'separator' => '',
+        ));
+        ?>
+    </div>
+    <div class="row">
         <div class="form-group"><label style="line-height: 30px;margin-bottom: 0">وضعیت پرداخت:</label></div>
         <?php
-        echo CHtml::radioButtonList('ShopOrder[payment_status]',$model->payment_status?$model->payment_status:1, $model->paymentStatusLabels,array(
+        echo CHtml::radioButtonList('ShopOrder[payment_status]',$model->payment_status?$model->payment_status:0, $model->paymentStatusLabels,array(
                 'class' => 'form-control',
                 'style' => 'width:auto !important; margin-left: 5px;',
                 'template' => '<div class="form-group">{input} {label}</div>',
@@ -223,7 +241,19 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'id',
             'value' => '$data->getOrderId()',
-            'htmlOptions' => array('style' => 'width:80px')
+            'htmlOptions' => array('style' => 'width:60px')
+        ),
+        array(
+            'header' => 'کتاب ها',
+            'value' => function($data){
+                $html = '';
+                foreach($data->items as $item){
+                    $html.=CHtml::tag('div',array('class' => 'nested-row text-nowrap'),$item->model->title.'<small>('.Controller::parseNumbers(number_format($item->qty)).'عدد)</small>');
+                    $html.=CHtml::closeTag('div');
+                }
+                return $html;
+            },
+            'type' => 'raw'
         ),
         array(
             'header' => 'کاربر',
@@ -238,12 +268,13 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 return JalaliDate::date('Y/m/d - H:i', $data->ordering_date);
             },
             'filter' => false,
-            'htmlOptions' => array('style' => 'width:130px')
+            'htmlOptions' => array('style' => 'width:80px')
         ),
         array(
             'name' => 'status',
             'value' => '$data->statusLabel',
-            'filter' => false
+            'filter' => false,
+            'htmlOptions' => array('style' => 'width:80px')
         ),
         array(
             'name' => 'payment_method',
@@ -254,6 +285,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 return $data->paymentMethod->title.$p;
             },
             'type' => 'raw',
+            'htmlOptions' => array('style' => 'width:80px'),
             'filter' => CHtml::listData(ShopPaymentMethod::model()->findAll(),'id', 'title'),
             'footer'=> Controller::parseNumbers(number_format($model->getTotalPaymentPrice())).' تومان',
         ),
@@ -271,20 +303,26 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'header' => 'مبلغ پایه',
-            'value' =>function($data){
-                return Controller::parseNumbers(number_format($data->price_amount)) . ' تومان';
+            'value' => function($data){
+                $html = '';
+                foreach($data->items as $item){
+                    $html.=CHtml::tag('div',array('class' => 'nested-row'),Controller::parseNumbers(number_format($item->base_price*$item->qty)).' تومان');
+                    $html.=CHtml::closeTag('div');
+                }
+                return $html;
             },
+            'type' => 'raw',
             'footer'=> Controller::parseNumbers(number_format($model->getTotalPrice())).' تومان',
         ),
         array(
             'header' => 'تخفیف',
-            'value' =>function($data){
-                return Controller::parseNumbers(number_format($data->discount_amount)) . ' تومان';
+            'value' => function($data){
+                return Controller::parseNumbers(number_format($data->discount_amount)).' تومان';
             },
             'footer'=> Controller::parseNumbers(number_format($model->getTotalDiscount())).' تومان',
         ),
         array(
-            'header' => 'مبلغ پرداختی',
+            'header' => 'جمع پرداختی',
             'value' =>function($data){
                 return Controller::parseNumbers(number_format($data->payment_amount)) . ' تومان';
             },
@@ -302,4 +340,14 @@ $this->widget('zii.widgets.grid.CGridView', array(
 ?>
 <?php
 echo CHtml::endForm();
-?>
+Yii::app()->clientScript->registerCss('nested-row','
+    .nested-row{
+        display:block;
+        padding:2px 0;
+        text-align:center;
+        border-bottom: 1px solid #aaa;
+    }
+    td > .nested-row:last-of-type{
+        border:none
+    }
+');

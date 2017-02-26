@@ -215,8 +215,9 @@ class ShopOrderController extends Controller
 				$orderItem->order_id = $order->id;
 				$orderItem->model_name = get_class($model);
 				$orderItem->model_id = $id;
-				$orderItem->fee = $model->off_printed_price;
+				$orderItem->base_price = $model->printed_price;
 				$orderItem->qty = $qty;
+                $orderItem->payment = $model->off_printed_price;
 				$flag = @$orderItem->save();
 				if(!$flag)
 					break;

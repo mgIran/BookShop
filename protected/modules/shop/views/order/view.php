@@ -53,10 +53,10 @@ $this->menu=array(
                         <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
                     </td>
                     <td class="text-center hidden-xs">
-                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->fee)));?> تومان
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?> تومان
                     </td>
                     <td class="text-center hidden-xs">
-                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->fee*$item->qty)));?>تومان
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?>تومان
                     </td>
                 </tr>
             <?php endforeach;?>
