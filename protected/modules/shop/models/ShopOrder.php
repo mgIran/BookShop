@@ -195,14 +195,14 @@ class ShopOrder extends CActiveRecord
 		));
 	}
 
-	public function report(){
+	public function report($pagination = true){
         $criteria = new CDbCriteria;
 
         $this->reportConditions($criteria);
         $criteria->order='t.id DESC';
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
-            'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
+            'pagination' => $pagination?array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20):false
         ));
     }
 
@@ -227,10 +227,6 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('payment_status', $this->payment_status);
 		$criteria->compare('export_code', $this->export_code, true);
 		$criteria->compare('user_id', $this->user_id);
-//		if($this->publisher_id){
-//			$criteria->compare('book.publisher_id', $this->publisher_id, true);
-//			$criteria->with = array('book');
-//		}
 		if($this->report_type){
 			switch($this->report_type){
 				case 'yearly':

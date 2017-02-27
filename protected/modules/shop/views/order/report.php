@@ -6,11 +6,13 @@ Yii::app()->clientScript->registerScript("send-form", '
     var report_type;
 
     $("body").on("submit", "#filter-form", function(e){
-        e.preventDefault();
-        var $filters = $(this).serialize();
-        $.fn.yiiGridView.update("report-shop-list",{
-            data: $filters
-        });
+        if(!$("#print").val()){
+            e.preventDefault();
+            var $filters = $(this).serialize();
+            $.fn.yiiGridView.update("report-shop-list",{
+                data: $filters
+            });
+        }
     });
     
     $("body").on("change", "#page-size", function(){
@@ -32,13 +34,19 @@ Yii::app()->clientScript->registerScript("send-form", '
         $(\'#ShopOrder_status\').val(el.data(\'status\'));
         $("#filter-form").submit();
 	});
+	
+	$(\'body\').on(\'click\', \'.print\', function(){
+	    $("#print").val(true);
+	    $("#filter-form").submit();
+	});
 ');
 ?>
 
-<h1>گزارش فروش نشخه های چاپی کتاب ها</h1>
+<h1>گزارش فروش نسخه های چاپی کتاب ها</h1>
 <?php
 echo CHtml::beginForm('','GET',array('class' => 'form-inline', 'id' => 'filter-form'));
 echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET['pageSize'], $this->pageSizes)?$_GET['pageSize']:20));
+echo CHtml::hiddenField('print',false);
 ?>
 <div class="filters well">
     <div class="form-group">
@@ -66,7 +74,7 @@ echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET[
     <div class="row">
         <div class="form-group"><label style="line-height: 30px;margin-bottom: 0">وضعیت سفارش:</label></div>
         <?php
-        echo CHtml::radioButtonList('ShopOrder[status]',$model->status?$model->status:0, $model->statusLabels,array(
+        echo CHtml::radioButtonList('ShopOrder[status]',$model->status?$model->status:'', CMap::mergeArray(array(''=>'همه'),$model->statusLabels),array(
             'class' => 'form-control',
             'style' => 'width:auto !important; margin-left: 5px;',
             'template' => '<div class="form-group">{input} {label}</div>',
@@ -77,7 +85,7 @@ echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET[
     <div class="row">
         <div class="form-group"><label style="line-height: 30px;margin-bottom: 0">وضعیت پرداخت:</label></div>
         <?php
-        echo CHtml::radioButtonList('ShopOrder[payment_status]',$model->payment_status?$model->payment_status:0, $model->paymentStatusLabels,array(
+        echo CHtml::radioButtonList('ShopOrder[payment_status]',$model->payment_status?$model->payment_status:'', CMap::mergeArray(array(''=>'همه'),$model->paymentStatusLabels),array(
                 'class' => 'form-control',
                 'style' => 'width:auto !important; margin-left: 5px;',
                 'template' => '<div class="form-group">{input} {label}</div>',
@@ -206,6 +214,10 @@ echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET[
     </div>
     <div class="buttons">
         <button type="submit" class="btn btn-success">نمایش</button>
+        <button type="button" class="btn btn-info print">
+            <i class="icon-print"></i>
+            چاپ نتایج
+        </button>
     </div>
 </div>
 <div style="width: 100%">
