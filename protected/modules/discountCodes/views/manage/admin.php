@@ -47,6 +47,13 @@ $this->menu=array(
 			}
 		),
 		array(
+			'header' => 'مجوز استفاده',
+            'filter'=>false,
+			'value' => function($data){
+				return $data->getAllow();
+			}
+		),
+		array(
 			'header' => 'میزان تخفیف',
             'filter'=>false,
 			'value' => function($data){

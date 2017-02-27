@@ -112,8 +112,29 @@ class Shop
         if($discount_codes = Users::model()->getDiscountCodes()){
             Yii::app()->getModule('discountCodes');
             $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discount_codes]);
-            $discountCodeAmount = (double)$discountObj->getAmount($payment_total);
-            DiscountCodes::calculateDiscountCodes($payment_total);
+            $flag = true;
+            if($discountObj === NULL || !$discountObj->shop_allow ||
+                ($discountObj->limit_times && $discountObj->usedCount() >= $discountObj->limit_times) ||
+                ($discountObj->user_id && Yii::app()->user->type == 'user' && $discountObj->user_id != Yii::app()->user->getId())
+            ){
+                $flag = false;
+            }
+            $used = $discountObj->codeUsed(array(
+                    'condition' => 'user_id = :user_id',
+                    'params' => array(':user_id' => Yii::app()->user->getId()),
+                )
+            );
+            /* @var $used DiscountUsed */
+            if($used){
+                $flag = false;
+            }
+            if($flag)
+                $discountCodeAmount = (double)$discountObj->getAmount($payment_total);
+            else{
+                $discount_codes = null;
+                Yii::app()->user->setState('discount-codes', null);
+            }
+            DiscountCodes::calculateDiscountCodes($payment_total, 'shop');
         }
 
         if($shipping_method = Shop::getShippingMethod()){

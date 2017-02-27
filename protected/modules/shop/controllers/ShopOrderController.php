@@ -118,6 +118,10 @@ class ShopOrderController extends Controller
             Yii::app()->end();
         }
         if(Yii::app()->user->getState('basket-position') == 3){
+            if(!$shipping_method){
+                Yii::app()->user->setState('basket-position', 2);
+                $this->refresh();
+            }
             if(isset($_POST['form']) && $_POST['form'] == 'payment-form'){
                 if(!$payment_method)
                     Yii::app()->user->setFlash('warning', 'لطفا شیوه پرداخت را انتخاب کنید.');
@@ -139,6 +143,21 @@ class ShopOrderController extends Controller
                 $delivery_address = ShopAddresses::model()->findByPk($delivery_address);
             if(is_numeric($payment_method))
                 $payment_method = ShopPaymentMethod::model()->findByPk($payment_method);
+
+            if(!$customer){
+                Yii::app()->user->setState('basket-position', 1);
+                $this->refresh();
+            }
+
+            if(!$shipping_method){
+                Yii::app()->user->setState('basket-position', 2);
+                $this->refresh();
+            }
+
+            if(!$payment_method){
+                Yii::app()->user->setState('basket-position', 3);
+                $this->refresh();
+            }
 
             $this->render('/order/create', array(
                 'user' => $customer,
@@ -481,6 +500,10 @@ class ShopOrderController extends Controller
             /* @var $discount DiscountCodes */
             if($discount === NULL){
                 Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر موجود نیست.');
+                $this->redirect(array('/shop/order/create'));
+            }
+            if(!$discount->shop_allow){
+                Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر قابل استفاده در این بخش نیست.');
                 $this->redirect(array('/shop/order/create'));
             }
             if($discount->limit_times && $discount->usedCount() >= $discount->limit_times){

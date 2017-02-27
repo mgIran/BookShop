@@ -92,7 +92,7 @@ class BookController extends Controller
 
             Yii::app()->getModule('discountCodes');
             $price = $basePrice; // price, base price with discount code
-            $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
+            $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price,'digital');
             $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
             // use Discount codes
             if (isset($_POST['DiscountCodes'])) {
@@ -103,6 +103,10 @@ class BookController extends Controller
                 /* @var $discount DiscountCodes */
                 if ($discount === NULL) {
                     Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر موجود نیست.');
+                    $this->refresh();
+                }
+                if ($discount->digital_allow) {
+                    Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر قابل استفاده در این بخش نیست.');
                     $this->refresh();
                 }
                 if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times) {
@@ -283,7 +287,7 @@ class BookController extends Controller
             $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($basePrice, $buy);
             $book->publisher->userDetails->save();
         }
-        if($discount)
+        if($discount && $discount->digital_allow)
         {
             $buy->discount_code_type = $discount->off_type;
             if($discount->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT)
