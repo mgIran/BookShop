@@ -448,8 +448,11 @@ class UsersPublicController extends Controller
 
         // Register codes
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'register-form') {
-            echo CActiveForm::validate($register);
-            Yii::app()->end();
+            $errors = CActiveForm::validate($register);
+            if (CJSON::decode($errors)) {
+                echo $errors;
+                Yii::app()->end();
+            }
         }
         if (isset($_POST['Users'])) {
             $register->attributes = $_POST['Users'];

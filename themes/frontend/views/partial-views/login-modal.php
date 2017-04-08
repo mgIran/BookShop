@@ -80,13 +80,13 @@
                                     var form = $("#register-form");
                                     var loading = $(".modal .loading-container");
                                     var url = \''.Yii::app()->createUrl('/register').'\';
-                                    submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                    submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else if(typeof html.msg !== \'undefined\') $(\'#Users_authenticate_field_em_register\').html(html.msg); else location.reload(); }else $(\'#Users_authenticate_field_em_register\').html(html.errors);");
                                 }
                             }'
                         )
                     ));
                     echo CHtml::hiddenField('ajax','register-form'); ?>
-                    <div class="form-group"><p id="Users_authenticate_field_em_" class="text-center"></p></div>
+                    <div class="form-group"><p id="Users_authenticate_field_em_register" class="text-center"></p></div>
                     <div class="form-group">
                         <?php echo $formR->emailField($registerModal,'email' ,array(
                             'placeholder' => 'پست الکترونیکی',

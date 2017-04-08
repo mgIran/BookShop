@@ -9,7 +9,7 @@
         <?php $this->renderPartial('//partial-views/_flashMessage', array('prefix' => 'register-')); ?>
         <?php $form=$this->beginWidget('CActiveForm', array(
             'id'=>'register-form',
-            'enableAjaxValidation'=>true,
+            'enableAjaxValidation'=>false,
             'enableClientValidation'=>true,
             'clientOptions'=>array(
                 'validateOnSubmit'=>true,
