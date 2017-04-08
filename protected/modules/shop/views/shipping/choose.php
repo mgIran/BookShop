@@ -3,6 +3,7 @@
 /* @var $form CActiveForm */
 /* @var $user Users */
 /* @var $shippingMethods ShopShippingMethod[] */
+$cartStatistics = Shop::getPriceTotal();
 ?>
 <div class="page">
     <div class="page-heading">
@@ -33,6 +34,7 @@
                             )),
                             'itemView' => 'shop.views.shipping._shipping_item',
                             'template' => '{items}',
+                            'viewData' => array('payment_total' => $cartStatistics['totalPayment']),
                             'itemsCssClass' => 'shipping-methods-list'
                         )); ?>
                     </div>

@@ -699,3 +699,100 @@ textarea.form-control{
     width: auto;
     display: inline-block;
 }
+
+.steps{
+    overflow: hidden;
+    padding-top: 15px;
+    padding-right: 0;
+    margin-top: 15px;
+}
+.steps li::before{
+    background: #e7ebf1;
+    content: "";
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 3px;
+    z-index: 1;
+}
+.steps li::after {
+    background: #cbd3de;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    content: "";
+    height: 32px;
+    margin-top: -16px;
+    margin-right: -16px;
+    position: absolute;
+    right: 50%;
+    top: 0;
+    width: 32px;
+    z-index: 2;
+    color: #fff;
+    line-height: 28px;
+}
+.steps li:hover{
+    background-color: #ddd !important;
+    cursor: pointer;
+}
+.steps li:hover::after {
+    content:"\2713";
+}
+.steps li {
+    list-style: outside none none;
+    margin: 0;
+    padding: 25px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #cbd3de;
+    line-height: 25px;
+    /*width: 25%;*/
+    /*float: right;*/
+}
+.steps li.doing::after {
+    background: #e74e40;
+}
+.steps li.doing{
+    color: #e74e40;
+}
+.steps li.done::after {
+    background: #82b440;
+}
+.steps li.done {
+    color: #82b440;
+}
+
+/*.steps.after-accept li{*/
+    /*width: 20%;*/
+/*}*/
+.steps.in-verify{
+    background: #fafafa;
+    padding-top: 55px;
+}
+.steps.in-verify li::after{
+    border-color: #fafafa;
+}
+.green-text{
+    color: #82b440;
+}
+.red-text{
+    color: #e74e40;
+}
+.text-lg td{
+    font-size: 16px !important;
+    font-weight: bold;
+}
+.token-text td{
+    letter-spacing: 2px;
+}
+
+.order-details h4{
+    background-color: rgba(215, 240, 197, 0.65);
+    padding: 15px 5px;
+    border: 1px solid #b3f09f;
+    color: #6aab20;
+}

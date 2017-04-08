@@ -25,17 +25,17 @@
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
       $cs->registerCssFile($baseUrl.'/css/persian-datepicker-0.4.5.min.css');
       $cs->registerCssFile($baseUrl.'/css/persian-datepicker-custom.css');
-	  $cs->registerCssFile($baseUrl.'/css/abound.css');
-      $cs->registerCssFile($baseUrl.'/css/rtl.css');
-	  $cs->registerCssFile($baseUrl.'/css/style-blue.css');
       $cs->registerCssFile($baseUrl.'/css/font-awesome.css');
+      $cs->registerCssFile($baseUrl.'/css/abound.css?2');
+      $cs->registerCssFile($baseUrl.'/css/rtl.css?2');
+      $cs->registerCssFile($baseUrl.'/css/style-blue.css?2');
       $cs->registerCoreScript('jquery.ui');
       $cs->registerScriptFile($baseUrl.'/js/persian-datepicker-0.4.5.min.js');
       $cs->registerScriptFile($baseUrl.'/js/persian-date.js');
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
       $cs->registerScriptFile($baseUrl.'/js/bootstrap-select.min.js', CClientScript::POS_END);
       $cs->registerScriptFile($baseUrl.'/js/defaults-fa_IR.min.js', CClientScript::POS_END);
-      $cs->registerScriptFile($baseUrl.'/js/scripts.js');
+      $cs->registerScriptFile($baseUrl.'/js/scripts.js?2');
 	?>
   </head>
 

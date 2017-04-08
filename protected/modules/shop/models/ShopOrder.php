@@ -20,6 +20,7 @@
  * @property double $shipping_price
  * @property double $payment_price
  * @property integer $payment_status
+ * @property integer $export_code
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -51,9 +52,11 @@ class ShopOrder extends CActiveRecord
 		return '{{shop_order}}';
 	}
 
+    private $prefixId = 'KBC-';
+
     public $statusLabels = [
         self::STATUS_PENDING => 'در انتظار بررسی',
-        self::STATUS_ACCEPTED => 'تایید سفارش',
+        self::STATUS_ACCEPTED => 'در انتظار پرداخت',
         self::STATUS_PAID => 'پرداخت شده',
         self::STATUS_STOCK_PROCESS => 'پردازش انبار',
         self::STATUS_SENDING => 'در حال ارسال',
@@ -64,6 +67,21 @@ class ShopOrder extends CActiveRecord
         self::PAYMENT_STATUS_UNPAID => 'در انتظار پرداخت',
         self::PAYMENT_STATUS_PAID => 'پرداخت موفق'
     ];
+
+    public $tax;
+
+    // Report Properties
+	public $report_type;
+	public $year_altField;
+	public $month_altField;
+	public $from_date_altField;
+	public $to_date_altField;
+    public $totalPrice;
+    public $totalPayment;
+    public $shippingPrice;
+    public $paymentPrice;
+    public $totalDiscount;
+    public $taxAmount;
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -81,10 +99,13 @@ class ShopOrder extends CActiveRecord
 			array('payment_status', 'length', 'max' => 1),
 			array('payment_status', 'default', 'value' => 0),
 			array('status', 'length', 'max' => 1),
+			array('export_code', 'length', 'max' => 100),
+			array('export_code', 'required', 'on' => 'export-code'),
+			array('export_code', 'numerical', 'integerOnly' => true),
 			array('transaction_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price, payment_status', 'safe', 'on' => 'search'),
+			array('id, user_id, delivery_address_id, billing_address_id, ordering_date, update_date, status, payment_method, shipping_method, payment_amount, discount_amount, price_amount, shipping_price, payment_price, payment_status, export_code, year_altField, month_altField, to_date_altField, from_date_altField, report_type', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -121,7 +142,7 @@ class ShopOrder extends CActiveRecord
 			'update_date' => 'تاریخ تغییر وضعیت',
 			'status' => 'وضعیت',
 			'payment_method' => 'شیوه پرداخت',
-			'shipping_method' => 'شیوه تحویل',
+			'shipping_method' => 'شیوه ارسال',
 			'payment_amount' => 'مبلغ پرداختی',
 			'discount_amount' => 'تخفیف',
 			'price_amount' => 'مبلغ پایه فاکتور',
@@ -129,6 +150,7 @@ class ShopOrder extends CActiveRecord
 			'payment_price' => 'هزینه اضافی پرداخت',
 			'transaction_id' => 'تراکنش',
 			'payment_status' => 'وضعیت پرداخت',
+			'export_code' => 'کد مرسوله',
 		);
 	}
 
@@ -150,11 +172,12 @@ class ShopOrder extends CActiveRecord
 
 		$criteria = new CDbCriteria;
 
-		$criteria->compare('id', $this->id, true);
-		$criteria->compare('user_id', $this->user_id, true);
+		$id = $this->id;
+		$id = str_ireplace($this->prefixId,'',$id);
+		$criteria->compare('id', $id, true);
 		$criteria->compare('delivery_address_id', $this->delivery_address_id, true);
 		$criteria->compare('billing_address_id', $this->billing_address_id, true);
-		$criteria->compare('status', $this->status, true);
+		$criteria->compare('status', $this->status);
 		$criteria->compare('payment_method', $this->payment_method);
 		$criteria->compare('shipping_method', $this->shipping_method);
 		$criteria->compare('payment_amount', $this->payment_amount);
@@ -163,11 +186,78 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('shipping_price', $this->shipping_price);
 		$criteria->compare('payment_price', $this->payment_price);
 		$criteria->compare('payment_status', $this->payment_status);
+		$criteria->compare('export_code', $this->export_code, true);
+		$criteria->compare('user_id', $this->user_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
 		));
+	}
+
+	public function report($pagination = true){
+        $criteria = new CDbCriteria;
+
+        $this->reportConditions($criteria);
+        $criteria->order='t.id DESC';
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => $pagination?array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20):false
+        ));
+    }
+
+    /**
+     * @param $criteria
+     */
+	public function reportConditions(&$criteria)
+    {
+        $id = $this->id;
+		$id = str_ireplace($this->prefixId,'',$id);
+		$criteria->compare('id', $id, true);
+		$criteria->compare('delivery_address_id', $this->delivery_address_id, true);
+		$criteria->compare('billing_address_id', $this->billing_address_id, true);
+		$criteria->compare('status', $this->status);
+		$criteria->compare('payment_method', $this->payment_method);
+		$criteria->compare('shipping_method', $this->shipping_method);
+		$criteria->compare('payment_amount', $this->payment_amount);
+		$criteria->compare('discount_amount', $this->discount_amount);
+		$criteria->compare('price_amount', $this->price_amount);
+		$criteria->compare('shipping_price', $this->shipping_price);
+		$criteria->compare('payment_price', $this->payment_price);
+		$criteria->compare('payment_status', $this->payment_status);
+		$criteria->compare('export_code', $this->export_code, true);
+		$criteria->compare('user_id', $this->user_id);
+		if($this->report_type){
+			switch($this->report_type){
+				case 'yearly':
+					$startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->year_altField, false), 1, 1);
+					$startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
+					$endTime = $startTime + (60 * 60 * 24 * 365);
+					$criteria->addCondition('ordering_date >= :start_date');
+					$criteria->addCondition('ordering_date <= :end_date');
+					$criteria->params[':start_date'] = $startTime;
+					$criteria->params[':end_date'] = $endTime;
+					break;
+				case 'monthly':
+					$startDate = JalaliDate::toGregorian(JalaliDate::date('Y', $this->month_altField, false), JalaliDate::date('m', $this->month_altField, false), 1);
+					$startTime = strtotime($startDate[0] . '/' . $startDate[1] . '/' . $startDate[2]);
+					if(JalaliDate::date('m', $this->month_altField, false) <= 6)
+						$endTime = $startTime + (60 * 60 * 24 * 31);
+					else
+						$endTime = $startTime + (60 * 60 * 24 * 30);
+					$criteria->addCondition('ordering_date >= :start_date');
+					$criteria->addCondition('ordering_date <= :end_date');
+					$criteria->params[':start_date'] = $startTime;
+					$criteria->params[':end_date'] = $endTime;
+					break;
+				case 'by-date':
+					$criteria->addCondition('ordering_date >= :start_date');
+					$criteria->addCondition('ordering_date <= :end_date');
+					$criteria->params[':start_date'] = $this->from_date_altField;
+					$criteria->params[':end_date'] = $this->to_date_altField;
+					break;
+			}
+		}
 	}
 
 	/**
@@ -233,6 +323,61 @@ class ShopOrder extends CActiveRecord
 	}
 
 	public function getOrderID(){
-		return 'KBC-'.$this->id;
+		return $this->prefixId.$this->id;
 	}
+
+    /**
+     * @return float
+     */
+    public function getTax(){
+        $taxRate = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+		return (double)($this->payment_amount * $taxRate / 100);
+	}
+
+    public function getTotalPrice(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(price_amount) as totalPrice';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->totalPrice:0;
+    }
+
+    public function getTotalPayment(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(payment_amount) as totalPayment';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->totalPayment:0;
+    }
+
+    public function getTotalShippingPrice(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(shipping_price) as shippingPrice';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->shippingPrice:0;
+    }
+
+    public function getTotalPaymentPrice(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(payment_price) as paymentPrice';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->paymentPrice:0;
+    }
+
+
+    public function getTotalDiscount(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'SUM(discount_amount) as totalDiscount';
+        $this->reportConditions($criteria);
+        $record = $this->find($criteria);
+        return $record?$record->totalDiscount:0;
+    }
+
+    public function getTotalTax(){
+        $taxRate = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+        $payment = $this->totalPayment?$this->totalPayment:$this->getTotalPayment();
+        return (double)($payment * $taxRate / 100);
+    }
 }

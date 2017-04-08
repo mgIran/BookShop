@@ -23,7 +23,23 @@ if(Yii::app()->user->hasFlash('message'))
                     <div class="overflow-hidden alert-warning alert">
                         <div class="text-center">شما می توانید مجددا مبلغ سفارش را با یکی از روش های زیر پرداخت نمایید تا سفارش شما تکمیل شود.</div>
                         <div class="buttons center-block text-center">
-                            <input type="button" class="btn-green btn-sm" value="پرداخت اینترنتی"><input type="button" class="btn-blue btn-sm" value="پرداخت در محل"><input type="button" class="btn-red btn-sm" value="کسر از اعتبار">
+                            <?php
+                            foreach(ShopPaymentMethod::model()->findAll(array(
+                                'order' => 't.order',
+                                'condition' => 'status <> :deactive',
+                                'params' => array(':deactive' => ShopPaymentMethod::STATUS_DEACTIVE)
+                            )) as $key => $item):
+                                if($key%3 == 1)
+                                    $class = 'green';
+                                if($key%3 == 2)
+                                    $class = 'blue';
+                                if($key%3 == 0)
+                                    $class = 'red';
+                            ?>
+                                <a href="<?= $this->createUrl('changePayment',array('id' => $order->id, 'method' => $item->name )) ?>" class="btn-<?= $class ?> btn" ><?= $item->title ?></a>
+                            <?php
+                            endforeach;
+                            ?>
                         </div>
                     </div>
                 <?php
@@ -37,6 +53,7 @@ if(Yii::app()->user->hasFlash('message'))
                         <tr>
                             <th class="green-text">شماره رسید</th>
                             <th>قیمت کل</th>
+                            <th>شیوه پرداخت</th>
                             <th<?= $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID?' class="red-text"':' class="green-text"' ?>>وضعیت پرداخت</th>
                             <th>وضعیت سفارش</th>
                         </tr>
@@ -45,6 +62,7 @@ if(Yii::app()->user->hasFlash('message'))
                         <tr>
                             <td class="green-text"><?= $order->getOrderID() ?></td>
                             <td><span class="price"><?= Controller::parseNumbers(number_format($order->payment_amount)) ?><small> تومان</small></span></td>
+                            <td><?= $order->paymentMethod->title ?></td>
                             <td<?= $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID?' class="red-text"':' class="green-text"' ?>><?= $order->getPaymentStatusLabel() ?></td>
                             <td><?= $order->getStatusLabel() ?></td>
                         </tr>
@@ -67,7 +85,15 @@ if(Yii::app()->user->hasFlash('message'))
                             <td><?= CHtml::encode($order->deliveryAddress->transferee) ?></td>
                             <td><?= CHtml::encode($order->deliveryAddress->postal_address) ?></td>
                             <td><?= CHtml::encode(Controller::parseNumbers($order->deliveryAddress->emergency_tel)) ?> - <?= CHtml::encode(Controller::parseNumbers($order->deliveryAddress->landline_tel)) ?></td>
-                            <td><?= CHtml::encode($order->shippingMethod->title)?> <small>( هزینه ارسال <?= CHtml::encode(Controller::parseNumbers(number_format($order->shipping_price))) ?> تومان )</small></td>
+                            <td><?= CHtml::encode($order->shippingMethod->title)?> <small>( <?php
+                                    if($order->shipping_price == 0):
+                                        echo 'ارسال رایگان';
+                                    else:
+                                        ?>
+هزینه <?= Controller::parseNumbers(number_format($order->shipping_price)) ?>تومان
+                                        <?
+                                    endif;
+                                    ?> )</small></td>
                         </tr>
                     </tbody>
                 </table>
@@ -76,7 +102,7 @@ if(Yii::app()->user->hasFlash('message'))
             if($order->transactions):
             ?>
                 <div class="transaction-details table-responsive">
-                    <h5>جزییات پرداخت شما</h5>
+                    <h5>جزییات تراکنش های بانکی شما</h5>
                     <table class="table">
                         <thead>
                             <tr>
@@ -112,11 +138,9 @@ if(Yii::app()->user->hasFlash('message'))
             <?php
             endif;
             ?>
-            <ul class="steps after-accept in-verify">
-                <?php
-                Shop::PrintStatusLine($order->status);
-                ?>
-            </ul>
+            <?php
+            Shop::PrintStatusLine($order->status);
+            ?>
         </div>
     </div>
 </div>

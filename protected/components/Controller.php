@@ -176,6 +176,7 @@ class Controller extends AuthController
                         array('label' => 'مدیریت سفارشات', 'url' => Yii::app()->createUrl('/shop/order/admin/')),
                         array('label' => 'مدیریت روش های پرداخت', 'url' => Yii::app()->createUrl('/shop/payment/admin/')),
                         array('label' => 'مدیریت روش های تحویل', 'url' => Yii::app()->createUrl('/shop/shipping/admin/')),
+                        array('label' => 'گزارش سفارشات', 'url' => Yii::app()->createUrl('/shop/order/report/')),
                     )
                 ),
                 array(

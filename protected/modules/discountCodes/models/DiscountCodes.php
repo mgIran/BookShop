@@ -14,6 +14,8 @@
  * @property string $percent
  * @property string $amount
  * @property integer $user_id
+ * @property integer $shop_allow
+ * @property integer $digital_allow
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -67,13 +69,13 @@ class DiscountCodes extends CActiveRecord
 			array('code', 'length', 'min'=>5),
 			array('start_date, expire_date', 'length', 'max'=>20),
 			array('limit_times, amount', 'length', 'max'=>10),
-			array('off_type', 'length', 'max'=>1),
+			array('off_type, shop_allow, digital_allow', 'length', 'max'=>1),
 			array('percent', 'length', 'max'=>2),
 			array('percent' ,'compare' ,'operator' => '!=' ,'compareValue' => 0 ,'message' => 'درصد تخفیف نمی تواند 0 درصد باشد.', 'on' => 'percent_off') ,
 			array('amount' ,'compare' ,'operator' => '!=' ,'compareValue' => 0 ,'message' => 'مبلغ تخفیف نمی تواند 0 تومان باشد.', 'on' => 'amount_off') ,
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, code, start_date, expire_date, limit_times, off_type, percent, amount, user_id', 'safe', 'on'=>'search'),
+			array('id, title, code, start_date, expire_date, limit_times, off_type, percent, amount, user_id, shop_allow, digital_allow', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -108,6 +110,8 @@ class DiscountCodes extends CActiveRecord
 			'percent' => 'درصد تخفیف',
 			'amount' => 'مبلغ تخفیف',
 			'user_id' => 'User',
+			'shop_allow' => 'مجاز در فروشگاه',
+			'digital_allow' => 'مجاز در خرید نسخه دیجیتال',
 		);
 	}
 
@@ -138,6 +142,8 @@ class DiscountCodes extends CActiveRecord
 		$criteria->compare('off_type',$this->off_type,true);
 		$criteria->compare('percent',$this->percent,true);
 		$criteria->compare('amount',$this->amount,true);
+		$criteria->compare('shop_allow',$this->shop_allow);
+		$criteria->compare('digital_allow',$this->digital_allow);
         if(!$this->user_id)
 		    $criteria->addCondition('user_id IS NULL');
         else
@@ -184,7 +190,7 @@ class DiscountCodes extends CActiveRecord
 	 * @param $price
 	 * @return array|mixed
 	 */
-	public static function calculateDiscountCodes(&$price)
+	public static function calculateDiscountCodes(&$price, $allow_type)
 	{
 		$discountCodesInSession = array();
 		if (Yii::app()->user->hasState('discount-codes')) {
@@ -197,15 +203,15 @@ class DiscountCodes extends CActiveRecord
                         $criteria = DiscountCodes::ValidCodes();
                         $criteria->compare('code', $code);
                         $discountObj = DiscountCodes::model()->find($criteria);
-                        if(!$discountObj->userUsedStatus(Yii::app()->user->getId())){
-                            $disVal = $discountObj->getAmount($price);
-                            if($price < 100 || $price - $disVal < 100){
-                                $price = 0;
-                                $priceZero = true;
-                            }else
-                                $price -= $disVal;
-                        }else
-                            unset($discountCodesInSession[$key]);
+						if($discountObj && $discountObj->{$allow_type.'_allow'} && !$discountObj->userUsedStatus(Yii::app()->user->getId())){
+							$disVal = $discountObj->getAmount($price);
+							if($price < 100 || $price - $disVal < 100){
+								$price = 0;
+								$priceZero = true;
+							}else
+								$price -= $disVal;
+						}else
+							unset($discountCodesInSession[$key]);
                     }else
                         unset($discountCodesInSession[$key]);
                 }
@@ -215,7 +221,7 @@ class DiscountCodes extends CActiveRecord
                 $criteria = DiscountCodes::ValidCodes();
                 $criteria->compare('code', $code);
                 $discountObj = DiscountCodes::model()->find($criteria);
-                if(!$discountObj->userUsedStatus(Yii::app()->user->getId())){
+				if($discountObj && $discountObj->{$allow_type.'_allow'} && !$discountObj->userUsedStatus(Yii::app()->user->getId())){
 					$disVal = $discountObj->getAmount($price);
                     if($price < 100 || $price - $disVal < 100){
                         $price = 0;
@@ -300,5 +306,14 @@ class DiscountCodes extends CActiveRecord
 		elseif($this->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT && $this->percent)
 			$disVal = (double)($price * (double)((double)$this->percent / 100));
 		return $disVal;
+	}
+
+	public function getAllow(){
+		$text = [];
+		if($this->shop_allow)
+			$text[]='فروشگاه';
+		if($this->digital_allow)
+			$text[]='خرید دیجیتال';
+		return $text?implode(' ، ',$text):'بدون مجوز';
 	}
 }

@@ -111,22 +111,26 @@ $this->breadcrumbs=array(
 <?php Yii::app()->clientScript->registerScript('changeConfirm', "
 	var row_id,row_val;
     $('body').on('click','.confirm-status', function(){
-        var this = $(this); 
-    	row_id = this.data('id');
-    	row_val = this.val();
-        if(this.val()=='accepted'){
-            $('#book-id').val(this.data('id'));
+        var el = $(this),
+        	tr = el.parents('tr');
+    	row_id = tr.find('.change-confirm').data('id');
+    	row_val = tr.find('.change-confirm').val();
+        if(el.val()=='accepted'){
+        console.log(3);
+            $('#book-id').val(row_id);
             $('#book-modal').modal('show');
-        }else if(this.val()=='refused' || this.val()=='change_required'){
+        }else if(row_val=='refused' || row_val=='change_required'){
+        console.log(2);
             $('#reason-modal').modal('show');
-            $('#reason-modal input.book-id').val(this.data('id'));
-            $('#reason-modal input.book-status').val(this.val());
+            $('#reason-modal input.book-id').val(row_id);
+            $('#reason-modal input.book-status').val(row_val);
         }else{
+        console.log(1);
             $.ajax({
                 url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
                 type:'POST',
                 dataType:'JSON',
-                data:{book_id:this.data('id'), value:this.val()},
+                data:{book_id:row_id, value:row_val},
                 success:function(data){
                     if(data.status){
                         alert('اطلاعات با موفقیت ثبت شد.');

@@ -112,6 +112,18 @@ Yii::app()->clientScript->registerCss('gen','
 	</div>
 
 	<div class="row">
+		<?php echo $form->checkBox($model,'shop_allow'); ?>
+		<?php echo $form->labelEx($model,'shop_allow'); ?>
+		<?php echo $form->error($model,'shop_allow'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->checkBox($model,'digital_allow'); ?>
+		<?php echo $form->labelEx($model,'digital_allow'); ?>
+		<?php echo $form->error($model,'digital_allow'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'off_type'); ?>
 		<?php echo $form->dropDownList($model,'off_type', $model->offTypeLabels); ?>
 		<?php echo $form->error($model,'off_type'); ?>

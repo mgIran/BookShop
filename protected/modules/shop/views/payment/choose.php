@@ -50,7 +50,15 @@ $cartStatistics = Shop::getPriceTotal();
                     </li>
                     <li class="list-group-item">
                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">هزینه ارسال</div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($cartStatistics['shippingPrice'])) ?><small> تومان</small></div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php
+                            if(!$cartStatistics['shippingPrice'] || $cartStatistics['shippingPrice'] == 0):
+                                echo 'رایگان';
+                            else:
+                                ?>
+                                <?= Controller::parseNumbers(number_format($cartStatistics['shippingPrice'])) ?><small> تومان</small>
+                                <?
+                            endif;
+                            ?></div>
                     </li>
                     <li class="list-group-item red-item">
                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">تخفیف کتاب<?php echo ($discountCodesInSession)?" + ".CHtml::encode($discountObj->title):"";?></div>

@@ -177,11 +177,13 @@ if(Yii::app()->user->roles == 'superAdmin' || Yii::app()->user->roles == 'admin'
             ));?>
             <?php Yii::app()->clientScript->registerScript('changeFinanceStatus', "
                 $('body').on('click', '.finance-confirm-status', function(){
+                    var el = $(this),
+                        tr = el.parents('tr');
                     $.ajax({
                         url:'".$this->createUrl('/users/manage/changeFinanceStatus')."',
                         type:'POST',
                         dataType:'JSON',
-                        data:{user_id:$('.change-finance-status').data('id'), value:$('.change-finance-status').val()},
+                        data:{user_id:tr.find('.change-finance-status').data('id'), value:tr.find('.change-finance-status').val()},
                         success:function(data){
                             if(data.status)
                                 $.fn.yiiGridView.update('newest-finance-info-grid');

@@ -437,7 +437,7 @@ class UsersPublicController extends Controller
                 else
                     $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
                 if (isset($_POST['ajax'])) {
-                    echo CJSON::encode(array('status' => true, 'url' => $redirect));
+                    echo CJSON::encode(array('status' => true, 'url' => $redirect, 'msg' => 'در حال انتقال ...'));
                     Yii::app()->end();
                 } else
                     $this->redirect($redirect);
@@ -445,7 +445,7 @@ class UsersPublicController extends Controller
                 $login->password = '';
         }
         // End of login codes
-
+        
         // Register codes
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'register-form') {
             $errors = CActiveForm::validate($register);

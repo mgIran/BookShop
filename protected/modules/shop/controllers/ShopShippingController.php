@@ -63,6 +63,8 @@ class ShopShippingController extends Controller
 			$model->attributes=$_POST['ShopShippingMethod'];
 			if(!$model->payment_method)
 				$model->payment_method = null;
+			if(!$model->limit_price || empty($model->limit_price))
+				$model->limit_price = null;
 			else
 				$model->payment_method=CJSON::encode($model->payment_method);
 			if ($model->save()) {
@@ -91,6 +93,8 @@ class ShopShippingController extends Controller
 			$model->attributes=$_POST['ShopShippingMethod'];
 			if(!$model->payment_method)
 				$model->payment_method = null;
+			if(!$model->limit_price || empty($model->limit_price))
+				$model->limit_price = null;
 			else
 				$model->payment_method=CJSON::encode($model->payment_method);
 			if ($model->save()) {

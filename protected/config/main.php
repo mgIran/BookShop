@@ -97,12 +97,11 @@ return array(
 			'class' => 'ext.yexcel.Yexcel'
 		),
 		'session' => array(
-			'class' => 'CDbHttpSession',
+			'class' => 'YmDbHttpSession',
 			'autoStart' => false,
 			'connectionID' => 'db',
 			'sessionTableName' => 'ym_sessions',
-			'autoCreateSessionTable' => true,
-			'timeout' => 3600
+			'timeout' => 600
 		),
 		'userCounter' => array(
 			'class' => 'application.components.UserCounter',

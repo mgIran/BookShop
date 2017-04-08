@@ -17,6 +17,7 @@
  * @property string $map_lat
  * @property string $map_lng
  * @property string $map_zoom
+ * @property string $deleted
  *
  * The followings are the available model relations:
  * @property ShopOrder[] $orders
@@ -51,9 +52,11 @@ class ShopAddresses extends CActiveRecord
 			array('district', 'length', 'max'=>50),
 			array('map_lat, map_lng', 'length', 'max'=>30),
 			array('map_zoom', 'length', 'max'=>3),
+			array('deleted', 'length', 'max'=>1),
+			array('deleted', 'default', 'value'=>0),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, transferee, emergency_tel, landline_tel, town_id, place_id, district, postal_address, postal_code, map_lat, map_lng, map_zoom', 'safe', 'on'=>'search'),
+			array('id, user_id, transferee, emergency_tel, landline_tel, town_id, place_id, district, postal_address, postal_code, map_lat, map_lng, map_zoom, deleted', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,6 +95,7 @@ class ShopAddresses extends CActiveRecord
 			'map_lat' => 'عرض جغرافیایی',
 			'map_lng' => 'طول جغرافیایی',
 			'map_zoom' => 'بزرگنمایی جغرافیایی',
+			'deleted' => 'حذف شده',
 		);
 	}
 
@@ -126,6 +130,7 @@ class ShopAddresses extends CActiveRecord
 		$criteria->compare('map_lat',$this->map_lat,true);
 		$criteria->compare('map_lng',$this->map_lng,true);
 		$criteria->compare('map_zoom',$this->map_zoom,true);
+		$criteria->compare('deleted',$this->deleted);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

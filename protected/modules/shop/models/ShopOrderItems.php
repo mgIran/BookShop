@@ -8,7 +8,8 @@
  * @property string $order_id
  * @property string $model_name
  * @property string $model_id
- * @property double $fee
+ * @property double $payment
+ * @property double $base_price
  * @property string $qty
  *
  * The followings are the available model relations:
@@ -33,13 +34,13 @@ class ShopOrderItems extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('order_id, model_id, fee', 'required'),
-			array('fee', 'numerical'),
+			array('order_id, model_id, payment, base_price', 'required'),
+			array('payment, base_price', 'numerical'),
 			array('order_id, model_id, qty', 'length', 'max'=>10),
 			array('model_name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, order_id, model_name, model_id, fee, qty', 'safe', 'on'=>'search'),
+			array('id, order_id, model_name, model_id, payment, qty, base_price', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +67,8 @@ class ShopOrderItems extends CActiveRecord
 			'order_id' => 'شناسه سفارش',
 			'model_name' => 'نام مدل',
 			'model_id' => 'شناسه مدل',
-			'fee' => 'مبلغ',
+			'base_price' => 'مبلغ پایه',
+			'payment' => 'مبلغ پرداختی',
 			'qty' => 'تعداد',
 		);
 	}
@@ -93,7 +95,8 @@ class ShopOrderItems extends CActiveRecord
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('model_name',$this->model_name,true);
 		$criteria->compare('model_id',$this->model_id,true);
-		$criteria->compare('fee',$this->fee);
+		$criteria->compare('payment',$this->payment);
+		$criteria->compare('base_price',$this->base_price);
 		$criteria->compare('qty',$this->qty,true);
 
 		return new CActiveDataProvider($this, array(
