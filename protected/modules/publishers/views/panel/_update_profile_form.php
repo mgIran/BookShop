@@ -1,5 +1,5 @@
 <?php
-/* @var $this PanelController */
+/* @var $this PublishersPanelController */
 /* @var $model UserDetails */
 /* @var $form CActiveForm */
 /* @var $nationalCardImage array */

@@ -62,6 +62,16 @@ $this->breadcrumbs=array(
 			}
 		),
 		array(
+			'name'=>'seen',
+			'filter'=>false,
+			'sortable'=>false
+		),
+		array(
+			'name'=>'download',
+			'filter'=>false,
+			'sortable'=>false
+		),
+		array(
 			'header' => 'تغییر وضعیت',
 			'value' => function($data){
 				$form=CHtml::dropDownList("confirm", $data->confirm, $data->confirmLabels, array("class"=>"change-confirm", "data-id"=>$data->id));

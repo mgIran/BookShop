@@ -25,6 +25,7 @@ class UsersPublicController extends Controller
                 'sessions',
                 'removeSession',
                 'ResendVerification',
+                'uploadAvatarImage',
             )
         );
     }
@@ -36,6 +37,29 @@ class UsersPublicController extends Controller
     {
         return array(
             'checkAccess + dashboard, logout, setting, notifications, bookmarked, downloaded, transactions, library, sessions, removeSession',
+        );
+    }
+
+    public function actions(){
+        return array(
+            'uploadAvatarImage' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'uploadDir' => '/uploads/users/avatar',
+                'attribute' => 'avatar',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('jpg','jpeg','png')
+                ),
+                'insert' => true,
+                'module' => 'users',
+                'modelName' => 'UserDetails',
+                'findAttributes' => 'array("user_id" => $_POST["user_id"])',
+                'scenario' => 'upload_photo',
+                'storeMode' => 'field',
+                'afterSaveActions' => array(
+                    'resize' => array('width'=>500,'height'=>500)
+                )
+            ),
         );
     }
 
@@ -110,9 +134,28 @@ class UsersPublicController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $model = Users::model()->findByPk(Yii::app()->user->getId());
+        $detailsModel = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
+        $detailsModel->scenario = 'update_profile';
         $model->setScenario('update');
 
-        $this->performAjaxValidation($model);
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'users-form')
+            $this->performAjaxValidation($model);
+        else
+            $this->performAjaxValidation($detailsModel);
+
+        // Save user profile
+        if (isset($_POST['UserDetails'])) {
+            unset($_POST['UserDetails']['credit']);
+            unset($_POST['UserDetails']['publisher_id']);
+            unset($_POST['UserDetails']['details_status']);
+            $detailsModel->attributes = $_POST['UserDetails'];
+            if ($detailsModel->save()) {
+                Yii::app()->user->setFlash('profile-success', 'اطلاعات با موفقیت ثبت شد.');
+                Yii::app()->user->setState('avatar', $detailsModel->avatar);
+                $this->refresh();
+            } else
+                Yii::app()->user->setFlash('profile-failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+        }
 
         if (isset($_POST['Users'])) {
             $model->attributes = $_POST['Users'];
@@ -126,8 +169,33 @@ class UsersPublicController extends Controller
             }
         }
 
+        $avatarImageUrl = $this->createUrl('/uploads/users/avatar');
+        $avatarImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/avatar';
+        $avatarImage = array();
+        if ($detailsModel->avatar != '')
+            $avatarImage = array(
+                'name' => $detailsModel->avatar,
+                'src' => $avatarImageUrl . '/' . $detailsModel->avatar,
+                'size' => (file_exists($avatarImagePath . '/' . $detailsModel->avatar)) ? filesize($avatarImagePath . '/' . $detailsModel->avatar) : 0,
+                'serverName' => $detailsModel->avatar,
+            );
+
+        $registrationCertificateImageUrl = $this->createUrl('/uploads/users/registration_certificate');
+        $registrationCertificateImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/registration_certificate';
+        $registrationCertificateImage = array();
+        if ($detailsModel->registration_certificate_image != '')
+            $registrationCertificateImage = array(
+                'name' => $detailsModel->registration_certificate_image,
+                'src' => $registrationCertificateImageUrl . '/' . $detailsModel->registration_certificate_image,
+                'size' => (file_exists($registrationCertificateImagePath . '/' . $detailsModel->registration_certificate_image)) ? filesize($registrationCertificateImagePath . '/' . $detailsModel->registration_certificate_image) : 0,
+                'serverName' => $detailsModel->registration_certificate_image,
+            );
+
         $this->render('setting', array(
             'model' => $model,
+            'detailsModel' => $detailsModel,
+            'avatarImage' => $avatarImage,
+            'registrationCertificateImage' => $registrationCertificateImage,
         ));
     }
 
