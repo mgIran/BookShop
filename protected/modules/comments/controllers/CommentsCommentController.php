@@ -28,7 +28,7 @@ class CommentsCommentController extends Controller
                 'captcha'
             ),
             'backend' => array(
-                'admin',
+                //'admin',
                 'adminBooks',
                 'delete',
                 'approve'

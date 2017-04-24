@@ -14,7 +14,7 @@ class RowsManageController extends Controller
     public static function actionsType()
     {
         return array(
-            'backend' => array('admin', 'const', 'index', 'view', 'delete', 'create', 'update', 'updateConst', 'add', 'remove', 'order')
+            'backend' => array('admin', 'const', 'delete', 'create', 'update', 'updateConst', 'add', 'remove', 'order')
         );
     }
 
@@ -36,17 +36,6 @@ class RowsManageController extends Controller
                 'class' => 'ext.yiiSortableModel.actions.AjaxSortingAction',
             )
         );
-    }
-
-    /**
-     * Displays a particular model.
-     * @param integer $id the ID of the model to be displayed
-     */
-    public function actionView($id)
-    {
-        $this->render('view', array(
-            'model' => $this->loadModel($id),
-        ));
     }
 
     /**
@@ -111,17 +100,6 @@ class RowsManageController extends Controller
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-    }
-
-    /**
-     * Lists all models.
-     */
-    public function actionIndex()
-    {
-        $dataProvider = new CActiveDataProvider('RowsHomepage');
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-        ));
     }
 
     /**

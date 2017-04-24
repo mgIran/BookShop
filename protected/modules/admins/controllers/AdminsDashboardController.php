@@ -84,8 +84,8 @@ class AdminsDashboardController extends Controller
         if (isset($_GET['Comment']))
             $comments->attributes = $_GET['Comment'];
         $comments->owner_name = 'Books';
-        //
-        
+        $comments->status = Comment::STATUS_NOT_APPROWED;
+
         $this->render('index', array(
             'newestPackages' => $newestPackages,
             'newestPrograms' => $newestPrograms,

@@ -101,7 +101,7 @@ return array(
 			'autoStart' => false,
 			'connectionID' => 'db',
 			'sessionTableName' => 'ym_sessions',
-			'timeout' => 600
+			'timeout' => 1800
 		),
 		'userCounter' => array(
 			'class' => 'application.components.UserCounter',

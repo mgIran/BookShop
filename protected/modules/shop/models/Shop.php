@@ -174,8 +174,8 @@ class Shop
     {
         $labels = ShopOrder::model()->statusLabels;
         $keys = array_keys($labels);
-        if($status > 5)
-            $status = 5;
+        if($status > 6)
+            $status = 6;
         $start = 0;
         $data = '';
         if($adminSide)

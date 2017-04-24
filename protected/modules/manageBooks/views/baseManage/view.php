@@ -83,6 +83,8 @@ $purifier=new CHtmlPurifier();
             'value'=>CHtml::image(Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon, '', array('style'=>'max-width:200px;')),
             'type'=>'raw'
         ),
+        'seen',
+        'download',
     ),
 )); ?>
 

@@ -11,6 +11,7 @@
     <p class="description">جهت ثبت اطلاعات کتاب لطفا فرم زیر را پر کنید.</p>
 
     <?php $this->renderPartial("//partial-views/_flashMessage") ?>
+    <div class="alert alert-success save-package-message hidden"></div>
 
     <ul class="nav nav-tabs">
         <li <?= !isset($step) || $step == 1 ?'class="active"':''; ?>>

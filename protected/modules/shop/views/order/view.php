@@ -37,9 +37,9 @@ $this->menu=array(
             <tr>
                 <th>شرح محصول</th>
                 <th class="text-center">تعداد</th>
-                <th class="text-center">قیمت پایه واحد</th>
-                <th class="text-center">قیمت واحد<small>(همراه با تخفیف)</small></th>
-                <th class="text-center">قیمت کل</th>
+                <th class="text-center hidden-xs">قیمت پایه واحد</th>
+                <th class="text-center hidden-xs">قیمت واحد<small>(همراه با تخفیف)</small></th>
+                <th class="text-center">قیمت کل<small>(همراه با تخفیف)</small></th>
             </tr>
             </thead>
             <tbody>
@@ -53,10 +53,10 @@ $this->menu=array(
                     <td class="text-center">
                         <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
                     </td>
-                    <td class="text-center">
+                    <td class="text-center hidden-xs">
                         <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->base_price)));?> تومان
                     </td>
-                    <td class="text-center">
+                    <td class="text-center hidden-xs">
                         <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?> تومان
                     </td>
                     <td class="text-center">
@@ -295,4 +295,39 @@ $this->menu=array(
         <?
     endif;
     ?>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <?php Yii::app()->clientScript->registerCss('inline-overflow', '.list-group-item{overflow:hidden;padding:20px 0;}');?>
+        <h4>خلاصه صورتحساب</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل خرید</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($model->price_amount))?><small> تومان</small></div>
+            </li>
+            <li class="list-group-item">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">هزینه ارسال</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php
+                    if(!$model->shipping_price || $model->shipping_price == 0):
+                        echo 'رایگان';
+                    else:
+                        ?>
+                        <?= Controller::parseNumbers(number_format($model->shipping_price)) ?><small> تومان</small>
+                        <?
+                    endif;
+                    ?>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">شیوه پرداخت</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo ShopPaymentMethod::getMethodName($model->payment_method); ?></div>
+            </li>
+            <li class="list-group-item red-item">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل تخفیف</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($model->discount_amount))?><small> تومان</small></div>
+            </li>
+            <li class="list-group-item green-item">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">جمع کل قابل پرداخت</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 price text-center"><?php echo Controller::parseNumbers(number_format($model->payment_amount))?><small> تومان</small></div>
+            </li>
+        </ul>
+    </div>
 </div>

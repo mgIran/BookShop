@@ -12,7 +12,7 @@ class PlacesCitiesController extends Controller
 	{
 		return array(
 			'frontend' => array('getCities'),
-			'backend' => array('create','update','admin','delete' ,'index','view')
+			'backend' => array('create', 'update', 'admin', 'delete')
 		);
 	}
 

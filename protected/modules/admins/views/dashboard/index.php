@@ -1,5 +1,5 @@
 <?php
-/* @var $this DashboardController*/
+/* @var $this AdminsDashboardController*/
 /* @var $devIDRequests CActiveDataProvider*/
 /* @var $newestPrograms CActiveDataProvider*/
 /* @var $newestPublishers CActiveDataProvider*/

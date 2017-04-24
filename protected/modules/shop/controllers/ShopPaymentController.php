@@ -14,7 +14,7 @@ class ShopPaymentController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('admin', 'index', 'view', 'delete', 'create', 'update', 'changeStatus', 'order')
+			'backend' => array('admin', 'view', 'delete', 'update', 'changeStatus', 'order')
 		);
 	}
 
@@ -109,17 +109,6 @@ class ShopPaymentController extends Controller
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('ShopPaymentMethod');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
 	}
 
 	/**

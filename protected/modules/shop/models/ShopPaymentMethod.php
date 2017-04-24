@@ -141,4 +141,9 @@ class ShopPaymentMethod extends SortableCActiveRecord
 			$this->status = self::STATUS_ACTIVE;
         return $this;
 	}
+
+	public static function getMethodName($id)
+	{
+		return self::model()->findByPk($id)->title;
+	}
 }

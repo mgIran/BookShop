@@ -25,7 +25,7 @@
                         <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
                     </td>
                     <td class="text-center hidden-xs">
-                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?>تومان
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->model->printed_price)));?>تومان
                     </td>
                     <td class="text-center hidden-xs">
                         <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?>تومان

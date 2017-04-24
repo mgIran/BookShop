@@ -16,7 +16,6 @@ class ManageBooksBaseManageController extends Controller
     {
         return array(
             'backend' => array(
-                'index',
                 'view',
                 'create',
                 'update',
@@ -365,17 +364,6 @@ class ManageBooksBaseManageController extends Controller
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if(!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('admin'));
-    }
-
-    /**
-     * Lists all models.
-     */
-    public function actionIndex()
-    {
-        $dataProvider = new CActiveDataProvider('Books');
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-        ));
     }
 
     /**

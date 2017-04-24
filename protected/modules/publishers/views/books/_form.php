@@ -1,5 +1,5 @@
 <?php
-/* @var $this BooksController */
+/* @var $this PublishersBooksController */
 /* @var $model Books */
 /* @var $form CActiveForm */
 /* @var $icon [] */
@@ -155,8 +155,9 @@
                         }
                     ',
                 )); ?>
+                <small class="description" style="display: block;margin: 15px 0;font-size: 12px;">سایز پیشنهادی: 400X600 پیکسل</small>
                 <?php echo $form->error($model,'icon'); ?>
-                <div class="uploader-message error"></div>
+                <div style="margin: 15px 0;" class="uploader-message error"></div>
             </div>
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <?php echo $form->labelEx($model,'preview_file',array('class'=> 'block')); ?>
@@ -183,7 +184,7 @@
                     ',
                 )); ?>
                 <?php echo $form->error($model,'preview_file'); ?>
-                <div class="uploader-preview-message error"></div>
+                <div style="margin: 15px 0;" class="uploader-preview-message error"></div>
             </div>
 
         </div>

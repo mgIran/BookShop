@@ -673,7 +673,7 @@ class PublishersPanelController extends Controller
         $model = Users::model()->findByPk($id);
         /* @var $model Users */
 
-        $model->userDetails->scenario = 'update_' . $model->userDetails->type . '_profile';
+        $model->userDetails->scenario = 'update_' . $model->userDetails->type . '_profile_admin';
 
         if (isset($_POST['Users']))
             $this->performAjaxValidation($model);
