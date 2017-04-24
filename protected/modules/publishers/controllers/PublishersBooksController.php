@@ -58,11 +58,12 @@ class PublishersBooksController extends Controller
                 'attribute' => 'icon',
                 'rename' => 'random',
                 'validateOptions' => array(
+                    'ratio' => 0.6666666666666667,
                     'dimensions' => array(
                         'minWidth' => 400,
-                        'minHeight' => 590,
-                        'maxWidth' => 400,
-                        'maxHeight' => 600
+                        'minHeight' => 600,
+                        //'maxWidth' => 400,
+                        //'maxHeight' => 600
                     ),
                     'acceptedTypes' => array('jpg', 'jpeg', 'png')
                 )

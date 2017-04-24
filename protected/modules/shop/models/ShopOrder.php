@@ -43,6 +43,7 @@ class ShopOrder extends CActiveRecord
 	const STATUS_STOCK_PROCESS = 3;
 	const STATUS_SENDING = 4;
 	const STATUS_DELIVERED = 5;
+	const STATUS_CANCELED = 6;
 
 	/**
 	 * @return string the associated database table name
@@ -61,6 +62,7 @@ class ShopOrder extends CActiveRecord
         self::STATUS_STOCK_PROCESS => 'پردازش انبار',
         self::STATUS_SENDING => 'در حال ارسال',
         self::STATUS_DELIVERED => 'تحویل شده',
+        self::STATUS_CANCELED => 'انصرافی',
     ];
 
 	public $paymentStatusLabels = [

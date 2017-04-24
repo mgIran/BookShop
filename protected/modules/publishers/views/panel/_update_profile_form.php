@@ -59,7 +59,12 @@
             </div>
 
             <div class="form-group">
-                <?php echo $form->textField($model,'nickname',array('placeholder'=>$model->getAttributeLabel('nickname'),'maxlength'=>20,'class'=>'form-control')); ?>
+                <?php echo $form->textField($model,'publication_name',array('placeholder'=>$model->getAttributeLabel('publication_name').' *','maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'publication_name'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->textField($model,'nickname',array('placeholder'=>$model->getAttributeLabel('nickname').' *','maxlength'=>20,'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'nickname'); ?>
             </div>
 
@@ -114,7 +119,12 @@
             </div>
 
             <div class="form-group">
-                <?php echo $form->textField($model,'nickname',array('placeholder'=>$model->getAttributeLabel('nickname'),'maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->textField($model,'publication_name',array('placeholder'=>$model->getAttributeLabel('publication_name').' *','maxlength'=>50,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'publication_name'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->textField($model,'nickname',array('placeholder'=>$model->getAttributeLabel('nickname').' *','maxlength'=>50,'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'nickname'); ?>
             </div>
 

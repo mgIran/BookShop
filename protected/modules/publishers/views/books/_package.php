@@ -142,6 +142,7 @@
                                             }",
                                             'success'=>"js:function(data){
                                                 if(data.status){
+                                                    $('.save-package-message').text('اطلاعات با موفقیت ثبت شد. کتاب ثبت شده بعد از تایید توسط کارشناسان در سایت نمایش داده خواهد شد.').removeClass('hidden');
                                                     $.fn.yiiListView.update('packages-list');
                                                     $('.uploader-message').text('');
                                                     $('#package-modal').modal('hide');

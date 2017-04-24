@@ -8,6 +8,7 @@
 $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
 $previewPath = Yii::getPathOfAlias("webroot")."/uploads/books/previews/";
 $purifier=new CHtmlPurifier();
+$purifier->options=array('HTML.ForbiddenElements' => array('a'));
 ?>
 <svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -74,7 +75,7 @@ $purifier=new CHtmlPurifier();
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="calendar-icon"></i></div>
-                                        <div class="meta-body ltr text-right">تاریخ انتشار<div class="meta-heading"><?= CHtml::encode(JalaliDate::date('d F Y',$model->lastPackage->publish_date)) ?></div></div>
+                                        <div class="meta-body ltr text-right">تاریخ انتشار<div class="meta-heading"><?= ($model->lastPackage->publish_date)?CHtml::encode(JalaliDate::date('d F Y',$model->lastPackage->publish_date)):'منتشر نشده'; ?></div></div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="pull-right"><i class="file-icon"></i></div>

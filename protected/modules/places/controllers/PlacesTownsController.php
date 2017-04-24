@@ -10,7 +10,7 @@ class PlacesTownsController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('create','update','admin','delete','index','view')
+			'backend' => array('create', 'update', 'admin', 'delete')
 		);
 	}
 

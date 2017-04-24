@@ -11,7 +11,7 @@ Yii::app()->clientScript->registerCss('imgSize','
 ');
 
 $this->breadcrumbs=array(
-	'کاربران'=>array('index'),
+	'کاربران'=>array('admin'),
 	$model->userDetails->fa_name && !empty($model->userDetails->fa_name)?$model->userDetails->fa_name:$model->email,
 );
 if($model->role_id == 2)
@@ -21,6 +21,7 @@ if($model->role_id == 2)
 		array('label'=>'نمایش کتابخانه کاربر', 'url'=>array("userLibrary",'id'=>$model->id)),
 		array('label'=>'نمایش تراکنش های کاربر', 'url'=>array("userTransactions",'id'=>$model->id)),
 		array('label'=>'نمایش جلسات کاری فعال کاربر', 'url'=>array("sessions",'id'=>$model->id)),
+        array('label'=>'ویرایش اطلاعات کاربر', 'url'=>array('/publishers/panel/update', 'id'=>$model->id)),
 		array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
 		array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
 		array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id, 'view-page' => true)),
@@ -54,6 +55,7 @@ else
 		array('label'=>'مدیرت کاربران', 'url'=>array($model->role_id == 2?'adminPublishers':'admin')),
 		array('label'=>'نمایش کتابخانه کاربر', 'url'=>array("userLibrary",'id'=>$model->id)),
 		array('label'=>'نمایش جلسات کاری فعال کاربر', 'url'=>array("sessions",'id'=>$model->id)),
+        array('label'=>'ویرایش اطلاعات کاربر', 'url'=>array('update', 'id'=>$model->id)),
 		array('label'=>'حذف کاربر', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'آیا از حذف کاربر اطمینان دارید؟')),
 		array('label'=>'تایید اطلاعات کاربر', 'url'=>array('confirmPublisher', 'id'=>$model->id, 'view-page' => true), 'linkOptions' => array('style' => 'margin-top:30px')),
 		array('label'=>'رد اطلاعات کاربر', 'url'=>array('refusePublisher', 'id'=>$model->id, 'view-page' => true)),
@@ -152,6 +154,10 @@ else
 				'name'=>'وضعیت اطلاعات مالی',
 				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->financial_info_status],
 			),
+            array(
+                'name'=>'تاریخ عضویت',
+                'value'=>JalaliDate::date('d F Y', $model->create_date),
+            ),
 		),
 	)); ?>
 <?php else:?>
@@ -241,6 +247,10 @@ else
 			array(
 				'name'=>'وضعیت اطلاعات مالی',
 				'value'=>$model->userDetails->detailsStatusLabels[$model->userDetails->financial_info_status],
+			),
+			array(
+				'name'=>'تاریخ عضویت',
+				'value'=>JalaliDate::date('d F Y', $model->create_date),
 			),
 		),
 	)); ?>

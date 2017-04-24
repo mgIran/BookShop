@@ -95,7 +95,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 		array(
 			'header'=>'تغییر وضعیت',
 			'value'=>function($data){
-				$form=CHtml::dropDownList("stauts", $data->status, $data->statusLabels, array("class"=>"change-order-status", "data-id"=>$data->id));
+				$form=CHtml::dropDownList("status", $data->status, $data->statusLabels, array("class"=>"change-order-status", "data-id"=>$data->id));
 				$form.=CHtml::button("ثبت", array("class"=>"btn btn-success order-change-status", 'style'=>'margin-right:5px;'));
 				return $form;
 			},

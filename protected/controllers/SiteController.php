@@ -25,6 +25,16 @@ class SiteController extends Controller
     }
 
     /**
+     * @return array action filters
+     */
+    public function filters()
+    {
+        return array(
+            'checkAccess + transactions' ,
+        );
+    }
+
+    /**
      * Declares class-based actions.
      */
     public function actions()

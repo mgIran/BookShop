@@ -23,7 +23,6 @@ class PagesManageController extends Controller
 				'view'
 			),
 			'backend' => array(
-				'index',
 				'create',
 				'update',
 				'admin',
@@ -38,7 +37,7 @@ class PagesManageController extends Controller
 	public function filters()
 	{
 		return array(
-			'checkAccess + index, create, update, admin, delete', // perform access control for CRUD operations
+			'checkAccess + create, update, admin, delete', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -151,17 +150,6 @@ class PagesManageController extends Controller
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('Pages');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
 	}
 
 	/**

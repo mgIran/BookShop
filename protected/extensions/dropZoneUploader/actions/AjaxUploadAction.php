@@ -141,6 +141,15 @@ class AjaxUploadAction extends CAction
                             $validFlag = false;
                         }
                     }
+                    if(isset($this->validateOptions['ratio'])){
+                        $imager = new Imager();
+                        $imageInfo = $imager->getImageInfo($file['tmp_name']);
+
+                        if(($imageInfo['width']/$imageInfo['height']) != $this->validateOptions['ratio']){
+                            $msg .= 'نسب ابعاد تصویر انتخاب شده صحیح نمی باشد.';
+                            $validFlag = false;
+                        }
+                    }
                     if (isset($this->validateOptions['acceptedTypes']) && is_array($this->validateOptions['acceptedTypes'])) {
                         if (!in_array($ext, $this->validateOptions['acceptedTypes'])) {
                             $msg .= 'فرمت فایل مجاز نیست.<br>فرمت های مجاز: '.implode(',', $this->validateOptions['acceptedTypes']).'<br>';
