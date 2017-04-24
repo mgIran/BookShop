@@ -99,6 +99,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 				$form.=CHtml::button("ثبت", array("class"=>"btn btn-success order-change-status", 'style'=>'margin-right:5px;'));
 				return $form;
 			},
+			'htmlOptions' => array('style' => 'width:210px'),
 			'type'=>'raw'
 		),
 		array(

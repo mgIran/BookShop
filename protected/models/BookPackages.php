@@ -133,7 +133,7 @@ class BookPackages extends CActiveRecord
             'reason' => 'دلیل',
             'for' => 'نوع نوبت چاپ',
             'isbn' => 'شابک',
-            'price' => 'قیمت نسخه دیجیتال',
+            'price' => 'قیمت نسخه الکترونیک',
             'sale_printed' => 'فروش نسخه چاپی',
             'printed_price' => 'قیمت نسخه چاپی',
             'print_year' => 'سال چاپ',

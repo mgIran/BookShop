@@ -9,6 +9,7 @@
  * @property string $password
  * @property string $email
  * @property string $role_id
+ * @property string $name_family
  *
  * The followings are the available model relations:
  * @property AdminRoles $role
@@ -20,7 +21,7 @@ class Admins extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ym_admins';
+		return '{{admins}}';
 	}
 
     /**
@@ -42,11 +43,12 @@ class Admins extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, password ,repeatPassword , email ,role_id', 'required' , 'on' => 'create'),
+            array('name_family, username, password ,repeatPassword , email ,role_id', 'required' , 'on' => 'create'),
             array('email' , 'email'),
             array('email' , 'unique'),
             array('email' , 'filter' , 'filter' => 'trim'),
             array('username, password', 'length', 'max'=>100),
+            array('name_family', 'length', 'max'=>255),
             array('username', 'checkExist' , 'on'=>'create'),
             array('email, role_id', 'required' , 'on'=>'update'),
             array('oldPassword ,newPassword ,repeatPassword, email, role_id', 'required' , 'on'=>'changePassword'),
@@ -88,6 +90,7 @@ class Admins extends CActiveRecord
     {
         return array(
             'id' => 'شناسه',
+            'name_family' => 'نام و نام خانوادگی',
             'username' => 'نام کاربری',
             'password' => 'کلمه عبور',
             'oldPassword' => 'کلمه عبور فعلی',
@@ -142,6 +145,7 @@ class Admins extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('name_family',$this->name_family,true);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('email',$this->email,true);

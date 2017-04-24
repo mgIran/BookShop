@@ -74,7 +74,7 @@ $('#package-info-form #sale_printed').on('change', function(){
             <?php echo CHtml::textField('print_year', '', array('class'=>'form-control', 'placeholder'=>'سال چاپ *'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال (تومان)'));?>
+            <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه الکترونیک (تومان)'));?>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clearfix" style="margin-top: 15px;">
             <?php echo CHtml::checkBox('free', false);?>

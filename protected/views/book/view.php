@@ -346,7 +346,14 @@ $purifier=new CHtmlPurifier();
                     <div class="heading">
                         <h4>درباره <?php echo Yii::app()->name;?></h4>
                     </div>
-                    <div class="text-justify"><?php echo $purifier->purify($about->summary); ?></div>
+                    <div class="text-justify"><?php
+                        $purifier = new CHtmlPurifier();
+                        $purifier->setOptions(array(
+                            'HTML.Allowed'=> 'p,a[href|target],b,i,br',
+                            'HTML.AllowedAttributes'=> 'style,id,class,src',
+                        ));
+                        echo $purifier->purify($about->summary);
+                        ?></div>
                 </div><div class="boxed">
                     <div class="heading">
                         <h4>دسته بندی ها</h4>

@@ -14,7 +14,7 @@
                 <th>حجم فایل</th>
                 <th>تاریخ بارگذاری</th>
                 <th>تاریخ انتشار</th>
-                <th>قیمت نسخه دیجیتال</th>
+                <th>قیمت نسخه الکترونیک</th>
                 <th>عملیات</th>
             </tr>
         </thead>
@@ -105,7 +105,7 @@
                                         <?php echo CHtml::textField('print_year', '', array('class'=>'form-control', 'placeholder'=>'سال چاپ *'));?>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه دیجیتال (تومان)'));?>
+                                        <?php echo CHtml::textField('price', '', array('class'=>'form-control', 'placeholder'=>'قیمت نسخه الکترونیک (تومان)'));?>
                                         <div style="margin-top: 10px">
                                             <?php echo CHtml::checkBox('free', false);?>
                                             <?php echo CHtml::label('رایگان', 'free');?>

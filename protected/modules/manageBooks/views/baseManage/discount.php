@@ -28,7 +28,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => 'Controller::parseNumbers(number_format($data->book->lastPackage->price))." تومان"'
         ),
         array(
-            'header' => 'قیمت دیجیتال با تخفیف',
+            'header' => 'قیمت الکترونیک با تخفیف',
             'value' => 'Controller::parseNumbers(number_format($data->book->offPrice))." تومان"'
         ),
         array(

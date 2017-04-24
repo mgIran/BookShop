@@ -20,6 +20,7 @@ $this->menu=array(
 	'filter'=>$model,
 	'itemsCssClass'=>'table',
 	'columns'=>array(
+		'name_family',
 		'username',
         'email',
         array(

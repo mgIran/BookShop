@@ -30,15 +30,16 @@ $this->menu=array(
     </div>
     <br>
     <br>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
         <h4>جزییات اقلام سفارش</h4>
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered">
             <thead>
             <tr>
                 <th>شرح محصول</th>
                 <th class="text-center">تعداد</th>
-                <th class="text-center hidden-xs">قیمت واحد<small>(همراه با تخفیف)</small></th>
-                <th class="text-center hidden-xs">قیمت کل</th>
+                <th class="text-center">قیمت پایه واحد</th>
+                <th class="text-center">قیمت واحد<small>(همراه با تخفیف)</small></th>
+                <th class="text-center">قیمت کل</th>
             </tr>
             </thead>
             <tbody>
@@ -52,15 +53,37 @@ $this->menu=array(
                     <td class="text-center">
                         <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
                     </td>
-                    <td class="text-center hidden-xs">
+                    <td class="text-center">
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->base_price)));?> تومان
+                    </td>
+                    <td class="text-center">
                         <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?> تومان
                     </td>
-                    <td class="text-center hidden-xs">
-                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?>تومان
+                    <td class="text-center">
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment * $item->qty)));?>تومان
                     </td>
                 </tr>
             <?php endforeach;?>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        
+                    </td>
+                    <td class="text-center">
+                        <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
+                    </td>
+                    <td class="text-center">
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->base_price)));?> تومان
+                    </td>
+                    <td class="text-center">
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?> تومان
+                    </td>
+                    <td class="text-center">
+                        <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment * $item->qty)));?>تومان
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
     <br>

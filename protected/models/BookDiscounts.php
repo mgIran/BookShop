@@ -84,9 +84,9 @@ class BookDiscounts extends CActiveRecord
 				$this->addError('amount' ,'مبلغ تخفیف نمی تواند خالی باشد.');
 		}else{
 			if($this->discount_type == self::DISCOUNT_TYPE_PERCENT && (!$this->percent || empty($this->percent) || !$this->printed_percent || empty($this->printed_percent)))
-				$this->addError('printed_percent' ,'درصد تخفیف نسخه دیجیتال یا چاپی نمی تواند خالی باشد.');
+				$this->addError('printed_percent' ,'درصد تخفیف نسخه الکترونیک یا چاپی نمی تواند خالی باشد.');
 			elseif($this->discount_type == self::DISCOUNT_TYPE_AMOUNT && (!$this->amount || empty($this->amount) || !$this->printed_amount || empty($this->printed_amount)))
-				$this->addError('amount' ,'مبلغ تخفیف نسخه دیجیتال یا چاپی نمی تواند خالی باشد.');
+				$this->addError('amount' ,'مبلغ تخفیف نسخه الکترونیک یا چاپی نمی تواند خالی باشد.');
 		}
 	}
 
@@ -114,9 +114,9 @@ class BookDiscounts extends CActiveRecord
 			'end_date' => 'تاریخ پایان' ,
 			'printed_end_date' => 'تاریخ پایان تخفیف چاپی' ,
 			'discount_type' => 'نوع تخفیف' ,
-			'percent' => 'درصد نسخه دیجیتال' ,
+			'percent' => 'درصد نسخه الکترونیک' ,
 			'printed_percent' => 'درصد تخفیف نسخه چاپی' ,
-			'amount' => 'مقدار تخفیف برای نسخه دیجیتال' ,
+			'amount' => 'مقدار تخفیف برای نسخه الکترونیک' ,
 			'printed_amount' => 'مقدار تخفیف برای نسخه چاپی' ,
 		);
 	}

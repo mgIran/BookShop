@@ -6,7 +6,7 @@
 
 <div class="white-form row">
     <h3>ناشر کتاب شوید</h3>
-    <p class="description">جهت نشر دیجیتال کتاب های خود در کتابیک به عنوان ناشر ثبت نام کنید.</p>
+    <p class="description">جهت نشر الکترونیک کتاب های خود در کتابیک به عنوان ناشر ثبت نام کنید.</p>
 
     <div class="steps-container">
         <ul class="steps">

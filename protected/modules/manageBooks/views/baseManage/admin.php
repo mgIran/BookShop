@@ -42,7 +42,7 @@ $this->breadcrumbs=array(
 			'value' => '$data->price != 0?$data->price." تومان":"رایگان"'
 		),
 		array(
-			'header' => 'قیمت دیجیتال با تخفیف',
+			'header' => 'قیمت الکترونیک با تخفیف',
 			'value' => function($data){
 				if($data->discount && $data->discount->hasPriceDiscount())
 					return Controller::parseNumbers(number_format($data->offPrice))." تومان";

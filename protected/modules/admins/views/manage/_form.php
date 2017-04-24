@@ -18,6 +18,12 @@ Yii::app()->clientScript->registerScript('resetForm','document.getElementById("a
 )); ?>
 
 	<div class="row form-group">
+		<?php echo $form->labelEx($model,'name_family' ,array('class'=>'col-lg-2 control-label')); ?>
+		<?php echo $form->textField($model,'name_family',array('size'=>50,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'name_family'); ?>
+	</div>
+    
+    <div class="row form-group">
 		<?php echo $form->labelEx($model,'username' ,array('class'=>'col-lg-2 control-label')); ?>
 		<?php
         if($model->isNewRecord)

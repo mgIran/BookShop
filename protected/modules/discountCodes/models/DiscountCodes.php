@@ -111,7 +111,7 @@ class DiscountCodes extends CActiveRecord
 			'amount' => 'مبلغ تخفیف',
 			'user_id' => 'User',
 			'shop_allow' => 'مجاز در فروشگاه',
-			'digital_allow' => 'مجاز در خرید نسخه دیجیتال',
+			'digital_allow' => 'مجاز در خرید نسخه الکترونیک',
 		);
 	}
 
@@ -313,7 +313,7 @@ class DiscountCodes extends CActiveRecord
 		if($this->shop_allow)
 			$text[]='فروشگاه';
 		if($this->digital_allow)
-			$text[]='خرید دیجیتال';
+			$text[]='خرید الکترونیک';
 		return $text?implode(' ، ',$text):'بدون مجوز';
 	}
 }
