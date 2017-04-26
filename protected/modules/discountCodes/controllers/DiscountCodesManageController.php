@@ -15,7 +15,7 @@ class DiscountCodesManageController extends Controller
 	{
 		return array(
 			'frontend' => array('view', 'removeCode'),
-			'backend' => array('admin', 'create', 'update', 'delete', 'codeGenerator')
+			'backend' => array('admin', 'create', 'update', 'delete', 'codeGenerator', 'report')
 		);
 	}
 
@@ -135,6 +135,22 @@ class DiscountCodesManageController extends Controller
 			$model->attributes=$_GET['DiscountCodes'];
 		$model->user_id=NULL;
 		$this->render('admin',array(
+			'model'=>$model,
+		));
+	}
+
+	/**
+	 * Manages all models.
+	 */
+	public function actionReport()
+	{
+		$this->layout = '//layouts/column1';
+		$model=new DiscountUsed('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['DiscountUsed']))
+			$model->attributes=$_GET['DiscountUsed'];
+
+		$this->render('report',array(
 			'model'=>$model,
 		));
 	}

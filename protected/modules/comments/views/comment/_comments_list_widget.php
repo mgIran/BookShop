@@ -34,7 +34,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 			'header'=>'نام کتاب',
 			'value'=>'CHtml::link($data->books->title, $data->pageUrl, array("target"=>"_blank"))',
 			'type'=>'raw',
-			'htmlOptions'=>array('width'=>50),
+			'htmlOptions'=>array('width'=>100),
 		),
 		array(
 			'header'=>Yii::t('commentsModule.msg', 'Comment Text'),
@@ -43,7 +43,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
 		array(
 			'header'=>'امتیاز',
 			'value' => '"<div class=\'stars\'>".Controller::printRateStars($data->getUserRate())."</div>"',
-			'type' => 'raw'
+			'type' => 'raw',
+			'htmlOptions'=>array('width'=>120),
 		),
 		array(
 			'header'=>Yii::t('commentsModule.msg', 'Create Time'),
@@ -73,7 +74,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 				'approve' => array(
 					'label'=>Yii::t('commentsModule.msg', 'Approve').' | ',
 					'url'=>'Yii::app()->urlManager->createUrl(CommentsModule::APPROVE_ACTION_ROUTE, array("id"=>$data->comment_id))',
-                        'options'=>array('style'=>'margin-right: 5px;'),
+					'options'=>array('style'=>'margin: 0 5px;'),
 					'visible'=>'$data->status == 0',
 					'click'=>'function(){
 						$.post($(this).attr("href")).success(function(data){

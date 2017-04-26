@@ -276,7 +276,7 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                 ?>
                                 <?php
                                 if($model->preview_file && file_exists($previewPath.$model->preview_file)){
-                                    echo '<a href="'.Yii::app()->baseUrl.'/uploads/books/previews/'.$model->preview_file.'" class="btn-blue" style="color: #fff;display: block;margin-top: 4px;overflow: hidden;width: 100%;"><i class="add-to-library-icon"></i>دریافت پیش نمایش</a>';
+                                    echo '<a href="'.Yii::app()->createUrl('/book/download/'.$model->id.'/'.urlencode($model->title).'/?preview=true').'" class="btn-blue" style="color: #fff;display: block;margin-top: 4px;overflow: hidden;width: 100%;"><i class="add-to-library-icon"></i>دریافت پیش نمایش</a>';
                                 }
                                 ?>
                                 <div class="small-info">

@@ -188,7 +188,8 @@ class DiscountCodes extends CActiveRecord
 	#region calculate discount
 	/**
 	 * @param $price
-	 * @return array|mixed
+	 * @param $allow_type
+	 * @return array|mixed|null
 	 */
 	public static function calculateDiscountCodes(&$price, $allow_type)
 	{
@@ -275,16 +276,18 @@ class DiscountCodes extends CActiveRecord
     }
     #endregion
 
-    /**
-     * @param $user Users
-     */
-    public static function InsertCodes($user){
+	/**
+	 * @param $user
+	 * @param $amount
+	 */
+    public static function InsertCodes($user, $amount){
         $discountIdsInSession = $user->getDiscountIds();
         if(is_array($discountIdsInSession)){ // exists multiple discount code
             foreach($discountIdsInSession as $dis_id){
                 $discountUsed = new DiscountUsed();
                 $discountUsed->user_id = $user->id;
                 $discountUsed->discount_id = $dis_id;
+                $discountUsed->discount_amount = $amount;
                 $discountUsed->date = time();
                 @$discountUsed->save();
             }
@@ -293,6 +296,7 @@ class DiscountCodes extends CActiveRecord
             $discountUsed = new DiscountUsed();
             $discountUsed->user_id = $user->id;
             $discountUsed->discount_id = $discountIdsInSession;
+			$discountUsed->discount_amount = $amount;
             $discountUsed->date = time();
             @$discountUsed->save();
         }

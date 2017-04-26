@@ -211,6 +211,8 @@ class Controller extends AuthController
                         array('label' => 'گزارش فروش کتاب ها', 'url' => Yii::app()->createUrl('/book/reportBookSales')),
                         array('label' => 'گزارش افزایش اعتبار', 'url' => Yii::app()->createUrl('/users/credit/reportCreditBuys')),
                         array('label' => 'گزارش استفاده از بن', 'url' => Yii::app()->createUrl('/users/credit/reportBonBuys')),
+                        array('label' => 'گزارش استفاده از کدهای تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/report')),
+                        array('label' => 'گزارش استفاده از طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/report')),
                     )
                 ),
                 array(
@@ -244,6 +246,7 @@ class Controller extends AuthController
                         array('label' => 'مدیریت کاربران', 'url' => Yii::app()->createUrl('/users/manage')),
                         array('label' => 'مدیریت بن های خرید', 'url' => Yii::app()->createUrl('/users/bon')),
                         array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/admin')),
+                        array('label' => 'مدیریت طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/admin')),
                     )
                 ),
                 array(
@@ -260,7 +263,6 @@ class Controller extends AuthController
                         array('label' => 'صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
                         array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
                         array('label' => 'مدیریت تگ ها', 'url' => Yii::app()->createUrl('/tags/admin')),
-                        array('label' => 'مدیریت طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/admin')),
                         array('label' => 'تغییر کلمه عبور', 'url' => Yii::app()->createUrl('/admins/manage/changePass')),
                     )
                 ),

@@ -119,7 +119,7 @@ class UserBonRel extends CActiveRecord
     }
 
     /**
-     * @param $criteria
+     * @param $criteria CDbCriteria
      */
     public function reportConditions(&$criteria)
     {

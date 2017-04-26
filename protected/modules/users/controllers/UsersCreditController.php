@@ -168,7 +168,7 @@ class UsersCreditController extends Controller
                 if($userDetails->save())
                 {
                     foreach($result['ids'] as $id)
-                        Festivals::ApplyUsed($id, Yii::app()->user->getId(), $model->id);
+                        Festivals::ApplyUsed($id, $model->amount, $gift, Yii::app()->user->getId(), $model->id);
                 }
                 Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
             } else {

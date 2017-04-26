@@ -8,6 +8,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'افزودن طرح جدید', 'url'=>array('create')),
+	array('label'=>'گزارشات استفاده از طرح ها', 'url'=>array('report')),
 );
 ?>
 <h1>مدیریت طرح ها</h1>

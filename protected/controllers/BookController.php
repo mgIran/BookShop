@@ -106,7 +106,7 @@ class BookController extends Controller
                     $this->refresh();
                 }
                 if ($discount->digital_allow) {
-                    Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر قابل استفاده در این بخش نیست.');
+                    Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر مربوط به خرید نسخه چاپی می باشد.');
                     $this->refresh();
                 }
                 if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times) {
@@ -151,7 +151,7 @@ class BookController extends Controller
                             $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
                             Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
                             if($discountCodesInSession)
-                                DiscountCodes::InsertCodes($user); // insert used discount code in db
+                                DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                             Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
                             $this->redirect(array('/library'));
                         }else
@@ -186,7 +186,7 @@ class BookController extends Controller
                     $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
                     Library::AddToLib($model->id, $model->lastPackage->id, $userID);
                     if($discountCodesInSession)
-                        DiscountCodes::InsertCodes($user); // insert used discount code in db
+                        DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                     Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
                     $this->redirect(array('/library'));
                 }
@@ -222,13 +222,13 @@ class BookController extends Controller
 
         Yii::app()->getModule('discountCodes');
         $price = $basePrice; // price, base price with discount code
-        $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price);
+        $discountCodesInSession = DiscountCodes::calculateDiscountCodes($price, 'digital');
         $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
 
         $transactionResult = false;
         if ($_GET['Status'] == 'OK') {
             $gateway = new ZarinPal();
-            $gateway->verify($Authority, $Amount);
+            $gateway->verify($Authority, $price);
             if ($gateway->getStatus() == 100) {
                 $model->scenario = 'update';
                 $model->status = 'paid';
@@ -238,7 +238,7 @@ class BookController extends Controller
                 $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj,$model->id);
                 Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
                 if($discountCodesInSession)
-                    DiscountCodes::InsertCodes($user); // insert used discount code in db
+                    DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                 Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
             } else {
                 Yii::app()->user->setFlash('failed', $gateway->getError());
@@ -335,58 +335,67 @@ class BookController extends Controller
     /**
      * Download book
      *
-     * public function actionDownload($id, $title)
-     * {
-     * $model = $this->loadModel($id);
-     * if ($model->price == 0) {
-     * $model->download += 1;
-     * $model->setScenario('update-download');
-     * $model->save();
-     * $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
-     * } else {
-     * $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
-     * if ($buy) {
-     * $model->download += 1;
-     * $model->setScenario('update-download');
-     * $model->save();
-     * $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
-     * } else
-     * $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
-     * }
-     * }
-     *
-     * protected function download($fileName, $filePath)
-     * {
-     * $fakeFileName = $fileName;
-     * $realFileName = $fileName;
-     *
-     * $file = $filePath . DIRECTORY_SEPARATOR . $realFileName;
-     * $fp = fopen($file, 'rb');
-     *
-     * $mimeType = '';
-     * switch (pathinfo($fileName, PATHINFO_EXTENSION)) {
-     * case 'apk':
-     * $mimeType = 'application/vnd.android.package-archive';
-     * break;
-     *
-     * case 'xap':
-     * $mimeType = 'application/x-silverlight-app';
-     * break;
-     *
-     * case 'ipa':
-     * $mimeType = 'application/octet-stream';
-     * break;
-     * }
-     *
-     * header('Pragma: public');
-     * header('Expires: 0');
-     * header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-     * header('Content-Transfer-Encoding: binary');
-     * header('Content-Type: ' . $mimeType);
-     * header('Content-Disposition: attachment; filename=' . $fakeFileName);
-     *
-     * echo stream_get_contents($fp);
-     * }*/
+     */
+    public function actionDownload($id, $title)
+    {
+        $model = $this->loadModel($id);
+        if(isset($_GET['preview']) && $_GET['preview'] == true){
+            $previewPath = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
+            $ext = strtolower(pathinfo($model->preview_file, PATHINFO_EXTENSION));
+            $this->download($model->preview_file, $previewPath, 'پیش نمایش - '.str_replace(' ','_',$model->title).'.'.$ext);
+        }else{
+//            if($model->price == 0){
+//                $model->download += 1;
+//                $model->setScenario('update-download');
+//                $model->save();
+//                $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+//            }else{
+//                $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
+//                if($buy){
+//                    $model->download += 1;
+//                    $model->setScenario('update-download');
+//                    $model->save();
+//                    $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+//                }else
+//                    $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
+//            }
+            throw new CHttpException(500, 'درخواست موردنظر نامعتبر است.');
+        }
+    }
+
+    protected function download($fileName, $filePath, $fakeFileName = null)
+    {
+        if(!$fakeFileName)
+            $fakeFileName = $fileName;
+        $realFileName = $fileName;
+
+        $fileName = $filePath . DIRECTORY_SEPARATOR . $realFileName;
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        switch($ext){
+            case 'pdf':
+                $mimeType = 'application/pdf';
+                break;
+            case 'epub':
+                $mimeType = 'application/epub+zip';
+                break;
+            default:
+                $mimeType = 'application/octet-stream';
+                break;
+        }
+
+        header('Pragma: public');    // required
+        header('Expires: 0');        // no cache
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($fileName)) . ' GMT');
+        header('Cache-Control: private', false);
+        header('Content-Type: ' . $mimeType);
+        header('Content-Disposition: attachment; filename="' . $fakeFileName . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($fileName));    // provide file size
+        header('Connection: close');
+        echo readfile($fileName);
+        exit();
+    }
 
     /**
      * Show books list

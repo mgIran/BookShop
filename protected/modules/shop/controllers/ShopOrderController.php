@@ -274,9 +274,11 @@ class ShopOrderController extends Controller
         Yii::app()->getModule('discountCodes');
         $order = $this->loadModel($id);
         if($order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID){
+            $discountIdsInSession = $order->user->getDiscountIds();
+            $discountObj = DiscountCodes::model()->findByPk($discountIdsInSession);
             if($order->payment_amount !== 0){
                 if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
-                    DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+                    DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                     $order->setStatus(ShopOrder::STATUS_PENDING)->save();
                     Shop::SetSuccessFlash();
                 }else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
@@ -289,7 +291,7 @@ class ShopOrderController extends Controller
                     $userDetails->credit = $userDetails->credit - $order->payment_amount;
                     if($userDetails->save()){
                         $order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
-                        DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+                        DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                         Shop::SetSuccessFlash();
                     }else
                         Shop::SetFailedFlash();
@@ -323,7 +325,7 @@ class ShopOrderController extends Controller
                     }
                 }
             }else{
-                DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+                DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                 Shop::SetSuccessFlash();
             }
         }
@@ -356,7 +358,9 @@ class ShopOrderController extends Controller
                 $model->status = 'paid';
                 $model->token = $gateway->getRefId();
                 $model->save();
-                DiscountCodes::InsertCodes($order->user); // insert used discount code in db
+                $discountIdsInSession = $order->user->getDiscountIds();
+                $discountObj = DiscountCodes::model()->findByPk($discountIdsInSession);
+                DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                 $order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
                 Shop::SetSuccessFlash();
             }else
@@ -469,7 +473,7 @@ class ShopOrderController extends Controller
                 $this->redirect(array('/shop/order/create'));
             }
             if(!$discount->shop_allow){
-                Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر قابل استفاده در این بخش نیست.');
+                Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر مربوط به خرید نسخه دیجیتال می باشد.');
                 $this->redirect(array('/shop/order/create'));
             }
             if($discount->limit_times && $discount->usedCount() >= $discount->limit_times){

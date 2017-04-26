@@ -20,7 +20,7 @@ class AdminsDashboardController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess - index', // perform access control for CRUD operations
+            'checkAccess', // perform access control for CRUD operations
         );
     }
 

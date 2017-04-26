@@ -257,7 +257,7 @@ class Books extends CActiveRecord
             $price = $price - $tax;
 		}
 		$commission_amount = ($price * $commission) / 100;
-
+		$commission_amount = floatval(number_format($commission_amount,1));
 		// save publisher commission percent and amount in db
 		if($buy)
 		{

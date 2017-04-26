@@ -41,6 +41,12 @@ class Festivals extends CActiveRecord
         self::FESTIVAL_TYPE_BOOK_BUY => 'مبلغی'
     ];
 
+    public $year_altField;
+    public $month_altField;
+    public $from_date_altField;
+    public $to_date_altField;
+    public $report_type;
+
     /**
      * @return array validation rules for model attributes.
      */
@@ -213,17 +219,21 @@ class Festivals extends CActiveRecord
      *
      * @param $festival_id
      * @param $user_id
+     * @param $range
+     * @param $gift_amount
      * @param null $transaction_id
      * @param null $book_id
      * @return bool
      */
-    public static function ApplyUsed($festival_id, $user_id, $transaction_id = NULL, $book_id = NULL)
+    public static function ApplyUsed($festival_id, $user_id, $range, $gift_amount, $transaction_id = NULL, $book_id = NULL)
     {
         $model = new FestivalUsed();
         $model->festival_id = $festival_id;
         $model->user_id = $user_id;
         $model->transaction_id = $transaction_id;
         $model->book_id = $book_id;
+        $model->range = $range;
+        $model->gift_amount = $gift_amount;
         return @$model->save();
     }
 }

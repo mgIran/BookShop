@@ -14,7 +14,7 @@ class FestivalsManageController extends Controller
 	public static function actionsType()
 	{
 		return array(
-			'backend' => array('admin', 'create', 'update', 'delete')
+			'backend' => array('admin', 'create', 'update', 'delete', 'report')
 		);
 	}
 
@@ -109,13 +109,28 @@ class FestivalsManageController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		Festivals::DeleteExpires();
 		$model=new Festivals('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Festivals']))
 			$model->attributes=$_GET['Festivals'];
 
 		$this->render('admin',array(
+			'model'=>$model,
+		));
+	}
+
+	/**
+	 * Manages all models.
+	 */
+	public function actionReport()
+	{
+		$this->layout = '//layouts/column1';
+		$model=new FestivalUsed('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['FestivalUsed']))
+			$model->attributes=$_GET['FestivalUsed'];
+
+		$this->render('report',array(
 			'model'=>$model,
 		));
 	}
