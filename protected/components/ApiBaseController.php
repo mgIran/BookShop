@@ -127,4 +127,14 @@ class ApiBaseController extends CController
         else
             throw new CHttpException(400, Yii::t('yii', 'Your request is invalid.'));
     }
+
+    /**
+     * return array of sent parameters
+     *
+     * @return string
+     */
+    protected function getRequest()
+    {
+        return CJSON::decode(file_get_contents('php://input'));
+    }
 }

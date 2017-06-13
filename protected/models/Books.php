@@ -179,35 +179,42 @@ class Books extends CActiveRecord
 	 * models according to data in model fields.
 	 * - Pass data provider to CGridView, CListView or any similar widget.
 	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
+	 * @param CDbCriteria $criteria
+	 * @param string $returnType
+	 *
+	 * @return CActiveDataProvider or CDbCriteria
 	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+	public function search($criteria = null, $returnType = 'dataProvider')
+    {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria = new CDbCriteria;
-		$criteria->compare('publisher_id', $this->publisher_id);
-		$criteria->compare('t.id', $this->id, true);
-		$criteria->compare('t.title', $this->title, true);
-		$criteria->compare('category_id', $this->category_id);
-		$criteria->compare('t.status', $this->status);
+        if (!$criteria)
+            $criteria = new CDbCriteria;
+        $criteria->compare('publisher_id', $this->publisher_id);
+        $criteria->compare('t.id', $this->id);
+        $criteria->compare('t.title', $this->title, true);
+        $criteria->compare('category_id', $this->category_id);
+        $criteria->compare('t.status', $this->status);
 
-		if($this->devFilter){
-			$criteria->with = array('publisher', 'publisher.userDetails');
-			$criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
-			$criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
-		}
+        if ($this->devFilter) {
+            $criteria->with[] = 'publisher';
+            $criteria->with[] = 'publisher.userDetails';
+            $criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
+            $criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
+        }
 
-		$criteria->addCondition('deleted=0');
-		$criteria->addCondition('t.title != ""');
-		$criteria->order = 't.id DESC';
+        $criteria->addCondition('deleted=0');
+        $criteria->addCondition('t.title != ""');
+        $criteria->order = 't.id DESC';
 
-		return new CActiveDataProvider($this ,array(
-			'criteria' => $criteria ,
-			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)
-		));
-	}
+        if ($returnType == 'dataProvider')
+            return new CActiveDataProvider($this, array(
+                'criteria' => $criteria,
+                'pagination' => array('pageSize' => isset($_GET['pageSize']) ? $_GET['pageSize'] : 20)
+            ));
+        elseif ($returnType == 'criteria')
+            return $criteria;
+    }
 
 	public function publisherBooks($publisher_id=false)
 	{
@@ -500,6 +507,8 @@ class Books extends CActiveRecord
 	 * @param array $categoryIds
 	 * @param string $order
 	 * @param string $limit
+	 * @param string $alias
+     *
 	 * @return CDbCriteria
 	 */
 	public function getValidBooks($categoryIds = array(), $order = 'confirm_date DESC', $limit = null, $alias = 't')
