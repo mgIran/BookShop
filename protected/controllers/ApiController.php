@@ -6,7 +6,8 @@ class ApiController extends ApiBaseController
      */
     public function filters()
     {
-        return array(//'RestAccessControl'
+        return array(
+            //'RestAccessControl'
         );
     }
 
@@ -223,7 +224,6 @@ class ApiController extends ApiBaseController
         } else
             $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Entity and ID variable is required.']), 'application/json');
     }
-
     /**
      * Get list of models
      */

@@ -93,6 +93,10 @@ return array(
 
 	// application components
 	'components'=>array(
+		'JWT' => array(
+			'class' => 'ext.jwt.JWT',
+			'key' => base64_encode(md5('Rahbod-Ketabic-2017')),
+		),
 		'yexcel' => array(
 			'class' => 'ext.yexcel.Yexcel'
 		),
