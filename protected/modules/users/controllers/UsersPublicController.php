@@ -469,7 +469,10 @@ class UsersPublicController extends Controller
     {
         if(isset($_GET['return-url']))
             Yii::app()->user->returnUrl = $_GET['return-url'];
-        $googleAuth = new GoogleOAuth();
+        $platform = "web";
+        if(isset($_GET['platform']))
+            $platform = $_GET['platform'];
+        $googleAuth = new GoogleOAuth($platform);
         $model = new UserLoginForm('OAuth');
         $googleAuth->login($model);
     }

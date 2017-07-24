@@ -212,6 +212,8 @@ class YmDbHttpSession extends CHttpSession
                     'device_platform' => 'web',
                     'device_ip' => $this->getRealIp(),
                     'device_type' => $device->getDeviceType(),
+                    'token' => Controller::generateRandomString(40),
+                    'refresh_token' => Controller::generateRandomString(),
                 ));
             else
                 $db->createCommand()->update($this->sessionTableName,array(
@@ -222,6 +224,8 @@ class YmDbHttpSession extends CHttpSession
                     'device_platform' => 'web',
                     'device_ip' => $this->getRealIp(),
                     'device_type' => $device->getDeviceType(),
+                    'token' => Controller::generateRandomString(40),
+                    'refresh_token' => Controller::generateRandomString(),
                 ),'id=:id',array(':id'=>$id));
         }
         catch(Exception $e)
