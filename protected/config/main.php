@@ -19,6 +19,8 @@ return array(
 		'application.components.*',
 		'ext.yiiSortableModel.models.*',
 		'application.modules.shop.models.*',
+		'application.modules.users.models.*',
+		'application.modules.users.components.*'
 	),
 
 	'modules'=>array(
@@ -96,6 +98,10 @@ return array(
 		'JWT' => array(
 			'class' => 'ext.jwt.JWT',
 			'key' => base64_encode(md5('Rahbod-Ketabic-2017')),
+		),
+		'JWS' => array(
+			'class' => 'ext.jwt.JWT',
+			'key' => base64_encode(sha1('Rahbod-Ketabic-2017')),
 		),
 		'yexcel' => array(
 			'class' => 'ext.yexcel.Yexcel'

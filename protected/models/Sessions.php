@@ -12,6 +12,7 @@
  * @property string $device_platform
  * @property string $device_ip
  * @property string $device_type
+ * @property string $refresh_token
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -41,7 +42,7 @@ class Sessions extends CActiveRecord
 			array('user_id', 'length', 'max'=>10),
 			array('user_type, device_platform', 'length', 'max'=>20),
 			array('device_ip', 'length', 'max'=>15),
-			array('device_type', 'length', 'max'=>255),
+			array('device_type, refresh_token', 'length', 'max'=>255),
 			array('data', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

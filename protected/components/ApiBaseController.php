@@ -7,6 +7,11 @@
  */
 class ApiBaseController extends CController
 {
+    public $user;
+
+    private $_client_id = 'AbRgEQy91vLU3S073Byc0-8pixMTkxplOB-jAplL2FwvoGi6eBGuFZ8ckmLXFT0nBRrz_6C5rGbmmY2f';
+    private $_client_secret = 'EMcxZTH6EZ_3Y8b71wcFeB6J7t4aFGhx5He3c2P1x2H_yHVh9xB581mM8SB5IDWGZGpF8tAHz85z39Ae';
+
     protected function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
     {
         // set the status
@@ -86,32 +91,26 @@ class ApiBaseController extends CController
     }
 
     /**
-     * @return bool
+     * The filter method for 'restAccessControl' filter.
+     * This filter throws an exception (CHttpException with code 400) if the applied action is receiving a non-AJAX request.
+     * @param CFilterChain $filterChain the filter chain that the filter is on.
+     * @throws CHttpException if the current request is not an AJAX request.
      */
-    protected function _checkAuth()
+    public function filterRestAccessControl($filterChain)
     {
-        if(!isset(getallheaders()['Authorization'])){
-            $this->_sendResponse(401);
-        }
-        $authorization = getallheaders()['Authorization'];
-        $token = str_ireplace('Token ', '', $authorization);
-        if(!$token)
-            $this->_sendResponse(401, 'Error: Authorization code was not set or invalid.');
-        // Find the api token
+        if($this->_checkRest())
+            $filterChain->run();
+        else
+            $this->_sendResponse(401, CJSON::encode(['status' => false, 'message' => 'Client ID Or Client Secret is invalid.']), 'application/json');
+    }
 
-//        $this->_headers = array(
-//            "Authorization: Bearer " . $this->_auth,
-//            'Content-Type: application/json',
-//        );
-        $model = ApiTokens::model()->findByAttributes(array('api_token' => $token));
-        if($model === null)
-            $this->_sendResponse(401, 'Error: Not Authorized.');
-//        $model->domain = strpos($model->domain, '/', strlen($model->domain) - 1) === false?$model->domain:substr($model->domain, 0, strlen($model->domain) - 1);
-//        if($model->domain != Yii::app()->request->getHostInfo() . Yii::app()->request->getBaseUrl())
-//            $this->_sendResponse(401, 'Error: Your Domain not Authorized.');
-        if((int)$model->status == ApiTokens::STATUS_DEACTIVE)
-            $this->_sendResponse(401, 'Error: Your token has been disabled, please contact support.');
-        return true;
+    protected function _checkRest()
+    {
+        if(isset($_SERVER['PHP_AUTH_USER']) and isset($_SERVER['PHP_AUTH_PW']) and
+            $_SERVER['PHP_AUTH_USER'] == $this->_client_id and $_SERVER['PHP_AUTH_PW'] == $this->_client_secret
+        )
+            return true;
+        return false;
     }
 
     /**
@@ -120,12 +119,64 @@ class ApiBaseController extends CController
      * @param CFilterChain $filterChain the filter chain that the filter is on.
      * @throws CHttpException if the current request is not an AJAX request.
      */
-    public function filterRestAccessControl($filterChain)
+    public function filterRestAuthControl($filterChain)
     {
         if($this->_checkAuth())
             $filterChain->run();
         else
-            throw new CHttpException(400, Yii::t('yii', 'Your request is invalid.'));
+            $this->_sendResponse(401, ['status' => false, 'message' => 'Client ID Or Client Secret is invalid.']);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _checkAuth()
+    {
+        if(!isset(getallheaders()['Authorization'])){
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 101,
+                'message' => 'Access Token not sent.']), 'application/json');
+        }
+        $authorization = getallheaders()['Authorization'];
+        if(strpos($authorization, 'Bearer') === false){
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 102,
+                'message' => 'Access Token is invalid. Please Authorize again.']), 'application/json');
+        }
+        $access_token = str_ireplace('Bearer ', '', $authorization);
+        if(!$access_token)
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 103,
+                'message' => 'Access Token is invalid. Please Authorize again.']), 'application/json');
+        // Find the api token
+        $token = Yii::app()->JWT->decode($access_token);
+        if(!$token)
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 104,
+                'message' => 'Access Token is invalid. Please Authorize again.']), 'application/json');
+        if(!$token->session_id)
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 104,
+                'message' => 'Access Token is invalid. Please Authorize again.']), 'application/json');
+
+        $session = Sessions::model()->findByPk($token->session_id);
+        if(!$session)
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 104,
+                'message' => 'Access Token is invalid or revoked. Please Authorize again.']), 'application/json');
+        if(!$session->user)
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 104,
+                'message' => 'Access Token is invalid. Please Authorize again.']), 'application/json');
+        if($session->expire < time())
+            $this->_sendResponse(401, CJSON::encode(['status' => false,
+                'code' => 105,
+                'message' => 'Access Token has expired in ' . date('Y/m/d H:i', $session->expire) . '. if you have refresh token, get new access token.']), 'application/json');
+        if($session->user_type == 'user')
+            $this->user = $session->user;
+        if($session->user_type == 'admin')
+            $this->user = $session->admin;
+        return true;
     }
 
     /**

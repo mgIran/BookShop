@@ -18,10 +18,10 @@ class JWT
 
     public function init()
     {
-        require dirname(__FILE__) . '/src/JWT.php';
-        require dirname(__FILE__) . '/src/BeforeValidException.php';
-        require dirname(__FILE__) . '/src/ExpiredException.php';
-        require dirname(__FILE__) . '/src/SignatureInvalidException.php';
+        require_once dirname(__FILE__) . '/src/JWT.php';
+        require_once dirname(__FILE__) . '/src/BeforeValidException.php';
+        require_once dirname(__FILE__) . '/src/ExpiredException.php';
+        require_once dirname(__FILE__) . '/src/SignatureInvalidException.php';
 
     }
 
@@ -32,6 +32,10 @@ class JWT
 
     public function decode($msg)
     {
-        return \Firebase\JWT\JWT::decode($msg, $this->key, array('HS256'));
+        try{
+            return \Firebase\JWT\JWT::decode($msg, $this->key, array('HS256'));
+        }catch(Exception $ex){
+            return false;
+        }
     }
 }

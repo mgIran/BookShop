@@ -78,7 +78,7 @@ class WebUser extends CWebUser
     {
         if($this->allowActiveSessions){
             $activeSessions = Yii::app()->db->createCommand()
-                ->select('COUNT(id)')
+                ->select('COUNT(*)')
                 ->from('ym_sessions')
                 ->where('user_id = :user_id AND user_type=:type', array('user_id' => $id, ':type' => $states['type']))
                 ->queryScalar();

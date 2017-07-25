@@ -153,7 +153,7 @@ class YmDbHttpSession extends CHttpSession
             $db->setActive(true);
             try
             {
-                $db->createCommand()->delete($this->sessionTableName,'expire<:expire',array(':expire'=>time()));
+//                $db->createCommand()->delete($this->sessionTableName,'expire<:expire',array(':expire'=>time()));
             }
             catch(Exception $e)
             {
@@ -212,8 +212,7 @@ class YmDbHttpSession extends CHttpSession
                     'device_platform' => 'web',
                     'device_ip' => $this->getRealIp(),
                     'device_type' => $device->getDeviceType(),
-                    'token' => Controller::generateRandomString(40),
-                    'refresh_token' => Controller::generateRandomString(),
+                    'refresh_token' => Controller::generateRandomString(50),
                 ));
             else
                 $db->createCommand()->update($this->sessionTableName,array(
@@ -224,8 +223,7 @@ class YmDbHttpSession extends CHttpSession
                     'device_platform' => 'web',
                     'device_ip' => $this->getRealIp(),
                     'device_type' => $device->getDeviceType(),
-                    'token' => Controller::generateRandomString(40),
-                    'refresh_token' => Controller::generateRandomString(),
+                    'refresh_token' => Controller::generateRandomString(50),
                 ),'id=:id',array(':id'=>$id));
         }
         catch(Exception $e)
@@ -259,8 +257,8 @@ class YmDbHttpSession extends CHttpSession
      */
     public function gcSession($maxLifetime)
     {
-        $this->getDbConnection()->createCommand()
-            ->delete($this->sessionTableName,'expire<:expire',array(':expire'=>time()));
+//        $this->getDbConnection()->createCommand()
+//            ->delete($this->sessionTableName,'expire<:expire',array(':expire'=>time()));
         return true;
     }
 

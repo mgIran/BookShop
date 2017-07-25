@@ -9,7 +9,8 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            //'RestAccessControl'
+            'RestAccessControl + row, search, find, list, page, comment',
+            'RestAuthControl + testAuth',
         );
     }
 
@@ -126,7 +127,6 @@ class ApiController extends ApiBaseController
         } else
             $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Query variable is required.']), 'application/json');
     }
-
     /**
      * Get a specific model
      */
@@ -360,27 +360,8 @@ class ApiController extends ApiBaseController
             $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Comment variable is required.']), 'application/json');
     }
 
-    public function actionLogin()
-    {
-        if (isset($_SERVER['PHP_AUTH_USER']) and isset($_SERVER['PHP_AUTH_PW'])) {
-            Yii::import('users.models.*');
-            Yii::import('users.components.*');
-            $login = new UserLoginForm;
-            $login->email = $_SERVER['PHP_AUTH_USER'];
-            $login->password = $_SERVER['PHP_AUTH_PW'];
-
-            if ($login->validate() && $login->login()) {
-                $this->_sendResponse(200, CJSON::encode([
-                    'status' => true,
-                    'user' => [
-                        'email' => Yii::app()->user->email,
-                        'fa_name' => Yii::app()->user->fa_name,
-                        'en_name' => Yii::app()->user->en_name
-                    ]
-                ]), 'application/json');
-            } else
-                $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => strip_tags(preg_replace('/<a(.*)<\/a>/', '',$login->errors['authenticate_field'][0]))]), 'application/json');
-        } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Email and Password is required.']), 'application/json');
+    /** ------------------------------------------------- Authorized Api ------------------------------------------------ **/
+    public function actionTestAuth(){
+        $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'Access Token works properly.']), 'application/json');  
     }
 }
