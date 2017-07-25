@@ -116,7 +116,7 @@ class GoogleOAuth extends CComponent
                 $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
 
             if ($_GET['platform'] == 'mobile' or $_GET['platform'] == 'windows')
-                $redirect .= '?email=' . $model->email;
+                $redirect .= '?authorization_code=' .  session_id();
 
             if (isset($_POST['ajax'])) {
                 echo CJSON::encode(array('status' => true, 'url' => $redirect));
