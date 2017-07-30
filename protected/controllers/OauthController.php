@@ -25,7 +25,8 @@ class OauthController extends ApiBaseController
                 $this->_sendResponse(400, CJSON::encode([
                     'status' => false,
                     'message' => $login->getError('authenticate_field')
-                ]), 'application/json');
+                ]),
+                    'application/json');
         }else
             $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Email and Password is required.']), 'application/json');
     }
