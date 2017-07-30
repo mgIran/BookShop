@@ -21,6 +21,15 @@ class Controller extends AuthController
      */
     public $breadcrumbs = array();
 
+    /**
+     * For Rahbod Admin Theme
+     * @var string $pageHeader
+     * @var string $pageDescription
+     */
+    public $pageHeader;
+    public $pageDescription;
+    //
+
     public $town = null;
     public $place = null;
     public $description;
@@ -41,7 +50,7 @@ class Controller extends AuthController
     {
         return CHtml::dropDownList('pageSize', (isset($_GET['pageSize']) && in_array($_GET['pageSize'], $this->pageSizes)?$_GET['pageSize']:20), $this->pageSizes, array(
             'onchange' => "$.fn.yiiGridView.update($(this).parents('.grid-view').attr('id'),{ data:{pageSize: $(this).val() }})",
-            'class'=> 'form-control'
+            'class' => 'form-control'
         ));
     }
 
@@ -151,128 +160,132 @@ class Controller extends AuthController
         if(!Yii::app()->user->isGuest && Yii::app()->user->type != 'user')
             return array(
                 array(
-                    'label' => 'پیشخوان',
+                    'label' => 'منوی مدیریت',
+                    'itemOptions' => array('class' => 'header'),
+                ),
+                array(
+                    'label' => '<i class="fa fa-dashboard"></i><span>پیشخوان</span>',
                     'url' => array('/admins/dashboard')
                 ),
                 array(
-                    'label' => 'کتاب ها<span class="caret"></span>',
+                    'label' => '<i class="fa fa-book"></i><span>کتاب ها</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/baseManage/admin/')),
-                        array('label' => 'مدیریت دسته بندی کتاب ها', 'url' => Yii::app()->createUrl('/category/admin/')),
-                        array('label' => 'تخفیفات', 'url' => Yii::app()->createUrl('/manageBooks/baseManage/discount/')),
-                        array('label' => 'تبلیغات', 'url' => Yii::app()->createUrl('/advertises/manage/admin/')),
-                        array('label' => 'نظرات', 'url' => Yii::app()->createUrl('/comments/comment/adminBooks')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت کتاب ها', 'url' => Yii::app()->createUrl('/manageBooks/baseManage/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت دسته بندی کتاب ها', 'url' => Yii::app()->createUrl('/category/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>تخفیفات', 'url' => Yii::app()->createUrl('/manageBooks/baseManage/discount/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>تبلیغات', 'url' => Yii::app()->createUrl('/advertises/manage/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>نظرات', 'url' => Yii::app()->createUrl('/comments/comment/adminBooks')),
                     )
                 ),
                 array(
-                    'label' => 'فروشگاه<span class="caret"></span>',
+                    'label' => '<i class="fa fa-shopping-cart"></i><span>فروشگاه</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'مدیریت سفارشات', 'url' => Yii::app()->createUrl('/shop/order/admin/')),
-                        array('label' => 'مدیریت روش های پرداخت', 'url' => Yii::app()->createUrl('/shop/payment/admin/')),
-                        array('label' => 'مدیریت روش های تحویل', 'url' => Yii::app()->createUrl('/shop/shipping/admin/')),
-                        array('label' => 'گزارش سفارشات', 'url' => Yii::app()->createUrl('/shop/order/report/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت سفارشات', 'url' => Yii::app()->createUrl('/shop/order/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت روش های پرداخت', 'url' => Yii::app()->createUrl('/shop/payment/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت روش های تحویل', 'url' => Yii::app()->createUrl('/shop/shipping/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش سفارشات', 'url' => Yii::app()->createUrl('/shop/order/report/')),
                     )
                 ),
                 array(
-                    'label' => 'اخبار<span class="caret"></span>',
+                    'label' => '<i class="fa fa-newspaper-o"></i><span>اخبار</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/news/manage/admin/')),
-                        array('label' => ' افزودن خبر', 'url' => Yii::app()->createUrl('/news/manage/create/')),
-                        array('label' => 'مدیریت دسته بندی ها', 'url' => Yii::app()->createUrl('/news/category/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت', 'url' => Yii::app()->createUrl('/news/manage/admin/')),
+                        array('label' => '<i class="fa fa-circle-o"></i> افزودن خبر', 'url' => Yii::app()->createUrl('/news/manage/create/')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت دسته بندی ها', 'url' => Yii::app()->createUrl('/news/category/admin/')),
                     )
                 ),
                 array(
-                    'label' => 'امور مالی<span class="caret"></span>',
+                    'label' => '<i class="fa fa-money"></i><span>امور مالی</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'تراکنش ها', 'url' => Yii::app()->createUrl('/site/transactions')),
-                        array('label' => 'تسویه حساب', 'url' => Yii::app()->createUrl('/publishers/panel/manageSettlement')),
-                        array('label' => 'گزارش درآمد', 'url' => Yii::app()->createUrl('/book/reportIncome')),
+                        array('label' => '<i class="fa fa-circle-o"></i>تراکنش ها', 'url' => Yii::app()->createUrl('/site/transactions')),
+                        array('label' => '<i class="fa fa-circle-o"></i>تسویه حساب', 'url' => Yii::app()->createUrl('/publishers/panel/manageSettlement')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش درآمد', 'url' => Yii::app()->createUrl('/book/reportIncome')),
                     )
                 ),
                 array(
-                    'label' => 'گزارشات<span class="caret"></span>',
+                    'label' => '<i class="fa fa-bar-chart"></i><span>گزارشات</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'نمودار گزارش فروش', 'url' => Yii::app()->createUrl('/book/reportSales')),
-                        array('label' => 'گزارش فروش کتاب ها', 'url' => Yii::app()->createUrl('/book/reportBookSales')),
-                        array('label' => 'گزارش افزایش اعتبار', 'url' => Yii::app()->createUrl('/users/credit/reportCreditBuys')),
-                        array('label' => 'گزارش استفاده از بن', 'url' => Yii::app()->createUrl('/users/credit/reportBonBuys')),
-                        array('label' => 'گزارش استفاده از کدهای تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/report')),
-                        array('label' => 'گزارش استفاده از طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/report')),
+                        array('label' => '<i class="fa fa-circle-o"></i>نمودار گزارش فروش', 'url' => Yii::app()->createUrl('/book/reportSales')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش فروش کتاب ها', 'url' => Yii::app()->createUrl('/book/reportBookSales')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش افزایش اعتبار', 'url' => Yii::app()->createUrl('/users/credit/reportCreditBuys')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش استفاده از بن', 'url' => Yii::app()->createUrl('/users/credit/reportBonBuys')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش استفاده از کدهای تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/report')),
+                        array('label' => '<i class="fa fa-circle-o"></i>گزارش استفاده از طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/report')),
                     )
                 ),
                 array(
-                    'label' => 'ردیف های کتاب<span class="caret"></span>',
+                    'label' => '<i class="fa fa-bars"></i><span>ردیف های کتاب</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'مدیریت ردیف های دلخواه', 'url' => Yii::app()->createUrl('/rows/manage/admin')),
-                        array('label' => 'مدیریت ردیف های ثابت', 'url' => Yii::app()->createUrl('/rows/manage/const')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت ردیف های دلخواه', 'url' => Yii::app()->createUrl('/rows/manage/admin')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت ردیف های ثابت', 'url' => Yii::app()->createUrl('/rows/manage/const')),
                     )
                 ),
                 array(
-                    'label' => 'مدیران <span class="caret"></span>',
+                    'label' => '<i class="fa fa-user-md"></i><span>مدیران</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"), 'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"), 'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'نقش مدیران', 'url' => Yii::app()->createUrl('/admins/roles/admin')),
-                        array('label' => 'مدیریت', 'url' => Yii::app()->createUrl('/admins/manage')),
-                        array('label' => 'افزودن', 'url' => Yii::app()->createUrl('/admins/manage/create')),
+                        array('label' => '<i class="fa fa-circle-o"></i>نقش مدیران', 'url' => Yii::app()->createUrl('/admins/roles/admin')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت', 'url' => Yii::app()->createUrl('/admins/manage')),
+                        array('label' => '<i class="fa fa-circle-o"></i>افزودن', 'url' => Yii::app()->createUrl('/admins/manage/create')),
                     )
                 ),
                 array(
-                    'label' => 'کاربران <span class="caret"></span>',
+                    'label' => '<i class="fa fa-users"></i><span>کاربران</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'افزودن ناشر', 'url' => Yii::app()->createUrl('/publishers/panel/create')),
-                        array('label' => 'مدیریت ناشران', 'url' => Yii::app()->createUrl('/users/manage/adminPublishers')),
-                        array('label' => 'مدیریت کاربران', 'url' => Yii::app()->createUrl('/users/manage')),
-                        array('label' => 'مدیریت بن های خرید', 'url' => Yii::app()->createUrl('/users/bon')),
-                        array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/admin')),
-                        array('label' => 'مدیریت طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/admin')),
+                        array('label' => '<i class="fa fa-circle-o"></i>افزودن ناشر', 'url' => Yii::app()->createUrl('/publishers/panel/create')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت ناشران', 'url' => Yii::app()->createUrl('/users/manage/adminPublishers')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت کاربران', 'url' => Yii::app()->createUrl('/users/manage')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت بن های خرید', 'url' => Yii::app()->createUrl('/users/bon')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/admin')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت طرح ها', 'url' => Yii::app()->createUrl('/festivals/manage/admin')),
                     )
                 ),
                 array(
-                    'label' => 'پشتیبانی',
+                    'label' => '<i class="fa fa-support"></i><span>پشتیبانی</span>',
                     'url' => Yii::app()->createUrl('/tickets/manage/admin'),
                 ),
                 array(
-                    'label' => 'تنظیمات<span class="caret"></span>',
+                    'label' => '<i class="fa fa-cogs"></i><span>تنظیمات</span> <i class="fa fa-angle-left pull-left"></i>',
                     'url' => '#',
-                    'itemOptions' => array('class' => 'dropdown', 'tabindex' => "-1"),
-                    'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => "dropdown"),
+                    'itemOptions' => array('class' => 'treeview', 'tabindex' => "-1"),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => 'عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
-                        array('label' => 'صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
-                        array('label' => 'لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
-                        array('label' => 'مدیریت تگ ها', 'url' => Yii::app()->createUrl('/tags/admin')),
-                        array('label' => 'تغییر کلمه عبور', 'url' => Yii::app()->createUrl('/admins/manage/changePass')),
+                        array('label' => '<i class="fa fa-circle-o"></i>عمومی', 'url' => Yii::app()->createUrl('/setting/manage/changeSetting')),
+                        array('label' => '<i class="fa fa-circle-o"></i>صفحات استاتیک', 'url' => Yii::app()->createUrl('/pages/manage/admin/slug/base')),
+                        array('label' => '<i class="fa fa-circle-o"></i>لینک شبکه های اجتماعی', 'url' => Yii::app()->createUrl('/setting/manage/socialLinks')),
+                        array('label' => '<i class="fa fa-circle-o"></i>مدیریت تگ ها', 'url' => Yii::app()->createUrl('/tags/admin')),
+                        array('label' => '<i class="fa fa-circle-o"></i>تغییر کلمه عبور', 'url' => Yii::app()->createUrl('/admins/manage/changePass')),
                     )
                 ),
                 array(
-                    'label' => 'ورود',
+                    'label' => '<i class="fa fa-lock"></i><span>ورود</span>',
                     'url' => array('/admins/login'),
                     'visible' => Yii::app()->user->isGuest
                 ),
                 array(
-                    'label' => 'خروج',
+                    'label' => '<i class="fa fa-sign-out text-danger"></i><span class="text-danger">خروج</span>',
                     'url' => array('/admins/login/logout'),
                     'visible' => !Yii::app()->user->isGuest
                 ),
@@ -450,11 +463,9 @@ class Controller extends AuthController
             else
                 $html .= $starHalf;
             $index = $rateInteger + 1;
-        }else
-        {
+        }else{
             $rateQ1 = ($rate - $rateInteger) >= 0.25?true:false;
-            if($rateQ1)
-            {
+            if($rateQ1){
                 $html .= $starQ1;
                 $index = $rateInteger + 1;
             }else

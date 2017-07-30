@@ -11,19 +11,23 @@ class OauthController extends ApiBaseController
 
     public function actionAuthorize()
     {
-        if (isset($this->request['email']) and isset($this->request['password'])) {
+        if(isset($this->request['email']) and isset($this->request['password'])){
             $login = new UserLoginForm;
+            $login->scenario = 'app_login';
             $login->email = $this->request['email'];
             $login->password = $this->request['password'];
-            if ($login->validate() && $login->login()) {
+            if($login->validate() && $login->login()){
                 $this->_sendResponse(200, CJSON::encode([
                     'status' => true,
                     'authorization_code' => session_id()
                 ]), 'application/json');
-            } else
-                $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => strip_tags(preg_replace('/<a(.*)<\/a>/', '',$login->errors['authenticate_field'][0]))]), 'application/json');
-        } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Email and Password is required.']), 'application/json');
+            }else
+                $this->_sendResponse(400, CJSON::encode([
+                    'status' => false,
+                    'message' => $login->getError('authenticate_field')
+                ]), 'application/json');
+        }else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Email and Password is required.']), 'application/json');
     }
 
     public function actionToken(){
@@ -72,7 +76,7 @@ class OauthController extends ApiBaseController
                 $code = $this->request['authorization_code'];
                 $session = Sessions::model()->findByPk($code);
                 if($session === null)
-                    $this->_sendResponse(500, CJSON::encode([
+                    $this->_sendResponse(400, CJSON::encode([
                         'status' => false,
                         'message' => 'Authorization code is invalid.'
                     ]), 'application/json');
@@ -114,8 +118,8 @@ class OauthController extends ApiBaseController
                     'message' => 'Access token has revoked successfully.'
                 ]), 'application/json');
             }else
-                $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'request invalid.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'request invalid.']), 'application/json');
         }else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'grant_type not sent.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'grant_type not sent.']), 'application/json');
     }
 }

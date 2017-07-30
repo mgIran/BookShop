@@ -78,7 +78,7 @@ class TicketsManageController extends Controller
 	public function actionView($id)
 	{
 		if (Yii::app()->user->type == 'admin') {
-			Yii::app()->theme = 'abound';
+			Yii::app()->theme = 'rahbod';
 			$this->layout = '//layouts/main';
 		} else {
 			Yii::app()->theme = 'frontend';
@@ -212,7 +212,7 @@ class TicketsManageController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		Yii::app()->theme = 'abound';
+		Yii::app()->theme = 'rahbod';
 		$this->layout = '//layouts/column1';
 		$criteria = new CDbCriteria();
 		if (isset($_GET['Tickets']))

@@ -509,7 +509,7 @@ class BookController extends Controller
      */
     public function actionReportSales()
     {
-        Yii::app()->theme = 'abound';
+        Yii::app()->theme = 'rahbod';
         $this->layout = '//layouts/main';
 
         $labels = $values = array();
@@ -676,7 +676,7 @@ class BookController extends Controller
     }
     public function actionReportBookSales()
     {
-        Yii::app()->theme = 'abound';
+        Yii::app()->theme = 'rahbod';
         $this->layout = '//layouts/column1';
 
         $model = new BookBuys('search');
@@ -694,7 +694,7 @@ class BookController extends Controller
      */
     public function actionReportIncome()
     {
-        Yii::app()->theme = 'abound';
+        Yii::app()->theme = 'rahbod';
         $this->layout = '//layouts/main';
 
         $labels = $values = array();

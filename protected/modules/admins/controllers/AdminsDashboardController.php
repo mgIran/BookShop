@@ -26,6 +26,7 @@ class AdminsDashboardController extends Controller
 
     public function actionIndex()
     {
+        $this->pageHeader = 'داشبورد';
         Yii::app()->getModule('users');
 
         $criteria = new CDbCriteria();

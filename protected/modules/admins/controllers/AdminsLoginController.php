@@ -33,7 +33,7 @@ class AdminsLoginController extends Controller
      */
     public function actionIndex()
     {
-        Yii::app()->theme = 'abound';
+        Yii::app()->theme = 'rahbod';
         $this->layout = '//layouts/login';
         if(!Yii::app()->user->isGuest && Yii::app()->user->type === 'admin')
             $this->redirect(array('/admins/'));

@@ -65,7 +65,12 @@ class UserLoginForm extends CFormModel
             if(!$this->_identity->authenticate())
             {
                 if($this->_identity->errorCode===3)
-                    $this->addError($attribute,'این حساب کاربری فعال نشده است.<br><a href="'.Yii::app()->createUrl('/users/public/resendVerification', array('email'=>$this->email)).'">ارسال مجدد لینک فعال سازی</a>');
+				{
+					if($this->scenario == 'app_login')
+						$this->addError($attribute,'این حساب کاربری فعال نشده است.');
+					else
+						$this->addError($attribute,'این حساب کاربری فعال نشده است.<br><a href="'.Yii::app()->createUrl('/users/public/resendVerification', array('email'=>$this->email)).'">ارسال مجدد لینک فعال سازی</a>');
+				}
                 elseif($this->_identity->errorCode===4)
                     $this->addError($attribute,'این حساب کاربری مسدود شده است.');
                 elseif($this->_identity->errorCode===5)

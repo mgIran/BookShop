@@ -6,7 +6,7 @@ return array(
 	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'کتابیک',
 	'timeZone' => 'Asia/Tehran',
-	'theme' => 'abound',
+	'theme' => 'rahbod',
 	'sourceLanguage' => '00',
 	'language' => 'fa_ir',
 	// preloading 'log' component
