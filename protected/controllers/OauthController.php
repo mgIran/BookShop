@@ -60,6 +60,7 @@ class OauthController extends ApiBaseController
                 $model->email = $email;
                 $model->name = $name;
                 $model->pic = $pic;
+                $model->OAuth = 'google';
                 if($model->AppGoogleLogin()){
                     $this->_sendResponse(200, CJSON::encode([
                         'status' => true,
