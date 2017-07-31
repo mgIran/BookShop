@@ -33,7 +33,7 @@ class AdminsLoginController extends Controller
      */
     public function actionIndex()
     {
-        Yii::app()->theme = 'rahbod';
+//        Yii::app()->theme = 'rahbod';
         $this->layout = '//layouts/login';
         if(!Yii::app()->user->isGuest && Yii::app()->user->type === 'admin')
             $this->redirect(array('/admins/'));
@@ -54,10 +54,13 @@ class AdminsLoginController extends Controller
         if ( isset( $_POST[ 'AdminLoginForm' ] ) ) {
             $model->attributes = $_POST[ 'AdminLoginForm' ];
             // validate user input and redirect to the previous page if valid
-            if ( $model->validate() && $model->login())
-            {
+            if ( $model->validate() && $model->login()){
                 Yii::app()->user->setState('attempts-login', 0);
-                $this->redirect(Yii::app()->createUrl('/admins/dashboard'));
+                if(Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/')
+                    $redirect = Yii::app()->createUrl('/' . Yii::app()->user->returnUrl);
+                else
+                    $redirect = Yii::app()->createUrl('/admins/dashboard');
+                $this->redirect($redirect);
             }else
             {
                 Yii::app()->user->setState('attempts-login', Yii::app()->user->getState('attempts-login', 0) + 1);
