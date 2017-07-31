@@ -153,7 +153,7 @@ class YmDbHttpSession extends CHttpSession
             $db->setActive(true);
             try
             {
-//                $db->createCommand()->delete($this->sessionTableName,'expire<:expire',array(':expire'=>time()));
+                $db->createCommand()->delete($this->sessionTableName,'expire<:expire AND device_type = :device_type',array(':expire'=>time(), ':device_type' => 'computer'));
             }
             catch(Exception $e)
             {
@@ -257,8 +257,7 @@ class YmDbHttpSession extends CHttpSession
      */
     public function gcSession($maxLifetime)
     {
-//        $this->getDbConnection()->createCommand()
-//            ->delete($this->sessionTableName,'expire<:expire',array(':expire'=>time()));
+        $this->getDbConnection()->createCommand()->delete($this->sessionTableName,'expire<:expire AND device_type = :device_type',array(':expire'=>time(), ':device_type' => 'computer'));
         return true;
     }
 
