@@ -188,46 +188,4 @@ class ApiBaseController extends CController
     {
         return CJSON::decode(file_get_contents('php://input'));
     }
-
-    /**
-     * @param UserLoginForm $model
-     */
-    public function AppGoogleLogin($model){
-        // login start
-        $loginFlag = false;
-        if ($model->validate() && $model->login(true) === true)
-            $loginFlag = true;
-        elseif ($model->validate() && $model->login(true) === UserIdentity::ERROR_USERNAME_INVALID) {
-            $user = new Users('OAuthInsert');
-            $user->email = $model->email;
-            $user->status = "active";
-            $user->auth_mode = 'google';
-            $user->role_id = 1;
-            $user->create_date = time();
-            if ($user->save()) {
-                $userDetails = UserDetails::model()->findByPk($user->userDetails->user_id);
-                $userDetails->fa_name = $model->name;
-                $userDetails->avatar = $model->pic;
-                if ($userDetails->save()) {
-                    if ($model->validate() && $model->login(true) === true)
-                        $loginFlag = true;
-                }else
-                    $user->delete();
-            }
-        }
-        if ($loginFlag) {
-            $this->_sendResponse(200, CJSON::encode([
-                'status' => true,
-                'authorization_code' => session_id()
-            ]), 'application/json');
-        } else {
-            if (isset($_POST['ajax'])) {
-                echo CJSON::encode(array('status' => false, 'errors' => Yii::app()->controller->implodeErrors($model)));
-                Yii::app()->end();
-            } else {
-                Yii::app()->user->setFlash('success', $model->showError());
-                Yii::app()->controller->redirect(array('/login'));
-            }
-        }
-    }
 }

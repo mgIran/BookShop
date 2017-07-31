@@ -43,9 +43,9 @@ class OauthController extends ApiBaseController
 
     public function actionTokenSignIn()
     {
-        if(isset($_POST['idToken']) && !empty($_POST['idToken'])){
+        if(isset($this->request['idToken']) && !empty($this->request['idToken'])){
             require_once Yii::getPathOfAlias('webroot') . '/protected/vendor/google/autoload.php';
-            $id = $_POST['idToken'];
+            $id = $this->request['idToken'];
             $client_id = Yii::app()->params['googleAppKey']['client_id'];
             $client = new Google_Client(['client_id' => $client_id]);
             $payload = $client->verifyIdToken($id);
@@ -60,8 +60,17 @@ class OauthController extends ApiBaseController
                 $model->email = $email;
                 $model->name = $name;
                 $model->pic = $pic;
-                var_dump($model);exit;
-                $this->AppGoogleLogin($model);
+                if($model->AppGoogleLogin()){
+                    $this->_sendResponse(200, CJSON::encode([
+                        'status' => true,
+                        'authorization_code' => session_id()
+                    ]), 'application/json');
+                }else{
+                    $this->_sendResponse(400, CJSON::encode([
+                        'status' => false,
+                        'message' => $model->getError('authenticate_field')
+                    ]), 'application/json');
+                }
             }else{
                 $this->_sendResponse(400, CJSON::encode(['status' => false,
                     'message' => 'ID Token is invalid.']), 'application/json');

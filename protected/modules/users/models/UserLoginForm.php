@@ -134,4 +134,36 @@ class UserLoginForm extends CFormModel
 		else
 			return 'پست الکترونیک یا کلمه عبور اشتباه است .';
 	}
+
+
+	/**
+	 * @return bool
+	 * @throws CDbException
+	 */
+	public function AppGoogleLogin()
+	{
+		// login start
+		$loginFlag = false;
+		if($this->validate() && $this->login(true) === true)
+			$loginFlag = true;
+		elseif($this->validate() && $this->login(true) === UserIdentity::ERROR_USERNAME_INVALID){
+			$user = new Users('OAuthInsert');
+			$user->email = $this->email;
+			$user->status = "active";
+			$user->auth_mode = 'google';
+			$user->role_id = 1;
+			$user->create_date = time();
+			if($user->save()){
+				$userDetails = UserDetails::model()->findByPk($user->userDetails->user_id);
+				$userDetails->fa_name = $this->name;
+				$userDetails->avatar = $this->pic;
+				if($userDetails->save()){
+					if($this->validate() && $this->login(true) === true)
+						$loginFlag = true;
+				}else
+					$user->delete();
+			}
+		}
+		return $loginFlag;
+	}
 }
