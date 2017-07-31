@@ -125,7 +125,7 @@ return array(
 			'allowAutoLogin'=>true,
 			'class' => 'WebUser',
 			'loginUrl'=>array('/login'),
-			'allowActiveSessions'=>2,
+			'allowActiveSessions'=>false,
 		),
 		'authManager'=>array(
 			'class'=>'CDbAuthManager',
@@ -213,7 +213,10 @@ return array(
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
-		// @todo change webmail of emails
+		'google' => [
+			'client_id' => "847053315039-s41olq8kabaaee4dn5sk7hk4era5a6b4.apps.googleusercontent.com",
+			'client_secret' => "nAsP8voWDtb2sm3ZC__ZlYit"
+		],
 		'adminEmail'=>'webmaster@ketabic.ir',
 		'noReplyEmail' => 'noreply@ketabic.ir',
 		'SMTP' => array(

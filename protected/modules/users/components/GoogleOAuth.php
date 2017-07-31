@@ -63,14 +63,15 @@ class GoogleOAuth extends CComponent
         $this->platform = $platform;
         $this->scope = "https://www.googleapis.com/auth/userinfo.email";
         $this->redirect_uri = Yii::app()->createAbsoluteUrl('/googleLogin')."?platform=".$platform;
-        $this->client_id = "847053315039-s41olq8kabaaee4dn5sk7hk4era5a6b4.apps.googleusercontent.com";
-        $this->client_secret = "nAsP8voWDtb2sm3ZC__ZlYit";
+        $this->client_id = Yii::app()->params['google']['client_id'];
+        $this->client_secret = Yii::app()->params['google']['client_secret'];
         $this->login_url = "https://accounts.google.com/o/oauth2/v2/auth?scope=$this->scope&response_type=code&redirect_uri=$this->redirect_uri&client_id=$this->client_id";
         $this->image_size = 200;
     }
 
     /**
-     * @param $model UserLoginForm
+     * @param $model
+     * @throws CHttpException
      */
     public function login($model)
     {
