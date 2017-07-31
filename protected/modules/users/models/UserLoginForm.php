@@ -150,7 +150,7 @@ class UserLoginForm extends CFormModel
 			$user = new Users('OAuthInsert');
 			$user->email = $this->email;
 			$user->status = "active";
-			$user->auth_mode = 'google';
+			$user->auth_mode = 'google-app';
 			$user->role_id = 1;
 			$user->create_date = time();
 			if($user->save()){
