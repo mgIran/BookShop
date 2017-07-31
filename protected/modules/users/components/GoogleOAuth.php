@@ -51,20 +51,16 @@ class GoogleOAuth extends CComponent
     public $client_secret;
     public $login_url;
     public $image_size;
-    public $platform = "web";
 
     /**
      * GoogleOAuth constructor.
-     *
-     * @param $platform string
      */
-    public function __construct($platform)
+    public function __construct()
     {
-        $this->platform = $platform;
         $this->scope = "https://www.googleapis.com/auth/userinfo.email";
-        $this->redirect_uri = Yii::app()->createAbsoluteUrl('/googleLogin')."?platform=".$platform;
-        $this->client_id = Yii::app()->params['google']['client_id'];
-        $this->client_secret = Yii::app()->params['google']['client_secret'];
+        $this->redirect_uri = Yii::app()->createAbsoluteUrl('/googleLogin');
+        $this->client_id = Yii::app()->params['googleWebKey']['client_id'];
+        $this->client_secret = Yii::app()->params['googleWebKey']['client_secret'];
         $this->login_url = "https://accounts.google.com/o/oauth2/v2/auth?scope=$this->scope&response_type=code&redirect_uri=$this->redirect_uri&client_id=$this->client_id";
         $this->image_size = 200;
     }
@@ -115,9 +111,6 @@ class GoogleOAuth extends CComponent
                 $redirect = Yii::app()->createUrl('/' . Yii::app()->user->returnUrl);
             else
                 $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
-
-            if ($_GET['platform'] == 'mobile' or $_GET['platform'] == 'windows')
-                $redirect .= '?authorization_code=' .  session_id();
 
             if (isset($_POST['ajax'])) {
                 echo CJSON::encode(array('status' => true, 'url' => $redirect));

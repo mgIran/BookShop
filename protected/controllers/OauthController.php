@@ -41,19 +41,34 @@ class OauthController extends ApiBaseController
             $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Email and Password is required.']), 'application/json');
     }
 
-    public function actionTokenSignIn(){
-        require_once Yii::getPathOfAlias('webroot').'/protected/vendor/google/autoload.php';
-        $id='eyJhbGciOiJSUzI1NiIsImtpZCI6IjY3ODU2OGM4YWRiMmVjYzA3ZDE0M2RiNTE0Y2M3YTk5NTIwN2RmMzYifQ.eyJhenAiOiI3NTI2NDU5ODEwNjgtNm5tdG10aGVpdm90b3I5aTE1dWtwamZiZXZoMnBvMjcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI3NTI2NDU5ODEwNjgtMGE4MDFrb2l0bDlmYjIwMzFjMDFnM242MWRvZ3J2NTYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDMzMzU1NTY2NDA2OTkwNzgzNzUiLCJlbWFpbCI6Im1hamlkLnJlenZhbmlAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImlzcyI6Imh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbSIsImlhdCI6MTUwMTQ5MjY3MSwiZXhwIjoxNTAxNDk2MjcxLCJuYW1lIjoiTWFqaWQgUmV6dmFuaSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vLVZudHZUaFplanBrL0FBQUFBQUFBQUFJL0FBQUFBQUFBQU9RL2lKNE1yQ0phQ1VvL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJNYWppZCIsImZhbWlseV9uYW1lIjoiUmV6dmFuaSIsImxvY2FsZSI6ImVuIn0.sdO32zJ4gwwSavRWlg3E7HwJL-l5VRnGwHTKkTRTmki48Nbqjb2Durb5elycu6gf_H3bVmXD-zjiiLDX-aNKexajCcZt74SISqzSVjxXhfl8vPgT1IPZdMKk5CsT2ZjnW2m_8eL_rjZliYke4CBfGjfx9ryDEmeiAg86xNMMoKmgGGhgPRnkbAQYAW9FGwbZZlTluOB1v37ZCv4gSEVL3BlIZXT39vwR8VhaL4zkpwiODN25tM5NcBYCqRp7jNILgFLqoD7-rXvNpfUChfgMPWKvQgKKRUPx81tj5S2dwFNvqncn0tj7Ffko0VxUVSRn4V8wfleFsNO-h84LYlhMDQ';
-        $client = new Google_Client(['client_id' => '752645981068-0a801koitl9fb2031c01g3n61dogrv56.apps.googleusercontent.com','client_secret' => 'FlNnYi52jK-_i0Yu0HSOVWTJ']);
-        $payload = $client->verifyIdToken($id);
-        if ($payload) {
-            $userid = $payload['sub'];
-            // If request specified a G Suite domain:
-            //$domain = $payload['hd'];
-        } else {
-            // Invalid ID token
-        }
-        var_dump($payload);exit;
+    public function actionTokenSignIn()
+    {
+        if(isset($_POST['idToken']) && !empty($_POST['idToken'])){
+            require_once Yii::getPathOfAlias('webroot') . '/protected/vendor/google/autoload.php';
+            $id = $_POST['idToken'];
+            $client_id = Yii::app()->params['googleAppKey']['client_id'];
+            $client = new Google_Client(['client_id' => $client_id]);
+            $payload = $client->verifyIdToken($id);
+            if($payload && isset($payload['aud']) && $payload['aud'] == $client_id && isset($payload['email'])){
+                if(!$payload['email_verified'])
+                    $this->_sendResponse(400, CJSON::encode(['status' => false,
+                        'message' => 'Email Address not verified.']), 'application/json');
+                $email = $payload['email'];
+                $name = isset($payload['name'])?$payload['name']:null;
+                $pic = isset($payload['picture'])?$payload['picture']:null;
+                $model = new UserLoginForm('OAuth');
+                $model->email = $email;
+                $model->name = $name;
+                $model->pic = $pic;
+                var_dump($model);exit;
+                $this->AppGoogleLogin($model);
+            }else{
+                $this->_sendResponse(400, CJSON::encode(['status' => false,
+                    'message' => 'ID Token is invalid.']), 'application/json');
+            }
+        }else
+            $this->_sendResponse(400, CJSON::encode(['status' => false,
+                'message' => 'ID Token not sent.']), 'application/json');
     }
 
     public function actionToken(){

@@ -213,9 +213,13 @@ return array(
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
-		'google' => [
+		'googleWebKey' => [
 			'client_id' => "847053315039-s41olq8kabaaee4dn5sk7hk4era5a6b4.apps.googleusercontent.com",
 			'client_secret' => "nAsP8voWDtb2sm3ZC__ZlYit"
+		],
+		'googleAppKey' => [
+			'client_id' => "752645981068-0a801koitl9fb2031c01g3n61dogrv56.apps.googleusercontent.com",
+			'client_secret' => "FlNnYi52jK-_i0Yu0HSOVWTJ"
 		],
 		'adminEmail'=>'webmaster@ketabic.ir',
 		'noReplyEmail' => 'noreply@ketabic.ir',
