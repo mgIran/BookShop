@@ -75,7 +75,7 @@ class UserLoginForm extends CFormModel
 				elseif($this->_identity->errorCode === 5)
 					$this->addError($attribute, 'این حساب کاربری حذف شده است.');
 				else
-					$this->addError($attribute, 'پست الکترونیک یا کلمه عبور اشتباه است .');
+					$this->addError($attribute, 'پست الکترونیک یا کلمه عبور اشتباه است.');
 			}
 		}
 	}
