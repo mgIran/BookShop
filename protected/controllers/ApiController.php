@@ -10,7 +10,7 @@ class ApiController extends ApiBaseController
     {
         return array(
             'RestAccessControl + row, search, find, list, page, comment',
-            'RestAuthControl + testAuth',
+            'RestAuthControl + testAuth, bookmark, bookmarkList',
         );
     }
 
@@ -57,7 +57,7 @@ class ApiController extends ApiBaseController
             else
                 $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
         } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
     }
 
     public function actionSearch()
@@ -125,7 +125,7 @@ class ApiController extends ApiBaseController
             else
                 $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
         } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Query variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Query variable is required.']), 'application/json');
     }
     /**
      * Get a specific model
@@ -206,6 +206,7 @@ class ApiController extends ApiBaseController
                         'category_id' => intval($record->category_id),
                         'description' => strip_tags(str_replace('<br/>', '\n', str_replace('<br>', '\n', $record->description))),
                         'seen' => intval($record->seen),
+                        'previewFile' => Yii::app()->createAbsoluteUrl('/uploads/books/previews') . '/' . $record->preview_file,
                         'comments' => $comments,
                         'similar' => $similar,
                     ];
@@ -224,7 +225,7 @@ class ApiController extends ApiBaseController
             else
                 $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
         } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Entity and ID variables is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Entity and ID variables is required.']), 'application/json');
     }
     /**
      * Get list of models
@@ -273,6 +274,9 @@ class ApiController extends ApiBaseController
                         $criteria->params[':catID'] = $this->request['category_id'];
                     }
 
+                    if(isset($this->request['id_list']))
+                        $criteria->addInCondition('id', $this->request['id_list']);
+
                     /* @var Books[] $books */
                     $books = Books::model()->findAll($criteria);
 
@@ -291,7 +295,7 @@ class ApiController extends ApiBaseController
             else
                 $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
         } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Entity variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Entity variable is required.']), 'application/json');
     }
 
     public function actionPage()
@@ -318,15 +322,64 @@ class ApiController extends ApiBaseController
             else
                 $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
         } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
+    }
+
+    public function actionBookmark()
+    {
+        if (isset($this->request['book_id'])) {
+            $model = UserBookBookmark::model()->find('user_id = :user_id AND book_id = :book_id', array(
+                ':user_id' => $this->user->id,
+                ':book_id' => $this->request['book_id']
+            ));
+
+            if (!$model) {
+                $model = new UserBookBookmark();
+                $model->book_id = $this->request['book_id'];
+                $model->user_id = $this->user->id;
+                if ($model->save()) {
+                    $book = Books::model()->findByPk($this->request['book_id']);
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'کتاب "' . $book->title . '" با موفقیت نشان شد.']), 'application/json');
+                } else
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خطایی رخ داده است!']), 'application/json');
+            } else {
+                if (UserBookBookmark::model()->deleteAllByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id'])))
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'عملیات با موفقیت انجام شد.']), 'application/json');
+                else
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خطایی رخ داده است!']), 'application/json');
+            }
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID variable is required.']), 'application/json');
+    }
+
+    public function actionBookmarkList()
+    {
+        $list = [];
+        foreach ($this->user->bookmarkedBooks as $book)
+            $list[] = [
+                'id' => intval($book->id),
+                'title' => $book->title,
+                'icon' => Yii::app()->createAbsoluteUrl('/uploads/books/icons') . '/' . $book->icon,
+                'author' => ($person = $book->getPerson('نویسنده')) ? $person[0]->name_family : null,
+            ];
+
+        if ($list)
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'list' => $list]), 'application/json');
+        else
+            $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
     }
 
     public function actionComment()
     {
-        if (isset($this->request['comment'])) {
+        if (isset($this->request['book_id']) and isset($this->request['text'])) {
+            /* @var Comment $comment */
             $comment = new Comment();
-            $comment->attributes = $this->request['comment'];
             $comment->owner_name = "Books";
+            $comment->owner_id = $this->request['book_id'];
+            $comment->creator_id = $this->user->id;
+            $comment->comment_text = $this->request['text'];
+            $comment->create_time = time();
+            $comment->status = Comment::STATUS_NOT_APPROWED;
             $criteria = new CDbCriteria;
             $criteria->compare('owner_name', $comment->owner_name, true);
             $criteria->compare('owner_id', $comment->owner_id);
@@ -339,25 +392,25 @@ class ApiController extends ApiBaseController
             $criteria->params[':time'] = time() - 30;
             $model = Comment::model()->find($criteria);
             if ($model)
-                $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'تا 30 ثانیه دیگر امکان ثبت نظر وجود ندارد.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'تا 30 ثانیه دیگر امکان ثبت نظر وجود ندارد.']), 'application/json');
 
             if ($comment->save()) {
-                if (isset($this->request['comment']['rate'])) {
+                if (isset($this->request['rate'])) {
                     $rateModel = BookRatings::model()->findAllByAttributes(array('user_id' => $comment->creator_id, 'book_id' => $comment->owner_id));
                     if ($rateModel)
                         BookRatings::model()->deleteAllByAttributes(array('user_id' => $comment->creator_id, 'book_id' => $comment->owner_id));
                     $rateModel = new BookRatings();
                     $rateModel->book_id = $comment->owner_id;
                     $rateModel->user_id = $comment->creator_id;
-                    $rateModel->rate = $this->request['comment']['rate'];
+                    $rateModel->rate = $this->request['rate'];
                     @$rateModel->save();
                 }
 
                 $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'نظر شما با موفقیت ثبت شد.']), 'application/json');
             } else
-                $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'در عملیات ثبت خطایی رخ داده است! لطفا مجددا تلاش کنید.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در عملیات ثبت خطایی رخ داده است! لطفا مجددا تلاش کنید.']), 'application/json');
         } else
-            $this->_sendResponse(500, CJSON::encode(['status' => false, 'message' => 'Comment variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Comment variable is required.']), 'application/json');
     }
 
     /** ------------------------------------------------- Authorized Api ------------------------------------------------ **/
