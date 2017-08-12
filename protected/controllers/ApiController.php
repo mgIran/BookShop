@@ -9,8 +9,8 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + row, search, find, list, page, comment',
-            'RestAuthControl + testAuth, bookmark, bookmarkList',
+            'RestAccessControl + row, search, find, list, page',
+            'RestAuthControl + testAuth, bookmark, bookmarkList, comment, discount, buy',
         );
     }
 
@@ -167,7 +167,7 @@ class ApiController extends ApiBaseController
                             'id' => intval($comment->comment_id),
                             'text' => $comment->comment_text,
                             'username' => $comment->userName,
-                            'rate' => $comment->userRate ? floatval($comment->userRate) : false,
+                            'rate' => $comment->userRate ? floatval($comment->userRate) : -1,
                             'createTime' => doubleval($comment->create_time),
                         ];
 
@@ -203,16 +203,18 @@ class ApiController extends ApiBaseController
                         'price' => doubleval($record->price),
                         'hasDiscount' => $record->hasDiscount(),
                         'offPrice' => $record->hasDiscount() ? doubleval($record->offPrice) : 0,
-                        'category_id' => intval($record->category_id),
                         'description' => strip_tags(str_replace('<br/>', '\n', str_replace('<br>', '\n', $record->description))),
                         'seen' => intval($record->seen),
-                        'previewFile' => Yii::app()->createAbsoluteUrl('/uploads/books/previews') . '/' . $record->preview_file,
+                        'pagesCount' => intval($record->number_of_pages),
+                        'category' => $record->category->title,
                         'comments' => $comments,
                         'similar' => $similar,
                     ];
 
-                    if ($record->preview_file)
-                        $book['preview_file'] = Yii::app()->createAbsoluteUrl('/uploads/books/previews') . '/' . $record->preview_file;
+                    if ($record->preview_file) {
+                        $book['previewFile'] = Yii::app()->createAbsoluteUrl('/uploads/books/previews') . '/' . $record->preview_file;
+                        $book['previewFileType'] = pathinfo($record->preview_file, PATHINFO_EXTENSION);
+                    }
 
                     break;
                 default:
@@ -372,6 +374,7 @@ class ApiController extends ApiBaseController
     public function actionComment()
     {
         if (isset($this->request['book_id']) and isset($this->request['text'])) {
+            Yii::import('comments.models.*');
             /* @var Comment $comment */
             $comment = new Comment();
             $comment->owner_name = "Books";
@@ -393,24 +396,232 @@ class ApiController extends ApiBaseController
             $model = Comment::model()->find($criteria);
             if ($model)
                 $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'تا 30 ثانیه دیگر امکان ثبت نظر وجود ندارد.']), 'application/json');
+            else {
+                if ($comment->save()) {
+                    if (isset($this->request['rate'])) {
+                        $rateModel = BookRatings::model()->findAllByAttributes(array('user_id' => $comment->creator_id, 'book_id' => $comment->owner_id));
+                        if ($rateModel)
+                            BookRatings::model()->deleteAllByAttributes(array('user_id' => $comment->creator_id, 'book_id' => $comment->owner_id));
+                        $rateModel = new BookRatings();
+                        $rateModel->book_id = $comment->owner_id;
+                        $rateModel->user_id = $comment->creator_id;
+                        $rateModel->rate = $this->request['rate'];
+                        @$rateModel->save();
+                    }
 
-            if ($comment->save()) {
-                if (isset($this->request['rate'])) {
-                    $rateModel = BookRatings::model()->findAllByAttributes(array('user_id' => $comment->creator_id, 'book_id' => $comment->owner_id));
-                    if ($rateModel)
-                        BookRatings::model()->deleteAllByAttributes(array('user_id' => $comment->creator_id, 'book_id' => $comment->owner_id));
-                    $rateModel = new BookRatings();
-                    $rateModel->book_id = $comment->owner_id;
-                    $rateModel->user_id = $comment->creator_id;
-                    $rateModel->rate = $this->request['rate'];
-                    @$rateModel->save();
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'نظر شما با موفقیت ثبت شد.']), 'application/json');
+                } else
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در عملیات ثبت خطایی رخ داده است! لطفا مجددا تلاش کنید.']), 'application/json');
+            }
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID and Text variables is required.']), 'application/json');
+    }
+
+    public function actionDiscount()
+    {
+        if (isset($this->request['code'])) {
+            Yii::app()->getModule('discountCodes');
+            $code = $this->request['code'];
+            $criteria = DiscountCodes::ValidCodes();
+            $criteria->compare('code', $code);
+            $discount = DiscountCodes::model()->find($criteria);
+            /* @var $discount DiscountCodes */
+            if ($discount === NULL)
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر موجود نیست.']), 'application/json');
+
+            if (!$discount->digital_allow)
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر مربوط به خرید نسخه چاپی می باشد.']), 'application/json');
+
+            if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times)
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.']), 'application/json');
+
+            if ($discount->user_id && $discount->user_id != $this->user->id)
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر نامعتبر است.']), 'application/json');
+
+            /* @var $used DiscountUsed */
+            $used = $discount->codeUsed(array(
+                    'condition' => 'user_id = :user_id',
+                    'params' => array(':user_id' => $this->user->id),
+                )
+            );
+
+            if ($used) {
+                $u_date = JalaliDate::date('Y/m/d - H:i', $used->date);
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => "کد تخفیف مورد نظر قبلا در تاریخ {$u_date} استفاده شده است."]), 'application/json');
+            }
+
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'discount' => [
+                'id' => intval($discount->id),
+                'offType' => $discount->off_type == 1 ? 'percent' : 'amount',
+                'off' => $discount->off_type == 1 ? floatval($discount->percent) : doubleval($discount->amount)
+            ]]), 'application/json');
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Code variable is required.']), 'application/json');
+    }
+
+    public function actionBuy()
+    {
+        if (isset($this->request['book_id']) and isset($this->request['payment_method'])) {
+            $userID = $this->user->id;
+            $id = $this->request['book_id'];
+            /* @var Books $model */
+            $model = Books::model()->findByPk($id);
+
+            if (Library::BookExistsInLib($model->id, $model->lastPackage->id, $userID))
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'این کتاب در کتابخانه ی شما موجود است.']), 'application/json');
+
+            // price with publisher discount or not
+            $basePrice = $model->hasDiscount() ? $model->offPrice : $model->price;
+
+            $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID, 'book_id' => $id));
+
+            Yii::app()->getModule('users');
+            $user = Users::model()->findByPk($userID);
+            /* @var $user Users */
+            $price = 0;
+            if ($model->publisher_id != $userID) {
+                Yii::app()->getModule('discountCodes');
+                $price = $basePrice; // price, base price with discount code
+
+                if (isset($this->request['discount_code'])) {
+                    $discountCodesInSession = DiscountCodes::calculateDiscountCodesManual($price, 'digital', $this->request['discount_code'], $this->user->id);
+                    $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+                } else {
+                    $discountCodesInSession = DiscountCodes::calculateDiscountCodesManual($price, 'digital', null, $this->user->id);
+                    $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
                 }
 
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'نظر شما با موفقیت ثبت شد.']), 'application/json');
+                if ($price !== 0) {
+                    if ($this->request['payment_method'] == 'credit') {
+                        if ($user->userDetails->credit < $price)
+                            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'اعتبار فعلی شما کافی نیست!']), 'application/json');
+
+                        $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $userID));
+                        $userDetails->setScenario('update-credit');
+                        $userDetails->credit = $userDetails->credit - $price;
+                        $userDetails->score = $userDetails->score + 1;
+                        if ($userDetails->save()) {
+                            $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
+                            Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
+                            if ($discountCodesInSession)
+                                DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
+                            $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'خرید شما با موفقیت انجام شد.']), 'application/json');
+                        } else
+                            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خرید خطایی رخ داده است. لطفا مجددا تلاش کنید.']), 'application/json');
+                    } elseif ($this->request['payment_method'] == 'gateway') {
+                        // Save payment
+                        $transaction = new UserTransactions();
+                        $transaction->user_id = $userID;
+                        $transaction->amount = $price;
+                        $transaction->date = time();
+                        $transaction->gateway_name = 'زرین پال';
+                        $transaction->type = UserTransactions::TRANSACTION_TYPE_BOOK;
+                        $transaction->type_id = $model->id;
+
+                        if ($transaction->save()) {
+                            $title = $model->title;
+                            $gateway = new ZarinPal();
+                            $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title);
+                            $siteName = Yii::app()->name;
+                            $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
+                            $result = $gateway->request(doubleval($transaction->amount), $description, $this->user->email, $this->user->userDetails && $this->user->userDetails->phone ? $this->user->userDetails->phone : '0');
+                            $transaction->scenario = 'set-authority';
+                            $transaction->description = $description;
+                            $transaction->authority = $result->getAuthority();
+                            $transaction->save();
+                            //Redirect to URL You can do it also by creating a form
+                            if ($result->getStatus() == 100)
+                                $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $gateway->getRedirectUrl()]), 'application/json');
+                            else
+                                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'خطای بانکی: ' . $result->getError()]), 'application/json');
+                        }
+                    }
+                } else {
+                    $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
+                    Library::AddToLib($model->id, $model->lastPackage->id, $userID);
+                    if ($discountCodesInSession)
+                        DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'خرید شما با موفقیت انجام شد.']), 'application/json');
+                }
             } else
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در عملیات ثبت خطایی رخ داده است! لطفا مجددا تلاش کنید.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'شما ناشر این کتاب هستید. امکان خرید وجود ندارد.']), 'application/json');
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Comment variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID and Payment Method variables is required.']), 'application/json');
+    }
+
+    /**
+     * Save buy information
+     *
+     * @param Books $book
+     * @param Users $user
+     * @param string $method
+     * @param string $price
+     * @param string $basePrice
+     * @param DiscountCodes$discount
+     * @param null $transactionID
+     * @return string
+     * @throws CException
+     */
+    private function saveBuyInfo($book , $user ,$method, $basePrice, $price, $discount, $transactionID = null)
+    {
+        $book->download += 1;
+        $book->setScenario('update-download');
+        $book->save();
+        $buy = new BookBuys();
+        $buy->book_id = $book->id;
+        $buy->base_price = $basePrice;
+        $buy->user_id = $user->id;
+        $buy->package_id = $book->lastPackage->id;
+        $buy->method = $method;
+        $buy->price = $price;
+        if($method == 'gateway')
+            $buy->rel_id = $transactionID;
+        if($book->publisher){
+            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($basePrice, $buy);
+            $book->publisher->userDetails->save();
+        }
+        if($discount && $discount->digital_allow) {
+            $buy->discount_code_type = $discount->off_type;
+            if ($discount->off_type == DiscountCodes::DISCOUNT_TYPE_PERCENT)
+                $buy->discount_code_amount = $discount->percent;
+            else if ($discount->off_type == DiscountCodes::DISCOUNT_TYPE_AMOUNT)
+                $buy->discount_code_amount = $discount->amount;
+        }
+        $buy->site_amount = $book->getSitePortion($price, $buy);
+        $buy->save();
+        $message =
+            '<p style="text-align: right;">با سلام<br>کاربر گرامی، جزئیات خرید شما به شرح ذیل می باشد:</p>
+            <div style="width: 100%;height: 1px;background: #ccc;margin-bottom: 15px;"></div>
+            <table style="font-size: 9pt;text-align: right;">
+                <tr>
+                    <td style="font-weight: bold;width: 120px;">عنوان کتاب</td>
+                    <td>' . CHtml::encode($book->title) . '</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;width: 120px;">قیمت</td>
+                    <td>' . Controller::parseNumbers(number_format($price ,0)) . ' تومان</td>
+                </tr>';
+        if($method == 'gateway' && $buy->transaction)
+            $message.= '<tr>
+                    <td style="font-weight: bold;width: 120px;">کد رهگیری</td>
+                    <td style="font-weight: bold;letter-spacing:4px">' . CHtml::encode($buy->transaction->token) . ' </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
+                    <td style="font-weight: bold;">درگاه ' . CHtml::encode($buy->transaction->gateway_name) . ' </td>
+                </tr>';
+        elseif($method == 'credit')
+            $message.= '<tr>
+                    <td style="font-weight: bold;width: 120px;">روش پرداخت</td>
+                    <td style="font-weight: bold;">کسر از اعتبار</td>
+                </tr>';
+        $message.= '<tr>
+                    <td style="font-weight: bold;width: 120px;">تاریخ</td>
+                    <td>' . JalaliDate::date('d F Y - H:i' ,$buy->date) . '</td>
+                </tr>
+            </table>';
+        Mailer::mail($user->email ,'اطلاعات خرید کتاب' ,$message ,Yii::app()->params['noReplyEmail']);
+        return $buy->id;
     }
 
     /** ------------------------------------------------- Authorized Api ------------------------------------------------ **/

@@ -105,7 +105,7 @@ class BookController extends Controller
                     Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر موجود نیست.');
                     $this->refresh();
                 }
-                if ($discount->digital_allow) {
+                if (!$discount->digital_allow) {
                     Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر مربوط به خرید نسخه چاپی می باشد.');
                     $this->refresh();
                 }
@@ -164,6 +164,7 @@ class BookController extends Controller
                         $transaction->date = time();
                         $transaction->gateway_name = 'زرین پال';
                         $transaction->type = UserTransactions::TRANSACTION_TYPE_BOOK;
+                        $transaction->type_id = $model->id;
 
                         if($transaction->save()){
                             $gateway = new ZarinPal();
@@ -259,12 +260,12 @@ class BookController extends Controller
     /**
      * Save buy information
      *
-     * @param $book
-     * @param $user
-     * @param $method
-     * @param $price
-     * @param $basePrice
-     * @param $discount DiscountCodes
+     * @param Books $book
+     * @param Users $user
+     * @param string $method
+     * @param string $price
+     * @param string $basePrice
+     * @param DiscountCodes$discount
      * @param null $transactionID
      * @return string
      * @throws CException
