@@ -206,11 +206,13 @@ class BookController extends Controller
 
     public function actionVerify($id ,$title)
     {
-        if(!isset($_GET['Authority']))
-            $this->redirect(array('/book/buy' ,'id' => $id ,'title' => $title));
+        $platform = Yii::app()->request->getQuery('platform');
+        if (!isset($_GET['Authority']))
+            $this->redirect(array('/book/buy', 'id' => $id, 'title' => $title));
         $Authority = $_GET['Authority'];
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
+        /* @var UserTransactions $model */
         $model = UserTransactions::model()->findByAttributes(array(
             'authority' => $Authority,
             'user_id' => Yii::app()->user->getId(),
@@ -218,7 +220,7 @@ class BookController extends Controller
         ));
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
-        $basePrice = $book->hasDiscount()?$book->offPrice:$book->price;
+        $basePrice = $book->hasDiscount() ? $book->offPrice : $book->price;
         $Amount = $model->amount; //Amount will be based on Toman
 
         Yii::app()->getModule('discountCodes');
@@ -236,24 +238,36 @@ class BookController extends Controller
                 $model->token = $gateway->getRefId();
                 $model->save();
                 $transactionResult = true;
-                $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj,$model->id);
-                Library::AddToLib($book->id ,$book->lastPackage->id ,$user->id);
-                if($discountCodesInSession)
+                $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj, $model->id);
+                Library::AddToLib($book->id, $book->lastPackage->id, $user->id);
+                if ($discountCodesInSession)
                     DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
-                Yii::app()->user->setFlash('success' ,'پرداخت شما با موفقیت انجام شد.');
+
+                if ($platform and $platform == 'mobile')
+                    $this->redirect(array('/site?status=paid&amount=' . $model->amount . '&date=' . $model->date));
+                else
+                    Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
             } else {
-                Yii::app()->user->setFlash('failed', $gateway->getError());
-                $this->redirect(array('/book/buy/'.$id.'/'.urlencode($title)));
+                if ($platform and $platform == 'mobile')
+                    $this->redirect(array('/site?status=failed&error=' . urlencode($gateway->getError())));
+                else {
+                    Yii::app()->user->setFlash('failed', $gateway->getError());
+                    $this->redirect(array('/book/buy/' . $id . '/' . urlencode($title)));
+                }
             }
-        } else
-            Yii::app()->user->setFlash('failed' ,'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
-        //
-        $this->render('verify' ,array(
-            'transaction' => $model ,
-            'book' => $book ,
-            'user' => $user ,
-            'price' => $model->amount ,
-            'transactionResult' => $transactionResult ,
+        } else {
+            if ($platform and $platform == 'mobile')
+                $this->redirect(array('/site?status=failed&error=' . urlencode('عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.')));
+            else
+                Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+        }
+
+        $this->render('verify', array(
+            'transaction' => $model,
+            'book' => $book,
+            'user' => $user,
+            'price' => $model->amount,
+            'transactionResult' => $transactionResult,
         ));
     }
 

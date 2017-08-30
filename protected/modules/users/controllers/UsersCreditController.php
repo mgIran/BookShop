@@ -136,11 +136,13 @@ class UsersCreditController extends Controller
 
     public function actionVerify()
     {
+        $platform = Yii::app()->request->getQuery('platform');
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        if(!isset($_GET['Authority']))
+        if (!isset($_GET['Authority']))
             $this->redirect(array('/users/credit/buy'));
         $Authority = $_GET['Authority'];
+        /* @var $model UserTransactions */
         $model = UserTransactions::model()->findByAttributes(array(
             'authority' => $Authority,
             'user_id' => Yii::app()->user->getId(),
@@ -163,24 +165,35 @@ class UsersCreditController extends Controller
                 Yii::app()->getModule('festivals');
                 $result = Festivals::CheckFestivals(Yii::app()->user->getId(), Festivals::FESTIVAL_TYPE_CREDIT, $model->amount);
                 $gift = (float)$result['gift'];
-                if($gift)
+                if ($gift)
                     $userDetails->credit += $gift;
-                if($userDetails->save())
-                {
-                    foreach($result['ids'] as $id)
+                if ($userDetails->save()) {
+                    foreach ($result['ids'] as $id)
                         Festivals::ApplyUsed($id, $model->amount, $gift, Yii::app()->user->getId(), $model->id);
                 }
-                Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
+                if ($platform and $platform == 'mobile')
+                    $this->redirect(array('/site?status=paid&amount=' . $model->amount . '&date=' . $model->date));
+                else
+                    Yii::app()->user->setFlash('success', 'پرداخت شما با موفقیت انجام شد.');
             } else {
-                Yii::app()->user->setFlash('failed', $gateway->getError());
-                $this->redirect(array('/users/credit/buy'));
+                if ($platform and $platform == 'mobile')
+                    $this->redirect(array('/site?status=failed&error=' . urlencode($gateway->getError())));
+                else {
+                    Yii::app()->user->setFlash('failed', $gateway->getError());
+                    $this->redirect(array('/users/credit/buy'));
+                }
             }
-        } else
-            Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+        } else {
+            if ($platform and $platform == 'mobile')
+                $this->redirect(array('/site?status=failed&error=' . urlencode('عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.')));
+            else
+                Yii::app()->user->setFlash('failed', 'عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
+        }
+
         $this->render('verify', array(
             'model' => $model,
             'userDetails' => $userDetails,
-            'gift' => isset($gift)?$gift:false,
+            'gift' => isset($gift) ? $gift : false,
         ));
     }
 
