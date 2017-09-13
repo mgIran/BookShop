@@ -9,7 +9,7 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + row, search, find, list, page, creditPrices',
+            'RestAccessControl + row, search, find, list, page, creditPrices, ads',
             'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile',
         );
     }
@@ -491,11 +491,11 @@ class ApiController extends ApiBaseController
                 $price = $basePrice; // price, base price with discount code
 
                 if (isset($this->request['discount_code'])) {
-                    $discountCodesInSession = DiscountCodes::calculateDiscountCodesManual($price, 'digital', $this->request['discount_code'], $this->user->id);
-                    $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+                    $discountCode = DiscountCodes::calculateDiscountCodesManual($price, 'digital', $this->request['discount_code'], $this->user->id);
+                    $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCode]);
                 } else {
-                    $discountCodesInSession = DiscountCodes::calculateDiscountCodesManual($price, 'digital', null, $this->user->id);
-                    $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodesInSession]);
+                    $discountCode = DiscountCodes::calculateDiscountCodesManual($price, 'digital', null, $this->user->id);
+                    $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCode]);
                 }
 
                 if ($price !== 0) {
@@ -515,7 +515,7 @@ class ApiController extends ApiBaseController
                         if ($userDetails->save()) {
                             $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
                             Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
-                            if ($discountCodesInSession)
+                            if ($discountCode)
                                 DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                             $this->_sendResponse(200, CJSON::encode(['status' => true, 'result' => [
                                 'hasError' => false,
@@ -543,7 +543,7 @@ class ApiController extends ApiBaseController
                         if ($transaction->save()) {
                             $title = $model->title;
                             $gateway = new ZarinPal();
-                            $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/verify/' . $id . '/' . urlencode($title) . '?platform=mobile';
+                            $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/book/apiVerify/' . $id . '?platform=mobile&dc=' . urlencode(base64_encode(json_encode($discountCode)));
                             $siteName = Yii::app()->name;
                             $description = "خرید کتاب {$title} از وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
                             $result = $gateway->request(doubleval($transaction->amount), $description, $this->user->email, $this->user->userDetails && $this->user->userDetails->phone ? $this->user->userDetails->phone : '0');
@@ -571,7 +571,7 @@ class ApiController extends ApiBaseController
                 } else {
                     $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
                     Library::AddToLib($model->id, $model->lastPackage->id, $userID);
-                    if ($discountCodesInSession)
+                    if ($discountCode)
                         DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                     $this->_sendResponse(200, CJSON::encode(['status' => true, 'result' => [
                         'hasError' => false,
@@ -668,7 +668,7 @@ class ApiController extends ApiBaseController
 
     public function actionProfile()
     {
-        $avatar = ($this->user->userDetails->avatar == '') ? Yii::app()->createAbsoluteUrl('/themes/frontend/images/default-user.svg') : Yii::app()->createAbsoluteUrl('/uploads/users/avatar') . '/' . $this->user->userDetails->avatar;
+        $avatar = ($this->user->userDetails->avatar == '') ? Yii::app()->createAbsoluteUrl('/themes/frontend/images/default-user.png') : Yii::app()->createAbsoluteUrl('/uploads/users/avatar') . '/' . $this->user->userDetails->avatar;
         $this->_sendResponse(200, CJSON::encode(['status' => true, 'user' => [
             'name' => $this->user->userDetails->getShowName(),
             'role' => $this->user->userDetails->roleLabels[$this->user->role->role],
@@ -737,7 +737,7 @@ class ApiController extends ApiBaseController
             $model->type = UserTransactions::TRANSACTION_TYPE_CREDIT;
             if ($model->save()) {
                 $gateway = new ZarinPal();
-                $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/users/credit/verify?platform=mobile';
+                $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/users/credit/apiVerify?platform=mobile';
                 $siteName = Yii::app()->name;
                 $description = "افزایش اعتبار در {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
                 $result = $gateway->request(doubleval($model->amount), $description, $this->user->email, $this->user->userDetails && $this->user->userDetails->phone ? $this->user->userDetails->phone : '0');
@@ -780,5 +780,31 @@ class ApiController extends ApiBaseController
                 $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => $voucherForm->getError('code')]), 'application/json');
         } else
             $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Code variable is required.']), 'application/json');
+    }
+
+    public function actionAds()
+    {
+        Yii::import('advertises.models.*');
+        $advertises = new CActiveDataProvider('Advertises', array(
+            'criteria' => Advertises::model()->getActiveAdvertises()
+        ));
+
+        if ($advertises->totalItemCount != 0) {
+            $advertisesTemp = [];
+            foreach ($advertises->getData() as $ads) {
+                /* @var $ads Advertises */
+                $advertisesTemp[] = [
+                    'book' => [
+                        'id' => $ads->book_id,
+                        'title' => $ads->book->title,
+                        'author' => ($person = $ads->book->getPerson('نویسنده')) ? $person[0]->name_family : null,
+                    ],
+                    'cover' => Yii::app()->createAbsoluteUrl('/uploads/advertisesCover') . '/' . $ads->cover,
+                ];
+            }
+
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'ads' => $advertisesTemp]), 'application/json');
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'The result was not found.']), 'application/json');
     }
 }

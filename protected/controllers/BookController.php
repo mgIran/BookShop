@@ -9,7 +9,7 @@ class BookController extends Controller
     public static function actionsType()
     {
         return array(
-            'frontend' => array('discount' ,'tag' ,'search' ,'view' ,'download' ,'publisher' ,'buy' ,'bookmark' ,'rate' ,'verify' ,'updateVersion') ,
+            'frontend' => array('discount' ,'tag' ,'search' ,'view' ,'download' ,'publisher' ,'buy' ,'bookmark' ,'rate' ,'verify' ,'apiVerify' ,'updateVersion') ,
             'backend' => array('reportSales' ,'reportIncome','reportBookSales')
         );
     }
@@ -269,6 +269,63 @@ class BookController extends Controller
             'price' => $model->amount,
             'transactionResult' => $transactionResult,
         ));
+    }
+
+    public function actionApiVerify($id)
+    {
+        $platform = Yii::app()->request->getQuery('platform');
+        $discountCode = Yii::app()->request->getQuery('dc');
+        if (!isset($_GET['Authority']) or is_null($platform) or is_null($discountCode))
+            $this->redirect(array('/site?status=failed&error=' . urlencode("درخواست شما معتبر نیست")));
+        $Authority = $_GET['Authority'];
+
+        /* @var UserTransactions $model */
+        $model = UserTransactions::model()->findByAttributes(array(
+            'authority' => $Authority,
+            'type' => UserTransactions::TRANSACTION_TYPE_BOOK
+        ));
+        if ($model) {
+            $book = Books::model()->findByPk($id);
+            $user = Users::model()->findByPk($model->user_id);
+            $basePrice = $book->hasDiscount() ? $book->offPrice : $book->price;
+            $Amount = $model->amount; //Amount will be based on Toman
+
+            Yii::app()->getModule('discountCodes');
+            $price = $basePrice; // price, base price with discount code
+            $discountCodes = DiscountCodes::calculateDiscountCodesManual($price, 'digital', CJSON::decode(base64_decode($discountCode))[0], $user->id);
+            $discountObj = DiscountCodes::model()->findByAttributes(['code' => $discountCodes]);
+
+            if ($_GET['Status'] == 'OK') {
+                $gateway = new ZarinPal();
+                $gateway->verify($Authority, $price);
+                if ($gateway->getStatus() == 100) {
+                    $model->scenario = 'update';
+                    $model->status = 'paid';
+                    $model->token = $gateway->getRefId();
+                    $model->save();
+                    $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj, $model->id);
+                    Library::AddToLib($book->id, $book->lastPackage->id, $user->id);
+                    if ($discountCodes)
+                        DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
+
+                    if ($platform and $platform == 'mobile')
+                        $this->redirect(array('/site?status=paid&amount=' . $model->amount . '&date=' . $model->date));
+                    else
+                        $this->redirect(array('/site?status=failed&error=' . urlencode("درخواست شما معتبر نیست")));
+                } else {
+                    if ($platform and $platform == 'mobile')
+                        $this->redirect(array('/site?status=failed&error=' . urlencode($gateway->getError())));
+                    else
+                        $this->redirect(array('/site?status=failed&error=' . urlencode("درخواست شما معتبر نیست")));
+                }
+            } else {
+                if ($platform and $platform == 'mobile')
+                    $this->redirect(array('/site?status=failed&error=' . urlencode('عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.')));
+                else
+                    $this->redirect(array('/site?status=failed&error=' . urlencode("درخواست شما معتبر نیست")));
+            }
+        } else
+            $this->redirect(array('/site?status=failed&error=' . urlencode("درخواست شما معتبر نیست")));
     }
 
     /**
