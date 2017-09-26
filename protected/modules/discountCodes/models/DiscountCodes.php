@@ -192,48 +192,99 @@ class DiscountCodes extends CActiveRecord
 	 * @return array|mixed|null
 	 */
 	public static function calculateDiscountCodes(&$price, $allow_type)
-	{
-		$discountCodesInSession = array();
-		if (Yii::app()->user->hasState('discount-codes')) {
-			$discountCodesInSession = Yii::app()->user->getState('discount-codes');
-			$discountCodesInSession = CJSON::decode(base64_decode($discountCodesInSession));
-			$priceZero = false;
-            if(is_array($discountCodesInSession)){ // add multiple discount codes in invoice
-                foreach($discountCodesInSession as $key => $code){
-                    if(!$priceZero){
+    {
+        $discountCodesInSession = array();
+        if (Yii::app()->user->hasState('discount-codes')) {
+            $discountCodesInSession = Yii::app()->user->getState('discount-codes');
+            $discountCodesInSession = CJSON::decode(base64_decode($discountCodesInSession));
+            $priceZero = false;
+            if (is_array($discountCodesInSession)) { // add multiple discount codes in invoice
+                foreach ($discountCodesInSession as $key => $code) {
+                    if (!$priceZero) {
                         $criteria = DiscountCodes::ValidCodes();
                         $criteria->compare('code', $code);
                         $discountObj = DiscountCodes::model()->find($criteria);
-						if($discountObj && $discountObj->{$allow_type.'_allow'} && !$discountObj->userUsedStatus(Yii::app()->user->getId())){
-							$disVal = $discountObj->getAmount($price);
-							if($price < 100 || $price - $disVal < 100){
-								$price = 0;
-								$priceZero = true;
-							}else
-								$price -= $disVal;
-						}else
-							unset($discountCodesInSession[$key]);
-                    }else
+                        if ($discountObj && $discountObj->{$allow_type . '_allow'} && !$discountObj->userUsedStatus(Yii::app()->user->getId())) {
+                            $disVal = $discountObj->getAmount($price);
+                            if ($price < 100 || $price - $disVal < 100) {
+                                $price = 0;
+                                $priceZero = true;
+                            } else
+                                $price -= $disVal;
+                        } else
+                            unset($discountCodesInSession[$key]);
+                    } else
                         unset($discountCodesInSession[$key]);
                 }
-            }else // add single discount code in invoice
+            } else // add single discount code in invoice
             {
                 $code = $discountCodesInSession;
                 $criteria = DiscountCodes::ValidCodes();
                 $criteria->compare('code', $code);
                 $discountObj = DiscountCodes::model()->find($criteria);
-				if($discountObj && $discountObj->{$allow_type.'_allow'} && !$discountObj->userUsedStatus(Yii::app()->user->getId())){
-					$disVal = $discountObj->getAmount($price);
-                    if($price < 100 || $price - $disVal < 100){
+                if ($discountObj && $discountObj->{$allow_type . '_allow'} && !$discountObj->userUsedStatus(Yii::app()->user->getId())) {
+                    $disVal = $discountObj->getAmount($price);
+                    if ($price < 100 || $price - $disVal < 100) {
                         $price = 0;
-                    }else
+                    } else
                         $price -= $disVal;
-                }else
+                } else
                     $discountCodesInSession = null;
             }
-			Yii::app()->user->setState('discount-codes', base64_encode(CJSON::encode($discountCodesInSession)));
+
+            Yii::app()->user->setState('discount-codes', base64_encode(CJSON::encode($discountCodesInSession)));
+        }
+        return $discountCodesInSession;
+    }
+
+    /**
+	 * @param $price
+	 * @param $allow_type
+	 * @param $codes
+	 * @param $userID
+	 * @return array|mixed|null
+	 */
+	public static function calculateDiscountCodesManual(&$price, $allow_type, $codes = false, $userID)
+	{
+		$discountCodes = array();
+		if ($codes) {
+			$discountCodes = $codes;
+			$priceZero = false;
+			if (is_array($discountCodes)) { // add multiple discount codes in invoice
+				foreach ($discountCodes as $key => $code) {
+					if (!$priceZero) {
+						$criteria = DiscountCodes::ValidCodes();
+						$criteria->compare('code', $code);
+						$discountObj = DiscountCodes::model()->find($criteria);
+						if ($discountObj && $discountObj->{$allow_type . '_allow'} && !$discountObj->userUsedStatus($userID)) {
+							$disVal = $discountObj->getAmount($price);
+							if ($price < 100 || $price - $disVal < 100) {
+								$price = 0;
+								$priceZero = true;
+							} else
+								$price -= $disVal;
+						} else
+							unset($discountCodes[$key]);
+					} else
+						unset($discountCodes[$key]);
+				}
+			} else // add single discount code in invoice
+			{
+				$code = $discountCodes;
+				$criteria = DiscountCodes::ValidCodes();
+				$criteria->compare('code', $code);
+				$discountObj = DiscountCodes::model()->find($criteria);
+				if ($discountObj && $discountObj->{$allow_type . '_allow'} && !$discountObj->userUsedStatus($userID)) {
+					$disVal = $discountObj->getAmount($price);
+					if ($price < 100 || $price - $disVal < 100) {
+						$price = 0;
+					} else
+						$price -= $disVal;
+				} else
+					$discountCodes = null;
+			}
 		}
-		return $discountCodesInSession;
+		return $discountCodes;
 	}
 	#endregion
 
