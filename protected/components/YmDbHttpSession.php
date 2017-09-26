@@ -202,7 +202,8 @@ class YmDbHttpSession extends CHttpSession
             $db=$this->getDbConnection();
             if($db->getDriverName()=='sqlsrv' || $db->getDriverName()=='mssql' || $db->getDriverName()=='dblib')
                 $data=new CDbExpression('CONVERT(VARBINARY(MAX), '.$db->quoteValue($data).')');
-            if($db->createCommand()->select('id')->from($this->sessionTableName)->where('id=:id',array(':id'=>$id))->queryScalar()===false)
+            $session = $db->createCommand()->select('*')->from($this->sessionTableName)->where('id=:id',array(':id'=>$id))->queryRow();
+            if($session===false)
                 $db->createCommand()->insert($this->sessionTableName,array(
                     'id'=>$id,
                     'data'=>$data,
@@ -223,7 +224,7 @@ class YmDbHttpSession extends CHttpSession
                     'device_platform' => 'web',
                     'device_ip' => $this->getRealIp(),
                     'device_type' => $device->getDeviceType(),
-                    'refresh_token' => Controller::generateRandomString(50),
+                    'refresh_token' => $session['refresh_token']?:Controller::generateRandomString(50),
                 ),'id=:id',array(':id'=>$id));
         }
         catch(Exception $e)
