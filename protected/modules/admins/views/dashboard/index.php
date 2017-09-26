@@ -28,7 +28,7 @@ else:
     <div class="row">
         <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 connectedSortable ui-sortable">
             <div class="box box-primary">
-                <div class="box-header">جدیدترین کتاب ها</div>
+                <div class="box-header"><h3 class="box-title" >جدیدترین کتاب ها</h3></div>
                 <div class="box-body">
                     <?php $this->widget('zii.widgets.grid.CGridView', array(
                         'id'=>'newest-books-grid',
