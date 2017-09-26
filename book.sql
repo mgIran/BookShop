@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50616
+Source Server         : localhost
+Source Server Version : 50714
 Source Host           : localhost:3306
 Source Database       : book
 
 Target Server Type    : MYSQL
-Target Server Version : 50616
+Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2017-07-25 20:50:06
+Date: 2017-09-26 16:26:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -290,6 +290,7 @@ CREATE TABLE `ym_book_packages` (
   `sale_printed` tinyint(1) DEFAULT NULL COMMENT 'فروش نسخه چاپی',
   `printed_price` decimal(10,0) unsigned DEFAULT NULL,
   `print_year` varchar(8) DEFAULT NULL COMMENT 'سال چاپ',
+  `encrypted` tinyint(1) DEFAULT '0' COMMENT 'رمز گذاری شده',
   PRIMARY KEY (`id`),
   KEY `app_id` (`book_id`) USING BTREE,
   CONSTRAINT `ym_book_packages_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `ym_books` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
@@ -298,19 +299,19 @@ CREATE TABLE `ym_book_packages` (
 -- ----------------------------
 -- Records of ym_book_packages
 -- ----------------------------
-INSERT INTO `ym_book_packages` VALUES ('46', '52', '1', 'تیراژ اول', '978-3-16-148410-0', 'GJLsY1478819947.pdf', null, '1477566615', '1483176919', 'accepted', '', 'old_book', '10000', '1', '150000', '1394');
-INSERT INTO `ym_book_packages` VALUES ('47', '53', '3', 'فتح خون جلد اول', '978-3-16-148410-0', 'ig6Xo1478814578.pdf', null, '1477582805', '1487490172', 'accepted', 'sf', 'old_book', '100', '1', '5000', '1370');
-INSERT INTO `ym_book_packages` VALUES ('48', '54', '1', 'جلد اول', '978-3-16-148410-0', 'kpg841477592881.docx', null, '1477592909', '1477687323', 'pending', '', 'old_book', '100', '0', '1220', '1370');
-INSERT INTO `ym_book_packages` VALUES ('69', '53', '1', null, '978-3-16-148410-0', '5JAX91478815087.pdf', null, '1478811430', '1478816997', 'accepted', '', 'old_book', '10000', '1', '120000', '1395');
-INSERT INTO `ym_book_packages` VALUES ('71', '55', '1', null, '9781856176972', 'XtVxn1483356171.pdf', 'a8Qov1483356131.epub', '1483356035', '1492962913', 'accepted', '', 'old_book', '5000', '1', '35000', '93');
-INSERT INTO `ym_book_packages` VALUES ('72', '56', '26', null, '9781856176972', '4nVhe1483364756.pdf', null, '1483364776', '1483364776', 'accepted', '', null, '10000', '0', '10000', '2017');
-INSERT INTO `ym_book_packages` VALUES ('73', '57', '27', null, '978-964-02-1268-4', '9fcd71483369513.pdf', null, '1483369631', '1483370044', 'accepted', '', 'old_book', '10000', '0', '10000', '1396');
-INSERT INTO `ym_book_packages` VALUES ('74', '58', '2', null, '978-3-16-148410-0', 'Yhjf11483380488.pdf', null, '1483380507', '1483512061', 'accepted', '', 'old_book', '3000', '0', '3000', '2011');
-INSERT INTO `ym_book_packages` VALUES ('75', '58', '5', null, '9781856176972', 'F9Yzg1483447833.pdf', null, '1483447835', '1483512063', 'accepted', '', 'old_book', '5000', '0', '5000', '1352');
-INSERT INTO `ym_book_packages` VALUES ('76', '58', '3', null, '1856176975', 'NcRVX1483447862.pdf', null, '1483447864', '1483447864', 'accepted', '', null, '2000', '0', '2000', '15365');
-INSERT INTO `ym_book_packages` VALUES ('77', '58', '4', null, '1856176975', null, 'g8Opy1483447901.epub', '1483447986', '1483447986', 'accepted', '', null, '1000', '0', '1000', '90');
-INSERT INTO `ym_book_packages` VALUES ('78', '59', '1', null, '978-600-7289-01-3', 'PCEDe1483464658.pdf', null, '1483464711', '1485265833', 'accepted', '', 'old_book', '5000', '1', '5000', '90');
-INSERT INTO `ym_book_packages` VALUES ('81', '60', '1', null, '978-3-16-148410-0', 'lwcqL1492870894.pdf', null, '1492870906', '', 'pending', '', 'old_book', '0', '0', '0', '1396');
+INSERT INTO `ym_book_packages` VALUES ('46', '52', '1', 'تیراژ اول', '978-3-16-148410-0', 'GJLsY1478819947.pdf', null, '1477566615', '1483176919', 'accepted', '', 'old_book', '10000', '1', '150000', '1394', '0');
+INSERT INTO `ym_book_packages` VALUES ('47', '53', '3', 'فتح خون جلد اول', '978-3-16-148410-0', 'ig6Xo1478814578.pdf', null, '1477582805', '1487490172', 'accepted', 'sf', 'old_book', '100', '1', '5000', '1370', '0');
+INSERT INTO `ym_book_packages` VALUES ('48', '54', '1', 'جلد اول', '978-3-16-148410-0', 'kpg841477592881.docx', null, '1477592909', '1477687323', 'pending', '', 'old_book', '100', '0', '1220', '1370', '0');
+INSERT INTO `ym_book_packages` VALUES ('69', '53', '1', null, '978-3-16-148410-0', '5JAX91478815087.pdf', null, '1478811430', '1478816997', 'accepted', '', 'old_book', '10000', '1', '120000', '1395', '0');
+INSERT INTO `ym_book_packages` VALUES ('71', '55', '1', null, '9781856176972', 'XtVxn1483356171.pdf', 'a8Qov1483356131.epub', '1483356035', '1492962913', 'accepted', '', 'old_book', '5000', '1', '35000', '93', '0');
+INSERT INTO `ym_book_packages` VALUES ('72', '56', '26', null, '9781856176972', '4nVhe1483364756.pdf', null, '1483364776', '1483364776', 'accepted', '', null, '10000', '0', '10000', '2017', '0');
+INSERT INTO `ym_book_packages` VALUES ('73', '57', '27', null, '978-964-02-1268-4', '9fcd71483369513.pdf', null, '1483369631', '1483370044', 'accepted', '', 'old_book', '10000', '0', '10000', '1396', '0');
+INSERT INTO `ym_book_packages` VALUES ('74', '58', '2', null, '978-3-16-148410-0', 'Yhjf11483380488.pdf', null, '1483380507', '1483512061', 'accepted', '', 'old_book', '3000', '0', '3000', '2011', '0');
+INSERT INTO `ym_book_packages` VALUES ('75', '58', '5', null, '9781856176972', 'F9Yzg1483447833.pdf', null, '1483447835', '1483512063', 'accepted', '', 'old_book', '5000', '0', '5000', '1352', '0');
+INSERT INTO `ym_book_packages` VALUES ('76', '58', '3', null, '1856176975', 'NcRVX1483447862.pdf', null, '1483447864', '1483447864', 'accepted', '', null, '2000', '0', '2000', '15365', '0');
+INSERT INTO `ym_book_packages` VALUES ('77', '58', '4', null, '1856176975', null, 'g8Opy1483447901.epub', '1483447986', '1483447986', 'accepted', '', null, '1000', '0', '1000', '90', '0');
+INSERT INTO `ym_book_packages` VALUES ('78', '59', '1', null, '978-600-7289-01-3', 'PCEDe1483464658.pdf', null, '1483464711', '1485265833', 'accepted', '', 'old_book', '5000', '1', '5000', '90', '0');
+INSERT INTO `ym_book_packages` VALUES ('81', '60', '1', null, '978-3-16-148410-0', 'lwcqL1492870894.pdf', null, '1492870906', '', 'pending', '', 'old_book', '0', '0', '0', '1396', '0');
 
 -- ----------------------------
 -- Table structure for ym_book_persons
@@ -492,11 +493,11 @@ CREATE TABLE `ym_counter_save` (
 -- ----------------------------
 -- Records of ym_counter_save
 -- ----------------------------
-INSERT INTO `ym_counter_save` VALUES ('counter', '962');
-INSERT INTO `ym_counter_save` VALUES ('day_time', '2457960');
+INSERT INTO `ym_counter_save` VALUES ('counter', '964');
+INSERT INTO `ym_counter_save` VALUES ('day_time', '2457987');
 INSERT INTO `ym_counter_save` VALUES ('max_count', '30');
 INSERT INTO `ym_counter_save` VALUES ('max_time', '1484296200');
-INSERT INTO `ym_counter_save` VALUES ('yesterday', '1');
+INSERT INTO `ym_counter_save` VALUES ('yesterday', '0');
 
 -- ----------------------------
 -- Table structure for ym_counter_users
@@ -511,7 +512,7 @@ CREATE TABLE `ym_counter_users` (
 -- ----------------------------
 -- Records of ym_counter_users
 -- ----------------------------
-INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1500999316');
+INSERT INTO `ym_counter_users` VALUES ('837ec5754f503cfaaee0929fd48974e7', '1503295928');
 
 -- ----------------------------
 -- Table structure for ym_discount_codes
@@ -1265,6 +1266,7 @@ CREATE TABLE `ym_sessions` (
   `device_platform` varchar(20) DEFAULT NULL COMMENT 'پلتفرم دستگاه',
   `device_ip` varchar(15) DEFAULT NULL COMMENT 'آی پی دستگاه',
   `device_type` varchar(255) DEFAULT NULL COMMENT 'نوع دستگاه',
+  `token` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `refresh_token` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -1272,6 +1274,8 @@ CREATE TABLE `ym_sessions` (
 -- ----------------------------
 -- Records of ym_sessions
 -- ----------------------------
+INSERT INTO `ym_sessions` VALUES ('vn17lbf32oh1ua6g4j6rhpjja4', '1503297728', '', null, null, 'web', '::1', 'computer', null, 'pe7bNmjZtVPlnxnB1gdBlJ1GO11GpIXXBU1mldWd8HWmUYKa98');
+INSERT INTO `ym_sessions` VALUES ('ho8q9vo4t01nb46e4eucajpkp2', '1502024948', 0x32306663646530633139363064396139653239353235623564646461643730335F5F69647C733A323A223433223B32306663646530633139363064396139653239353235623564646461643730335F5F6E616D657C733A32373A226768617261676F7A6C752E6D61736F756440676D61696C2E636F6D223B3230666364653063313936306439613965323935323562356464646164373033726F6C65737C733A343A2275736572223B3230666364653063313936306439613965323935323562356464646164373033747970657C733A343A2275736572223B3230666364653063313936306439613965323935323562356464646164373033656D61696C7C733A32373A226768617261676F7A6C752E6D61736F756440676D61696C2E636F6D223B3230666364653063313936306439613965323935323562356464646164373033757365726E616D657C733A303A22223B323066636465306331393630643961396532393532356235646464616437303366615F6E616D657C733A32373A22D985D8B3D8B9D988D8AF20D982D8B1D8A7DAAFD988D8B2D984D988223B3230666364653063313936306439613965323935323562356464646164373033656E5F6E616D657C733A363A226D61736F7564223B32306663646530633139363064396139653239353235623564646461643730336176617461727C733A303A22223B3230666364653063313936306439613965323935323562356464646164373033617574685F6D6F64657C733A343A2273697465223B32306663646530633139363064396139653239353235623564646461643730335F5F7374617465737C613A393A7B733A353A22726F6C6573223B623A313B733A343A2274797065223B623A313B733A353A22656D61696C223B623A313B733A383A22757365726E616D65223B623A313B733A373A2266615F6E616D65223B623A313B733A373A22656E5F6E616D65223B623A313B733A363A22617661746172223B623A313B733A393A22617574685F6D6F6465223B623A313B733A353A224F41757468223B623A313B7D, '43', 'user', 'web', '::1', '', 'QOpOdq9gjRNhnYjs67aTI7lbVkipYAZazfUzV90b', 'rbYE8vDEzv2E5FgQwXTXfP2d4ggkmJHwXcUvc80vVuAeuLJUJU');
 
 -- ----------------------------
 -- Table structure for ym_shop_addresses

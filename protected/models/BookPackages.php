@@ -19,6 +19,7 @@
  * @property integer $sale_printed
  * @property string $printed_price
  * @property string $print_year
+ * @property integer $encrypted
  *
  * The followings are the available model relations:
  * @property Books $book
@@ -58,11 +59,12 @@ class BookPackages extends CActiveRecord
             array('book_id, price, printed_price', 'length', 'max' => 10),
             array('print_year', 'length', 'max' => 8),
             array('version, isbn, create_date, publish_date', 'length', 'max' => 20),
-            array('sale_printed, price, printed_price, print_year, version', 'numerical', 'integerOnly' => true),
+            array('sale_printed, price, printed_price, print_year, version, encrypted', 'numerical', 'integerOnly' => true),
             array('isbn, create_date, publish_date, reason, print_year', 'filter', 'filter' => 'strip_tags'),
             array('package_name', 'length', 'max' => 100),
             array('pdf_file_name, epub_file_name', 'length', 'max' => 255),
             array('for', 'length', 'max' => 8),
+            array('encrypted', 'length', 'max' => 1),
             array('create_date', 'default', 'value' => time()),
             array('isbn', 'isbnChecker'),
             // The following rule is used by search().
@@ -137,6 +139,7 @@ class BookPackages extends CActiveRecord
             'sale_printed' => 'فروش نسخه چاپی',
             'printed_price' => 'قیمت نسخه چاپی',
             'print_year' => 'سال چاپ',
+            'encrypted' => 'رمز گذاری شده',
         );
     }
 
