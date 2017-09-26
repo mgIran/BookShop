@@ -95,6 +95,9 @@ return array(
 
 	// application components
 	'components'=>array(
+		'phpseclib' => array( // encoder
+			'class' => 'ext.phpseclib.PhpSecLib'
+		),
 		'JWT' => array(
 			'class' => 'ext.jwt.JWT',
 			'key' => base64_encode(md5('Rahbod-Ketabic-2017')),
