@@ -763,6 +763,7 @@ class ApiController extends ApiBaseController
             $voucherForm->user_id = $this->user->id;
             $voucherForm->code = $this->request['code'];
             if ($voucherForm->validate()) {
+                /* @var $bon UserBons */
                 $bon = $voucherForm->getBon();
                 $bonRelModel = new UserBonRel();
                 $bonRelModel->user_id = $this->user->id;
@@ -770,10 +771,15 @@ class ApiController extends ApiBaseController
                 $bonRelModel->date = time();
                 $bonRelModel->amount = $bon->amount;
                 if ($bonRelModel->save()) {
+                    /* @var $creditModel UserDetails */
                     $creditModel = UserDetails::model()->findByPk($this->user->id);
-                    $creditModel->credit += $bon->amount;
+                    $creditModel->credit += doubleval($bon->amount);
                     $creditModel->save();
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => CHtml::encode($bon->title) . ' با موفقیت اعمال گردید و مبلغ ' . Controller::parseNumbers(number_format($bon->amount)) . ' تومان به اعتبار شما اضافه شد.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode([
+                        'status' => true,
+                        'message' => CHtml::encode($bon->title) . ' با موفقیت اعمال گردید و مبلغ ' . Controller::parseNumbers(number_format($bon->amount)) . ' تومان به اعتبار شما اضافه شد.',
+                        'credit' => intval($creditModel->credit),
+                    ]), 'application/json');
                 } else
                     $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']), 'application/json');
             } else
