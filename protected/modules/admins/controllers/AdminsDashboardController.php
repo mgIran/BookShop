@@ -26,14 +26,16 @@ class AdminsDashboardController extends Controller
 
     public function actionIndex()
     {
-        $this->pageHeader = 'داشبورد';
         Yii::app()->getModule('users');
 
         $criteria = new CDbCriteria();
         $criteria->addCondition('confirm=:confirm');
         $criteria->addCondition('deleted=:deleted');
         $criteria->addCondition('title!=""');
-        $criteria->params = array(':confirm' => 'pending', ':deleted' => '0');
+        $criteria->addCondition('packages.encrypted = :encrypted');
+        $criteria->with = ['packages'];
+        $criteria->together = true;
+        $criteria->params = array(':confirm' => 'pending', ':deleted' => '0', ':encrypted' => 1);
         $newestPrograms = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,
         ));
