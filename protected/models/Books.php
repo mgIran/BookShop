@@ -205,6 +205,10 @@ class Books extends CActiveRecord
 
         $criteria->addCondition('deleted=0');
         $criteria->addCondition('t.title != ""');
+        $criteria->addCondition('packages.encrypted = :encrypted');
+        $criteria->params[':encrypted'] = 1;
+        $criteria->with[] = 'packages';
+        $criteria->together = true;
         $criteria->order = 't.id DESC';
 
         if ($returnType == 'dataProvider')

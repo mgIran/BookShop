@@ -217,6 +217,16 @@ class ApiController extends ApiBaseController
                         $book['previewFileType'] = pathinfo($record->preview_file, PATHINFO_EXTENSION);
                     }
 
+                    if ($record->lastPackage) {
+                        $fileName = '';
+                        if($record->lastPackage->pdf_file_name)
+                            $fileName = $record->lastPackage->pdf_file_name;
+                        elseif($record->lastPackage->epub_file_name)
+                            $fileName = $record->lastPackage->epub_file_name;
+                        $book['file'] = Yii::app()->createAbsoluteUrl('/uploads/books/encrypted') . '/' . $fileName;
+                        $book['fileType'] = pathinfo($fileName, PATHINFO_EXTENSION);
+                    }
+
                     break;
                 default:
                     $book = null;
