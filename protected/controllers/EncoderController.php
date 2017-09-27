@@ -59,32 +59,37 @@ class EncoderController extends Controller
         if(!is_dir($encryptPath))
             mkdir($encryptPath);
 
-        $this->_privateKey = file_get_contents(Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.'private.key');
+        $this->_privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'private.key');
 
         $criteria = new CDbCriteria();
         $criteria->addCondition('encrypted = 0');
         $files = BookPackages::model()->findAll($criteria);
+        $total = 0;
+        $totalEn = 0;
         if($files){
-            foreach($files as $file)
-            {
+            foreach($files as $file){
                 if($file->epub_file_name && file_exists($originalPath . $file->epub_file_name)){
+                    $total++;
                     $sourceFileName = $originalPath . $file->epub_file_name;
                     $ext = pathinfo($file->epub_file_name, PATHINFO_EXTENSION);
-                    $secureFileName = str_replace('.'.$ext,'',$file->epub_file_name).'.secure';
+                    $secureFileName = str_replace('.' . $ext, '', $file->epub_file_name) . '.secure';
                     $destFileName = $encryptPath . $secureFileName;
                     if($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)){
+                        $totalEn++;
                         $file->epub_file_name = $secureFileName;
                         $file->encrypted = 1;
                         $file->save(false);
                     }
                 }
-                
+
                 if($file->pdf_file_name && file_exists($originalPath . $file->pdf_file_name)){
+                    $total++;
                     $sourceFileName = $originalPath . $file->pdf_file_name;
                     $ext = pathinfo($file->pdf_file_name, PATHINFO_EXTENSION);
-                    $secureFileName = str_replace('.'.$ext,'',$file->pdf_file_name).'.secure';
+                    $secureFileName = str_replace('.' . $ext, '', $file->pdf_file_name) . '.secure';
                     $destFileName = $encryptPath . $secureFileName;
                     if($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)){
+                        $totalEn++;
                         $file->pdf_file_name = $secureFileName;
                         $file->encrypted = 1;
                         $file->save(false);
@@ -92,5 +97,8 @@ class EncoderController extends Controller
                 }
             }
         }
+
+        echo "Total Files: " . $total . '<br>';
+        echo "Total Encrypted: " . $totalEn;
     }
 }
