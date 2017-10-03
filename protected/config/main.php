@@ -146,6 +146,7 @@ return array(
 				'<action:(register|login)>' => 'users/public/index',
 				'<action:(logout|dashboard|googleLogin|library|transactions|downloaded)>' => 'users/public/<action>',
 				'/help'=>'site/help',
+				'encoder/<action:\w+>'=>'encoder/<action>',
 				'books/<id:\d+>'=>'books/view',
 				'documents/<id:\d+>/<title>'=>'pages/manage/view',
 				'category/<id:\d+>/<title:(.*)>'=>'category/index',
