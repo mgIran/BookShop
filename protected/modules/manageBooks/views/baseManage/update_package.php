@@ -15,6 +15,7 @@ $this->menu = array(
 )
 ?>
 <h1>ویرایش </h1>
+<?php $this->renderPartial("//layouts/_flashMessage") ?>
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'book-packages-form',
     'enableClientValidation'=>true,
