@@ -24,8 +24,7 @@ class ManageBooksBaseManageController extends Controller
                 'upload',
                 'deleteUpload',
                 'uploadFile',
-                'deleteUploadPdfFile',
-                'deleteUploadEpubFile',
+                'deleteUploadedFile',
                 'changeConfirm',
                 'deletePackage',
                 'savePackage',
@@ -107,34 +106,6 @@ class ManageBooksBaseManageController extends Controller
                 'attribute' => 'icon',
                 'uploadDir' => '/uploads/books/icons',
                 'storedMode' => 'field'
-            ),
-            'deleteUploadPdfFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'pdf_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'record'
-            ),
-            'deletePdfFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'pdf_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'field'
-            ),
-            'deleteEpubFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'epub_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'field'
-            ),
-            'deleteUploadEpubFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'epub_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'record'
             ),
             'deleteUploadPreview' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
@@ -821,5 +792,45 @@ class ManageBooksBaseManageController extends Controller
             echo CJSON::encode(array('status' => 'success'));
         else
             echo CJSON::encode(array('status' => 'failed'));
+    }
+
+    public function actionDeleteUploadedFile()
+    {
+        $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/';
+
+        if(isset($_POST['fileName'])){
+
+            $fileName = $_POST['fileName'];
+
+            $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
+
+            $model = BookPackages::model()->findByAttributes(array('pdf_file_name' => $fileName));
+            if($model === null)
+                $model = BookPackages::model()->findByAttributes(array('epub_file_name' => $fileName));
+            if($model){
+                if($model->encrypted)
+                    $Dir .= 'encrypted';
+                else
+                    $Dir .= 'files';
+
+
+                if($model->pdf_file_name && file_exists($Dir . '/' . $model->pdf_file_name)){
+                    @unlink($Dir . '/' . $model->pdf_file_name);
+                    $model->updateByPk($model->id, array('pdf_file_name' => null, 'encrypted' => 0));
+                    $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
+                }else if($model->epub_file_name && file_exists($Dir . '/' . $model->epub_file_name)){
+                    @unlink($Dir . '/' . $model->epub_file_name);
+                    $model->updateByPk($model->id, array('epub_file_name' => null, 'encrypted' => 0));
+                    $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
+                }else
+                    $response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
+            }else{
+                @unlink($tempDir . $fileName);
+                $response = ['state' => 'ok', 'msg' => 'حذف شد.'];
+            }
+
+            echo CJSON::encode($response);
+            Yii::app()->end();
+        }
     }
 }
