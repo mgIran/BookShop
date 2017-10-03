@@ -12,17 +12,17 @@ class EncoderController extends Controller
         $encoder->setKey($this->_privateKey);
 
         $bufferSize = 1024 * 100;
-        try{
+        try {
             $sp = fopen($sourceFileName, 'r');
             $op = fopen($destFileName, 'w');
-            while(!feof($sp)){
+            while (!feof($sp)) {
                 $buffer = fread($sp, $bufferSize);
                 fwrite($op, $encoder->encrypt($buffer));
             }
             fclose($op);
             fclose($sp);
             return true;
-        }catch(CException $e){
+        } catch (CException $e) {
             return false;
         }
     }
@@ -56,25 +56,25 @@ class EncoderController extends Controller
         $path = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'books' . DIRECTORY_SEPARATOR;
         $originalPath = $path . 'files' . DIRECTORY_SEPARATOR;
         $encryptPath = $path . 'encrypted' . DIRECTORY_SEPARATOR;
-        if(!is_dir($encryptPath))
+        if (!is_dir($encryptPath))
             mkdir($encryptPath);
 
-        $this->_privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'private.key');
+        $this->_privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private.key');
 
         $criteria = new CDbCriteria();
         $criteria->addCondition('encrypted = 0');
         $files = BookPackages::model()->findAll($criteria);
         $total = 0;
         $totalEn = 0;
-        if($files){
-            foreach($files as $file){
-                if($file->epub_file_name && file_exists($originalPath . $file->epub_file_name)){
+        if ($files) {
+            foreach ($files as $file) {
+                if ($file->epub_file_name && file_exists($originalPath . $file->epub_file_name)) {
                     $total++;
                     $sourceFileName = $originalPath . $file->epub_file_name;
                     $ext = pathinfo($file->epub_file_name, PATHINFO_EXTENSION);
                     $secureFileName = str_replace('.' . $ext, '', $file->epub_file_name) . '.secure';
                     $destFileName = $encryptPath . $secureFileName;
-                    if($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)){
+                    if ($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)) {
                         $totalEn++;
                         $file->epub_file_name = $secureFileName;
                         $file->encrypted = 1;
@@ -82,13 +82,13 @@ class EncoderController extends Controller
                     }
                 }
 
-                if($file->pdf_file_name && file_exists($originalPath . $file->pdf_file_name)){
+                if ($file->pdf_file_name && file_exists($originalPath . $file->pdf_file_name)) {
                     $total++;
                     $sourceFileName = $originalPath . $file->pdf_file_name;
                     $ext = pathinfo($file->pdf_file_name, PATHINFO_EXTENSION);
                     $secureFileName = str_replace('.' . $ext, '', $file->pdf_file_name) . '.secure';
                     $destFileName = $encryptPath . $secureFileName;
-                    if($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)){
+                    if ($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)) {
                         $totalEn++;
                         $file->pdf_file_name = $secureFileName;
                         $file->encrypted = 1;
