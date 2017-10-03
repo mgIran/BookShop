@@ -23,6 +23,7 @@ class PublishersBooksController extends Controller
                 'deleteImage',
                 'upload',
                 'deleteUpload',
+                'uploadFile',
                 'uploadPdfFile',
                 'deleteUploadPdfFile',
                 'uploadEpubFile',
@@ -58,7 +59,7 @@ class PublishersBooksController extends Controller
                 'attribute' => 'icon',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'ratio' => 0.6666666666666667,
+                    //'ratio' => 0.6666666666666667,
                     'dimensions' => array(
                         'minWidth' => 400,
                         'minHeight' => 600,
@@ -66,6 +67,14 @@ class PublishersBooksController extends Controller
                         //'maxHeight' => 600
                     ),
                     'acceptedTypes' => array('jpg', 'jpeg', 'png')
+                )
+            ),
+            'uploadFile' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
+                'attribute' => 'tempFile',
+                'rename' => 'random',
+                'validateOptions' => array(
+                    'acceptedTypes' => array('pdf', 'epub')
                 )
             ),
             'uploadPdfFile' => array(
@@ -453,15 +462,24 @@ class PublishersBooksController extends Controller
             $model = new BookPackages();
             $model->attributes = $_POST;
             $model->sale_printed = 0;
+
+            if(isset($_POST['tempFile'])) {
+                if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
+                    $model->pdf_file_name = $_POST['tempFile'];
+                else if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
+                    $model->epub_file_name = $_POST['tempFile'];
+            }
+
             if(!$model->printed_price || empty($model->printed_price))
                 $model->printed_price = $model->price;
             if ($model->save()) {
                 $response = ['status' => true, 'PdfFileName' => CHtml::encode($model->pdf_file_name), 'EpubFileName' => CHtml::encode($model->epub_file_name)];
-                if(isset($_POST['pdf_file_name']))
-                    rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-
-                if(isset($_POST['epub_file_name']))
-                    rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                if(isset($_POST['tempFile'])) {
+                    if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
+                        rename($tempDir . DIRECTORY_SEPARATOR . $_POST['tempFile'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                    else if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
+                        rename($tempDir . DIRECTORY_SEPARATOR . $_POST['tempFile'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                }
             } else
                 $response = ['status' => false, 'message' => $this->implodeErrors($model)];
 
@@ -528,8 +546,9 @@ class PublishersBooksController extends Controller
                 mkdir($uploadDir);
 
             $pdfPackage=$epubPackage = array();
+            $tempPackage = array();
             if($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
-                $pdfPackage = array(
+                $tempPackage = array(
                     'name' => $model->pdf_file_name ,
                     'src' => $uploadUrl . '/' . $model->pdf_file_name ,
                     'size' => filesize($uploadDir . $model->pdf_file_name) ,
@@ -537,33 +556,48 @@ class PublishersBooksController extends Controller
                 );
 
             if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
-                $epubPackage = array(
+                $tempPackage = array(
                     'name' => $model->epub_file_name ,
                     'src' => $uploadUrl . '/' . $model->epub_file_name,
                     'size' => filesize($uploadDir . $model->epub_file_name) ,
                     'serverName' => $model->epub_file_name,
                 );
-            if(isset($_POST['BookPackages'])){
+            if(isset($_POST['BookPackages'])) {
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
 
-                if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
-                    $model->price=0;
+                if (
+                    (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
+                    (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
+                )
+                    $model->encrypted = 0;
+
+                if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf') {
+                    $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
+                    $model->epub_file_name = null;
+                } else if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub') {
+                    $model->epub_file_name = $_POST['BookPackages']['tempFile'];
+                    $model->pdf_file_name = null;
+                }
+
+                if ((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
+                    $model->price = 0;
 
                 if (!isset($_POST['BookPackages']['sale_printed']))
                     $model->sale_printed = 0;
-                if($model->save()){
-                    if($model->pdf_file_name && file_exists($tempDir .DIRECTORY_SEPARATOR. $model->pdf_file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name ,$uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                    if($model->epub_file_name && file_exists($tempDir .DIRECTORY_SEPARATOR. $model->epub_file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name,$uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-                    Yii::app()->user->setFlash('success' ,'اطلاعات با موفقیت ثبت شد.');
+                if ($model->save()) {
+                    if ($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                    if ($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                    Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                     $this->redirect(array('/publishers/books/update/' . $model->book_id . '?step=2'));
-                }else
-                    Yii::app()->user->setFlash('failed' ,'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+                } else
+                    Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
             $this->render('update_package' ,array(
                 'model' => $model ,
+                'tempPackage' => $tempPackage,
                 'pdfPackage' => $pdfPackage,
                 'epubPackage' => $epubPackage
             ));

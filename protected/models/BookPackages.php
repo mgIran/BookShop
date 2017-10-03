@@ -33,6 +33,8 @@ class BookPackages extends CActiveRecord
     const STATUS_REFUSED = 'refused';
     const STATUS_CHANGE_REQUIRED = 'change_required';
 
+    public $tempFile;
+
     public $forLabels = array(
         'new_book' => '<span class="label label-success">کتاب جدید</span>',
         'old_book' => '<span class="label label-warning">کتاب تغییر داده شده</span>',
@@ -75,7 +77,7 @@ class BookPackages extends CActiveRecord
 
     public function orRequired($attribute, $params)
     {
-        if (is_null($this->$attribute) and is_null($this->$params['other']))
+        if (is_null($this->$attribute) and is_null($this->{$params['other']}))
             $this->addError($attribute, '"' . $this->getAttributeLabel($attribute) . '" و "' . $this->getAttributeLabel($params['other']) . '" نمی توانند خالی باشند. لطفا یکی از آنها را پر کنید.');
     }
 

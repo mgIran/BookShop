@@ -96,6 +96,7 @@ class PublishersPanelController extends Controller
         if(isset($_GET['Books']) && isset($_GET['ajax']) && $_GET['ajax']=='books-list')
             $books->attributes = $_GET['Books'];
         $books->publisher_id = Yii::app()->user->getId();
+        $books->showEncrypted = false;
 
         $this->render('index', array(
             'books' => $books,
