@@ -54,7 +54,7 @@
                                         'maxFileSize' => 1024,
                                         'maxFiles' => false,
                                         'url' => Yii::app()->createUrl('/publishers/books/uploadFile'),
-                                        'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadFile'),
+                                        'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadedFile'),
                                         'acceptedFiles' => '.pdf, .epub',
                                         'serverFiles' => array(),
                                         'onSuccess' => '
