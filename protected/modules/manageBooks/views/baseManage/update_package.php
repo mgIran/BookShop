@@ -3,6 +3,7 @@
 /* @var $model BookPackages */
 /* @var $pdfPackage [] */
 /* @var $epubPackage [] */
+/* @var $tempPackage [] */
 $this->breadcrumbs = array(
     'مدیریت کتاب ها' => array('admin'),
     'نوبت های چاپ کتاب '.$model->book->title => array('update?id='.$model->book_id.'&step=2'),
@@ -22,17 +23,17 @@ $this->menu = array(
     )
 )); ?>
     <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-                'id' => 'uploaderPdfFile',
+                'id' => 'uploaderFile',
                 'model' => $model,
-                'name' => 'pdf_file_name',
+                'name' => 'tempFile',
                 'maxFileSize' => 1024,
                 'maxFiles' => 1,
-                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadPdfFile'),
+                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadFile'),
                 'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deletePdfFile'),
-                'acceptedFiles' => '.pdf',
-                'serverFiles' => $pdfPackage,
+                'acceptedFiles' => '.pdf, .epub',
+                'serverFiles' => $tempPackage,
                 'onSuccess' => '
                     var responseObj = JSON.parse(res);
                     if(responseObj.status){
@@ -48,32 +49,58 @@ $this->menu = array(
             <?php echo $form->error($model , 'file_name'); ?>
             <div class="pdf-uploader-message"></div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-            <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
-                'id' => 'uploaderEpubFile',
-                'model' => $model,
-                'name' => 'epub_file_name',
-                'maxFileSize' => 1024,
-                'maxFiles' => 1,
-                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadEpubFile'),
-                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteEpubFile'),
-                'acceptedFiles' => '.epub',
-                'serverFiles' => $epubPackage,
-                'onSuccess' => '
-                    var responseObj = JSON.parse(res);
-                    if(responseObj.status){
-                        {serverName} = responseObj.fileName;
-                        $(".epub-uploader-message").html("");
-                    }
-                    else{
-                        $(".epub-uploader-message").html(responseObj.message).addClass("error");
-                        this.removeFile(file);
-                    }
-                ',
-            ));?>
-            <?php echo $form->error($model , 'file_name'); ?>
-            <div class="epub-uploader-message"></div>
-        </div>
+<!--        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+<!--            --><?php //$this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+//                'id' => 'uploaderPdfFile',
+//                'model' => $model,
+//                'name' => 'pdf_file_name',
+//                'maxFileSize' => 1024,
+//                'maxFiles' => 1,
+//                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadPdfFile'),
+//                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deletePdfFile'),
+//                'acceptedFiles' => '.pdf',
+//                'serverFiles' => $pdfPackage,
+//                'onSuccess' => '
+//                    var responseObj = JSON.parse(res);
+//                    if(responseObj.status){
+//                        {serverName} = responseObj.fileName;
+//                        $(".pdf-uploader-message").html("");
+//                    }
+//                    else{
+//                        $(".pdf-uploader-message").html(responseObj.message).addClass("error");
+//                        this.removeFile(file);
+//                    }
+//                ',
+//            ));?>
+<!--            --><?php //echo $form->error($model , 'file_name'); ?>
+<!--            <div class="pdf-uploader-message"></div>-->
+<!--        </div>-->
+<!--        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+<!--            --><?php //$this->widget('ext.dropZoneUploader.dropZoneUploader', array(
+//                'id' => 'uploaderEpubFile',
+//                'model' => $model,
+//                'name' => 'epub_file_name',
+//                'maxFileSize' => 1024,
+//                'maxFiles' => 1,
+//                'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadEpubFile'),
+//                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteEpubFile'),
+//                'acceptedFiles' => '.epub',
+//                'serverFiles' => $epubPackage,
+//                'onSuccess' => '
+//                    var responseObj = JSON.parse(res);
+//                    if(responseObj.status){
+//                        {serverName} = responseObj.fileName;
+//                        $(".epub-uploader-message").html("");
+//                    }
+//                    else{
+//                        $(".epub-uploader-message").html(responseObj.message).addClass("error");
+//                        this.removeFile(file);
+//                    }
+//                ',
+//            ));?>
+<!--            --><?php //echo $form->error($model , 'file_name'); ?>
+<!--            <div class="epub-uploader-message"></div>-->
+<!--        </div>-->
     </div>
     <div class="row">
         <?php echo $form->labelEx($model , 'version'); ?>
