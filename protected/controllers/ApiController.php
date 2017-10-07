@@ -217,7 +217,7 @@ class ApiController extends ApiBaseController
                         $book['previewFileType'] = pathinfo($record->preview_file, PATHINFO_EXTENSION);
                     }
 
-                    if ($record->lastPackage) {
+                    if ($record->lastPackage and $record->lastPackage->encrypted == 1) {
                         $fileName = '';
                         if($record->lastPackage->pdf_file_name)
                             $fileName = $record->lastPackage->pdf_file_name;
