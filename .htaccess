@@ -21,6 +21,6 @@ RewriteRule . index.php
     ExpiresByType image/png "access plus 1 month"
 </IfModule>
 
-<FilesMatch .*\.(zip|doc|docx|pdf|rar|apk)>
+<FilesMatch .*\.(zip|doc|docx|pdf|rar|secure)>
 Deny from all
 </FilesMatch>
