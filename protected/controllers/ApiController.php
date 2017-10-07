@@ -219,12 +219,16 @@ class ApiController extends ApiBaseController
 
                     if ($record->lastPackage and $record->lastPackage->encrypted == 1) {
                         $fileName = '';
-                        if($record->lastPackage->pdf_file_name)
+                        $fileType = '';
+                        if ($record->lastPackage->pdf_file_name) {
                             $fileName = $record->lastPackage->pdf_file_name;
-                        elseif($record->lastPackage->epub_file_name)
+                            $fileType = 'pdf';
+                        } elseif ($record->lastPackage->epub_file_name) {
                             $fileName = $record->lastPackage->epub_file_name;
+                            $fileType = 'epub';
+                        }
                         $book['file'] = Yii::app()->createAbsoluteUrl('/uploads/books/encrypted') . '/' . $fileName;
-                        $book['fileType'] = pathinfo($fileName, PATHINFO_EXTENSION);
+                        $book['fileType'] = $fileType;
                     }
 
                     break;
