@@ -24,8 +24,7 @@ class ManageBooksBaseManageController extends Controller
                 'upload',
                 'deleteUpload',
                 'uploadFile',
-                'deleteUploadPdfFile',
-                'deleteUploadEpubFile',
+                'deleteUploadedFile',
                 'changeConfirm',
                 'deletePackage',
                 'savePackage',
@@ -107,34 +106,6 @@ class ManageBooksBaseManageController extends Controller
                 'attribute' => 'icon',
                 'uploadDir' => '/uploads/books/icons',
                 'storedMode' => 'field'
-            ),
-            'deleteUploadPdfFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'pdf_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'record'
-            ),
-            'deletePdfFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'pdf_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'field'
-            ),
-            'deleteEpubFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'epub_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'field'
-            ),
-            'deleteUploadEpubFile' => array(
-                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
-                'modelName' => 'BookPackages',
-                'attribute' => 'epub_file_name',
-                'uploadDir' => '/uploads/books/files',
-                'storedMode' => 'record'
             ),
             'deleteUploadPreview' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
@@ -621,6 +592,8 @@ class ManageBooksBaseManageController extends Controller
                 throw new CHttpException(404, 'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
             $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';
+            $encDir = Yii::getPathOfAlias("webroot") . '/uploads/books/encrypted/';
+            $encUrl = Yii::app()->baseUrl . '/uploads/books/encrypted';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
             if(!is_dir($uploadDir))
                 mkdir($uploadDir);
@@ -634,6 +607,13 @@ class ManageBooksBaseManageController extends Controller
                     'size' => filesize($uploadDir . $model->pdf_file_name),
                     'serverName' => $model->pdf_file_name,
                 );
+            else if($model->pdf_file_name && file_exists($encDir . $model->pdf_file_name))
+                $tempPackage = array(
+                    'name' => $model->pdf_file_name,
+                    'src' => $encUrl . '/' . $model->pdf_file_name,
+                    'size' => filesize($encDir . $model->pdf_file_name),
+                    'serverName' => $model->pdf_file_name,
+                );
 
             if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
                 $tempPackage = array(
@@ -642,38 +622,52 @@ class ManageBooksBaseManageController extends Controller
                     'size' => filesize($uploadDir . $model->epub_file_name),
                     'serverName' => $model->epub_file_name,
                 );
+            else if($model->epub_file_name && file_exists($encDir . $model->epub_file_name))
+                $tempPackage = array(
+                    'name' => $model->epub_file_name,
+                    'src' => $encUrl . '/' . $model->epub_file_name,
+                    'size' => filesize($encDir . $model->epub_file_name),
+                    'serverName' => $model->epub_file_name,
+                );
+            
             if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
 
-                if (
-                    (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
-                    (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
-                )
-                    $model->encrypted = 0;
+                if(!isset($_POST['BookPackages']['tempFile']))
+                {
+                    Yii::app()->user->setFlash('failed', 'لطفا فایل کتاب را آپلود کنید.');  
+                }else{
 
-                if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf') {
-                    $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
-                    $model->epub_file_name = null;
-                } else if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub') {
-                    $model->epub_file_name = $_POST['BookPackages']['tempFile'];
-                    $model->pdf_file_name = null;
+                    if(
+                        (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
+                        (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
+                    )
+                        $model->encrypted = 0;
+
+                    if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf'){
+                        $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
+                        $model->epub_file_name = null;
+                    }else if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub'){
+                        $model->epub_file_name = $_POST['BookPackages']['tempFile'];
+                        $model->pdf_file_name = null;
+                    }
+
+                    if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
+                        $model->price = 0;
+
+                    if(!isset($_POST['BookPackages']['sale_printed']))
+                        $model->sale_printed = 0;
+                    if($model->save()){
+                        if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                        if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                        Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                        $this->redirect('update/' . $model->book_id . '/?step=2');
+                    }else
+                        Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
                 }
-
-                if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
-                    $model->price=0;
-
-                if(!isset($_POST['BookPackages']['sale_printed']))
-                    $model->sale_printed = 0;
-                if($model->save()){
-                    if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                    if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-                    Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
-                    $this->redirect('update/' . $model->book_id . '/?step=2');
-                }else
-                    Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
             $this->render('update_package', array(
                 'model' => $model,
@@ -821,5 +815,45 @@ class ManageBooksBaseManageController extends Controller
             echo CJSON::encode(array('status' => 'success'));
         else
             echo CJSON::encode(array('status' => 'failed'));
+    }
+
+    public function actionDeleteUploadedFile()
+    {
+        $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/';
+
+        if(isset($_POST['fileName'])){
+
+            $fileName = $_POST['fileName'];
+
+            $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
+
+            $model = BookPackages::model()->findByAttributes(array('pdf_file_name' => $fileName));
+            if($model === null)
+                $model = BookPackages::model()->findByAttributes(array('epub_file_name' => $fileName));
+            if($model){
+                if($model->encrypted)
+                    $Dir .= 'encrypted';
+                else
+                    $Dir .= 'files';
+
+
+                if($model->pdf_file_name && file_exists($Dir . '/' . $model->pdf_file_name)){
+                    @unlink($Dir . '/' . $model->pdf_file_name);
+                    $model->updateByPk($model->id, array('pdf_file_name' => null, 'encrypted' => 0));
+                    $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
+                }else if($model->epub_file_name && file_exists($Dir . '/' . $model->epub_file_name)){
+                    @unlink($Dir . '/' . $model->epub_file_name);
+                    $model->updateByPk($model->id, array('epub_file_name' => null, 'encrypted' => 0));
+                    $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
+                }else
+                    $response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
+            }else{
+                @unlink($tempDir . $fileName);
+                $response = ['state' => 'ok', 'msg' => 'حذف شد.'];
+            }
+
+            echo CJSON::encode($response);
+            Yii::app()->end();
+        }
     }
 }
