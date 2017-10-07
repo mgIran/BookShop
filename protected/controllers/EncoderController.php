@@ -44,8 +44,10 @@ class EncoderController extends Controller
                 }
 
                 // Save encrypted files to epub file
-                foreach ($encryptedFiles as $file)
+                foreach ($encryptedFiles as $file) {
                     $archive->addFile($file, 'OEBPS/Text/' . basename($file));
+                    @unlink($file);
+                }
                 $archive->close();
             } else {
                 $sp = fopen($sourceFileName, 'r');
