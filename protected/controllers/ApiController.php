@@ -10,7 +10,7 @@ class ApiController extends ApiBaseController
     {
         return array(
             'RestAccessControl + index, search, find, list, page, creditPrices',
-            'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile',
+            'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile, download',
         );
     }
 
@@ -178,16 +178,12 @@ class ApiController extends ApiBaseController
                     }
 
                     if ($record->lastPackage and $record->lastPackage->encrypted == 1) {
-                        $fileName = '';
                         $fileType = '';
-                        if ($record->lastPackage->pdf_file_name) {
-                            $fileName = $record->lastPackage->pdf_file_name;
+                        if ($record->lastPackage->pdf_file_name)
                             $fileType = 'pdf';
-                        } elseif ($record->lastPackage->epub_file_name) {
-                            $fileName = $record->lastPackage->epub_file_name;
+                        elseif ($record->lastPackage->epub_file_name)
                             $fileType = 'epub';
-                        }
-                        $book['file'] = Yii::app()->createAbsoluteUrl('/uploads/books/encrypted') . '/' . $fileName;
+
                         $book['fileType'] = $fileType;
                     }
 
@@ -773,6 +769,72 @@ class ApiController extends ApiBaseController
             ],
             'ads' => $this->getAds()
         ]]), 'application/json');
+    }
+
+    public function actionDownload()
+    {
+        if (isset($this->request['book_id'])) {
+            /* @var $model Books */
+            $model = Books::model()->findByPk($this->request['book_id']);
+            $fileName = null;
+            if ($model->lastPackage->epub_file_name)
+                $fileName = $model->lastPackage->epub_file_name;
+            elseif ($model->lastPackage->pdf_file_name)
+                $fileName = $model->lastPackage->pdf_file_name;
+
+            if ($model->price == 0) {
+                $model->download += 1;
+                $model->setScenario('update-download');
+                $model->save();
+
+                $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+            } else {
+                $buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
+                if ($buy) {
+                    $model->download += 1;
+                    $model->setScenario('update-download');
+                    $model->save();
+
+                    $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+                } else
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'شما اجازه دسترسی به این فایل را ندارید.']), 'application/json');
+            }
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'BookID variable is required.']), 'application/json');
+    }
+
+    protected function download($fileName, $filePath, $fakeFileName = null)
+    {
+        if(!$fakeFileName)
+            $fakeFileName = $fileName;
+        $realFileName = $fileName;
+
+        $fileName = $filePath . DIRECTORY_SEPARATOR . $realFileName;
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        switch($ext){
+            case 'pdf':
+                $mimeType = 'application/pdf';
+                break;
+            case 'epub':
+                $mimeType = 'application/epub+zip';
+                break;
+            default:
+                $mimeType = 'application/octet-stream';
+                break;
+        }
+
+        header('Pragma: public');    // required
+        header('Expires: 0');        // no cache
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($fileName)) . ' GMT');
+        header('Cache-Control: private', false);
+        header('Content-Type: ' . $mimeType);
+        header('Content-Disposition: attachment; filename="' . $fakeFileName . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($fileName));    // provide file size
+        header('Connection: close');
+        echo readfile($fileName);
+        exit();
     }
 
     /**
