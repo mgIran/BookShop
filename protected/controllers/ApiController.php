@@ -9,7 +9,7 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + index, search, find, list, page, creditPrices',
+            'RestAccessControl + index, search, find, list, page, creditPrices, row',
             'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile, download',
         );
     }
@@ -663,9 +663,9 @@ class ApiController extends ApiBaseController
                 'address',
             ];
 
-            foreach($profileFields as $field)
-                if(!key_exists($field, $profile))
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'The '.$field.' variable does not exist in the Profile array.']), 'application/json');
+            foreach ($profileFields as $field)
+                if (!key_exists($field, $profile))
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'The ' . $field . ' variable does not exist in the Profile array.']), 'application/json');
 
             /* @var $detailsModel UserDetails */
             $detailsModel = UserDetails::model()->findByAttributes(array('user_id' => $this->user->id));
@@ -771,6 +771,34 @@ class ApiController extends ApiBaseController
         ]]), 'application/json');
     }
 
+    public function actionRow()
+    {
+        if (isset($this->request['name'])) {
+            $limit = 10;
+            if (isset($this->request['limit']))
+                $limit = $this->request['limit'];
+
+            if ($limit == -1)
+                $limit = 30;
+
+            $title = null;
+            if ($this->request['name'] == 'dynamic') {
+                if (isset($this->request['title']))
+                    $title = $this->request['title'];
+                else
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Title variable is required.']), 'application/json');
+            }
+
+            $books = $this->getRow($this->request['name'], $limit, $title);
+
+            if ($this->request['name'] == 'dynamic')
+                $books = $books[0]['books'];
+
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'books' => $books]), 'application/json');
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
+    }
+
     public function actionDownload()
     {
         if (isset($this->request['book_id'])) {
@@ -781,13 +809,14 @@ class ApiController extends ApiBaseController
                 $fileName = $model->lastPackage->epub_file_name;
             elseif ($model->lastPackage->pdf_file_name)
                 $fileName = $model->lastPackage->pdf_file_name;
+            $token = Yii::app()->JWT->encode($fileName);
 
             if ($model->price == 0) {
                 $model->download += 1;
                 $model->setScenario('update-download');
                 $model->save();
 
-                $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token='.$token)]), 'application/json');
             } else {
                 $buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
                 if ($buy) {
@@ -795,7 +824,7 @@ class ApiController extends ApiBaseController
                     $model->setScenario('update-download');
                     $model->save();
 
-                    $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token='.$token)]), 'application/json');
                 } else
                     $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'شما اجازه دسترسی به این فایل را ندارید.']), 'application/json');
             }
@@ -803,15 +832,23 @@ class ApiController extends ApiBaseController
             $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'BookID variable is required.']), 'application/json');
     }
 
+    public function actionDownloadFile()
+    {
+        if(isset($_GET['token'])){
+            $fileName = Yii::app()->JWT->decode($_GET['token']);
+            $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/encrypted');
+        }
+    }
+
     protected function download($fileName, $filePath, $fakeFileName = null)
     {
-        if(!$fakeFileName)
+        if (!$fakeFileName)
             $fakeFileName = $fileName;
         $realFileName = $fileName;
 
         $fileName = $filePath . DIRECTORY_SEPARATOR . $realFileName;
         $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-        switch($ext){
+        switch ($ext) {
             case 'pdf':
                 $mimeType = 'application/pdf';
                 break;
@@ -842,9 +879,10 @@ class ApiController extends ApiBaseController
      *
      * @param string $name
      * @param integer $limit
+     * @param string $title
      * @return array
      */
-    public function getRow($name = null, $limit = null)
+    public function getRow($name = null, $limit = null, $title = null)
     {
         if (!is_null($name)) {
             if (is_null($limit))
@@ -857,7 +895,7 @@ class ApiController extends ApiBaseController
 
             /* @var $row RowsHomepage */
             if ($name == 'dynamic') {
-                $rows = RowsHomepage::model()->findAll(RowsHomepage::model()->getActiveRows());
+                $rows = RowsHomepage::model()->findAll(RowsHomepage::model()->getActiveRows(false, $title));
                 foreach ($rows as $row) {
                     if ($row && $row->status == 1)
                         $books = Books::model()->findAll($row->getConstCriteria(Books::model()->getValidBooks(null, 'id DESC', $limit)));
