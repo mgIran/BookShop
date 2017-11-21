@@ -532,7 +532,7 @@ class Books extends CActiveRecord
 		if ($categoryIds)
 			$criteria->addInCondition('category_id', $categoryIds);
 		$criteria->order = $order;
-		if ($limit)
+		if ($limit and $limit != -1)
 			$criteria->limit = $limit;
 		return $criteria;
 	}

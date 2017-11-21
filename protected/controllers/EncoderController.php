@@ -12,15 +12,61 @@ class EncoderController extends Controller
         /* @var $encoder Crypt_AES*/
         $encoder->setKey($this->_privateKey);
         $bufferSize = 1024 * 100;
-        try {
-            $sp = fopen($sourceFileName, 'r');
-            $op = fopen($destFileName, 'w');
-            while (!feof($sp)) {
-                $buffer = fread($sp, $bufferSize);
-                fwrite($op, $encoder->encrypt($buffer));
+
+        $files = $sourceFileName;
+        $archive = null;
+        $filesPathOnTemp = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR . pathinfo($sourceFileName, PATHINFO_FILENAME);
+        if (pathinfo($sourceFileName, PATHINFO_EXTENSION) == 'epub') {
+            $files = [];
+            $archive = new ZipArchive();
+            $archive->open($sourceFileName);
+            $archive->extractTo($filesPathOnTemp);
+
+            for ($i = 0; $i < $archive->numFiles; $i++) {
+                $stat = $archive->statIndex($i);
+                if (pathinfo(basename($stat['name']), PATHINFO_EXTENSION) == 'xhtml')
+                    $files[$stat['name']] = $filesPathOnTemp . DIRECTORY_SEPARATOR . $stat['name'];
             }
-            fclose($op);
-            fclose($sp);
+        }
+
+        try {
+            if (is_array($files)) {
+                // Encrypt xhtml files of epub
+                $encryptedFiles = [];
+                foreach ($files as $name => $file) {
+                    $tempPath = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
+                    $sp = fopen($file, 'r');
+                    $op = fopen($tempPath . basename($name), 'w');
+                    $encryptedFiles[] = $tempPath . basename($name);
+                    while (!feof($sp)) {
+                        $buffer = fread($sp, $bufferSize);
+                        fwrite($op, $encoder->encrypt($buffer));
+                    }
+                    fclose($op);
+                    fclose($sp);
+                }
+
+                // Save encrypted files to epub file
+                foreach ($encryptedFiles as $file) {
+                    $archive->deleteName('OEBPS/Text/' . basename($file));
+                    $archive->addFile($file, 'OEBPS/Text/' . basename($file));
+                }
+                $archive->close();
+
+                // Delete additional files
+                foreach ($encryptedFiles as $file)
+                    @unlink($file);
+                $this->delete($filesPathOnTemp);
+            } else {
+                $sp = fopen($sourceFileName, 'r');
+                $op = fopen($destFileName, 'w');
+                while (!feof($sp)) {
+                    $buffer = fread($sp, $bufferSize);
+                    fwrite($op, $encoder->encrypt($buffer));
+                }
+                fclose($op);
+                fclose($sp);
+            }
             return true;
         } catch (CException $e) {
             return false;
@@ -73,8 +119,10 @@ class EncoderController extends Controller
                     $sourceFileName = $originalPath . $file->epub_file_name;
                     $ext = pathinfo($file->epub_file_name, PATHINFO_EXTENSION);
                     $secureFileName = str_replace('.' . $ext, '', $file->epub_file_name) . '.secure';
-                    $destFileName = $encryptPath . $secureFileName;
-                    if ($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)) {
+                    $destFileName = $encryptPath . $file->epub_file_name;
+                    copy($sourceFileName, $destFileName);
+                    if ($this->encode($destFileName, $destFileName) && file_exists($destFileName)) {
+                        rename($destFileName, $encryptPath . $secureFileName);
                         $totalEn++;
                         $file->epub_file_name = $secureFileName;
                         $file->encrypted = 1;

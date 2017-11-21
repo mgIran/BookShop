@@ -152,11 +152,17 @@ class RowsHomepage extends SortableCActiveRecord
     }
 
 
-    public function getActiveRows($const = false)
+    public function getActiveRows($const = false, $title = null)
     {
         $criteria = new CDbCriteria();
         $criteria->addCondition('status = 1');
-        if($const)
+
+        if (!is_null($title)) {
+            $criteria->addCondition('title = :title');
+            $criteria->params[':title'] = $title;
+        }
+
+        if ($const)
             $criteria->addCondition('const_query = 1');
         else
             $criteria->addCondition('const_query = 0 AND query IS NULL');

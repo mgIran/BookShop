@@ -14,9 +14,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/owl.c
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.mousewheel.min.js');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl.carousel.min.js');
 ?>
-<?php
-if($advertises->totalItemCount):
-    ?>
+<?php if($advertises->totalItemCount):?>
     <div class="slider" <?= $advertises->totalItemCount>1?'data-loop="true"':'' ?>>
         <?php
         foreach($advertises->getData() as $advertise):
@@ -24,9 +22,7 @@ if($advertises->totalItemCount):
         endforeach;
         ?>
     </div>
-<?
-endif;
-?>
+<?php endif;?>
     <div class="categories">
         <div class="container">
             <div class="heading">
@@ -65,12 +61,8 @@ endif;
             </div>
         </div>
     </div>
-    <?
-endif;
-?>
-<?php
-if($activeRows['latest'] && $latestBooksDP->totalItemCount):
-    ?>
+    <?php endif;?>
+<?php if($activeRows['latest'] && $latestBooksDP->totalItemCount):?>
     <div class="newest">
         <div class="container">
             <div class="heading">
@@ -90,12 +82,8 @@ if($activeRows['latest'] && $latestBooksDP->totalItemCount):
             <a href="<?= $this->createUrl('/book/index') ?>" class="more"><i class="icon"></i>کتابهای بیشتر</a>
         </div>
     </div>
-<?php
-endif;
-?>
-<?php
-if($activeRows['buy'] && $buyBooksDP->totalItemCount):
-?>
+<?php endif;?>
+<?php if($activeRows['buy'] && $buyBooksDP->totalItemCount):?>
     <div class="bestselling paralax">
         <div class="content">
             <div class="container">
@@ -116,12 +104,8 @@ if($activeRows['buy'] && $buyBooksDP->totalItemCount):
             </div>
         </div>
     </div>
-<?php
-endif;
-?>
-<?php
-if($activeRows['popular'] && $popularBooksDP->totalItemCount):
-?>
+<?php endif;?>
+<?php if($activeRows['popular'] && $popularBooksDP->totalItemCount):?>
     <div class="newest">
         <div class="container">
             <div class="heading">
@@ -140,11 +124,8 @@ if($activeRows['popular'] && $popularBooksDP->totalItemCount):
             </div>
         </div>
     </div>
-<?php
-endif;
-?>
-<?php
-if($rows->totalItemCount):
+<?php endif;?>
+<?php if($rows->totalItemCount):
     $rowData = $rows->getData();
 ?>
     <div class="tabs">
@@ -185,12 +166,8 @@ if($rows->totalItemCount):
             </div>
         </div>
     </div>
-<?php
-endif;
-?>
-<?php
-if($news->totalItemCount):
-?>
+<?php endif;?>
+<?php if($news->totalItemCount):?>
     <div class="news">
         <div class="container">
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
@@ -208,6 +185,4 @@ if($news->totalItemCount):
             </div>
         </div>
     </div>
-    <?php
-endif;
-?>
+<?php endif;?>
