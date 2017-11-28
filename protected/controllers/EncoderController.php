@@ -9,6 +9,7 @@ class EncoderController extends Controller
         set_time_limit(0);
 
         $encoder = Yii::app()->phpseclib->createAES();
+        /* @var $encoder Crypt_AES*/
         $encoder->setKey($this->_privateKey);
         $bufferSize = 1024 * 100;
 
