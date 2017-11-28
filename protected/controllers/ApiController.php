@@ -639,6 +639,32 @@ class ApiController extends ApiBaseController
     public function actionProfile()
     {
         $avatar = ($this->user->userDetails->avatar == '') ? Yii::app()->createAbsoluteUrl('/themes/frontend/images/default-user.png') : Yii::app()->createAbsoluteUrl('/uploads/users/avatar') . '/' . $this->user->userDetails->avatar;
+
+        $bookmarked = [];
+        foreach($this->user->bookmarkedBooks as $bookmarkedBook){
+            $arr = [
+                'id' => intval($bookmarkedBook->id),
+                'title' => $bookmarkedBook->title,
+                'icon' => Yii::app()->createAbsoluteUrl('/uploads/books/icons') . '/' . $bookmarkedBook->icon,
+                'author' => ($person = $bookmarkedBook->getPerson('نویسنده')) ? $person[0]->name_family : null,
+            ];
+            array_push($bookmarked, $arr);
+        }
+
+        $library = [];
+        $boughtBooks = new Library('search');
+        $boughtBooks->unsetAttributes();
+        $boughtBooks->user_id = $this->user->id;
+        foreach($boughtBooks->search()->getData() as $bookBuy){
+            $arr = [
+                'id' => intval($bookBuy->book->id),
+                'title' => $bookBuy->book->title,
+                'icon' => Yii::app()->createAbsoluteUrl('/uploads/books/icons') . '/' . $bookBuy->book->icon,
+                'author' => ($person = $bookBuy->book->getPerson('نویسنده')) ? $person[0]->name_family : null,
+            ];
+            array_push($library, $arr);
+        }
+
         $this->_sendResponse(200, CJSON::encode(['status' => true, 'user' => [
             'name' => $this->user->userDetails->getShowName(),
             'role' => $this->user->userDetails->roleLabels[$this->user->role->role],
@@ -648,6 +674,8 @@ class ApiController extends ApiBaseController
             'phone' => $this->user->userDetails->phone,
             'zipCode' => $this->user->userDetails->zip_code,
             'address' => $this->user->userDetails->address,
+            'bookmarked' => $bookmarked,
+            'library' => $library,
         ]]), 'application/json');
     }
 
@@ -818,11 +846,22 @@ class ApiController extends ApiBaseController
 
                 $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token='.$token)]), 'application/json');
             } else {
-                $buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
-                if ($buy) {
+                //$buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
+                //if($buy)
+                if (Library::BookExistsInLib($model->id, $model->lastPackage->id, $this->user->id)) {
                     $model->download += 1;
                     $model->setScenario('update-download');
                     $model->save();
+
+                    // change book status to downloaded in library
+                    /* @var Library $lib */
+                    $lib = Library::model()->findByAttributes(array(
+                        'book_id' => $model->id ,
+                        'package_id' => $model->lastPackage->id,
+                        'user_id' => $this->user->id
+                    ));
+                    $lib->download_status = Library::STATUS_DOWNLOADED;
+                    $lib->save();
 
                     $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token='.$token)]), 'application/json');
                 } else
