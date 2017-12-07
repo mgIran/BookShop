@@ -11,7 +11,6 @@ class EncoderController extends Controller
         $encoder = Yii::app()->phpseclib->createAES();
         /* @var $encoder Crypt_AES*/
         $encoder->setKey($this->_privateKey);
-        $bufferSize = 1024 * 100;
 
         $files = $sourceFileName;
         $archive = null;
@@ -39,7 +38,7 @@ class EncoderController extends Controller
                     $op = fopen($tempPath . basename($name), 'w');
                     $encryptedFiles[] = $tempPath . basename($name);
                     while (!feof($sp)) {
-                        $buffer = fread($sp, $bufferSize);
+                        $buffer = fread($sp, filesize($file));
                         fwrite($op, $encoder->encrypt($buffer));
                     }
                     fclose($op);
@@ -61,7 +60,7 @@ class EncoderController extends Controller
                 $sp = fopen($sourceFileName, 'r');
                 $op = fopen($destFileName, 'w');
                 while (!feof($sp)) {
-                    $buffer = fread($sp, $bufferSize);
+                    $buffer = fread($sp, filesize($sourceFileName));
                     fwrite($op, $encoder->encrypt($buffer));
                 }
                 fclose($op);
