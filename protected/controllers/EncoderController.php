@@ -39,7 +39,7 @@ class EncoderController extends Controller
                     $encryptedFiles[] = $tempPath . basename($name);
                     while (!feof($sp)) {
                         $buffer = fread($sp, filesize($file));
-                        fwrite($op, $encoder->encrypt($buffer));
+                        fwrite($op, base64_encode($encoder->encrypt($buffer)));
                     }
                     fclose($op);
                     fclose($sp);
@@ -61,7 +61,7 @@ class EncoderController extends Controller
                 $op = fopen($destFileName, 'w');
                 while (!feof($sp)) {
                     $buffer = fread($sp, filesize($sourceFileName));
-                    fwrite($op, $encoder->encrypt($buffer));
+                    fwrite($op, base64_encode($encoder->encrypt($buffer)));
                 }
                 fclose($op);
                 fclose($sp);

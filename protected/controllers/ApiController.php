@@ -9,7 +9,7 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + index, search, find, list, page, creditPrices, row',
+            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword',
             'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile, download',
         );
     }
@@ -641,7 +641,7 @@ class ApiController extends ApiBaseController
         $avatar = ($this->user->userDetails->avatar == '') ? Yii::app()->createAbsoluteUrl('/themes/frontend/images/default-user.png') : Yii::app()->createAbsoluteUrl('/uploads/users/avatar') . '/' . $this->user->userDetails->avatar;
 
         $bookmarked = [];
-        foreach($this->user->bookmarkedBooks as $bookmarkedBook){
+        foreach ($this->user->bookmarkedBooks as $bookmarkedBook) {
             $arr = [
                 'id' => intval($bookmarkedBook->id),
                 'title' => $bookmarkedBook->title,
@@ -655,7 +655,7 @@ class ApiController extends ApiBaseController
         $boughtBooks = new Library('search');
         $boughtBooks->unsetAttributes();
         $boughtBooks->user_id = $this->user->id;
-        foreach($boughtBooks->search()->getData() as $bookBuy){
+        foreach ($boughtBooks->search()->getData() as $bookBuy) {
             $arr = [
                 'id' => intval($bookBuy->book->id),
                 'title' => $bookBuy->book->title,
@@ -844,7 +844,7 @@ class ApiController extends ApiBaseController
                 $model->setScenario('update-download');
                 $model->save();
 
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token='.$token)]), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]), 'application/json');
             } else {
                 //$buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
                 //if($buy)
@@ -856,14 +856,14 @@ class ApiController extends ApiBaseController
                     // change book status to downloaded in library
                     /* @var Library $lib */
                     $lib = Library::model()->findByAttributes(array(
-                        'book_id' => $model->id ,
+                        'book_id' => $model->id,
                         'package_id' => $model->lastPackage->id,
                         'user_id' => $this->user->id
                     ));
                     $lib->download_status = Library::STATUS_DOWNLOADED;
                     $lib->save();
 
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token='.$token)]), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]), 'application/json');
                 } else
                     $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'شما اجازه دسترسی به این فایل را ندارید.']), 'application/json');
             }
@@ -873,7 +873,7 @@ class ApiController extends ApiBaseController
 
     public function actionDownloadFile()
     {
-        if(isset($_GET['token'])){
+        if (isset($_GET['token'])) {
             $fileName = Yii::app()->JWT->decode($_GET['token']);
             $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/encrypted');
         }
@@ -1007,5 +1007,39 @@ class ApiController extends ApiBaseController
             return $advertisesTemp;
         } else
             return [];
+    }
+
+    public function actionForgetPassword()
+    {
+        if (isset($this->request['email'])) {
+            $model = Users::model()->findByAttributes(array('email' => $this->request['email']));
+            if ($model) {
+                if ($model->status == 'active') {
+                    if ($model->change_password_request_count != 3) {
+                        $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date . '#' . time());
+                        $count = intval($model->change_password_request_count);
+                        $model->updateByPk($model->id, array('verification_token' => $token, 'change_password_request_count' => $count + 1));
+                        $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>بنا به درخواست شما جهت تغییر کلمه عبور لینک زیر خدمتتان ارسال گردیده است.</div>';
+                        $message .= '<div style="text-align: right;font-size: 9pt;">';
+                        $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/changePassword/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/changePassword/token/' . $token . '</a>';
+                        $message .= '</div>';
+                        $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">اگر شخص دیگری غیر از شما این درخواست را صادر نموده است، یا شما کلمه عبور خود را به یاد آورده‌اید و دیگر نیازی به تغییر آن ندارید، کلمه عبور قبلی/موجود شما همچنان فعال می‌باشد و می توانید از طریق <a href="' . ((strpos($_SERVER['SERVER_PROTOCOL'], 'https')) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/login">این صفحه</a> وارد حساب کاربری خود شوید.</div>';
+                        $result = Mailer::mail($model->email, 'درخواست تغییر کلمه عبور در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+                        if ($result)
+                            $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'لینک تغییر کلمه عبور به ' . $model->email . ' ارسال شد.']), 'application/json');
+                        else
+                            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'در ارسال ایمیل خطایی رخ داده است لطفا مجددا تلاش کنید.']), 'application/json');
+                    } else
+                        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'بیش از 3 بار نمی توانید درخواست تغییر کلمه عبور بدهید.']), 'application/json');
+                } elseif ($model->status == 'pending')
+                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری هنوز فعال نشده است.']), 'application/json');
+                elseif ($model->status == 'blocked')
+                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری مسدود می باشد.']), 'application/json');
+                elseif ($model->status == 'deleted')
+                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری حذف شده است.']), 'application/json');
+            } else
+                $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'پست الکترونیکی وارد شده اشتباه است.']), 'application/json');
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Email variable is required.']), 'application/json');
     }
 }
