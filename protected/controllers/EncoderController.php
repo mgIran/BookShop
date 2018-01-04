@@ -59,10 +59,9 @@ class EncoderController extends Controller
             } else {
                 $sp = fopen($sourceFileName, 'r');
                 $op = fopen($destFileName, 'w');
-                while (!feof($sp)) {
-                    $buffer = fread($sp, filesize($sourceFileName));
-                    fwrite($op, base64_encode($encoder->encrypt($buffer)));
-                }
+                $buffer = fread($sp, filesize($sourceFileName));
+                $base = base64_encode($encoder->encrypt($buffer));
+                fwrite($op, $base);
                 fclose($op);
                 fclose($sp);
             }
@@ -72,7 +71,7 @@ class EncoderController extends Controller
         }
     }
 
-    public function actionDecode()
+    /*public function actionDecode()
     {
         $start = time();
         $path = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'books' . DIRECTORY_SEPARATOR;
@@ -80,13 +79,15 @@ class EncoderController extends Controller
         $originalPath = $path . 'files' . DIRECTORY_SEPARATOR;
         $encryptPath = $path . 'encrypted' . DIRECTORY_SEPARATOR;
 
-        $sourceFileName = $encryptPath . 'CCNA-decoded.pdf';
-        $destFileName = $encryptPath . '/CCNA-aes.ktb.sec';
+        $sourceFileName = $encryptPath . 'decoded.pdf';
+        $destFileName = $encryptPath . '/test.secure';
+
+        $this->_privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'private.key');
 
         $encoder = Yii::app()->phpseclib->createAES();
         $encoder->setKey($this->_privateKey);
         $content = file_get_contents($destFileName);
-        $decoded = $encoder->decrypt($content);
+        $decoded = $encoder->decrypt(base64_decode($content));
         file_put_contents($sourceFileName, $decoded);
         echo '<pre>';
         echo "Time Remaining: " . (time() - $start);
@@ -94,7 +95,7 @@ class EncoderController extends Controller
         echo "Encrypted Content Length: " . filesize($destFileName);
         echo '<br>';
         echo "DECODED Content Length: " . filesize($sourceFileName);
-    }
+    }*/
 
     public function actionEncryptCron()
     {
@@ -148,4 +149,36 @@ class EncoderController extends Controller
         echo "Total Files: " . $total . '<br>';
         echo "Total Encrypted: " . $totalEn;
     }
+
+    /*public function actionEnc()
+    {
+        $path = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'books' . DIRECTORY_SEPARATOR;
+        $originalPath = $path . 'files' . DIRECTORY_SEPARATOR;
+        $encryptPath = $path . 'encrypted' . DIRECTORY_SEPARATOR;
+        if (!is_dir($encryptPath))
+            mkdir($encryptPath);
+
+        $this->_privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'private.key');
+
+        $files = ['test.pdf'];
+        $total = 0;
+        $totalEn = 0;
+        if ($files) {
+            foreach ($files as $file) {
+                if (file_exists($originalPath . $file)) {
+                    $total++;
+                    $sourceFileName = $originalPath . $file;
+                    $ext = pathinfo($file, PATHINFO_EXTENSION);
+                    $secureFileName = 'test.secure';
+                    $destFileName = $encryptPath . $secureFileName;
+                    if ($this->encode($sourceFileName, $destFileName) && file_exists($destFileName)) {
+                        $totalEn++;
+                    }
+                }
+            }
+        }
+
+        echo "Total Files: " . $total . '<br>';
+        echo "Total Encrypted: " . $totalEn;
+    }*/
 }
