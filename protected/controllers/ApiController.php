@@ -9,7 +9,7 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword',
+            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword, encrypt, decrypt',
             'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile, download',
         );
     }
@@ -1041,5 +1041,52 @@ class ApiController extends ApiBaseController
                 $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'پست الکترونیکی وارد شده اشتباه است.']), 'application/json');
         } else
             $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Email variable is required.']), 'application/json');
+    }
+
+    public function actionEncrypt()
+    {
+        if (isset($this->request['string'])) {
+            $privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private.key');
+
+            set_time_limit(0);
+
+            $encoder = Yii::app()->phpseclib->createAES();
+            /* @var $encoder Crypt_AES*/
+            $encoder->setKey($privateKey);
+
+            try {
+                $buffer = $this->request['string'];
+                $base = base64_encode($encoder->encrypt($buffer));
+                echo $base;
+            } catch (CException $e) {
+                return false;
+            }
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'String variable is required.']), 'application/json');
+    }
+
+    public function actionDecrypt()
+    {
+        if (isset($this->request['string'])) {
+            $privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private.key');
+
+            set_time_limit(0);
+
+            $encoder = Yii::app()->phpseclib->createAES();
+            /* @var $encoder Crypt_AES*/
+            $encoder->setKey($privateKey);
+
+            try {
+                $buffer = $this->request['string'];
+                $base = $encoder->decrypt(base64_decode($buffer));
+//                file_put_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test_decoded2.pdf', $base);
+//                echo mb_convert_encoding(file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test_decoded2.pdf'), 'utf8');
+//                header('content-type: application/pdf;');
+                echo $base;
+            } catch (CException $e) {
+                return false;
+            }
+        } else
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'String variable is required.']), 'application/json');
     }
 }

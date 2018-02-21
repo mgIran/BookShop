@@ -6,7 +6,7 @@
  * @property Users $user
  * @property [] $loginArray
  */
-class ApiBaseController extends CController
+class ApiBaseController extends Controller
 {
     public $user;
 

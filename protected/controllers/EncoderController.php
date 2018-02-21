@@ -181,4 +181,44 @@ class EncoderController extends Controller
         echo "Total Files: " . $total . '<br>';
         echo "Total Encrypted: " . $totalEn;
     }*/
+
+    public function actionEnc()
+    {
+        $privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'private.key');
+
+        set_time_limit(0);
+
+        $encoder = Yii::app()->phpseclib->createAES();
+        /* @var $encoder Crypt_AES*/
+        $encoder->setKey($privateKey);
+
+        try {
+            echo '<meta charset="utf-8">';
+            $buffer = "test test2";
+            var_dump(mb_convert_encoding($buffer, 'utf-8'));
+            $base = base64_encode($encoder->encrypt(mb_convert_encoding($buffer, 'utf-8')));
+            var_dump(file_put_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test.secure', $base));
+        } catch (CException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function actionDec()
+    {
+        $privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private.key');
+
+        set_time_limit(0);
+
+        $encoder = Yii::app()->phpseclib->createAES();
+        /* @var $encoder Crypt_AES*/
+        $encoder->setKey($privateKey);
+
+        try {
+            $buffer = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test.secure');
+            $base = $encoder->decrypt(base64_decode($buffer));
+            var_dump(file_put_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test_decoded.pdf', $base));
+        } catch (CException $e) {
+            echo $e->getMessage();
+        }
+    }
 }
