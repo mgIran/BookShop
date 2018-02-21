@@ -149,7 +149,7 @@ class ManageBooksBaseManageController extends Controller
         $previewFile = array();
 
         $this->performAjaxValidation($model);
-        if(isset($_POST['Books']) && file_exists($tmpDIR . $_POST['Books']['icon'])){
+        if(isset($_POST['Books']) && is_file($tmpDIR . $_POST['Books']['icon'])){
             $model->attributes = $_POST['Books'];
             if(isset($_POST['Books']['icon'])){
                 $file = $_POST['Books']['icon'];
@@ -217,7 +217,7 @@ class ManageBooksBaseManageController extends Controller
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
         $icon = array();
-        if($model->icon && file_exists($bookIconsDIR . $model->icon))
+        if($model->icon && is_file($bookIconsDIR . $model->icon))
             $icon = array(
                 'name' => $model->icon,
                 'src' => $bookIconsUrl . '/' . $model->icon,
@@ -226,7 +226,7 @@ class ManageBooksBaseManageController extends Controller
             );
 
         $previewFile = array();
-        if($model->preview_file && file_exists($bookPreviewDIR . $model->preview_file))
+        if($model->preview_file && is_file($bookPreviewDIR . $model->preview_file))
             $previewFile = array(
                 'name' => $model->preview_file,
                 'src' => $bookPreviewUrl . '/' . $model->preview_file,
@@ -237,7 +237,7 @@ class ManageBooksBaseManageController extends Controller
         $images = array();
         if($model->images)
             foreach($model->images as $image)
-                if(file_exists($bookImagesDIR . $image->image))
+                if(is_file($bookImagesDIR . $image->image))
                     $images[] = array(
                         'name' => $image->image,
                         'src' => $bookImagesUrl . '/' . $image->image,
@@ -419,9 +419,9 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = BookPackages::model()->findByPk($id);
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if(file_exists($uploadDir . '/' . $model->pdf_file_name)){
+        if(is_file($uploadDir . '/' . $model->pdf_file_name)){
             @unlink($uploadDir . '/' . $model->pdf_file_name);
-            if(file_exists($uploadDir . '/' . $model->epub_file_name)){
+            if(is_file($uploadDir . '/' . $model->epub_file_name)){
                 @unlink($uploadDir . '/' . $model->epub_file_name);
                 if($model->delete())
                     $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
@@ -491,7 +491,7 @@ class ManageBooksBaseManageController extends Controller
         if(isset($_POST['image'])){
             $flag = true;
             foreach($_POST['image'] as $image){
-                if(file_exists($tempDir . $image)){
+                if(is_file($tempDir . $image)){
                     $model = new BookImages();
                     $model->book_id = (int)$id;
                     $model->image = $image;
@@ -600,14 +600,14 @@ class ManageBooksBaseManageController extends Controller
 
             $pdfPackage = $epubPackage = array();
             $tempPackage = array();
-            if($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
+            if($model->pdf_file_name && is_file($uploadDir . $model->pdf_file_name))
                 $tempPackage = array(
                     'name' => $model->pdf_file_name,
                     'src' => $uploadUrl . '/' . $model->pdf_file_name,
                     'size' => filesize($uploadDir . $model->pdf_file_name),
                     'serverName' => $model->pdf_file_name,
                 );
-            else if($model->pdf_file_name && file_exists($encDir . $model->pdf_file_name))
+            else if($model->pdf_file_name && is_file($encDir . $model->pdf_file_name))
                 $tempPackage = array(
                     'name' => $model->pdf_file_name,
                     'src' => $encUrl . '/' . $model->pdf_file_name,
@@ -615,14 +615,14 @@ class ManageBooksBaseManageController extends Controller
                     'serverName' => $model->pdf_file_name,
                 );
 
-            if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
+            if($model->epub_file_name && is_file($uploadDir . $model->epub_file_name))
                 $tempPackage = array(
                     'name' => $model->epub_file_name,
                     'src' => $uploadUrl . '/' . $model->epub_file_name,
                     'size' => filesize($uploadDir . $model->epub_file_name),
                     'serverName' => $model->epub_file_name,
                 );
-            else if($model->epub_file_name && file_exists($encDir . $model->epub_file_name))
+            else if($model->epub_file_name && is_file($encDir . $model->epub_file_name))
                 $tempPackage = array(
                     'name' => $model->epub_file_name,
                     'src' => $encUrl . '/' . $model->epub_file_name,
@@ -659,9 +659,9 @@ class ManageBooksBaseManageController extends Controller
                     if(!isset($_POST['BookPackages']['sale_printed']))
                         $model->sale_printed = 0;
                     if($model->save()){
-                        if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                        if($model->pdf_file_name && is_file($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
                             @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                        if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                        if($model->epub_file_name && is_file($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
                             @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
                         Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                         $this->redirect('update/' . $model->book_id . '/?step=2');
@@ -837,11 +837,11 @@ class ManageBooksBaseManageController extends Controller
                     $Dir .= 'files';
 
 
-                if($model->pdf_file_name && file_exists($Dir . '/' . $model->pdf_file_name)){
+                if($model->pdf_file_name && is_file($Dir . '/' . $model->pdf_file_name)){
                     @unlink($Dir . '/' . $model->pdf_file_name);
                     $model->updateByPk($model->id, array('pdf_file_name' => null, 'encrypted' => 0));
                     $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-                }else if($model->epub_file_name && file_exists($Dir . '/' . $model->epub_file_name)){
+                }else if($model->epub_file_name && is_file($Dir . '/' . $model->epub_file_name)){
                     @unlink($Dir . '/' . $model->epub_file_name);
                     $model->updateByPk($model->id, array('epub_file_name' => null, 'encrypted' => 0));
                     $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];

@@ -98,7 +98,7 @@ class AjaxUploadAction extends CAction
                 switch ($this->rename) {
                     case 'random':
                         $filename = Controller::generateRandomString($this->randomLength).time();
-                        while (file_exists($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext))
+                        while (is_file($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext))
                             $filename = Controller::generateRandomString($this->randomLength).time();
                         $filename = $filename.'.'.$ext;
                         break;
@@ -107,7 +107,7 @@ class AjaxUploadAction extends CAction
                         $filename = CHtml::encode(str_replace(' ', '_', $file['name']));
                         $filename = str_replace('.'.$ext, '', $filename);
                         $i = 1;
-                        while (file_exists($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext)) {
+                        while (is_file($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext)) {
                             $filename = $filename.'('.$i.')';
                             $i++;
                         }

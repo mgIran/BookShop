@@ -59,7 +59,7 @@ class AjaxDeleteUploadedAction extends CAction
                         @unlink($uploadDir.DIRECTORY_SEPARATOR.$fileName);
                         if($this->thumbSizes)
                             foreach($this->thumbSizes as $size)
-                                if(is_dir($uploadDir.DIRECTORY_SEPARATOR.$size) && file_exists($uploadDir.DIRECTORY_SEPARATOR.$size.DIRECTORY_SEPARATOR.$fileName))
+                                if(is_dir($uploadDir.DIRECTORY_SEPARATOR.$size) && is_file($uploadDir.DIRECTORY_SEPARATOR.$size.DIRECTORY_SEPARATOR.$fileName))
                                     @unlink($uploadDir.DIRECTORY_SEPARATOR.$size.DIRECTORY_SEPARATOR.$fileName);
                         $response = ['status' => true, 'msg' => 'فایل با موفقیت حذف شد.'];
                     } else
