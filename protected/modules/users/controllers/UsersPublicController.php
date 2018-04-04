@@ -25,7 +25,8 @@ class UsersPublicController extends Controller
                 'sessions',
                 'removeSession',
                 'ResendVerification',
-                'uploadAvatarImage',
+                'upload',
+                'deleteUpload',
             )
         );
     }
@@ -42,7 +43,7 @@ class UsersPublicController extends Controller
 
     public function actions(){
         return array(
-            'uploadAvatarImage' => array(
+            'upload' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
                 'uploadDir' => '/uploads/users/avatar',
                 'attribute' => 'avatar',
@@ -53,12 +54,20 @@ class UsersPublicController extends Controller
                 'insert' => true,
                 'module' => 'users',
                 'modelName' => 'UserDetails',
-                'findAttributes' => 'array("user_id" => $_POST["user_id"])',
+                'findAttributes' => 'array("user_id" => Yii::app()->user->getId())',
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(
-                    'resize' => array('width'=>500,'height'=>500)
+                    'thumbnail' => array('width'=>200,'height'=>200, 'replaceOrigin' => true),
+                    'expression' => 'Yii::app()->user->setState("avatar", {thumburl})'
                 )
+            ),
+            'deleteUpload' => array(
+                'class' => 'ext.dropZoneUploader.actions.AjaxDeleteUploadedAction',
+                'modelName' => 'UserDetails',
+                'attribute' => 'avatar',
+                'uploadDir' => '/uploads/users/avatar',
+                'storedMode' => 'field'
             ),
         );
     }

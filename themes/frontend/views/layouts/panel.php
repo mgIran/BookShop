@@ -83,7 +83,7 @@
         <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
         <div class="profile">
             <div class="profile-image">
-                <div class="panel-avatar">
+                <span class="panel-avatar">
                     <img src="<?php
                     if(Yii::app()->user->auth_mode == 'site')
                     {
@@ -91,7 +91,7 @@
                     }else
                         echo Yii::app()->user->avatar;
                     ?>" alt="<?= $this->userDetails->getShowName(); ?>">
-
+                    <div class="upload-overlay hidden-lg hidden-md"></div>
                     <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
                         'id' => 'uploaderLogo',
                         'model' => new Users(),
@@ -101,8 +101,8 @@
                         'maxFiles' => 1,
                         'maxFileSize' => 0.5, //MB
                         'data'=>array('user_id'=>Yii::app()->user->getId()),
-                        'url' => $this->createUrl('upload'),
-                        'deleteUrl' => $this->createUrl('deleteUpload'),
+                        'url' => Yii::app()->createUrl('/users/public/upload'),
+                        'deleteUrl' => Yii::app()->createUrl('/users/public/deleteUpload'),
                         'acceptedFiles' => '.jpg, .jpeg, .png',
                         'serverFiles' => Yii::app()->user->auth_mode == 'site' && Yii::app()->user->avatar?new UploadedFiles('uploads/users/avatar', [Yii::app()->user->avatar]):[],
                         'onSending' => '
@@ -112,16 +112,15 @@
                             var responseObj = JSON.parse(res);
                             if(responseObj.status){
                                 {serverName} = responseObj.fileName;
-                                
+                                location.reload();
                             }
                             else{
-                            alert(responseObj);
-                                $(".uploader-message").html(responseObj.message);
+                                alert(responseObj.message);
                                 this.removeFile(file);
                             }
                         ',
                     )); ?>
-                </div>
+                </span>
                 <div class="profile-badges">
                     <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>" class="profile-badges-left"><i class="bookmark-icon"></i><span><?php echo Controller::parseNumbers(number_format(count($this->userDetails->user->bookmarkedBooks), 0, '.', '.'));?></span>نشان شده</a>
                     <a href="<?php echo Yii::app()->createUrl('/users/credit/buy');?>" class="profile-badges-right"><i class="credit-icon"></i><span><?php echo Controller::parseNumbers(number_format($this->userDetails->credit, 0, '.', '.'));?></span>تومان</a>
