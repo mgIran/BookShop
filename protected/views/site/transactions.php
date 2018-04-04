@@ -14,7 +14,9 @@
         array(
             'name'=>'user_name',
             'header'=>'کاربر',
-            'value'=>'empty($data->user->userDetails->fa_name)?$data->user->email:$data->user->userDetails->fa_name'
+            'value'=> function($data){
+                return $data->user && $data->user->userDetails?(empty($data->user->userDetails->fa_name)?$data->user->email:$data->user->userDetails->fa_name):'کاربر حذف شده';
+            }
         ),
         array(
             'name'=>'amount',

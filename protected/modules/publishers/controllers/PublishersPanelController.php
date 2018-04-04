@@ -488,7 +488,7 @@ class PublishersPanelController extends Controller
      */
     public function actionManageSettlement()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/main';
 
         if (isset($_POST['token'])) {
@@ -641,7 +641,7 @@ class PublishersPanelController extends Controller
 
     public function actionCreate()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/column2';
 
         $model = new Users();
@@ -668,7 +668,7 @@ class PublishersPanelController extends Controller
 
     public function actionUpdate($id)
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/column2';
 
         $model = Users::model()->findByPk($id);

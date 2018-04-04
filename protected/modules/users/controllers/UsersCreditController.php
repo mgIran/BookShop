@@ -256,7 +256,7 @@ class UsersCreditController extends Controller
 
     public function actionReportCreditBuys()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/column1';
 
         $model = new UserTransactions('search');
@@ -273,7 +273,7 @@ class UsersCreditController extends Controller
 
     public function actionReportBonBuys()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/column1';
 
         $model = new UserBonRel('search');

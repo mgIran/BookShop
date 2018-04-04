@@ -467,8 +467,8 @@ class UsersPublicController extends Controller
 
     public function actionGoogleLogin()
     {
-        if(isset($_GET['return-url']))
-            Yii::app()->user->returnUrl = $_GET['return-url'];
+        if(isset($_REQUEST['return-url']))
+            Yii::app()->user->returnUrl = $_REQUEST['return-url'];
         $googleAuth = new GoogleOAuth();
         $model = new UserLoginForm('OAuth');
         $googleAuth->login($model);
@@ -496,21 +496,28 @@ class UsersPublicController extends Controller
         // collect user input data
         if (isset($_POST['UserLoginForm'])) {
             $login->attributes = $_POST['UserLoginForm'];
-            if(isset($_POST['returnUrl']))
+            if (isset($_POST['returnUrl']))
                 Yii::app()->user->returnUrl = $_POST['returnUrl'];
             // validate user input and redirect to the previous page if valid
             if ($login->validate() && $login->login()) {
-                if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/')
-                    $redirect = Yii::app()->createUrl('/'.Yii::app()->user->returnUrl);
+                if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/' &&
+                    Yii::app()->user->returnUrl != 'logout')
+                    $redirect = Yii::app()->createUrl('/' . Yii::app()->user->returnUrl);
                 else
                     $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');
                 if (isset($_POST['ajax'])) {
                     echo CJSON::encode(array('status' => true, 'url' => $redirect, 'msg' => 'در حال انتقال ...'));
                     Yii::app()->end();
                 } else
+                {
+                    Yii::app()->user->setFlash('login-success', 'در حال انتقال ...');
                     $this->redirect($redirect);
+                }
             } else
+            {
+                Yii::app()->user->setFlash('login-failed', 'نام کاربری یا کلمه عبور اشتباه است.');
                 $login->password = '';
+            }
         }
         // End of login codes
         

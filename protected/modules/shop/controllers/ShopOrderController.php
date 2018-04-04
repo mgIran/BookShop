@@ -617,7 +617,7 @@ class ShopOrderController extends Controller
 
     public function actionReport()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = isset($_GET['print'])?'//layouts/print':'//layouts/column1';
 
         $model = new ShopOrder('search');

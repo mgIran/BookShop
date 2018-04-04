@@ -38,7 +38,7 @@ Yii::app()->clientScript->registerCss('inline',"
                     'maxFileSize' => 1024,
                     'maxFiles' => 1,
                     'url' => Yii::app()->createUrl('/publishers/books/uploadFile'),
-                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadedFile'),
+                    'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteFile'),
                     'acceptedFiles' => '.pdf, .epub',
                     'serverFiles' => $tempPackage,
                     'onSuccess' => '
