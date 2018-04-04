@@ -112,6 +112,7 @@
                             var responseObj = JSON.parse(res);
                             if(responseObj.status){
                                 {serverName} = responseObj.fileName;
+                                alert("آواتار با موفقیت ویرایش شد.");
                                 location.reload();
                             }
                             else{
