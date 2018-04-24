@@ -488,10 +488,6 @@ class PublishersBooksController extends Controller
                 throw new CHttpException(404, 'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
             $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';
-
-            $encDir = Yii::getPathOfAlias("webroot") . '/uploads/books/encrypted/';
-            $encUrl = Yii::app()->baseUrl . '/uploads/books/encrypted';
-
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
             if(!is_dir($uploadDir))
                 mkdir($uploadDir);
@@ -505,13 +501,6 @@ class PublishersBooksController extends Controller
                     'size' => filesize($uploadDir . $model->pdf_file_name),
                     'serverName' => $model->pdf_file_name,
                 );
-            else if($model->pdf_file_name && file_exists($encDir . $model->pdf_file_name))
-                $tempPackage = array(
-                    'name' => $model->pdf_file_name,
-                    'src' => $encUrl . '/' . $model->pdf_file_name,
-                    'size' => filesize($encDir . $model->pdf_file_name),
-                    'serverName' => $model->pdf_file_name,
-                );
 
             if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
                 $tempPackage = array(
@@ -520,50 +509,38 @@ class PublishersBooksController extends Controller
                     'size' => filesize($uploadDir . $model->epub_file_name),
                     'serverName' => $model->epub_file_name,
                 );
-            else if($model->epub_file_name && file_exists($encDir . $model->epub_file_name))
-                $tempPackage = array(
-                    'name' => $model->epub_file_name,
-                    'src' => $encUrl . '/' . $model->epub_file_name,
-                    'size' => filesize($encDir . $model->epub_file_name),
-                    'serverName' => $model->epub_file_name,
-                );
-
             if(isset($_POST['BookPackages'])){
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
-                if(!isset($_POST['BookPackages']['tempFile']))
-                {
-                    Yii::app()->user->setFlash('failed', 'لطفا فایل کتاب را آپلود کنید.');
-                }else{
-                    if(
-                        (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
-                        (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
-                    )
-                        $model->encrypted = 0;
 
-                    if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf'){
-                        $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
-                        $model->epub_file_name = null;
-                    }else if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub'){
-                        $model->epub_file_name = $_POST['BookPackages']['tempFile'];
-                        $model->pdf_file_name = null;
-                    }
+                if(
+                    (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
+                    (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
+                )
+                    $model->encrypted = 0;
 
-                    if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
-                        $model->price = 0;
-
-                    if(!isset($_POST['BookPackages']['sale_printed']))
-                        $model->sale_printed = 0;
-                    if($model->save()){
-                        if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
-                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                        if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
-                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-                        Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
-                        $this->redirect(array('/publishers/books/update/' . $model->book_id . '?step=2'));
-                    }else
-                        Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+                if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf'){
+                    $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
+                    $model->epub_file_name = null;
+                }else if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub'){
+                    $model->epub_file_name = $_POST['BookPackages']['tempFile'];
+                    $model->pdf_file_name = null;
                 }
+
+                if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
+                    $model->price = 0;
+
+                if(!isset($_POST['BookPackages']['sale_printed']))
+                    $model->sale_printed = 0;
+                if($model->save()){
+                    if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                    if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                    Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                    $this->redirect(array('/publishers/books/update/' . $model->book_id . '?step=2'));
+                }else
+                    Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
             $this->render('update_package', array(
                 'model' => $model,

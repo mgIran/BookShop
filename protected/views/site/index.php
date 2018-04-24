@@ -14,7 +14,9 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl.'/css/owl.c
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/jquery.mousewheel.min.js');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl.carousel.min.js');
 ?>
-<?php if($advertises->totalItemCount):?>
+<?php
+if($advertises->totalItemCount):
+    ?>
     <div class="slider" <?= $advertises->totalItemCount>1?'data-loop="true"':'' ?>>
         <?php
         foreach($advertises->getData() as $advertise):
@@ -22,7 +24,9 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
         endforeach;
         ?>
     </div>
-<?php endif;?>
+<?
+endif;
+?>
     <div class="categories">
         <div class="container">
             <div class="heading">
@@ -61,8 +65,12 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             </div>
         </div>
     </div>
-    <?php endif;?>
-<?php if($activeRows['latest'] && $latestBooksDP->totalItemCount):?>
+    <?
+endif;
+?>
+<?php
+if($activeRows['latest'] && $latestBooksDP->totalItemCount):
+    ?>
     <div class="newest">
         <div class="container">
             <div class="heading">
@@ -82,8 +90,12 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             <a href="<?= $this->createUrl('/book/index') ?>" class="more"><i class="icon"></i>کتابهای بیشتر</a>
         </div>
     </div>
-<?php endif;?>
-<?php if($activeRows['buy'] && $buyBooksDP->totalItemCount):?>
+<?php
+endif;
+?>
+<?php
+if($activeRows['buy'] && $buyBooksDP->totalItemCount):
+?>
     <div class="bestselling paralax">
         <div class="content">
             <div class="container">
@@ -104,8 +116,12 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             </div>
         </div>
     </div>
-<?php endif;?>
-<?php if($activeRows['popular'] && $popularBooksDP->totalItemCount):?>
+<?php
+endif;
+?>
+<?php
+if($activeRows['popular'] && $popularBooksDP->totalItemCount):
+?>
     <div class="newest">
         <div class="container">
             <div class="heading">
@@ -124,8 +140,11 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             </div>
         </div>
     </div>
-<?php endif;?>
-<?php if($rows->totalItemCount):
+<?php
+endif;
+?>
+<?php
+if($rows->totalItemCount):
     $rowData = $rows->getData();
 ?>
     <div class="tabs">
@@ -166,8 +185,12 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             </div>
         </div>
     </div>
-<?php endif;?>
-<?php if($news->totalItemCount):?>
+<?php
+endif;
+?>
+<?php
+if($news->totalItemCount):
+?>
     <div class="news">
         <div class="container">
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
@@ -185,4 +208,6 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
             </div>
         </div>
     </div>
-<?php endif;?>
+    <?php
+endif;
+?>

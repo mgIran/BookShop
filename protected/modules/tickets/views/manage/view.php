@@ -37,12 +37,12 @@
     <p class="description">با ارسال تیکت می توانید با بخش پشتیبانی در ارتباط باشید.</p>
 
     <?php if($model->status == 'close'):
-        $this->renderPartial('//partial-views/_alertMessage',array(
+        $this->renderPartial('//layouts/_alertMessage',array(
             'type' => 'danger',
             'message' => 'تیکت مورد نظر بسته شده و امکان ارسال پیام وجود ندارد.'
         ));
     elseif($model->status == 'pending'):
-        $this->renderPartial('//partial-views/_alertMessage',array(
+        $this->renderPartial('//layouts/_alertMessage',array(
             'type' => 'warning',
             'message' => 'پیام شما توسط کارشناسان در حال بررسی می باشد.'
         ));
@@ -50,7 +50,7 @@
     <?php if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
         $this->renderPartial('//layouts/_flashMessage');
     elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-        $this->renderPartial('//partial-views/_flashMessage'); ?>
+        $this->renderPartial('//layouts/_flashMessage'); ?>
 
     <div class="form-group">
         <label>موضوع:</label>

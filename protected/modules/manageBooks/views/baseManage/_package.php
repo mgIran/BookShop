@@ -14,16 +14,16 @@ $('#package-info-form #sale_printed').on('change', function(){
 });
 ");
 ?>
-<?php echo CHtml::beginForm('','post',array('id'=>'package-info-form', 'class'=>($dataProvider->totalItemCount==0)?'':'hidden'));?>
+<?php echo CHtml::beginForm('','post',array('id'=>'package-info-form'));?>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <?php $this->widget('ext.dropZoneUploader.dropZoneUploader', array(
                 'id' => 'uploaderFile',
                 'name' => 'tempFile',
                 'maxFileSize' => 1024,
-                'maxFiles' => 1,
+                'maxFiles' => false,
                 'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadFile'),
-                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadedFile'),
+                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadPdfFile'),
                 'acceptedFiles' => '.pdf, .epub',
                 'serverFiles' => array(),
                 'onSuccess' => '

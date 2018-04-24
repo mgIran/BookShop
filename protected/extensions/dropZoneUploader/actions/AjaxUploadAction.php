@@ -90,15 +90,14 @@ class AjaxUploadAction extends CAction
             $validFlag = true;
             $uploadDir = Yii::getPathOfAlias("webroot").$this->uploadDir;
             if (!is_dir($uploadDir))
-                mkdir($uploadDir);
-
+                mkdir($uploadDir, 0777, true);
             if (isset($_FILES[$this->attribute])) {
                 $file = $_FILES[$this->attribute];
                 $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
                 switch ($this->rename) {
                     case 'random':
                         $filename = Controller::generateRandomString($this->randomLength).time();
-                        while (is_file($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext))
+                        while (file_exists($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext))
                             $filename = Controller::generateRandomString($this->randomLength).time();
                         $filename = $filename.'.'.$ext;
                         break;
@@ -107,7 +106,7 @@ class AjaxUploadAction extends CAction
                         $filename = CHtml::encode(str_replace(' ', '_', $file['name']));
                         $filename = str_replace('.'.$ext, '', $filename);
                         $i = 1;
-                        while (is_file($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext)) {
+                        while (file_exists($uploadDir.DIRECTORY_SEPARATOR.$filename.'.'.$ext)) {
                             $filename = $filename.'('.$i.')';
                             $i++;
                         }
@@ -138,15 +137,6 @@ class AjaxUploadAction extends CAction
                         }
                         if ($maxH && $imageInfo['height'] > $maxH) {
                             $msg .= 'عرض تصویر نباید بزرگتر از '.$maxH.' پیکسل باشد.<br>';
-                            $validFlag = false;
-                        }
-                    }
-                    if(isset($this->validateOptions['ratio'])){
-                        $imager = new Imager();
-                        $imageInfo = $imager->getImageInfo($file['tmp_name']);
-
-                        if(($imageInfo['width']/$imageInfo['height']) != $this->validateOptions['ratio']){
-                            $msg .= 'نسب ابعاد تصویر انتخاب شده صحیح نمی باشد.';
                             $validFlag = false;
                         }
                     }
@@ -197,12 +187,33 @@ class AjaxUploadAction extends CAction
                                     isset($this->afterSaveActions['thumbnail']['height'])
                                 ) {
                                     $thumbnailPath = $uploadDir.DIRECTORY_SEPARATOR.$this->afterSaveActions['thumbnail']['width'].'x'.$this->afterSaveActions['thumbnail']['height'];
+                                    if(isset($this->afterSaveActions['thumbnail']['replaceOrigin']) && $this->afterSaveActions['thumbnail']['replaceOrigin'])
+                                        $thumbnailPath = $uploadDir;
+
                                     if (!is_dir($thumbnailPath))
-                                        mkdir($thumbnailPath);
+                                        mkdir($thumbnailPath, 0777, true);
                                     $imager = new Imager();
                                     $imager->createThumbnail($uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute},
                                         $this->afterSaveActions['thumbnail']['width'], $this->afterSaveActions['thumbnail']['height'], false,
                                         $thumbnailPath.DIRECTORY_SEPARATOR.$model->{$this->attribute});
+                                }
+
+                                if (isset($this->afterSaveActions['expression'])) {
+                                    $path = $uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute};
+                                    $url = Yii::app()->getBaseUrl(true).$this->uploadDir.DIRECTORY_SEPARATOR.$model->{$this->attribute};
+                                    $exp = str_replace('{filename}', "\"$path\"", $this->afterSaveActions['expression']);
+                                    $exp = str_replace('{fileurl}', "\"$url\"", $exp);
+
+                                    if (isset($this->afterSaveActions['thumbnail']) &&
+                                        isset($this->afterSaveActions['thumbnail']['width']) &&
+                                        isset($this->afterSaveActions['thumbnail']['height'])
+                                    ) {
+                                        $thumbUrl = Yii::app()->getBaseUrl(true).$this->uploadDir.'/'.$this->afterSaveActions['thumbnail']['width'].'x'.$this->afterSaveActions['thumbnail']['height'].'/'.$model->{$this->attribute};
+                                        if(isset($this->afterSaveActions['thumbnail']['replaceOrigin']) && $this->afterSaveActions['thumbnail']['replaceOrigin'])
+                                            $thumbUrl = Yii::app()->getBaseUrl(true).$this->uploadDir.'/'.$model->{$this->attribute};
+                                        $exp = str_replace('{thumburl}', "\"$thumbUrl\"", $exp);
+                                    }
+                                    @$this->evaluateExpression($exp);
                                 }
                             }
                         }

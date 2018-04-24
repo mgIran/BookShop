@@ -87,9 +87,9 @@ $this->breadcrumbs=array(
             'buttons' => array(
                 'update' => array(
                     'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/update", array("id"=>$data->id))',
-					'visible' => function(){
-						return Yii::app()->user->roles == 'admin';
-					}
+//					'visible' => function(){
+//						return Yii::app()->user->roles == 'admin';
+//					}
                 ),
                 'delete' => array(
                     'url' => 'Yii::app()->createUrl("/manageBooks/baseManage/delete", array("id"=>$data->id))'

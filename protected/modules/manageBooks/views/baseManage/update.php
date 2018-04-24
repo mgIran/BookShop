@@ -41,11 +41,11 @@ if(isset($_GET['step']))
             'commission'=>$commission,
         )); ?>
     </div>
-    <? if(!$model->getIsNewRecord()):?>
+<!--    --><?// if(!$model->getIsNewRecord()):?>
         <div id="packages" class="tab-pane fade <?= ($step == 2?'in active':''); ?>">
             <?php $this->renderPartial('_package', array('model'=>$model, 'dataProvider'=>$packageDataProvider)); ?>
         </div>
-    <? endif;?>
+<!--    --><?// endif;?>
 </div>
 
 <?php Yii::app()->clientScript->registerScript('changeConfirm', "

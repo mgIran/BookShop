@@ -1,3 +1,10 @@
+@media (max-width: 992px){
+    .profile .profile-image .panel-avatar .upload-overlay{
+        height: 40%;
+        background-size: 16px;
+        top: auto;
+    }
+}
 @media (max-width: 767px) {
     .divider{
         padding-bottom: 15px;

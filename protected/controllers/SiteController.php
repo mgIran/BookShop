@@ -220,7 +220,7 @@ class SiteController extends Controller
 
     public function actionTransactions()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/main';
 
         $model = new UserTransactions('search');

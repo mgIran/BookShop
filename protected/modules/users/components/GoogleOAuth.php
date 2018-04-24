@@ -107,7 +107,8 @@ class GoogleOAuth extends CComponent
             }
         }
         if ($loginFlag) {
-            if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/')
+            if (Yii::app()->user->returnUrl != Yii::app()->request->baseUrl . '/' &&
+                Yii::app()->user->returnUrl != 'logout')
                 $redirect = Yii::app()->createUrl('/' . Yii::app()->user->returnUrl);
             else
                 $redirect = Yii::app()->createAbsoluteUrl('/users/public/dashboard');

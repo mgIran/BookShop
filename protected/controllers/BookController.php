@@ -134,6 +134,16 @@ class BookController extends Controller
                     Yii::app()->user->setFlash('failed', 'کد تخفیف در حال حاضر اعمال شده است.');
                 $this->refresh();
             }
+
+            if($price==0){
+                $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
+                Library::AddToLib($model->id, $model->lastPackage->id, $userID);
+                if($discountCodesInSession)
+                    DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
+                Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
+                $this->redirect(array('/library'));
+            }
+
             if(isset($_POST['Buy'])){
                 if($price !== 0){
                     if(isset($_POST['Buy']['credit'])){
@@ -581,7 +591,7 @@ class BookController extends Controller
      */
     public function actionReportSales()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/main';
 
         $labels = $values = array();
@@ -748,7 +758,7 @@ class BookController extends Controller
     }
     public function actionReportBookSales()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/column1';
 
         $model = new BookBuys('search');
@@ -766,7 +776,7 @@ class BookController extends Controller
      */
     public function actionReportIncome()
     {
-        Yii::app()->theme = 'rahbod';
+        Yii::app()->theme = 'abound';
         $this->layout = '//layouts/main';
 
         $labels = $values = array();

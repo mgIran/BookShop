@@ -196,9 +196,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'itemsCssClass' => 'table',
     'columns' => array(
         array(
-            'header' => 'کاربر',
-            'value' => function($data){
-                return $data->user->userDetails->fa_name?$data->user->userDetails->fa_name . ' (' . $data->user->email . ')':$data->user->email;
+            'header'=>'کاربر',
+            'value'=> function($data){
+                return $data->user && $data->user->userDetails?(empty($data->user->userDetails->fa_name)?$data->user->email:$data->user->userDetails->fa_name):'کاربر حذف شده';
             },
             'footer'=>'<h5 class="text-center"><strong>مجموع</strong></h5>',
             'htmlOptions' => array('style' => 'width:50px')

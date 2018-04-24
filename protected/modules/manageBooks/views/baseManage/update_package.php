@@ -15,7 +15,6 @@ $this->menu = array(
 )
 ?>
 <h1>ویرایش </h1>
-<?php $this->renderPartial("//layouts/_flashMessage") ?>
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'book-packages-form',
     'enableClientValidation'=>true,
@@ -32,7 +31,7 @@ $this->menu = array(
                 'maxFileSize' => 1024,
                 'maxFiles' => 1,
                 'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadFile'),
-                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadedFile'),
+                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deletePdfFile'),
                 'acceptedFiles' => '.pdf, .epub',
                 'serverFiles' => $tempPackage,
                 'onSuccess' => '
