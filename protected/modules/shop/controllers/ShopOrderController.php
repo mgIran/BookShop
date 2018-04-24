@@ -65,46 +65,46 @@ class ShopOrderController extends Controller
         Yii::app()->getModule('users');
         Yii::app()->getModule('discountCodes');
 
-        if(!Yii::app()->user->hasState('basket-position'))
+        if (!Yii::app()->user->hasState('basket-position'))
             Yii::app()->user->setState('basket-position', 1);
         $cart = Shop::getCartContent();
-        if(!$cart)
+        if (!$cart)
             $this->redirect(array('/shop/cart/view'));
-        if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'){
+        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user') {
             $customer = Yii::app()->user->getId();
             Yii::app()->user->setState('customer_id', $customer);
-            if(Yii::app()->user->getState('basket-position') < 2)
+            if (Yii::app()->user->getState('basket-position') < 2)
                 Yii::app()->user->setState('basket-position', 2);
         }
-        if(isset($_POST['DeliveryAddress']))
+        if (isset($_POST['DeliveryAddress']))
             Yii::app()->user->setState('delivery_address', $_POST['DeliveryAddress']);
-        if(isset($_POST['ShippingMethod'])){
+        if (isset($_POST['ShippingMethod'])) {
             Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
-            if(Yii::app()->user->hasState('delivery_address'))
+            if (Yii::app()->user->hasState('delivery_address'))
                 Yii::app()->user->setState('basket-position', 3);
         }
-        if(isset($_POST['PaymentMethod'])){
+        if (isset($_POST['PaymentMethod'])) {
             Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
             Yii::app()->user->setState('basket-position', 4);
         }
-        if(!$shipping_method)
+        if (!$shipping_method)
             $shipping_method = (int)Yii::app()->user->getState('shipping_method');
-        if(!$delivery_address)
+        if (!$delivery_address)
             $delivery_address = (int)Yii::app()->user->getState('delivery_address');
-        if(!$payment_method)
+        if (!$payment_method)
             $payment_method = (int)Yii::app()->user->getState('payment_method');
-        if(Yii::app()->user->getState('basket-position') == 1){
+        if (Yii::app()->user->getState('basket-position') == 1) {
             $this->render('login');
             Yii::app()->end();
         }
-        if(Yii::app()->user->getState('basket-position') == 2){
+        if (Yii::app()->user->getState('basket-position') == 2) {
             Yii::app()->getModule('places');
-            if(isset($_POST['form']) && $_POST['form'] == 'shipping-form'){
-                if(!$shipping_method && !$delivery_address)
+            if (isset($_POST['form']) && $_POST['form'] == 'shipping-form') {
+                if (!$shipping_method && !$delivery_address)
                     Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل و شیوه ارسال را انتخاب کنید.');
-                elseif(!$shipping_method)
+                elseif (!$shipping_method)
                     Yii::app()->user->setFlash('warning', 'لطفا شیوه ارسال را انتخاب کنید.');
-                elseif(!$delivery_address)
+                elseif (!$delivery_address)
                     Yii::app()->user->setFlash('warning', 'لطفا آدرس تحویل را انتخاب کنید.');
             }
             $this->render('/shipping/choose', array(
@@ -117,13 +117,13 @@ class ShopOrderController extends Controller
             ));
             Yii::app()->end();
         }
-        if(Yii::app()->user->getState('basket-position') == 3){
-            if(!$shipping_method){
+        if (Yii::app()->user->getState('basket-position') == 3) {
+            if (!$shipping_method) {
                 Yii::app()->user->setState('basket-position', 2);
                 $this->refresh();
             }
-            if(isset($_POST['form']) && $_POST['form'] == 'payment-form'){
-                if(!$payment_method)
+            if (isset($_POST['form']) && $_POST['form'] == 'payment-form') {
+                if (!$payment_method)
                     Yii::app()->user->setFlash('warning', 'لطفا شیوه پرداخت را انتخاب کنید.');
             }
             $shipping_object = ShopShippingMethod::model()->findByPk($shipping_method);
@@ -134,27 +134,27 @@ class ShopOrderController extends Controller
             Yii::app()->end();
         }
 
-        if(Yii::app()->user->getState('basket-position') == 4){
-            if(is_numeric($customer))
+        if (Yii::app()->user->getState('basket-position') == 4) {
+            if (is_numeric($customer))
                 $customer = Users::model()->findByPk($customer);
-            if(is_numeric($shipping_method))
+            if (is_numeric($shipping_method))
                 $shipping_method = ShopShippingMethod::model()->findByPk($shipping_method);
-            if(is_numeric($delivery_address))
+            if (is_numeric($delivery_address))
                 $delivery_address = ShopAddresses::model()->findByPk($delivery_address);
-            if(is_numeric($payment_method))
+            if (is_numeric($payment_method))
                 $payment_method = ShopPaymentMethod::model()->findByPk($payment_method);
 
-            if(!$customer){
+            if (!$customer) {
                 Yii::app()->user->setState('basket-position', 1);
                 $this->refresh();
             }
 
-            if(!$shipping_method){
+            if (!$shipping_method) {
                 Yii::app()->user->setState('basket-position', 2);
                 $this->refresh();
             }
 
-            if(!$payment_method){
+            if (!$payment_method) {
                 Yii::app()->user->setState('basket-position', 3);
                 $this->refresh();
             }
@@ -174,9 +174,9 @@ class ShopOrderController extends Controller
     public function actionBack()
     {
         $position = Yii::app()->user->getState('basket-position');
-        if($position > 2)
+        if ($position > 2)
             $position--;
-        elseif($position == 2)
+        elseif ($position == 2)
             $this->redirect(array('/shop/cart/view'));
         Yii::app()->user->setState('basket-position', $position);
         $this->redirect(array('/shop/order/create'));
@@ -196,18 +196,18 @@ class ShopOrderController extends Controller
         // check cart content and statistics
         $cartStatistics = Shop::getPriceTotal();
         $cart = Shop::getCartContent();
-        if(!$cart || Shop::isEmpty($cartStatistics))
+        if (!$cart || Shop::isEmpty($cartStatistics))
             $this->redirect(array('/shop/cart/view'));
         // check order fields that is correct to be send
-        if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
             $customer = Yii::app()->user->getId();
-        elseif(Yii::app()->user->hasState('customer_id'))
+        elseif (Yii::app()->user->hasState('customer_id'))
             $customer = Yii::app()->user->getState('customer_id');
 
         $shipping_method = Yii::app()->user->getState('shipping_method');
         $delivery_address = Yii::app()->user->getState('delivery_address');
         $payment_method = Yii::app()->user->getState('payment_method');
-        if(!$customer || !$shipping_method || !$delivery_address || !$payment_method)
+        if (!$customer || !$shipping_method || !$delivery_address || !$payment_method)
             $this->redirect(array('/shop/order/create'));
         // order save in db
         $order = new ShopOrder();
@@ -223,10 +223,10 @@ class ShopOrderController extends Controller
         $order->discount_amount = (double)$cartStatistics['totalDiscount'] + (double)$cartStatistics['discountCodeAmount'];
         $order->shipping_price = (double)$cartStatistics['shippingPrice'];
         $order->payment_price = (double)$cartStatistics['paymentPrice'];
-        if($order->save()){
+        if ($order->save()) {
             // order items save in db
             $flag = true;
-            foreach($cart as $id => $array){
+            foreach ($cart as $id => $array) {
                 $id = $array['book_id'];
                 $qty = $array['qty'];
                 $model = Books::model()->findByPk($id);
@@ -238,10 +238,10 @@ class ShopOrderController extends Controller
                 $orderItem->qty = $qty;
                 $orderItem->payment = $model->off_printed_price;
                 $flag = @$orderItem->save();
-                if(!$flag)
+                if (!$flag)
                     break;
             }
-            if(!$flag){
+            if (!$flag) {
                 $order->delete();
                 Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
                 Yii::app()->user->setState('basket-position', 4);
@@ -254,7 +254,7 @@ class ShopOrderController extends Controller
 
             // redirect to payment method runs action
             $this->redirect(array('payment', 'id' => $order->id));
-        }else{
+        } else {
             Yii::app()->user->setFlash('failed', 'متاسفانه در ثبت سفارش مشکلی پیش آمده است! لطفا موارد را بررسی کرده و مجدد تلاش فرمایید.');
             Yii::app()->user->setState('basket-position', 4);
             $this->redirect(array('create'));
@@ -273,29 +273,30 @@ class ShopOrderController extends Controller
         Yii::app()->getModule('users');
         Yii::app()->getModule('discountCodes');
         $order = $this->loadModel($id);
-        if($order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID){
+        if ($order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID) {
             $discountIdsInSession = $order->user->getDiscountIds();
             $discountObj = DiscountCodes::model()->findByPk($discountIdsInSession);
-            if($order->payment_amount !== 0){
-                if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH){
+            if ($order->payment_amount !== 0) {
+                if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH) {
                     DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                     $order->setStatus(ShopOrder::STATUS_PENDING)->save();
                     Shop::SetSuccessFlash();
-                }else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT){
-                    if($order->user->userDetails->credit < $order->payment_amount){
+                } else if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT) {
+                    if ($order->user->userDetails->credit < $order->payment_amount) {
                         Yii::app()->user->setFlash('failed', 'اعتبار فعلی شما برای پرداخت مبلغ فاکتور کافی نیست! لطفا برای افزایش اعتبار از پنل کاربری خود اقدام کنید.');
                         $this->redirect(array('details', 'id' => $order->id));
                     }
                     $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $order->user_id));
                     $userDetails->setScenario('update-credit');
                     $userDetails->credit = $userDetails->credit - $order->payment_amount;
-                    if($userDetails->save()){
+                    if ($userDetails->save()) {
                         $order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
-                        DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
+                        if ($discountObj)
+                            DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                         Shop::SetSuccessFlash();
-                    }else
+                    } else
                         Shop::SetFailedFlash();
-                }else if($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY){
+                } else if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY) {
                     // Save transaction
                     $transaction = new UserTransactions();
                     $transaction->user_id = $order->user_id;
@@ -305,12 +306,12 @@ class ShopOrderController extends Controller
                     $transaction->type = UserTransactions::TRANSACTION_TYPE_SHOP;
                     $transaction->type_id = $order->id;
 
-                    if($transaction->save()){
+                    if ($transaction->save()) {
                         $gateway = new ZarinPal();
                         $gateway->callback_url = Yii::app()->getBaseUrl(true) . '/shop/order/verify/' . $order->id;
                         $siteName = Yii::app()->name;
                         $description = "پرداخت فاکتور {$order->getOrderID()} در وبسایت {$siteName} از طریق درگاه {$gateway->getGatewayName()}";
-                        $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone?$this->userDetails->phone:'0');
+                        $result = $gateway->request(doubleval($transaction->amount), $description, Yii::app()->user->email, $this->userDetails && $this->userDetails->phone ? $this->userDetails->phone : '0');
                         $transaction->scenario = 'set-authority';
                         $transaction->description = $description;
                         $transaction->authority = $result->getAuthority();
@@ -318,13 +319,13 @@ class ShopOrderController extends Controller
                         $order->transaction_id = $transaction->id;
                         @$order->save(false);
                         //Redirect to URL You can do it also by creating a form
-                        if($result->getStatus() == 100)
+                        if ($result->getStatus() == 100)
                             $this->redirect($gateway->getRedirectUrl());
                         else
                             throw new CHttpException(404, 'خطای بانکی: ' . $result->getError());
                     }
                 }
-            }else{
+            } else {
                 DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                 Shop::SetSuccessFlash();
             }
@@ -339,7 +340,7 @@ class ShopOrderController extends Controller
      */
     public function actionVerify($id)
     {
-        if(!isset($_GET['Authority']))
+        if (!isset($_GET['Authority']))
             $this->redirect(array('/shop/order/create'));
         Yii::app()->getModule('discountCodes');
         $Authority = $_GET['Authority'];
@@ -350,10 +351,10 @@ class ShopOrderController extends Controller
         ));
         $order = $this->loadModel($id);
         $Amount = $model->amount; //Amount will be based on Toman
-        if($_GET['Status'] == 'OK'){
+        if ($_GET['Status'] == 'OK') {
             $gateway = new ZarinPal();
             $gateway->verify($Authority, $Amount);
-            if($gateway->getStatus() == 100){
+            if ($gateway->getStatus() == 100) {
                 $model->scenario = 'update';
                 $model->status = 'paid';
                 $model->token = $gateway->getRefId();
@@ -363,9 +364,9 @@ class ShopOrderController extends Controller
                 DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                 $order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
                 Shop::SetSuccessFlash();
-            }else
+            } else
                 Shop::SetFailedFlash($gateway->getError());
-        }else
+        } else
             Shop::SetFailedFlash('عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
         $this->redirect(array('details', 'id' => $order->id));
     }
@@ -390,8 +391,8 @@ class ShopOrderController extends Controller
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('admin'));
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
 
     /**
@@ -402,7 +403,7 @@ class ShopOrderController extends Controller
         $this->layout = '//layouts/column1';
         $model = new ShopOrder('search');
         $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['ShopOrder']))
+        if (isset($_GET['ShopOrder']))
             $model->attributes = $_GET['ShopOrder'];
 
         $this->render('admin', array(
@@ -420,7 +421,7 @@ class ShopOrderController extends Controller
     public function loadModel($id)
     {
         $model = ShopOrder::model()->findByPk($id);
-        if($model === null)
+        if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
@@ -431,7 +432,7 @@ class ShopOrderController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']) && $_POST['ajax'] === 'shop-order-form'){
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'shop-order-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
@@ -443,11 +444,11 @@ class ShopOrderController extends Controller
      */
     public function actionChangeStatus()
     {
-        if(isset($_POST['id']) && !empty($_POST['id'])){
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
             $id = (int)$_POST['id'];
             $model = $this->loadModel($id);
             $model->update_date = time();
-            if($model->setStatus($_POST['value'])->save())
+            if ($model->setStatus($_POST['value'])->save())
                 echo CJSON::encode(['status' => true]);
             else
                 echo CJSON::encode(['status' => false, 'msg' => 'در تغییر وضعیت این آیتم مشکلی بوجود آمده است! لطفا مجددا بررسی کنید.']);
@@ -462,25 +463,25 @@ class ShopOrderController extends Controller
         Yii::app()->user->setState('basket-position', 3);
         Yii::app()->getModule('discountCodes');
         // use Discount codes
-        if(isset($_POST['DiscountCodes'])){
+        if (isset($_POST['DiscountCodes'])) {
             $code = $_POST['DiscountCodes']['code'];
             $criteria = DiscountCodes::ValidCodes();
             $criteria->compare('code', $code);
             $discount = DiscountCodes::model()->find($criteria);
             /* @var $discount DiscountCodes */
-            if($discount === NULL){
+            if ($discount === NULL) {
                 Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر موجود نیست.');
                 $this->redirect(array('/shop/order/create'));
             }
-            if(!$discount->shop_allow){
+            if (!$discount->shop_allow) {
                 Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر مربوط به خرید نسخه دیجیتال می باشد.');
                 $this->redirect(array('/shop/order/create'));
             }
-            if($discount->limit_times && $discount->usedCount() >= $discount->limit_times){
+            if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times) {
                 Yii::app()->user->setFlash('failed', 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.');
                 $this->redirect(array('/shop/order/create'));
             }
-            if(!Yii::app()->user->isGuest && $discount->user_id && $discount->user_id != Yii::app()->user->getId()){
+            if (!Yii::app()->user->isGuest && $discount->user_id && $discount->user_id != Yii::app()->user->getId()) {
                 Yii::app()->user->setFlash('failed', 'کد تخفیف مورد نظر نامعتبر است.');
                 $this->redirect(array('/shop/order/create'));
             }
@@ -490,12 +491,12 @@ class ShopOrderController extends Controller
                 )
             );
             /* @var $used DiscountUsed */
-            if($used){
+            if ($used) {
                 $u_date = JalaliDate::date('Y/m/d - H:i', $used->date);
                 Yii::app()->user->setFlash('failed', "کد تخفیف مورد نظر قبلا در تاریخ {$u_date} استفاده شده است.");
                 $this->redirect(array('/shop/order/create'));
             }
-            if(DiscountCodes::addDiscountCodes($discount))
+            if (DiscountCodes::addDiscountCodes($discount))
                 Yii::app()->user->setFlash('success', 'کد تخفیف با موفقیت اعمال شد.');
             else
                 Yii::app()->user->setFlash('failed', 'کد تخفیف در حال حاضر اعمال شده است.');
@@ -511,17 +512,17 @@ class ShopOrderController extends Controller
         Yii::app()->user->setState('basket-position', 3);
         Yii::app()->getModule('discountCodes');
         // use Discount codes
-        if(isset($_GET['code'])){
+        if (isset($_GET['code'])) {
             $code = $_GET['code'];
-            if(Yii::app()->user->hasState('discount-codes')){
+            if (Yii::app()->user->hasState('discount-codes')) {
                 $discountCodesInSession = Yii::app()->user->getState('discount-codes');
                 $discountCodesInSession = CJSON::decode(base64_decode($discountCodesInSession));
-                if(is_array($discountCodesInSession) && in_array($code, $discountCodesInSession)){
+                if (is_array($discountCodesInSession) && in_array($code, $discountCodesInSession)) {
                     $key = array_search($code, $discountCodesInSession);
                     unset($discountCodesInSession[$key]);
-                }else if(!is_array($discountCodesInSession) && $code == $discountCodesInSession)
+                } else if (!is_array($discountCodesInSession) && $code == $discountCodesInSession)
                     $discountCodesInSession = null;
-                if($discountCodesInSession)
+                if ($discountCodesInSession)
                     Yii::app()->user->setState('discount-codes', base64_encode(CJSON::encode($discountCodesInSession)));
                 else
                     Yii::app()->user->setState('discount-codes', null);
@@ -540,7 +541,7 @@ class ShopOrderController extends Controller
 
         $model = new ShopOrder("search");
         $model->unsetAttributes();
-        if(isset($_GET['ShopOrder']))
+        if (isset($_GET['ShopOrder']))
             $model->attributes = $_GET['ShopOrder'];
         $model->user_id = Yii::app()->user->getId();
 
@@ -559,7 +560,7 @@ class ShopOrderController extends Controller
     {
         $model = $this->loadModel($id);
 
-        if($model){
+        if ($model) {
             $this->beginClip("order-item");
             $this->renderPartial("_order_item", array(
                 "model" => $model,
@@ -570,7 +571,7 @@ class ShopOrderController extends Controller
                 "status" => true,
                 "content" => $this->clips["order-item"]
             ));
-        }else
+        } else
             echo CJSON::encode(array(
                 "status" => false,
             ));
@@ -584,10 +585,10 @@ class ShopOrderController extends Controller
     public function actionExportCode($id)
     {
         $model = $this->loadModel($id);
-        if(isset($_POST['ShopOrder'])){
+        if (isset($_POST['ShopOrder'])) {
             $model->scenario = 'export-code';
             $model->export_code = $_POST['ShopOrder']['export_code'];
-            if($model->save())
+            if ($model->save())
                 Yii::app()->user->setFlash('success', 'کد مرسوله با موفقیت ثبت شد.');
             else
                 Yii::app()->user->setFlash('success', 'در ثبت کد مرسوله مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
@@ -598,15 +599,15 @@ class ShopOrderController extends Controller
     public function actionChangePayment($id)
     {
         $model = $this->loadModel($id);
-        if(isset($_GET['method'])){
+        if (isset($_GET['method'])) {
             $payment = ShopPaymentMethod::model()->findByAttributes(array('name' => $_GET['method']));
-            if($payment && $payment->status == ShopPaymentMethod::STATUS_ACTIVE){
+            if ($payment && $payment->status == ShopPaymentMethod::STATUS_ACTIVE) {
                 $model->scenario = 'change-payment';
                 $payment_amount = (double)($model->payment_amount - $model->payment_price);
                 $model->payment_method = $payment->id;
                 $model->payment_price = $payment->price;
                 $model->payment_amount = $payment_amount + $payment->price;
-                if($model->save())
+                if ($model->save())
                     $this->redirect(array('payment', 'id' => $model->id));
             }
             Yii::app()->user->setFlash('failed', 'در پرداخت سفارش مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
@@ -618,13 +619,13 @@ class ShopOrderController extends Controller
     public function actionReport()
     {
         Yii::app()->theme = 'rahbod';
-        $this->layout = isset($_GET['print'])?'//layouts/print':'//layouts/column1';
+        $this->layout = isset($_GET['print']) ? '//layouts/print' : '//layouts/column1';
 
         $model = new ShopOrder('search');
         $model->unsetAttributes();
-        if(isset($_GET['ShopOrder']))
+        if (isset($_GET['ShopOrder']))
             $model->attributes = $_GET['ShopOrder'];
-        $this->render(isset($_GET['print']) && $_GET['print'] == true?'report_print':'report', array(
+        $this->render(isset($_GET['print']) && $_GET['print'] == true ? 'report_print' : 'report', array(
             'model' => $model,
         ));
     }
