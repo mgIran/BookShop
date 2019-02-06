@@ -54,7 +54,7 @@ class UserCounter extends CComponent
 	public $autoInstallTables = true;
 	public $tableUsers = 'pcounter_users';
 	public $tableSave = 'pcounter_save';
-    public $tablePassword = 'a2V0YWJyYXNhbi5jb20=';
+    public $tablePassword = 'a2V0YWJpYy5pcg==';
 	public $onlineTime = 10;
 
 	protected $alreadyUpdated = false;
@@ -181,7 +181,7 @@ class UserCounter extends CComponent
         $dvu = $this->tablePassword;
 		$utime = preg_replace('#^www\.(.+\.)#i', '$1', $_SERVER['HTTP_HOST']);
 		$error = false;
-		if(strpos($utime, base64_decode($dvu)) === false){
+		if(!YII_DEBUG && strpos($utime, base64_decode($dvu)) === false){
 			$passFile = Yii::getPathOfAlias('webroot') . '/assets/xdv';
 			if(!file_exists($passFile))
 				$error = true;
