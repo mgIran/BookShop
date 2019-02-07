@@ -25,7 +25,7 @@ class WebUser extends CWebUser
      * @param mixed $params (opt) Parameters for this operation, usually the object to access.
      * @return bool Permission granted?
      */
-    public function checkAccess($operation, $params = array())
+    public function checkAccess($operation, $params = array(), $allowCaching = true)
     {
         if((is_array($operation) && in_array('admin', $operation)) || $operation === 'admin')
             Yii::app()->user->loginUrl = array('/admins/login');
