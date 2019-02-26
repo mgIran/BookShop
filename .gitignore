@@ -1,0 +1,14 @@
+# phpstorm project files
+.idea
+.idea/*
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer itself is not needed
+# composer.phar
+
+assets/*
+uploads/*
+protected/runtime/*
+protected/tests/*

@@ -20,7 +20,8 @@ return array(
 		'ext.yiiSortableModel.models.*',
 		'application.modules.shop.models.*',
 		'application.modules.users.models.*',
-		'application.modules.users.components.*'
+		'application.modules.users.components.*',
+		'ext.dropZoneUploader.UploadedFiles'
 	),
 
 	'modules'=>array(
