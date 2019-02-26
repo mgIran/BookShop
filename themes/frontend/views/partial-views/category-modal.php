@@ -8,7 +8,7 @@ $parentsID=array();
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><i class="close-icon"></i></button>
-                <h4 class="modal-title">موضوعات<small><?php echo number_format(count($this->navbarCategories), 0, '.', '.');?> موضوع / <?php echo number_format($this->booksCount, 0, '.', '.');?> عنوان کتاب</small></h4>
+                <h4 class="modal-title">موضوعات<small><?php echo number_format(is_array($this->navbarCategories)?count($this->navbarCategories):0, 0, '.', '.');?> موضوع / <?php echo number_format($this->booksCount, 0, '.', '.');?> عنوان کتاب</small></h4>
             </div>
             <div class="modal-body">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 cats-list">
@@ -29,7 +29,7 @@ $parentsID=array();
                                     if($category->parent_id==$id)
                                         $subCategories[]=$category;
                                 ?>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12<?php echo (count($subCategories)==0)?' hidden':'';?>">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12<?php echo is_array($subCategories) && count($subCategories)==0 ?' hidden':'';?>">
                                     <h5>زیر مجموعه ها</h5>
                                     <ul>
                                         <?php foreach($subCategories as $category):?>
@@ -38,7 +38,7 @@ $parentsID=array();
                                     </ul>
                                 </div>
                                 <?php $books=$this->getCategoryBooks($id);?>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12<?php echo (count($books)==0)?' hidden':'';?>">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12<?php echo (is_array($books) && count($books)==0)?' hidden':'';?>">
                                     <h5>کتاب های تازه</h5>
                                     <ul>
                                         <?php foreach($books as $book):?>

@@ -284,6 +284,9 @@ a:active{
     display: inline-block;
     position: relative;
 }
+.profile .profile-image .panel-avatar.uploading .loading-container{
+    display: block;
+}
 .profile .profile-badges .profile-badges-left,
 .profile .profile-badges .profile-badges-right{
     position: absolute;

@@ -132,7 +132,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>وضعیت سفارش</h4>
                 <?php
-                Shop::PrintStatusLine($model->status);
+                Shop::PrintStatusLine($model);
                 ?>
             </div>
             <?php

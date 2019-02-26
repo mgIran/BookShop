@@ -65,6 +65,15 @@ class ShopOrder extends CActiveRecord
         self::STATUS_CANCELED => 'انصرافی',
     ];
 
+    public $statusLabelsCashMethod = [
+        self::STATUS_PENDING => 'در انتظار بررسی',
+        self::STATUS_STOCK_PROCESS => 'پردازش انبار',
+        self::STATUS_SENDING => 'در حال ارسال',
+        self::STATUS_PAID => 'پرداخت در محل',
+        self::STATUS_DELIVERED => 'تحویل شده',
+        self::STATUS_CANCELED => 'انصرافی',
+    ];
+
 	public $paymentStatusLabels = [
         self::PAYMENT_STATUS_UNPAID => 'در انتظار پرداخت',
         self::PAYMENT_STATUS_PAID => 'پرداخت موفق'

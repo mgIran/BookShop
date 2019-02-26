@@ -208,9 +208,9 @@ class AjaxUploadAction extends CAction
                                         isset($this->afterSaveActions['thumbnail']['width']) &&
                                         isset($this->afterSaveActions['thumbnail']['height'])
                                     ) {
-                                        $thumbUrl = Yii::app()->getBaseUrl(true).$this->uploadDir.'/'.$this->afterSaveActions['thumbnail']['width'].'x'.$this->afterSaveActions['thumbnail']['height'].'/'.$model->{$this->attribute};
+                                        $thumbUrl = $this->afterSaveActions['thumbnail']['width'].'x'.$this->afterSaveActions['thumbnail']['height'].'/'.$model->{$this->attribute};
                                         if(isset($this->afterSaveActions['thumbnail']['replaceOrigin']) && $this->afterSaveActions['thumbnail']['replaceOrigin'])
-                                            $thumbUrl = Yii::app()->getBaseUrl(true).$this->uploadDir.'/'.$model->{$this->attribute};
+                                            $thumbUrl = $model->{$this->attribute};
                                         $exp = str_replace('{thumburl}', "\"$thumbUrl\"", $exp);
                                     }
                                     @$this->evaluateExpression($exp);

@@ -25,7 +25,7 @@ $this->menu=array(
         <h4>وضعیت سفارش</h4>
         <span class="description">برای تغییر وضعیت سفارش روی وضعیت موردنظر کلیک کنید</span>
         <?php
-        Shop::PrintStatusLine($model->status,true,$model->id);
+        Shop::PrintStatusLine($model,true,$model->id);
         ?>
     </div>
     <br>

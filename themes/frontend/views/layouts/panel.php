@@ -52,7 +52,7 @@
             <span class="icon-bar"></span>
         </button>
         <div class="pin"></div>
-        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
+        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->getBaseUrl(true); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
     </div>
 
     <div class="navbar-custom hidden-xs" id="mobile-menu">
@@ -73,22 +73,22 @@
         ?>
         <ul class="navbar-buttons navbar-left">
             <li><a href="<?= $this->createUrl('/tickets/manage/');?>"><i class="messages-icon"></i></a></li>
-            <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
+            <li><a href="<?php echo $this->createUrl('/users/public/notifications');?>"><i class="notification-icon"></i><?php if(is_array($this->userNotifications) && count($this->userNotifications)!=0):?><span class="badge"><?php echo count($this->userNotifications);?></span><?php endif;?></a></li>
             <li><a href="<?php echo $this->createUrl('/logout');?>"><i class="logout-icon"></i></a></li>
         </ul>
     </div>
 </nav>
 <div class="page-container">
     <div class="sidebar">
-        <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
+        <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->getBaseUrl(true); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
         <div class="profile">
             <div class="profile-image">
                 <span class="panel-avatar">
+                    <?php $this->renderPartial('//partial-views/_loading') ?>
                     <img src="<?php
                     if(Yii::app()->user->auth_mode == 'site')
-                    {
-                        echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->baseUrl.'/uploads/users/avatar/'.Yii::app()->user->avatar;
-                    }else
+                        echo (Yii::app()->user->avatar=='')?Yii::app()->theme->baseUrl.'/images/default-user.svg':Yii::app()->getBaseUrl(true).'/uploads/users/avatar/'.Yii::app()->user->avatar;
+                    else
                         echo Yii::app()->user->avatar;
                     ?>" alt="<?= $this->userDetails->getShowName(); ?>">
                     <div class="upload-overlay hidden-lg hidden-md"></div>
@@ -104,11 +104,12 @@
                         'url' => Yii::app()->createUrl('/users/public/upload'),
                         'deleteUrl' => Yii::app()->createUrl('/users/public/deleteUpload'),
                         'acceptedFiles' => '.jpg, .jpeg, .png',
-                        'serverFiles' => Yii::app()->user->auth_mode == 'site' && Yii::app()->user->avatar?new UploadedFiles('uploads/users/avatar', [Yii::app()->user->avatar]):[],
+                        'serverFiles' => [],
                         'onSending' => '
-                            $(".userinfo").addClass("uploading");
+                            $(".panel-avatar").addClass("uploading");
                         ',
                         'onSuccess' => '
+                            $(".panel-avatar").removeClass("uploading");
                             var responseObj = JSON.parse(res);
                             if(responseObj.status){
                                 {serverName} = responseObj.fileName;
@@ -123,7 +124,7 @@
                     )); ?>
                 </span>
                 <div class="profile-badges">
-                    <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>" class="profile-badges-left"><i class="bookmark-icon"></i><span><?php echo Controller::parseNumbers(number_format(count($this->userDetails->user->bookmarkedBooks), 0, '.', '.'));?></span>نشان شده</a>
+                    <a href="<?php echo Yii::app()->createUrl('users/public/bookmarked');?>" class="profile-badges-left"><i class="bookmark-icon"></i><span><?php echo Controller::parseNumbers(number_format(is_array($this->userDetails->user->bookmarkedBooks)?count($this->userDetails->user->bookmarkedBooks):0, 0, '.', '.'));?></span>نشان شده</a>
                     <a href="<?php echo Yii::app()->createUrl('/users/credit/buy');?>" class="profile-badges-right"><i class="credit-icon"></i><span><?php echo Controller::parseNumbers(number_format($this->userDetails->credit, 0, '.', '.'));?></span>تومان</a>
                 </div>
             </div>

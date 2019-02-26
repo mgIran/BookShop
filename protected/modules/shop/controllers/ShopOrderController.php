@@ -278,7 +278,8 @@ class ShopOrderController extends Controller
             $discountObj = DiscountCodes::model()->findByPk($discountIdsInSession);
             if ($order->payment_amount !== 0) {
                 if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_CASH) {
-                    DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
+                    if($discountObj)
+                        DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                     $order->setStatus(ShopOrder::STATUS_PENDING)->save();
                     Shop::SetSuccessFlash();
                 } else if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT) {
@@ -618,7 +619,6 @@ class ShopOrderController extends Controller
 
     public function actionReport()
     {
-        Yii::app()->theme = 'rahbod';
         $this->layout = isset($_GET['print']) ? '//layouts/print' : '//layouts/column1';
 
         $model = new ShopOrder('search');

@@ -71,6 +71,7 @@ class Users extends CActiveRecord
             array('repeatPassword', 'compare', 'compareAttribute' => 'password', 'on' => 'change_password'),
             array('email', 'filter', 'filter' => 'trim', 'on' => 'create'),
             array('username, password, verification_token', 'length', 'max' => 100, 'on' => 'create'),
+//            array('username', 'default', 'value' => $this->email),
             array('oldPassword', 'oldPass', 'on' => 'update'),
             array('email', 'length', 'max' => 255),
             array('role_id', 'length', 'max' => 10),

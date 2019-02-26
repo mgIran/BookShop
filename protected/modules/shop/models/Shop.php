@@ -170,9 +170,15 @@ class Shop
         return false;
     }
 
-    public static function PrintStatusLine($status, $adminSide = false, $modelId = null)
+    /**
+     * @param $model ShopOrder
+     * @param bool $adminSide
+     * @param null $modelId
+     */
+    public static function PrintStatusLine($model, $adminSide = false, $modelId = null)
     {
-        $labels = ShopOrder::model()->statusLabels;
+        $status = $model->status;
+        $labels = $model->paymentMethod->name == ShopPaymentMethod::METHOD_CASH?ShopOrder::model()->statusLabelsCashMethod:ShopOrder::model()->statusLabels;
         $keys = array_keys($labels);
         if($status > 6)
             $status = 6;
@@ -183,6 +189,8 @@ class Shop
 
         echo "<ul class='steps after-accept in-verify nav nav-justified'{$data}>";
         for($i = $start;$i < count($keys);$i++){
+            if(!isset($labels[$i]))
+                continue;
             $class = '';
             $data = '';
             if($adminSide)

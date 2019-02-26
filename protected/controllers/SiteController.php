@@ -71,7 +71,7 @@ class SiteController extends Controller
         if ($model && $model->status == 1) {
             $visitedCats = CJSON::decode(base64_decode(Yii::app()->request->cookies['VC']));
             $suggestedCookieDataProvider = Books::model()->findAll(Books::model()->getValidBooks($visitedCats));
-            if (count($suggestedCookieDataProvider) < 10) {
+            if (is_array($suggestedCookieDataProvider) && count($suggestedCookieDataProvider) < 10) {
                 $criteria = $model->getConstCriteria(Books::model()->getValidBooks(null, 'id DESC', (10 - count($suggestedCookieDataProvider))));
                 $suggestedDP = Books::model()->findAll($criteria);
                 $data = $suggestedCookieDataProvider;

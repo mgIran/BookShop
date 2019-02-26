@@ -72,6 +72,18 @@ $this->breadcrumbs=array(
 			'sortable'=>false
 		),
 		array(
+			'name'=>'packages.encrypted',
+			'header'=>'وضعیت رمزنگاری',
+			'value' => function($data){
+			    $label = $data->lastPackage && $data->lastPackage->encrypted?"شده":"نشده";
+			    $class = $data->lastPackage && $data->lastPackage->encrypted?"success":"danger";
+			    return "<label class='label label-{$class}'>{$label}</label>";
+			},
+			'type'=>'raw',
+			'filter'=>false,
+			'sortable'=>false
+		),
+		array(
 			'header' => 'تغییر وضعیت',
 			'value' => function($data){
 				$form=CHtml::dropDownList("confirm", $data->confirm, $data->confirmLabels, array("class"=>"change-confirm", "data-id"=>$data->id));

@@ -18,10 +18,10 @@ if(Yii::app()->user->hasFlash('message'))
                 <?php $this->renderPartial("//partial-views/_flashMessage");?>
                 <div class="desc"><?php echo $message;?></div>
                 <?php
-                if($order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID):
+                if($order->paymentMethod->name != ShopPaymentMethod::METHOD_CASH and $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID):
                 ?>
                     <div class="overflow-hidden alert-warning alert">
-                        <div class="text-center">شما می توانید مجددا مبلغ سفارش را با یکی از روش های زیر پرداخت نمایید تا سفارش شما تکمیل شود.</div>
+                        <div>شما می توانید مجددا مبلغ سفارش را با یکی از روش های زیر پرداخت نمایید تا سفارش شما تکمیل شود.</div>
                         <div class="buttons center-block text-center">
                             <?php
                             foreach(ShopPaymentMethod::model()->findAll(array(
@@ -54,8 +54,8 @@ if(Yii::app()->user->hasFlash('message'))
                             <th class="green-text">شماره رسید</th>
                             <th>قیمت کل</th>
                             <th>شیوه پرداخت</th>
-                            <th<?= $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID?' class="red-text"':' class="green-text"' ?>>وضعیت پرداخت</th>
-                            <th>وضعیت سفارش</th>
+                            <th<?= $order->payment_status == ShopOrder::PAYMENT_STATUS_UNPAID?' class="red-text text-nowrap"':' class="green-text text-nowrap"' ?>>وضعیت پرداخت</th>
+                            <th class="text-nowrap">وضعیت سفارش</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,6 +67,60 @@ if(Yii::app()->user->hasFlash('message'))
                             <td><?= $order->getStatusLabel() ?></td>
                         </tr>
                     </tbody>
+                </table>
+            </div>
+            <div class="shipping-details table-responsive">
+                <h5>جزییات اقلام سفارش</h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>شرح محصول</th>
+                        <th>تعداد</th>
+                        <th class="text-center hidden-xs">قیمت پایه واحد</th>
+                        <th class="text-center hidden-xs text-nowrap">قیمت واحد<small>(همراه با تخفیف)</small></th>
+                        <th class="text-nowrap">قیمت کل<small>(همراه با تخفیف)</small></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($order->items as $item):?>
+                        <tr>
+                            <td>
+                                <h5><a href="<?php echo $this->createUrl("/book/".$item->model->id."/".urlencode($item->model->title));?>"><?php echo CHtml::encode($item->model->title);?></a></h5>
+                            </td>
+                            <td>
+                                <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
+                            </td>
+                            <td class="text-center hidden-xs">
+                                <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->base_price)));?> تومان
+                            </td>
+                            <td class="text-center hidden-xs">
+                                <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?> تومان
+                            </td>
+                            <td>
+                                <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment * $item->qty)));?>تومان
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td>
+                            <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد
+                        </td>
+                        <td>
+                            <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->base_price)));?> تومان
+                        </td>
+                        <td>
+                            <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment)));?> تومان
+                        </td>
+                        <td>
+                            <?php echo CHtml::encode(Controller::parseNumbers(number_format($item->payment * $item->qty)));?>تومان
+                        </td>
+                    </tr>
+                    </tfoot>
                 </table>
             </div>
             <div class="shipping-details table-responsive">
@@ -139,7 +193,7 @@ if(Yii::app()->user->hasFlash('message'))
             endif;
             ?>
             <?php
-            Shop::PrintStatusLine($order->status);
+            Shop::PrintStatusLine($order);
             ?>
         </div>
     </div>
