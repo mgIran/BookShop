@@ -133,7 +133,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
                                 <span class="price">رایگان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
                                 <span class="price">رایگان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -189,7 +189,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
                                 <span class="price">رایگان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -217,7 +217,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
                                 <span class="price">4.000 تومان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -245,7 +245,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
                                 <span class="price">1.500 تومان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -273,7 +273,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">مزرعه حیوانات</a></h4>
                                 <span class="price">1.500 تومان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -301,7 +301,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                 </div>
                                 <h4><a href="#" title="عنوان کتاب">مطلع مهر</a></h4>
                                 <span class="price">1.500 تومان</span>
-                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                             </div>
                         </div>
                     </div>
@@ -336,7 +336,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
                             <span class="price">رایگان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -361,7 +361,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
                             <span class="price">رایگان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -386,7 +386,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
                             <span class="price">رایگان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -411,7 +411,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
                             <span class="price">4.000 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -436,7 +436,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
                             <span class="price">1.500 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -461,7 +461,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">مزرعه حیوانات</a></h4>
                             <span class="price">1.500 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -486,7 +486,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">مطلع مهر</a></h4>
                             <span class="price">1.500 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -511,7 +511,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">دیدن دختر صددرصد دلخواه در صبح زیبای ماه آوریل</a></h4>
                             <span class="price">1.500 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -536,7 +536,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">دنیای آشنا</a></h4>
                             <span class="price">1.500 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -561,7 +561,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                             </div>
                             <h4><a href="#" title="عنوان کتاب">تخم مرغ ها</a></h4>
                             <span class="price">1.500 تومان</span>
-                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                            <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                         </div>
                     </div>
                 </div>
@@ -729,7 +729,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -754,7 +754,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -779,7 +779,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -804,7 +804,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
                                         <span class="price">4.000 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -829,7 +829,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
                                         <span class="price">1.500 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -858,7 +858,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -883,7 +883,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
                                         <span class="price">1.500 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -908,7 +908,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -933,7 +933,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -958,7 +958,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
                                         <span class="price">4.000 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -987,7 +987,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">فرزندان ایرانیم</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -1012,7 +1012,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">من دیگر ما</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -1037,7 +1037,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">کافکا در ساحل</a></h4>
                                         <span class="price">رایگان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -1062,7 +1062,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">دختر شینا</a></h4>
                                         <span class="price">4.000 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>
@@ -1087,7 +1087,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/owl
                                         </div>
                                         <h4><a href="#" title="عنوان کتاب">فتح خون</a></h4>
                                         <span class="price">1.500 تومان</span>
-                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>افزودن به کتابخانه</a>
+                                        <a href="#" class="btn btn-add-to-library" role="button"><i class="icon"></i>خرید نسخه الکترونیک</a>
                                     </div>
                                 </div>
                             </div>

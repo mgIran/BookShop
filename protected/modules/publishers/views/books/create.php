@@ -15,7 +15,10 @@
             <a href="#">اطلاعات کتاب</a>
         </li>
         <li class="disabled" >
-            <a href="#">نوبت های چاپ کتاب</a>
+            <a href="#">نسخه چاپی</a>
+        </li>
+        <li class="disabled" >
+            <a href="#">نسخه الکترونیکی</a>
         </li>
     </ul>
 

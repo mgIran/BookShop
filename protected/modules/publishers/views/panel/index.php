@@ -73,10 +73,6 @@
                 'filter' => $books->statusLabels
             ),
             array(
-                'header' => 'نسخه کتاب',
-                'value' => 'is_null($data->lastPackage)?"-":"ویرایش ".Controller::parseNumbers($data->lastPackage->version)',
-            ),
-            array(
                 'class' => 'CButtonColumn',
                 'header'=>$this->getPageSizeDropDownTag(),
                 'template' =>'{update} {delete}',

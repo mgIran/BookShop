@@ -5,6 +5,7 @@
 <div class="page-error">
     <div class="code"><?php echo $code; ?></div>
     <div class="title"><?php echo CHtml::encode($message);?></div>
+    <div class="description" style="direction: ltr"><?php echo $file . "($line)"?></div>
 
     <div class="buttons">
         <div class="row">

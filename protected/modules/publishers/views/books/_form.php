@@ -73,7 +73,12 @@
                 <?php echo $form->error($model,'category_id'); ?>
             </div>
 
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <?php echo $form->textField($model,'isbn',array('class'=>'form-control', 'placeholder'=>$model->getAttributeLabel('isbn'))); ?>
+                <?php echo $form->error($model,'isbn'); ?>
+            </div>
+
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <?php echo $form->dropDownList($model,'status',array('enable'=>'فعال','disable'=>'غیرفعال',),array('class'=>'form-control')); ?>
                 <?php echo $form->error($model,'status'); ?>
             </div>

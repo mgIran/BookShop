@@ -3507,12 +3507,12 @@ input[type="checkbox"] + label:hover::before {
     font-weight: bold;
     border-bottom: 1px dotted;
 }
-.book-view .buttons > div:first-child{
+/*.book-view .buttons > div:first-child{
     padding-left: 5px;
 }
 .book-view .buttons > div:last-child{
     padding-right: 5px;
-}
+}*/
 .cart .empty-message h4{
     color: #e74e40;
     text-align: center;
@@ -3641,4 +3641,7 @@ input[type="checkbox"] + label:hover::before {
 .cart .shipping-details,
 .cart .transaction-details{
     margin-top: 80px;
+}
+.printed-packages{
+    margin: 40px 0;
 }

@@ -43,10 +43,6 @@ else:
                             'name'=>'category_id',
                             'value'=>'$data->category->title'
                         ),
-                        'lastPackage.price'=>array(
-                            'name'=>'lastPackage.price',
-                            'value'=>'number_format($data->lastPackage->price)." تومان"'
-                        ),
                         array(
                             'class'=>'CButtonColumn',
                             'template' => '{view}{delete}',

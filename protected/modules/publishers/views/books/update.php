@@ -5,6 +5,7 @@
 /* @var $images [] */
 /* @var $step integer */
 /* @var $packagesDataProvider CActiveDataProvider */
+/* @var $electronicPackage array */
 ?>
 <div class="white-form">
     <h3>اطلاعات کتاب <?= CHtml::encode($model->title); ?></h3>
@@ -18,7 +19,10 @@
             <a data-toggle="tab" href="#info">اطلاعات کتاب</a>
         </li>
         <li <?= isset($step) && $step == 2 ?'class="active"':''; ?>>
-            <a data-toggle="tab" href="#packages">نوبت چاپ کتاب</a>
+            <a data-toggle="tab" href="#printed-packages">نسخه چاپی</a>
+        </li>
+        <li <?= isset($step) && $step == 3 ?'class="active"':''; ?>>
+            <a data-toggle="tab" href="#electronic-packages">نسخه الکترونیکی</a>
         </li>
 <!--        <li class="--><?// if($step == 3)echo 'active';elseif($step<3)echo 'disabled';?><!--">-->
 <!--            <a data-toggle="--><?//= ($step == 3)?'tab':''?><!--" href="#images">تصاویر کتاب</a>-->
@@ -37,11 +41,19 @@
                 ));?>
             <?php endif;?>
         </div>
-        <div id="packages" class="tab-pane fade <?= !isset($step) || $step == 2?'in active':''; ?>">
-            <?php $this->renderPartial('_package', array(
+        <div id="printed-packages" class="tab-pane fade <?= !isset($step) || $step == 2?'in active':''; ?>">
+            <?php $this->renderPartial('_printed_package', array(
                 'model'=>$model,
                 'dataProvider'=>$packagesDataProvider,
                 'for'=>(Yii::app()->request->getParam('new')=='1')?'new_book':'old_book'
+            ));?>
+        </div>
+        <div id="electronic-packages" class="tab-pane fade <?= !isset($step) || $step == 3?'in active':''; ?>">
+            <?php $this->renderPartial('_electronic_package', array(
+                'model'=>$model,
+                'dataProvider'=>$packagesDataProvider,
+                'for'=>(Yii::app()->request->getParam('new')=='1')?'new_book':'old_book',
+                'electronicPackage' => $electronicPackage,
             ));?>
         </div>
 <!--        <div id="images" class="tab-pane fade --><?//= $step == 3?'in active':''; ?><!--">-->

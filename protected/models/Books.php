@@ -22,6 +22,7 @@
  * @property integer $seen
  * @property string $download
  * @property integer $deleted
+ * @property integer $isbn
  * @property integer $size
  * @property integer $price
  * @property integer $printed_price
@@ -31,7 +32,9 @@
  *
  *
  * The followings are the available model relations:
- * @property BookPackages $lastPackage
+ * @property BookPackages $lastElectronicPackage
+ * @property BookPackages $lastPrintedPackage
+ * @property BookPackages[] $printedPackages
  * @property BookBuys[] $bookBuys
  * @property BookImages[] $images
  * @property Users $publisher
@@ -96,17 +99,45 @@ class Books extends CActiveRecord
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
 			array('publisher_commission', 'length', 'max' => 3),
-			array('language, confirm_date', 'length', 'max' => 20),
+			array('language, confirm_date, isbn', 'length', 'max' => 20),
 			array('language, preview_file', 'filter', 'filter' => 'strip_tags'),
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
 			array('preview_file', 'length', 'max' => 255),
 			array('description, change_log, publisher_name, _purifier, formAuthor, formTranslator', 'safe'),
+			array('isbn', 'isbnChecker'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, publisher_commission, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 		);
 	}
+
+    public function isbnChecker($attribute, $params)
+    {
+        $isbn = str_ireplace('-', '', $this->$attribute);
+        if (strlen($isbn) !== 10 && strlen($isbn) !== 13)
+            $this->addError($attribute, 'طول رشته شابک اشتباه است.');
+        $numbers = str_split($isbn);
+        $sum = 0;
+        if (strlen($isbn) === 13) {
+            foreach ($numbers as $key => $number) {
+                $z = 1;
+                if ($key % 2)
+                    $z = 3;
+                $sum += $number * $z;
+            }
+            if ($sum % 10 !== 0)
+                $this->addError($attribute, 'شابک نامعتبر است.');
+        } elseif (strlen($isbn) === 10) {
+            $z = 10;
+            foreach ($numbers as $key => $number) {
+                $sum += $number * $z;
+                $z--;
+            }
+            if ($sum % 11 !== 0)
+                $this->addError($attribute, 'شابک نامعتبر است.');
+        }
+    }
 
 	/**
 	 * @return array relational rules.
@@ -126,7 +157,10 @@ class Books extends CActiveRecord
 				'order' => 'discount.id DESC'
 			),
 			'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
-			'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPackage.publish_date DESC'),
+			//'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPackage.publish_date DESC'),
+			'lastElectronicPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastElectronicPackage.publish_date DESC', 'condition' => 'lastElectronicPackage.type = '.BookPackages::TYPE_ELECTRONIC),
+			'lastPrintedPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPrintedPackage.publish_date DESC', 'condition' => 'lastPrintedPackage.type = '.BookPackages::TYPE_PRINTED),
+			'printedPackages' => array(self::HAS_MANY, 'BookPackages', 'book_id', 'order' => 'printedPackages.publish_date DESC', 'condition' => 'printedPackages.type = '.BookPackages::TYPE_PRINTED),
 			'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 			'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
 			'advertise' => array(self::BELONGS_TO, 'Advertises', 'id'),
@@ -169,6 +203,7 @@ class Books extends CActiveRecord
 			'formSeoTags' => 'برچسب های سئو',
 			'formAuthor' => 'نویسندگان',
 			'formTranslator' => 'مترجمان',
+            'isbn' => 'شابک',
 		);
 	}
 
@@ -548,21 +583,21 @@ class Books extends CActiveRecord
 
 	public function getPrice()
 	{
-		if ($this->lastPackage)
-			return $this->lastPackage->price;
+		if ($this->lastPrintedPackage)
+			return $this->lastPrintedPackage->printed_price;
 		return false;
 	}
 
 	public function getPrinted_price()
 	{
-		if ($this->lastPackage && $this->lastPackage->sale_printed)
-			return $this->lastPackage->printed_price;
+		if ($this->lastPrintedPackage)
+			return $this->lastPrintedPackage->printed_price;
 		return false;
 	}
 
 	public function getOffPrice()
 	{
-		if ($this->lastPackage && $this->discount)
+		if (($this->lastPrintedPackage or $this->lastElectronicPackage) && $this->discount)
 			return $this->discount->getOffPrice();
 		else
 			return $this->getPrice();
@@ -570,7 +605,7 @@ class Books extends CActiveRecord
 
 	public function getOff_printed_price()
 	{
-		if ($this->lastPackage && $this->discount)
+		if ($this->lastPrintedPackage && $this->discount)
 			return $this->discount->getOff_printed_price();
 		else
 			return $this->getPrinted_price();

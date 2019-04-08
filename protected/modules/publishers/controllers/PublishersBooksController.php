@@ -120,18 +120,18 @@ class PublishersBooksController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::app()->user->isGuest || Yii::app()->user->type != 'admin'){
+        if (Yii::app()->user->isGuest || Yii::app()->user->type != 'admin') {
             $user = UserDetails::model()->findByPk(Yii::app()->user->getId());
-            if($user->details_status == 'refused'){
+            if ($user->details_status == 'refused') {
                 Yii::app()->user->setFlash('failed', 'اطلاعات قرارداد شما رد شده است و نمیتوانید کتاب ثبت کنید. در صورت نیاز نسبت به تغییر اطلاعات خود اقدام کنید.');
                 $this->redirect(array('/publishers/panel/account'));
-            }elseif($user->details_status == 'pending'){
+            } elseif ($user->details_status == 'pending') {
                 Yii::app()->user->setFlash('warning', 'اطلاعات قرارداد شما در انتظار تایید می باشد،لطفا پس از تایید اطلاعات مجددا تلاش کنید.');
                 $this->redirect(array('/publishers/panel/account'));
             }
-            if(!$user->publisher_id){
+            if (!$user->publisher_id) {
                 $devIdRequestModel = UserDevIdRequests::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
-                if($devIdRequestModel)
+                if ($devIdRequestModel)
                     Yii::app()->user->setFlash('warning', 'درخواست شما برای شناسه ناشر در انتظار تایید می باشد، لطفا شکیبا باشید.');
                 else
                     Yii::app()->user->setFlash('failed', 'شناسه ناشر تنظیم نشده است. برای ثبت کتاب شناسه ناشر الزامیست.');
@@ -139,13 +139,13 @@ class PublishersBooksController extends Controller
             }
             Yii::app()->getModule('setting');
             $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-            if(!is_dir($tmpDIR))
+            if (!is_dir($tmpDIR))
                 mkdir($tmpDIR);
             $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
-            if(!is_dir($bookIconsDIR))
+            if (!is_dir($bookIconsDIR))
                 mkdir($bookIconsDIR);
             $bookPreviewDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
-            if(!is_dir($bookPreviewDIR))
+            if (!is_dir($bookPreviewDIR))
                 mkdir($bookPreviewDIR);
 
             $tmpUrl = Yii::app()->baseUrl . '/uploads/temp/';
@@ -157,15 +157,15 @@ class PublishersBooksController extends Controller
             $this->performAjaxValidation($model);
             $icon = array();
             $previewFile = array();
-            if(isset($_POST['Books'])){
+            if (isset($_POST['Books'])) {
                 $iconFlag = false;
                 $previewFileFlag = false;
-                if(isset($_POST['Books']['icon']) && file_exists($tmpDIR . $_POST['Books']['icon'])){
+                if (isset($_POST['Books']['icon']) && file_exists($tmpDIR . $_POST['Books']['icon'])) {
                     $file = $_POST['Books']['icon'];
                     $icon = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
                     $iconFlag = true;
                 }
-                if(isset($_POST['Books']['previewFile']) && file_exists($tmpDIR . $_POST['Books']['previewFile'])){
+                if (isset($_POST['Books']['previewFile']) && file_exists($tmpDIR . $_POST['Books']['previewFile'])) {
                     $file = $_POST['Books']['previewFile'];
                     $previewFile = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
                     $previewFileFlag = true;
@@ -173,18 +173,18 @@ class PublishersBooksController extends Controller
                 $model->attributes = $_POST['Books'];
                 $model->publisher_id = $user->user_id;
                 $model->confirm = 'pending';
-                $model->formTags = isset($_POST['Books']['formTags'])?explode(',', $_POST['Books']['formTags']):null;
-                $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',', $_POST['Books']['formSeoTags']):null;
-                $model->formAuthor = isset($_POST['Books']['formAuthor'])?explode(',', $_POST['Books']['formAuthor']):null;
-                $model->formTranslator = isset($_POST['Books']['formTranslator'])?explode(',', $_POST['Books']['formTranslator']):null;
-                if($model->save()){
-                    if($iconFlag)
+                $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
+                $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
+                $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+                $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
+                if ($model->save()) {
+                    if ($iconFlag)
                         @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
-                    if($previewFileFlag)
+                    if ($previewFileFlag)
                         @rename($tmpDIR . $model->preview_file, $bookPreviewDIR . $model->preview_file);
                     Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد. لطفا مراحل بعدی را نیز انجام دهید.');
                     $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
-                }else{
+                } else {
                     Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
                 }
             }
@@ -195,7 +195,7 @@ class PublishersBooksController extends Controller
                 'tax' => SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value,
                 'commission' => SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value,
             ));
-        }else{
+        } else {
             Yii::app()->user->setFlash('failed', 'از طریق مدیریت اقدام کنید');
             $this->redirect(array('/admins/dashboard'));
         }
@@ -213,29 +213,50 @@ class PublishersBooksController extends Controller
         $this->layout = '//layouts/panel';
         Yii::app()->user->returnUrl = $this->createUrl('update', array('id' => $id));
         $model = $this->loadModel($id);
-        if($model->publisher_id != Yii::app()->user->getId()){
+        if ($model->publisher_id != Yii::app()->user->getId()) {
             Yii::app()->user->setFlash('images-failed', 'شما اجازه دسترسی به این صفحه را ندارید.');
             $this->redirect($this->createUrl('/publishers/panel'));
         }
         $tmpDIR = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
-        if(!is_dir($tmpDIR))
+        if (!is_dir($tmpDIR))
             mkdir($tmpDIR);
         $tmpUrl = Yii::app()->createAbsoluteUrl('/uploads/temp/');
         $bookIconsDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/icons/';
         $bookPreviewDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
         $bookImagesDIR = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
         $bookFilesDIR = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
-        if(!is_dir($bookFilesDIR))
+        if (!is_dir($bookFilesDIR))
             mkdir($bookFilesDIR);
         $bookIconsUrl = Yii::app()->createAbsoluteUrl('/uploads/books/icons');
         $bookPreviewUrl = Yii::app()->createAbsoluteUrl('/uploads/books/previews');
         $bookImagesUrl = Yii::app()->createAbsoluteUrl('/uploads/books/images');
 
+        $electronicPackage = array();
+        if($model->lastElectronicPackage) {
+            $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
+            $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';
+            if ($model->lastElectronicPackage->pdf_file_name && file_exists($uploadDir . $model->lastElectronicPackage->pdf_file_name))
+                $electronicPackage = array(
+                    'name' => $model->lastElectronicPackage->pdf_file_name,
+                    'src' => $uploadUrl . '/' . $model->lastElectronicPackage->pdf_file_name,
+                    'size' => filesize($uploadDir . $model->lastElectronicPackage->pdf_file_name),
+                    'serverName' => $model->lastElectronicPackage->pdf_file_name,
+                );
+
+            if ($model->lastElectronicPackage->epub_file_name && file_exists($uploadDir . $model->lastElectronicPackage->epub_file_name))
+                $electronicPackage = array(
+                    'name' => $model->lastElectronicPackage->epub_file_name,
+                    'src' => $uploadUrl . '/' . $model->lastElectronicPackage->epub_file_name,
+                    'size' => filesize($uploadDir . $model->lastElectronicPackage->epub_file_name),
+                    'serverName' => $model->lastElectronicPackage->epub_file_name,
+                );
+        }
+
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
         $icon = array();
-        if(!is_null($model->icon))
+        if (!is_null($model->icon))
             $icon = array(
                 'name' => $model->icon,
                 'src' => $bookIconsUrl . '/' . $model->icon,
@@ -243,7 +264,7 @@ class PublishersBooksController extends Controller
                 'serverName' => $model->icon
             );
         $previewFile = array();
-        if(!is_null($model->preview_file))
+        if (!is_null($model->preview_file))
             $previewFile = array(
                 'name' => $model->preview_file,
                 'src' => $bookPreviewUrl . '/' . $model->preview_file,
@@ -251,9 +272,9 @@ class PublishersBooksController extends Controller
                 'serverName' => $model->preview_file
             );
         $images = array();
-        if($model->images)
-            foreach($model->images as $image)
-                if(file_exists($bookImagesDIR . $image->image))
+        if ($model->images)
+            foreach ($model->images as $image)
+                if (file_exists($bookImagesDIR . $image->image))
                     $images[] = array(
                         'name' => $image->image,
                         'src' => $bookImagesUrl . '/' . $image->image,
@@ -261,60 +282,62 @@ class PublishersBooksController extends Controller
                         'serverName' => $image->image,
                     );
 
-        foreach($model->showTags as $tag)
+        foreach ($model->showTags as $tag)
             array_push($model->formTags, $tag->title);
-        foreach($model->seoTags as $tag)
+        foreach ($model->seoTags as $tag)
             array_push($model->formSeoTags, $tag->title);
-        foreach($model->persons(array('condition' => 'role_id = 1')) as $person)
+        foreach ($model->persons(array('condition' => 'role_id = 1')) as $person)
             array_push($model->formAuthor, $person->name_family);
-        foreach($model->persons(array('condition' => 'role_id = 2')) as $person)
+        foreach ($model->persons(array('condition' => 'role_id = 2')) as $person)
             array_push($model->formTranslator, $person->name_family);
 
-        if(isset($_POST['packages-submit'])){
-            if(empty($model->packages))
+        if (isset($_POST['packages-submit'])) {
+            if (empty($model->packages))
                 Yii::app()->user->setFlash('failed', 'نوبت چاپی تعریف نشده است.');
             else
                 $this->redirect($this->createUrl('/publishers/panel'));
         }
 
-        if(isset($_POST['Books'])){
+        if (isset($_POST['Books'])) {
             $iconFlag = false;
             $previewFileFlag = false;
-            if(isset($_POST['Books']['icon']) && file_exists($tmpDIR . $_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon){
+            if (isset($_POST['Books']['icon']) && file_exists($tmpDIR . $_POST['Books']['icon']) && $_POST['Books']['icon'] != $model->icon) {
                 $file = $_POST['Books']['icon'];
                 $icon = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
                 $iconFlag = true;
             }
-            if(isset($_POST['Books']['preview_file']) && file_exists($tmpDIR . $_POST['Books']['preview_file'])){
+            if (isset($_POST['Books']['preview_file']) && file_exists($tmpDIR . $_POST['Books']['preview_file'])) {
                 $file = $_POST['Books']['preview_file'];
                 $previewFile = array(array('name' => $file, 'src' => $tmpUrl . '/' . $file, 'size' => filesize($tmpDIR . $file), 'serverName' => $file,));
                 $previewFileFlag = true;
             }
             $model->attributes = $_POST['Books'];
             $model->confirm = 'pending';
-            $model->formTags = isset($_POST['Books']['formTags'])?explode(',', $_POST['Books']['formTags']):null;
-            $model->formSeoTags = isset($_POST['Books']['formSeoTags'])?explode(',', $_POST['Books']['formSeoTags']):null;
-            $model->formAuthor = isset($_POST['Books']['formAuthor'])?explode(',', $_POST['Books']['formAuthor']):null;
-            $model->formTranslator = isset($_POST['Books']['formTranslator'])?explode(',', $_POST['Books']['formTranslator']):null;
-            if($model->save()){
-                if($iconFlag)
+            $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
+            $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
+            $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+            $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
+            if ($model->save()) {
+                if ($iconFlag)
                     @rename($tmpDIR . $model->icon, $bookIconsDIR . $model->icon);
-                if($previewFileFlag)
+                if ($previewFileFlag)
                     @rename($tmpDIR . $model->preview_file, $bookPreviewDIR . $model->preview_file);
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ویرایش شد.');
                 $this->redirect(array('/publishers/books/update/' . $model->id . '?step=2'));
-            }else{
+            } else {
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
         }
 
-        if(isset($_GET['step']) && !empty($_GET['step']))
+        if (isset($_GET['step']) && !empty($_GET['step']))
             $step = (int)$_GET['step'];
 
         $criteria = new CDbCriteria();
         $criteria->addCondition('book_id=:book_id');
+        $criteria->addCondition('type=:type');
         $criteria->params = array(
             ':book_id' => $id,
+            ':type' => BookPackages::TYPE_PRINTED,
         );
         $packagesDataProvider = new CActiveDataProvider('BookPackages', array('criteria' => $criteria));
 
@@ -329,6 +352,7 @@ class PublishersBooksController extends Controller
             'step' => $step,
             'tax' => SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value,
             'commission' => SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value,
+            'electronicPackage' => $electronicPackage,
         ));
     }
 
@@ -342,8 +366,8 @@ class PublishersBooksController extends Controller
         Books::model()->updateByPk($id, array('deleted' => 1));
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('/publishers/panel'));
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/publishers/panel'));
     }
 
     /**
@@ -356,7 +380,7 @@ class PublishersBooksController extends Controller
     public function loadModel($id)
     {
         $model = Books::model()->findByPk($id);
-        if($model === null)
+        if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
@@ -367,7 +391,7 @@ class PublishersBooksController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']) && $_POST['ajax'] === 'books-form'){
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'books-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
@@ -377,26 +401,26 @@ class PublishersBooksController extends Controller
     {
         $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/images/';
-        if(!is_dir($uploadDir))
+        if (!is_dir($uploadDir))
             mkdir($uploadDir);
-        if(isset($_POST['BookImages']['image'])){
+        if (isset($_POST['BookImages']['image'])) {
             $flag = true;
-            foreach($_POST['BookImages']['image'] as $image){
-                if(file_exists($tempDir . $image)){
+            foreach ($_POST['BookImages']['image'] as $image) {
+                if (file_exists($tempDir . $image)) {
                     $model = new BookImages();
                     $model->book_id = (int)$id;
                     $model->image = $image;
                     rename($tempDir . $image, $uploadDir . $image);
-                    if(!$model->save(false))
+                    if (!$model->save(false))
                         $flag = false;
                 }
             }
-            if($flag){
+            if ($flag) {
                 Yii::app()->user->setFlash('images-success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect($this->createUrl('/publishers/panel'));
-            }else
+            } else
                 Yii::app()->user->setFlash('images-failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
-        }else
+        } else
             Yii::app()->user->setFlash('images-failed', 'تصاویر کتاب را آپلود کنید.');
         $this->redirect('update/' . $id . '/?step=3');
     }
@@ -406,34 +430,42 @@ class PublishersBooksController extends Controller
      */
     public function actionSavePackage()
     {
-        if(isset($_POST['book_id'])){
+        if (isset($_POST['book_id'])) {
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-            if(!is_dir($uploadDir))
+            if (!is_dir($uploadDir))
                 mkdir($uploadDir);
 
-            $model = new BookPackages();
+            $book = Books::model()->findByPk($_POST['book_id']);
+            $model = $book->lastElectronicPackage;
+            if (!$book->lastElectronicPackage)
+                $model = new BookPackages();
             $model->attributes = $_POST;
-            $model->sale_printed = 0;
+            if ($model->type == BookPackages::TYPE_ELECTRONIC)
+                $model->setScenario('save_electronic_package');
+            else
+                $model->setScenario('save_printed_package');
 
-            if(isset($_POST['tempFile'])){
-                if(pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
+            if (isset($_POST['tempFile'])) {
+                if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
                     $model->pdf_file_name = $_POST['tempFile'];
-                else if(pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
+                else if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
                     $model->epub_file_name = $_POST['tempFile'];
             }
 
-            if(!$model->printed_price || empty($model->printed_price))
-                $model->printed_price = $model->price;
-            if($model->save()){
-                $response = ['status' => true, 'PdfFileName' => CHtml::encode($model->pdf_file_name), 'EpubFileName' => CHtml::encode($model->epub_file_name)];
-                if(isset($_POST['tempFile'])){
-                    if(pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
-                        rename($tempDir . DIRECTORY_SEPARATOR . $_POST['tempFile'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                    else if(pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
-                        rename($tempDir . DIRECTORY_SEPARATOR . $_POST['tempFile'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+            if ($model->save()) {
+                $response = ['status' => true];
+                if ($model->type == BookPackages::TYPE_ELECTRONIC) {
+                    $response['PdfFileName'] = CHtml::encode($model->pdf_file_name);
+                    $response['EpubFileName'] = CHtml::encode($model->epub_file_name);
                 }
-            }else
+                if (isset($_POST['tempFile'])) {
+                    if ($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                    if ($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                }
+            } else
                 $response = ['status' => false, 'message' => $this->implodeErrors($model)];
 
             echo CJSON::encode($response);
@@ -444,7 +476,7 @@ class PublishersBooksController extends Controller
     public function actionGetPackages($id)
     {
         $model = $this->loadModel($id);
-        foreach($model->packages as $package)
+        foreach ($model->packages as $package)
             $this->renderPartial('_package_list', array('data' => $package));
     }
 
@@ -452,24 +484,24 @@ class PublishersBooksController extends Controller
     {
         $model = BookPackages::model()->findByPk($id);
         /* @var $model BookPackages */
-        if($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+        if ($model === null || $model->book->publisher_id != Yii::app()->user->getId())
             throw new CHttpException(404, 'The requested page does not exist.');
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
         // Remove PDF & EPUB files
-        if(file_exists($uploadDir . '/' . $model->pdf_file_name))
+        if (file_exists($uploadDir . '/' . $model->pdf_file_name))
             @unlink($uploadDir . '/' . $model->pdf_file_name);
 
-        if(file_exists($uploadDir . '/' . $model->epub_file_name))
+        if (file_exists($uploadDir . '/' . $model->epub_file_name))
             @unlink($uploadDir . '/' . $model->epub_file_name);
 
         $bookID = $model->book_id;
-        if($model->delete()){
+        if ($model->delete()) {
             $count = BookPackages::model()->count('book_id = :id', array(':id' => $bookID));
             echo CJSON::encode(array(
                 'status' => 'success',
                 'count' => $count
             ));
-        }else
+        } else
             echo CJSON::encode(array(
                 'status' => 'failed'
             ));
@@ -480,21 +512,21 @@ class PublishersBooksController extends Controller
     {
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        if(isset($_GET['id']) && !empty($_GET['id'])){
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
             $id = (int)$_GET['id'];
             $model = BookPackages::model()->findByPk($id);
             /* @var $model BookPackages */
-            if($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+            if ($model === null || $model->book->publisher_id != Yii::app()->user->getId())
                 throw new CHttpException(404, 'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
             $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp';
-            if(!is_dir($uploadDir))
+            if (!is_dir($uploadDir))
                 mkdir($uploadDir);
 
             $pdfPackage = $epubPackage = array();
             $tempPackage = array();
-            if($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
+            if ($model->pdf_file_name && file_exists($uploadDir . $model->pdf_file_name))
                 $tempPackage = array(
                     'name' => $model->pdf_file_name,
                     'src' => $uploadUrl . '/' . $model->pdf_file_name,
@@ -502,44 +534,46 @@ class PublishersBooksController extends Controller
                     'serverName' => $model->pdf_file_name,
                 );
 
-            if($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
+            if ($model->epub_file_name && file_exists($uploadDir . $model->epub_file_name))
                 $tempPackage = array(
                     'name' => $model->epub_file_name,
                     'src' => $uploadUrl . '/' . $model->epub_file_name,
                     'size' => filesize($uploadDir . $model->epub_file_name),
                     'serverName' => $model->epub_file_name,
                 );
-            if(isset($_POST['BookPackages'])){
+            if (isset($_POST['BookPackages'])) {
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
 
-                if(
-                    (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
-                    (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
-                )
-                    $model->encrypted = 0;
+                if($model->type == BookPackages::TYPE_ELECTRONIC) {
+                    if (
+                        (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
+                        (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
+                    )
+                        $model->encrypted = 0;
 
-                if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf'){
-                    $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
-                    $model->epub_file_name = null;
-                }else if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub'){
-                    $model->epub_file_name = $_POST['BookPackages']['tempFile'];
-                    $model->pdf_file_name = null;
+                    if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf') {
+                        $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
+                        $model->epub_file_name = null;
+                    } else if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub') {
+                        $model->epub_file_name = $_POST['BookPackages']['tempFile'];
+                        $model->pdf_file_name = null;
+                    }
                 }
 
-                if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
-                    $model->price = 0;
+//                if ((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
+//                    $model->price = 0;
 
-                if(!isset($_POST['BookPackages']['sale_printed']))
-                    $model->sale_printed = 0;
-                if($model->save()){
-                    if($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                    if($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                if ($model->save()) {
+                    if($model->type == BookPackages::TYPE_ELECTRONIC) {
+                        if ($model->pdf_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                        if ($model->epub_file_name && file_exists($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                    }
                     Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                     $this->redirect(array('/publishers/books/update/' . $model->book_id . '?step=2'));
-                }else
+                } else
                     Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
             $this->render('update_package', array(
@@ -548,7 +582,7 @@ class PublishersBooksController extends Controller
                 'pdfPackage' => $pdfPackage,
                 'epubPackage' => $epubPackage
             ));
-        }else
+        } else
             $this->redirect(array('/publishers/panel'));
     }
 
@@ -556,33 +590,33 @@ class PublishersBooksController extends Controller
     {
         $Dir = Yii::getPathOfAlias("webroot") . '/uploads/books/';
 
-        if(isset($_POST['fileName'])){
+        if (isset($_POST['fileName'])) {
 
             $fileName = $_POST['fileName'];
 
             $tempDir = Yii::getPathOfAlias("webroot") . '/uploads/temp/';
 
             $model = BookPackages::model()->findByAttributes(array('pdf_file_name' => $fileName));
-            if($model === null)
+            if ($model === null)
                 $model = BookPackages::model()->findByAttributes(array('epub_file_name' => $fileName));
-            if($model){
-                if($model->encrypted)
+            if ($model) {
+                if ($model->encrypted)
                     $Dir .= 'encrypted';
                 else
                     $Dir .= 'files';
 
 
-                if($model->pdf_file_name && file_exists($Dir . '/' . $model->pdf_file_name)){
+                if ($model->pdf_file_name && file_exists($Dir . '/' . $model->pdf_file_name)) {
                     @unlink($Dir . '/' . $model->pdf_file_name);
                     $model->updateByPk($model->id, array('pdf_file_name' => null, 'encrypted' => 0));
                     $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-                }else if($model->epub_file_name && file_exists($Dir . '/' . $model->epub_file_name)){
+                } else if ($model->epub_file_name && file_exists($Dir . '/' . $model->epub_file_name)) {
                     @unlink($Dir . '/' . $model->epub_file_name);
                     $model->updateByPk($model->id, array('epub_file_name' => null, 'encrypted' => 0));
                     $response = ['state' => 'ok', 'msg' => $this->implodeErrors($model)];
-                }else
+                } else
                     $response = ['state' => 'error', 'msg' => 'مشکل ایجاد شده است'];
-            }else{
+            } else {
                 @unlink($tempDir . $fileName);
                 $response = ['state' => 'ok', 'msg' => 'حذف شد.'];
             }

@@ -40,29 +40,9 @@ $purifier=new CHtmlPurifier();
 			'name'=>'status',
 			'value'=>$model->statusLabels[$model->status],
 		),
-		array(
-            'name'=>'lastPackage.price',
-            'value'=>number_format($model->lastPackage->price).' تومان',
-            'header'=>'قیمت',
-        ),
-		array(
-            'name'=>'lastPackage.pdf_file_name',
-            'value'=>is_null($model->lastPackage->pdf_file_name)?'-':CHtml::link($model->lastPackage->pdf_file_name, $this->createUrl('/manageBooks/baseManage/download/'.$model->id.'?title=pdf')),
-            'type'=>'raw'
-        ),
-        array(
-            'name'=>'lastPackage.epub_file_name',
-            'value'=>is_null($model->lastPackage->epub_file_name)?'-':CHtml::link($model->lastPackage->epub_file_name, $this->createUrl('/manageBooks/baseManage/download/'.$model->id.'?title=epub')),
-            'type'=>'raw'
-        ),
         array(
             'name'=>'preview_file',
             'value'=>empty($model->preview_file)?'-':CHtml::link($model->preview_file, $this->createUrl('/manageBooks/baseManage/download/'.$model->id.'?title=preview')),
-            'type'=>'raw'
-        ),
-        array(
-            'name'=>'size',
-            'value'=>'<div style="direction: ltr;text-align: right;">'.$model->lastPackage->getUploadedFilesSize().'</div>',
             'type'=>'raw'
         ),
         'language',
@@ -87,6 +67,64 @@ $purifier=new CHtmlPurifier();
         'download',
     ),
 )); ?>
+
+<?php if($model->lastElectronicPackage):?>
+    <h3 style="margin-top: 70px;">نسخه الکترونیکی</h3>
+    <?php $this->widget('zii.widgets.CDetailView', array(
+        'data'=>$model->lastElectronicPackage,
+        'attributes'=>array(
+            array(
+                'name'=>'cover_price',
+                'value'=>number_format($model->lastElectronicPackage->cover_price).' تومان',
+                'header'=>'قیمت',
+            ),
+            array(
+                'name'=>'electronic_price',
+                'value'=>number_format($model->lastElectronicPackage->electronic_price).' تومان',
+                'header'=>'قیمت',
+            ),
+            array(
+                'name'=>'pdf_file_name',
+                'value'=>is_null($model->lastElectronicPackage->pdf_file_name)?'-':CHtml::link($model->lastElectronicPackage->pdf_file_name, $this->createUrl('/manageBooks/baseManage/download/'.$model->id.'?title=pdf')),
+                'type'=>'raw'
+            ),
+            array(
+                'name'=>'epub_file_name',
+                'value'=>is_null($model->lastElectronicPackage->epub_file_name)?'-':CHtml::link($model->lastElectronicPackage->epub_file_name, $this->createUrl('/manageBooks/baseManage/download/'.$model->id.'?title=epub')),
+                'type'=>'raw'
+            ),
+            array(
+                'name'=>'size',
+                'value'=>'<div style="direction: ltr;text-align: right;">'.$model->lastElectronicPackage->getUploadedFilesSize().'</div>',
+                'type'=>'raw'
+            ),
+        ),
+    )); ?>
+<?php endif;?>
+
+<?php if($model->printedPackages):?>
+    <h3 style="margin-top: 70px;">نسخه چاپی</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>نوبت چاپ</th>
+            <th>زمان چاپ</th>
+            <th>قیمت روی جلد</th>
+            <th>قیمت فروش</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach($model->printedPackages as $printedPackage):?>
+            <tr>
+                <td><?php echo $printedPackage->version?></td>
+                <td><?php echo $printedPackage->print_year?></td>
+                <td><?php echo number_format($printedPackage->cover_price)." تومان"?></td>
+                <td><?php echo number_format($printedPackage->printed_price)." تومان"?></td>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+    </table>
+<?php endif;?>
 
 <?php Yii::app()->clientScript->registerScript('changeConfirm', "
     $('body').on('change','.change-confirm', function(){
@@ -154,11 +192,12 @@ $purifier=new CHtmlPurifier();
     });
 
     $('.close-reason-modal').click(function(){
-        $('#reason-text').val('');
+        $('#electronic-reason-text').val('');
+        $('#printed-reason-text').val('');
     });
 
     $('.save-reason-modal').click(function(){
-        if($('#reason-text').val()==''){
+        if($('#electronic-reason-text').val()=='' && $('#printed-reason-text').val()==''){
             $('.reason-modal-message').addClass('error').text('لطفا دلیل را ذکر کنید.');
             return false;
         }else{
@@ -167,11 +206,12 @@ $purifier=new CHtmlPurifier();
                 url:'".$this->createUrl('/manageBooks/baseManage/changeConfirm')."',
                 type:'POST',
                 dataType:'JSON',
-                data:{book_id:$('#reason-modal .book-id').val(), value:$('#reason-modal .book-status').val(), reason:$('#reason-text').val()},
+                data:{book_id:$('#reason-modal .book-id').val(), value:$('#reason-modal .book-status').val(), electronic_reason:$('#electronic-reason-text').val(), printed_reason:$('#printed-reason-text').val()},
                 success:function(data){
                     if(data.status){
                         $('#reason-modal').modal('hide');
-                        $('#reason-text').val('');
+                        $('#electronic-reason-text').val('');
+                        $('#printed-reason-text').val('');
                         $('.reason-modal-message').text('');
                     } else
                         alert('در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.');
@@ -207,8 +247,14 @@ $purifier=new CHtmlPurifier();
             <div class="modal-body">
                 <?php echo CHtml::hiddenField('book_id', '', array('class'=>'book-id'));?>
                 <?php echo CHtml::hiddenField('book_status', '', array('class'=>'book-status'));?>
-                <?php echo CHtml::label('لطفا دلیل این انتخاب را بنویسید:', 'reason-text')?>
-                <?php echo CHtml::textArea('reason', '', array('placeholder'=>'دلیل', 'class'=>'form-control', 'id'=>'reason-text'));?>
+                <?php echo CHtml::label('لطفا دلیل این انتخاب را برای نسخه الکترونیکی بنویسید:', 'electronic-reason-text')?>
+                <div class="form-group">
+                    <?php echo CHtml::textArea('electronic_reason', '', array('placeholder'=>'دلیل', 'class'=>'form-control', 'id'=>'electronic-reason-text'));?>
+                </div>
+                <?php echo CHtml::label('لطفا دلیل این انتخاب را برای نسخه چاپی بنویسید:', 'printed-reason-text')?>
+                <div class="form-group">
+                    <?php echo CHtml::textArea('printed_reason', '', array('placeholder'=>'دلیل', 'class'=>'form-control', 'id'=>'printed-reason-text'));?>
+                </div>
                 <div class="reason-modal-message error"></div>
             </div>
             <div class="modal-footer">

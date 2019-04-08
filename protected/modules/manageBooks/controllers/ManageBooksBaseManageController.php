@@ -376,13 +376,19 @@ class ManageBooksBaseManageController extends Controller
         $model->confirm = $_POST['value'];
         $model->confirm_date = time();
         if($model->save()){
-            $package = $model->lastPackage;
-            $package->setScenario('publish');
-            if($model->confirm == 'accepted')
-                $package->publish_date = time();
-            if($model->confirm == 'refused' or $model->confirm == 'change_required')
-                $package->reason = $_POST['reason'];
-            if($package->save()){
+            $electronicPackage = $model->lastElectronicPackage;
+            $printedPackage = $model->lastPrintedPackage;
+            $electronicPackage->setScenario('publish');
+            $printedPackage->setScenario('publish');
+            if($model->confirm == 'accepted') {
+                $electronicPackage->publish_date = time();
+                $printedPackage->publish_date = time();
+            }
+            if($model->confirm == 'refused' or $model->confirm == 'change_required') {
+                $electronicPackage->reason = $_POST['electronic_reason'];
+                $printedPackage->reason = $_POST['printed_reason'];
+            }
+            if($electronicPackage->save() and $printedPackage->save()){
                 $message = '';
                 switch($model->confirm){
                     case 'refused':
@@ -522,11 +528,11 @@ class ManageBooksBaseManageController extends Controller
         $filename = $folder = null;
         switch($title){
             case 'pdf':
-                $filename = $model->lastPackage->pdf_file_name;
+                $filename = $model->lastElectronicPackage->pdf_file_name;
                 $folder = 'files';
                 break;
             case 'epub':
-                $filename = $model->lastPackage->epub_file_name;
+                $filename = $model->lastElectronicPackage->epub_file_name;
                 $folder = 'files';
                 break;
             case 'preview':
