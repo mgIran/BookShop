@@ -38,7 +38,7 @@ $this->breadcrumbs=array(
 			'filter' => CHtml::activeDropDownList($model,'status',$model->statusLabels,array('prompt' => 'همه'))
 		),
 		array(
-			'name' => 'lastPackage.price',
+			'name' => 'lastPrintedPackage.printed_price',
 			'value' => '$data->price != 0?$data->price." تومان":"رایگان"'
 		),
 		array(
@@ -50,7 +50,7 @@ $this->breadcrumbs=array(
 			}
 		),
 		array(
-			'name' => 'lastPackage.printed_price',
+			'name' => 'lastPrintedPackage.printed_price',
 			'value' => '$data->printed_price?$data->printed_price." تومان":"غیرقابل فروش"'
 		),
 		array(
@@ -75,8 +75,9 @@ $this->breadcrumbs=array(
 			'name'=>'packages.encrypted',
 			'header'=>'وضعیت رمزنگاری',
 			'value' => function($data){
-			    $label = $data->lastPackage && $data->lastPackage->encrypted?"شده":"نشده";
-			    $class = $data->lastPackage && $data->lastPackage->encrypted?"success":"danger";
+				/* @var $data Books */
+			    $label = $data->lastElectronicPackage && $data->lastElectronicPackage->encrypted?"شده":"نشده";
+			    $class = $data->lastElectronicPackage && $data->lastElectronicPackage->encrypted?"success":"danger";
 			    return "<label class='label label-{$class}'>{$label}</label>";
 			},
 			'type'=>'raw',
@@ -115,7 +116,7 @@ $this->breadcrumbs=array(
                 ),
 				'sell_printed' => array(
 					'label'=>'تنظیمات فروش',
-					'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/updatePackage?id=".$data->lastPackage->id."&book_id=".$data->id)',
+					'url'=>'Yii::app()->createUrl("/manageBooks/baseManage/updatePackage?id=".$data->lastPrintedPackage->id."&book_id=".$data->id)',
 					'options'=>array(
 						'style' => 'margin-top:5px',
 						'class'=>'btn btn-sm btn-success'

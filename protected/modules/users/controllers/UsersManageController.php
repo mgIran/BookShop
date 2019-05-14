@@ -24,6 +24,7 @@ class UsersManageController extends Controller
                 'update',
                 'admin',
                 'adminPublishers',
+                'adminSellers',
                 'delete',
                 'userLibrary',
                 'userTransactions',
@@ -165,6 +166,22 @@ class UsersManageController extends Controller
         $this->render('admin', array(
             'model' => $model,
             'role' => 2
+        ));
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actionAdminSellers()
+    {
+        $model = new Users('search');
+        $model->unsetAttributes();  // clear any default values
+        if(isset($_GET['Users']))
+            $model->attributes = $_GET['Users'];
+        $model->role_id = 3;
+        $this->render('admin', array(
+            'model' => $model,
+            'role' => 3
         ));
     }
 

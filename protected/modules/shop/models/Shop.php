@@ -98,11 +98,13 @@ class Shop
         $shipping_price = 0;
         $discountCodeAmount = 0;
         foreach(Shop::getCartContent() as $book){
-            $model = Books::model()->findByPk($book['book_id']);
-            $price = (double)($model->getPrinted_price() * $book['qty']);
+            //$model = Books::model()->findByPk($book['book_id']);
+            $package = BookPackages::model()->findByPk($book['package']);
+            $price = (double)($package->printed_price * $book['qty']);
             $price_total += $price;
             // calculate tax
-            $discount_price = (double)($model->getOff_printed_price() * $book['qty']);
+            $off = $package->getOffPrice() ?: $package->printed_price;
+            $discount_price = (double)($off * $book['qty']);
             $discount_total += ($price - $discount_price);
             $payment_total += $discount_price;
         }

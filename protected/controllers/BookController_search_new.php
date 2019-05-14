@@ -86,7 +86,7 @@ class BookController extends Controller
         $this->layout = 'panel';
 
         $model = $this->loadModel($id);
-        $price = $model->hasDiscount() ? $model->offPrice : $model->price;
+        $price = $model->lastElectronicPackage->hasDiscount() ? $model->lastElectronicPackage->getOffPrice() : $model->price;
         $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
 
         Yii::app()->getModule('users');
@@ -249,7 +249,7 @@ class BookController extends Controller
      */
     private function saveBuyInfo($book, $user, $method, $transactionID = null)
     {
-        $price = $book->hasDiscount() ? $book->offPrice : $book->price;
+        $price = $book->lastElectronicPackage->hasDiscount() ? $book->lastElectronicPackage->getOffPrice() : $book->price;
 
         $book->download += 1;
         $book->setScenario('update-download');
@@ -259,7 +259,7 @@ class BookController extends Controller
         $buy->book_id = $book->id;
         $buy->user_id = $user->id;
         $buy->method = $method;
-        $buy->package_id = $book->lastPackage->id;
+        $buy->package_id = $book->lastPrintedPackage->id;
         if ($method == 'gateway')
             $buy->rel_id = $transactionID;
         $buy->save();

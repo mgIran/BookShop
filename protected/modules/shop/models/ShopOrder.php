@@ -200,6 +200,8 @@ class ShopOrder extends CActiveRecord
 		$criteria->compare('export_code', $this->export_code, true);
 		$criteria->compare('user_id', $this->user_id);
 
+		$criteria->order = 'id desc';
+
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
 			'pagination' => array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20)

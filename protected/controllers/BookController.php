@@ -74,13 +74,13 @@ class BookController extends Controller
         $userID = Yii::app()->user->getId();
         $model = $this->loadModel($id);
 
-        if(Library::BookExistsInLib($model->id, $model->lastPackage->id, $userID)){
+        if(Library::BookExistsInLib($model->id, $model->lastElectronicPackage->id, $userID)){
             Yii::app()->user->setFlash('warning', 'این کتاب در کتابخانه ی شما موجود است.');
             $this->redirect(array('/library'));
         }
 
         // price with publisher discount or not
-        $basePrice = $model->hasDiscount()?$model->offPrice:$model->price;
+        $basePrice = $model->lastElectronicPackage->hasDiscount()?$model->lastElectronicPackage->getOffPrice():$model->price;
 
         $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID, 'book_id' => $id));
 
@@ -137,7 +137,7 @@ class BookController extends Controller
 
             if($price==0){
                 $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
-                Library::AddToLib($model->id, $model->lastPackage->id, $userID);
+                Library::AddToLib($model->id, $model->lastElectronicPackage->id, $userID);
                 if($discountCodesInSession)
                     DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                 Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
@@ -159,7 +159,7 @@ class BookController extends Controller
                         $userDetails->score = $userDetails->score + 1;
                         if($userDetails->save()){
                             $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
-                            Library::AddToLib($model->id, $model->lastPackage->id, $user->id);
+                            Library::AddToLib($model->id, $model->lastElectronicPackage->id, $user->id);
                             if($discountCodesInSession)
                                 DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                             Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
@@ -195,7 +195,7 @@ class BookController extends Controller
                     }
                 }else{
                     $buyId = $this->saveBuyInfo($model, $user, 'credit', $basePrice, $price, $discountObj);
-                    Library::AddToLib($model->id, $model->lastPackage->id, $userID);
+                    Library::AddToLib($model->id, $model->lastElectronicPackage->id, $userID);
                     if($discountCodesInSession)
                         DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
                     Yii::app()->user->setFlash('success', 'خرید شما با موفقیت انجام شد.');
@@ -228,9 +228,10 @@ class BookController extends Controller
             'user_id' => Yii::app()->user->getId(),
             'type' => UserTransactions::TRANSACTION_TYPE_BOOK
         ));
+        /* @var Books $book */
         $book = Books::model()->findByPk($id);
         $user = Users::model()->findByPk(Yii::app()->user->getId());
-        $basePrice = $book->hasDiscount() ? $book->offPrice : $book->price;
+        $basePrice = $book->lastElectronicPackage->hasDiscount() ? $book->lastElectronicPackage->getOffPrice() : $book->price;
         $Amount = $model->amount; //Amount will be based on Toman
 
         Yii::app()->getModule('discountCodes');
@@ -249,7 +250,7 @@ class BookController extends Controller
                 $model->save();
                 $transactionResult = true;
                 $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj, $model->id);
-                Library::AddToLib($book->id, $book->lastPackage->id, $user->id);
+                Library::AddToLib($book->id, $book->lastElectronicPackage->id, $user->id);
                 if ($discountCodesInSession)
                     DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
 
@@ -295,9 +296,10 @@ class BookController extends Controller
             'type' => UserTransactions::TRANSACTION_TYPE_BOOK
         ));
         if ($model) {
+            /* @var Books $book */
             $book = Books::model()->findByPk($id);
             $user = Users::model()->findByPk($model->user_id);
-            $basePrice = $book->hasDiscount() ? $book->offPrice : $book->price;
+            $basePrice = $book->lastElectronicPackage->hasDiscount() ? $book->lastElectronicPackage->getOffPrice() : $book->price;
             $Amount = $model->amount; //Amount will be based on Toman
 
             Yii::app()->getModule('discountCodes');
@@ -314,7 +316,7 @@ class BookController extends Controller
                     $model->token = $gateway->getRefId();
                     $model->save();
                     $buyId = $this->saveBuyInfo($book, $user, 'gateway', $basePrice, $Amount, $discountObj, $model->id);
-                    Library::AddToLib($book->id, $book->lastPackage->id, $user->id);
+                    Library::AddToLib($book->id, $book->lastElectronicPackage->id, $user->id);
                     if ($discountCodes)
                         DiscountCodes::InsertCodes($user, $discountObj->getAmount($price)); // insert used discount code in db
 
@@ -360,7 +362,7 @@ class BookController extends Controller
         $buy->book_id = $book->id;
         $buy->base_price = $basePrice;
         $buy->user_id = $user->id;
-        $buy->package_id = $book->lastPackage->id;
+        $buy->package_id = $book->lastElectronicPackage->id;
         $buy->method = $method;
         $buy->price = $price;
         if($method == 'gateway')
@@ -1113,8 +1115,8 @@ class BookController extends Controller
                     'book_id' => $book->id ,
                     'user_id' => $userID ,
                 ) ,array('order' => 'date DESC'));
-                if($bought && $bought->package_id != $book->lastPackage->id){
-                    $bought->package_id = $book->lastPackage->id;
+                if($bought && $bought->package_id != $book->lastElectronicPackage->id){
+                    $bought->package_id = $book->lastElectronicPackage->id;
                     $bought->date = time();
                     if($bought->save())
                         Yii::app()->user->setFlash('success' ,'<i class="icon-check" ></i>  کتاب شما با موفقیت به روز رسانی شد.');

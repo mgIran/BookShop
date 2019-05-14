@@ -339,6 +339,7 @@ class PublishersBooksController extends Controller
             ':book_id' => $id,
             ':type' => BookPackages::TYPE_PRINTED,
         );
+        $criteria->order = 'id DESC';
         $packagesDataProvider = new CActiveDataProvider('BookPackages', array('criteria' => $criteria));
 
         Yii::app()->getModule('setting');
@@ -441,6 +442,7 @@ class PublishersBooksController extends Controller
             if (!$book->lastElectronicPackage)
                 $model = new BookPackages();
             $model->attributes = $_POST;
+            $model->user_id = Yii::app()->user->getId();
             if ($model->type == BookPackages::TYPE_ELECTRONIC)
                 $model->setScenario('save_electronic_package');
             else
@@ -484,7 +486,7 @@ class PublishersBooksController extends Controller
     {
         $model = BookPackages::model()->findByPk($id);
         /* @var $model BookPackages */
-        if ($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+        if ($model === null || $model->user_id != Yii::app()->user->getId())
             throw new CHttpException(404, 'The requested page does not exist.');
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
         // Remove PDF & EPUB files
@@ -516,7 +518,7 @@ class PublishersBooksController extends Controller
             $id = (int)$_GET['id'];
             $model = BookPackages::model()->findByPk($id);
             /* @var $model BookPackages */
-            if ($model === null || $model->book->publisher_id != Yii::app()->user->getId())
+            if ($model === null || $model->user_id != Yii::app()->user->getId())
                 throw new CHttpException(404, 'The requested page does not exist.');
             $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files/';
             $uploadUrl = Yii::app()->baseUrl . '/uploads/books/files';

@@ -236,7 +236,7 @@ class ShopOrderController extends Controller
                 $orderItem->model_id = $id;
                 $orderItem->base_price = $model->printed_price;
                 $orderItem->qty = $qty;
-                $orderItem->payment = $model->off_printed_price;
+                $orderItem->payment = $model->lastPrintedPackage->getOffPrice();
                 $flag = @$orderItem->save();
                 if (!$flag)
                     break;

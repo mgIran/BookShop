@@ -33,23 +33,23 @@ if($books):?>
                         </td>
                         <td class="vertical-middle text-center">
                             <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], Shop::$qtyList, array("class"=>"quantity", "data-id"=>$position));?>
-                            <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'confirm' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
+                            <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'data-message' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
                         </td>
                         <td class="vertical-middle text-center hidden-xs">
-                            <?php $price = $package->type == BookPackages::TYPE_PRINTED ? $package->printed_price : $package->electronic_price;?>
-                            <?php if($model->hasDiscount() && $model->discount->hasPrintedPriceDiscount()):?>
-                                <?php $price = $model->off_printed_price;?>
+                            <?php $price = ($package->type == BookPackages::TYPE_PRINTED ? $package->printed_price : $package->electronic_price);?>
+                            <?php if($model->lastPrintedPackage->hasDiscount()):?>
+                                <?php $off = $model->lastPrintedPackage->getOffPrice();?>
                                 <span class="price text-danger text-line-through"><?= Controller::parseNumbers(number_format($model->printed_price, 0)); ?><small> تومان</small></span>
-                                <span class="price center-block"><?= Controller::parseNumbers(number_format($model->off_printed_price, 0)); ?><small> تومان</small></span>
+                                <span class="price center-block"><?= Controller::parseNumbers(number_format($off, 0)); ?><small> تومان</small></span>
                             <?php else:?>
-                                <span class="price"><?php echo Controller::parseNumbers(number_format($model->getPrinted_price()))?><small> تومان</small></span>
+                                <span class="price"><?php echo Controller::parseNumbers(number_format($price))?><small> تومان</small></span>
                             <?php endif;?>
                         </td>
                         <td class="vertical-middle text-center hidden-xs">
                             <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$price)))?><small> تومان</small></span>
                         </td>
                         <td class="vertical-middle text-center hidden-xs">
-                            <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'confirm' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
+                            <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'data-message' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
                         </td>
                     </tr>
                 <?php endif;?>

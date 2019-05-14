@@ -20,9 +20,12 @@
  * @property integer $encrypted
  * @property integer $cover_price
  * @property integer $type
+ * @property integer $user_id
  *
  * The followings are the available model relations:
  * @property Books $book
+ * @property BookDiscounts $discount
+ * @property Users $user
  */
 class BookPackages extends CActiveRecord
 {
@@ -58,11 +61,11 @@ class BookPackages extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('book_id, cover_price', 'required'),
+            array('book_id, cover_price, user_id', 'required'),
             array('print_year, printed_price', 'required', 'on' => 'save_printed_package'),
             array('electronic_price', 'required', 'on' => 'save_electronic_package'),
             array('pdf_file_name', 'orRequired', 'other' => 'epub_file_name', 'on' => 'save_electronic_package'),
-            array('book_id, electronic_price, printed_price, cover_price', 'length', 'max' => 10),
+            array('book_id, user_id, electronic_price, printed_price, cover_price', 'length', 'max' => 10),
             array('print_year', 'length', 'max' => 50),
             array('version, create_date, publish_date', 'length', 'max' => 20),
             array('electronic_price, printed_price, cover_price, encrypted', 'numerical', 'integerOnly' => true),
@@ -74,7 +77,7 @@ class BookPackages extends CActiveRecord
             array('create_date', 'default', 'value' => time()),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, book_id, version, package_name, pdf_file_name, epub_file_name, create_date, publish_date, reason, for, electronic_price, printed_price', 'safe', 'on' => 'search'),
+            array('id, book_id, user_id, version, package_name, pdf_file_name, epub_file_name, create_date, publish_date, reason, for, electronic_price, printed_price', 'safe', 'on' => 'search'),
         );
     }
 
@@ -93,6 +96,7 @@ class BookPackages extends CActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'book' => array(self::BELONGS_TO, 'Books', 'book_id'),
+            'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
         );
     }
 
@@ -118,6 +122,7 @@ class BookPackages extends CActiveRecord
             'encrypted' => 'رمز گذاری شده',
             'cover_price' => 'قیمت روی جلد',
             'type' => 'نوع',
+            'user_id' => 'کاربر',
         );
     }
 
@@ -162,15 +167,6 @@ class BookPackages extends CActiveRecord
         return parent::model($className);
     }
 
-    public function getOffPrice()
-    {
-        if ($this->book->discount)
-            return $this->price - $this->price * $this->book->discount->percent / 100;
-        else
-            return $this->price;
-    }
-    
-
     public function getUploadedFilesType()
     {
         $types = array();
@@ -184,16 +180,38 @@ class BookPackages extends CActiveRecord
     public function getUploadedFilesSize()
     {
         $types = array();
-        $filePath = Yii::getPathOfAlias("webroot")."/uploads/books/files/";
+        $filePath = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
         if (!is_null($this->pdf_file_name))
-            $types[] = 'PDF: '.Controller::fileSize($filePath.$this->pdf_file_name);
+            $types[] = 'PDF: ' . Controller::fileSize($filePath . $this->pdf_file_name);
         if (!is_null($this->epub_file_name))
-            $types[] = 'EPUB: '.Controller::fileSize($filePath.$this->epub_file_name);
+            $types[] = 'EPUB: ' . Controller::fileSize($filePath . $this->epub_file_name);
         return implode('<br>', $types);
     }
 
     public function getPrintYearAndPrice()
     {
-        return $this->print_year . ' ('.Controller::parseNumbers(number_format($this->printed_price)).' تومان)';
+        return $this->print_year . ' (' . Controller::parseNumbers(number_format($this->printed_price)) . ' تومان)';
+    }
+
+    public function hasDiscount()
+    {
+        if ($this->discount && $this->discount->hasPriceDiscount())
+            return true;
+        else
+            return false;
+    }
+
+    public function getOffPrice()
+    {
+        if ($this->discount)
+            return $this->discount->getOffPrice();
+        else
+            return $this->type == self::TYPE_PRINTED ? $this->printed_price : $this->electronic_price;
+    }
+
+    public function getDiscount()
+    {
+        $discount = BookDiscounts::model()->find('package_id = :id', [':id' => $this->id]);
+        return $discount;
     }
 }

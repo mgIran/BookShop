@@ -3,12 +3,10 @@
 /* @var $model UserDetails */
 /* @var $form CActiveForm */
 
-$this->breadcrumbs=array(
-	'Users'=>array('index'),
-	'Create',
-);
-if($model->user->role_id = 2)
+if($model->user->role_id == 2)
 	$adminLink = array('label'=>'لیست ناشران', 'url'=>array('adminPublishers'));
+elseif($model->user->role_id == 3)
+	$adminLink = array('label'=>'لیست فروشندگان', 'url'=>array('adminSellers'));
 else
 	$adminLink = array('label'=>'لیست کاربران', 'url'=>array('/users/manage'));
 $this->menu=array(

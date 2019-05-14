@@ -44,22 +44,24 @@ $(function() {
 
     $body.on("click", ".remove", function (e) {
         e.preventDefault();
-        $.ajax({
-            url: $(this).attr("href"),
-            type: "POST",
-            dataType: "JSON",
-            data: {book_id: $(this).data("id")},
-            beforeSend: function () {
-                $("#basket-loading").fadeIn();
-            },
-            success: function (data) {
-                if (data.status) {
-                    $("#basket-table").html(data.table);
-                    $(".navbar-default .navbar-nav li a .cart-count").text(data.countCart);
+        if(confirm($(this).data('message'))) {
+            $.ajax({
+                url: $(this).attr("href"),
+                type: "POST",
+                dataType: "JSON",
+                data: {book_id: $(this).data("id")},
+                beforeSend: function () {
+                    $("#basket-loading").fadeIn();
+                },
+                success: function (data) {
+                    if (data.status) {
+                        $("#basket-table").html(data.table);
+                        $(".navbar-default .navbar-nav li a .cart-count").text(data.countCart);
+                    }
+                    $("#basket-loading").fadeOut();
                 }
-                $("#basket-loading").fadeOut();
-            }
-        });
+            });
+        }
     });
 
     // shipping scripts

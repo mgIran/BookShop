@@ -4,12 +4,12 @@
 /* @var $role string */
 
 $this->breadcrumbs=array(
-    $role==1?'کاربران':'ناشران'=>array($role==1?'admin':'adminPublishers'),
+    $role==1?'کاربران':($role == 3 ? 'فروشندگان' : 'ناشران')=>array($role==1?'admin':($role == 3 ? 'adminSellers': 'adminPublishers')),
     'مدیریت',
 );
 
 $this->menu=array(
-    array('label'=>'افزودن', 'url'=>array($role==1?'create':'/publishers/panel/create')),
+    array('label'=>'افزودن', 'url'=>array($role==1?'create':($role == 3 ? '/sellers/panel/create': '/publishers/panel/create'))),
 );
 $buttons = array(
     'session' => array(
@@ -52,8 +52,7 @@ $columns = array(
         'buttons' => $buttons
     ),
 );
-if($role == 2){
-
+if($role == 2 or $role == 3){
     $buttons = array(
         'update' => array(
             'url' => 'Yii::app()->createUrl("/publishers/panel/update",array("id" => $data->id))'
@@ -85,7 +84,7 @@ if($role == 2){
             'filter' => false
         ),
         array(
-            'header' => 'درآمد ناشر',
+            'header' => 'درآمد',
             'value' => 'Controller::parseNumbers(number_format($data->userDetails->earning))." تومان"',
             'filter' => false
         ),
@@ -111,7 +110,7 @@ if($role == 2){
 }
 ?>
 <? $this->renderPartial('//layouts/_flashMessage'); ?>
-<h1>مدیریت <?= $role==1?'کاربران':'ناشران' ?></h1>
+<h1>مدیریت <?= $role==1?'کاربران':($role == 3 ? 'فروشندگان' : 'ناشران') ?></h1>
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(

@@ -722,10 +722,10 @@ class ManageBooksBaseManageController extends Controller
         }
         $criteria = new CDbCriteria();
         $criteria->addCondition('deleted = 0');
-        $criteria->addCondition('lastPackage.price != 0');
+        $criteria->addCondition('printedPackages.price != 0');
         $criteria->addCondition('title != ""');
         $criteria->with[] = 'discount';
-        $criteria->with[] = 'lastPackage';
+        $criteria->with[] = 'printedPackages';
         $criteria->addCondition('discount.book_id IS NULL');
         $books = CHtml::listData(Books::model()->findAll($criteria), 'id', 'title');
         $this->render('_discount_form', array('model' => $model, 'books' => $books));
@@ -738,10 +738,10 @@ class ManageBooksBaseManageController extends Controller
             $model->attributes = $_POST['BookDiscounts'];
             if($model->validate() && isset($_POST['group_type'])){
                 $criteria = Books::model()->getValidBooks();
-                $criteria->addCondition('lastPackage.price != 0');
+                $criteria->addCondition('printedPackages.price != 0');
                 $criteria->addCondition('title != ""');
                 $criteria->with[] = 'discount';
-                $criteria->with[] = 'lastPackage';
+                $criteria->with[] = 'printedPackages';
                 $criteria->addCondition('discount.book_id IS NULL');
                 if($_POST['group_type'] == 'publisher'){
                     $criteria->compare('publisher_id', $_POST['publisher_id']);

@@ -38,6 +38,7 @@ return array(
 		'setting',
 		'pages',
 		'publishers',
+		'sellers',
 		'manageBooks',
 		'tickets',
 		'advertises',

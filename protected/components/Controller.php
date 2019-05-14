@@ -243,6 +243,8 @@ class Controller extends AuthController
                     'items' => array(
                         array('label' => 'افزودن ناشر', 'url' => Yii::app()->createUrl('/publishers/panel/create')),
                         array('label' => 'مدیریت ناشران', 'url' => Yii::app()->createUrl('/users/manage/adminPublishers')),
+                        array('label' => 'افزودن فروشنده', 'url' => Yii::app()->createUrl('/seller/panel/create')),
+                        array('label' => 'مدیریت فروشندگان', 'url' => Yii::app()->createUrl('/users/manage/adminSellers')),
                         array('label' => 'مدیریت کاربران', 'url' => Yii::app()->createUrl('/users/manage')),
                         array('label' => 'مدیریت بن های خرید', 'url' => Yii::app()->createUrl('/users/bon')),
                         array('label' => 'مدیریت کد های تخفیف', 'url' => Yii::app()->createUrl('/discountCodes/manage/admin')),

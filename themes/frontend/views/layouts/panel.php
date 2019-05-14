@@ -156,6 +156,16 @@
                 <a data-toggle="tooltip" data-placement="left" title="پروفایل ناشر" href="<?php echo Yii::app()->createUrl('publishers/panel/account');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/account')?' active':'';?>"><i class="user-icon"></i><span class="text">پروفایل ناشر</span></a>
             </div>
         <?php endif;?>
+        <?php if(Yii::app()->user->roles=='seller'):?>
+            <div class="list-group">
+                <h5>فروشندگان</h5>
+                <a data-toggle="tooltip" data-placement="left" title="کتاب ها" href="<?php echo Yii::app()->createUrl('sellers/panel');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel')?' active':'';?>"><i class="my-library-icon"></i><span class="text">کتاب ها</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="تخفیفات" href="<?php echo Yii::app()->createUrl('sellers/panel/discount');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/discount')?' active':'';?>"><i class="discount-icon"></i><span class="text">تخفیفات</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="گزارش فروش" href="<?php echo Yii::app()->createUrl('sellers/panel/sales');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/sales')?' active':'';?>"><i class="chart-icon"></i><span class="text">گزارش فروش</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="تسویه حساب" href="<?php echo Yii::app()->createUrl('sellers/panel/settlement');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/settlement')?' active':'';?>"><i class="payment-icon"></i><span class="text">تسویه حساب</span></a>
+                <a data-toggle="tooltip" data-placement="left" title="پروفایل فروشنده" href="<?php echo Yii::app()->createUrl('sellers/panel/account');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/account')?' active':'';?>"><i class="user-icon"></i><span class="text">پروفایل ناشر</span></a>
+            </div>
+        <?php endif;?>
     </div>
     <div class="content">
         <?php echo $content;?>

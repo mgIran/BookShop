@@ -24,6 +24,7 @@ class PublishersPanelController extends Controller
                 'sales',
                 'documents',
                 'signup',
+                'getBookPackages',
             ),
             'backend' => array(
                 'manageSettlement',
@@ -174,10 +175,10 @@ class PublishersPanelController extends Controller
         $criteria = new CDbCriteria();
         $criteria->addCondition('publisher_id = :user_id');
         $criteria->addCondition('deleted = 0');
-        $criteria->addCondition('lastPackage.price != 0');
+        $criteria->addCondition('printedPackages.printed_price != 0');
         $criteria->addCondition('title != ""');
         $criteria->with[] = 'discount';
-        $criteria->with[] = 'lastPackage';
+        $criteria->with[] = 'printedPackages';
         $criteria->addCondition('discount.book_id IS NULL');
         $criteria->params = array(':user_id' => Yii::app()->user->getId());
 
@@ -722,5 +723,21 @@ class PublishersPanelController extends Controller
             'nationalCardImage' => $nationalCardImage,
             'registrationCertificateImage' => $registrationCertificateImage,
         ));
+    }
+
+    public function actionGetBookPackages()
+    {
+        $bookID = $_POST['id'];
+        /* @var BookPackages[] $packages */
+        $packages = BookPackages::model()->findAll('book_id = :id AND user_id = :user', [':id' => $bookID, ':user' => Yii::app()->user->getId()]);
+        $result = [];
+        foreach($packages as $package){
+            $result[] = [
+                'id' => $package->id,
+                'name' => $package->version,
+            ];
+        }
+
+        echo CJSON::encode($result);
     }
 }

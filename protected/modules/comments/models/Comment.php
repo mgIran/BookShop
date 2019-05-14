@@ -389,7 +389,7 @@ class Comment extends CActiveRecord
             //if User model has been configured and comment posted by registered user
             $userConfig = Yii::app()->getModule('comments')->userConfig;
             if(strpos($userConfig['emailProperty'], '.') === false)
-                $userEmail .= $this->user->$userConfig['emailProperty'];
+                $userEmail .= $this->user->{$userConfig['emailProperty']};
             else {
                 $relations = explode('.', $userConfig['emailProperty']);
                 $user = $this->user;

@@ -33,8 +33,14 @@
         ?>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'book_id', array('class' => 'control-label')); ?>
-            <?php echo $form->dropDownList($model, 'book_id', $books, array('class' => 'form-control')); ?>
+            <?php echo $form->dropDownList($model, 'book_id', $books, array('class' => 'form-control', 'prompt' => 'کتاب مورد نظر را انتخاب کنید')); ?>
             <?php echo $form->error($model, 'book_id'); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'package_id', array('class' => 'control-label')); ?>
+            <?php echo $form->dropDownList($model, 'package_id', [], array('class' => 'form-control', 'prompt' => 'کتاب مورد نظر را انتخاب کنید')); ?>
+            <?php echo $form->error($model, 'package_id'); ?>
         </div>
 
         <div class="form-group">
@@ -93,6 +99,22 @@
                 $("#amount-field").removeClass("hidden").addClass("in");
                 $("#percent-field").removeClass("in").addClass("hidden");
             }
+        }).on("change", "#BookDiscounts_book_id", function(){
+            var book = $("#BookDiscounts_book_id").val();
+            $.ajax({
+                url: "'.$this->createUrl('getBookPackages').'",
+                type: "POST",
+                dataType: "JSON",
+                data: {id: book},
+                success: function(data){
+                    if(data.length != 0){
+                        $("#BookDiscounts_package_id").html("");
+                        for(var i=0;i<data.length;i++)
+                            $("#BookDiscounts_package_id").append("<option value=\'"+data[i].id+"\'>"+data[i].name+"</option>");
+                    }else
+                        alert("نوبت چاپی برای این کتاب تعریف نشده است!");
+                }
+            });
         });
     ');
     Yii::app()->clientScript->registerScript('datesScript', '

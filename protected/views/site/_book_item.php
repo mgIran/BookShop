@@ -59,18 +59,12 @@ if(!isset($buy))
                 <span class="price"><?php if($data->price==0):?>
                         <a href="<?php echo Yii::app()->createUrl('/book/free')?>">رایگان</a>
                     <?php else:?>
-                        <?
-                        if($data->hasDiscount() && $data->discount->hasPriceDiscount()):
-                            ?>
+                        <? if($data->lastPrintedPackage->hasDiscount()):?>
                             <span class="text-danger text-line-through center-block"><?= Controller::parseNumbers(number_format($data->price, 0)).' تومان'; ?></span>
-                            <span ><?= Controller::parseNumbers(number_format($data->offPrice, 0)).' تومان' ; ?></span>
-                            <?
-                        else:
-                            ?>
+                            <span ><?= Controller::parseNumbers(number_format($data->lastPrintedPackage->getOffPrice(), 0)).' تومان' ; ?></span>
+                        <? else:?>
                             <span ><?= $data->price?Controller::parseNumbers(number_format($data->price, 0)).' تومان':'رایگان'; ?></span>
-                            <?
-                        endif;
-                        ?>
+                        <? endif;?>
                     <?php endif;?>
             </span>
                 <?php

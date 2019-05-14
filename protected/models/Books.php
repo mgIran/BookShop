@@ -29,6 +29,8 @@
  * @property integer $off_printed_price
  * @property integer $offPrice
  * @property integer $rate
+ * @property integer $seller_id
+ * @property string $seller_commission
  *
  *
  * The followings are the available model relations:
@@ -38,10 +40,12 @@
  * @property BookBuys[] $bookBuys
  * @property BookImages[] $images
  * @property Users $publisher
+ * @property Users $seller
  * @property BookCategories $category
  * @property Users[] $bookmarker
  * @property BookPackages[] $packages
  * @property BookDiscounts $discount
+ * @property BookDiscounts $printedDiscount
  * @property Advertises $bookAdvertises
  * @property BookPersons[] $persons
  * @property Comment[] $comments
@@ -51,6 +55,7 @@
 class Books extends CActiveRecord
 {
 	public $showEncrypted = true;
+	public $sellerBooks = false;
 
 	/**
 	 * @return string the associated database table name
@@ -97,8 +102,8 @@ class Books extends CActiveRecord
 			array('description, change_log, formTags, formSeoTags, formAuthor, formTranslator', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
-			array('publisher_id, category_id', 'length', 'max' => 10),
-			array('publisher_commission', 'length', 'max' => 3),
+			array('publisher_id, seller_id, category_id', 'length', 'max' => 10),
+			array('publisher_commission, seller_commission', 'length', 'max' => 3),
 			array('language, confirm_date, isbn', 'length', 'max' => 20),
 			array('language, preview_file', 'filter', 'filter' => 'strip_tags'),
 			array('status', 'length', 'max' => 7),
@@ -108,7 +113,7 @@ class Books extends CActiveRecord
 			array('isbn', 'isbnChecker'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, publisher_commission, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
+			array('id, title, confirm_date, icon, description, change_log, number_of_pages, language, status, category_id, publisher_name, publisher_id, seller_id, publisher_commission, seller_commission, confirm, seen, download, deleted ,devFilter', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -150,6 +155,7 @@ class Books extends CActiveRecord
 			'bookBuys' => array(self::HAS_MANY, 'BookBuys', 'book_id'),
 			'images' => array(self::HAS_MANY, 'BookImages', 'book_id'),
 			'publisher' => array(self::BELONGS_TO, 'Users', 'publisher_id'),
+			'seller' => array(self::BELONGS_TO, 'Users', 'seller_id'),
 			'category' => array(self::BELONGS_TO, 'BookCategories', 'category_id'),
 			'discount' => array(self::HAS_ONE, 'BookDiscounts', 'book_id',
 				'on' => 'discount.start_date < :time AND discount.end_date > :time',
@@ -159,7 +165,7 @@ class Books extends CActiveRecord
 			'bookmarker' => array(self::MANY_MANY, 'Users', '{{user_book_bookmark}}(user_id, book_id)'),
 			//'lastPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPackage.publish_date DESC'),
 			'lastElectronicPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastElectronicPackage.publish_date DESC', 'condition' => 'lastElectronicPackage.type = '.BookPackages::TYPE_ELECTRONIC),
-			'lastPrintedPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPrintedPackage.publish_date DESC', 'condition' => 'lastPrintedPackage.type = '.BookPackages::TYPE_PRINTED),
+            'lastPrintedPackage' => array(self::HAS_ONE, 'BookPackages', 'book_id', 'order' => 'lastPrintedPackage.printed_price ASC', 'condition' => 'lastPrintedPackage.type = '.BookPackages::TYPE_PRINTED),
 			'printedPackages' => array(self::HAS_MANY, 'BookPackages', 'book_id', 'order' => 'printedPackages.publish_date DESC', 'condition' => 'printedPackages.type = '.BookPackages::TYPE_PRINTED),
 			'packages' => array(self::HAS_MANY, 'BookPackages', 'book_id'),
 			'ratings' => array(self::HAS_MANY, 'BookRatings', 'book_id'),
@@ -188,7 +194,9 @@ class Books extends CActiveRecord
 			'number_of_pages' => 'تعداد صفحات',
 			'language' => 'زبان کتاب',
 			'publisher_id' => 'ناشر',
+			'seller_id' => 'فروشنده',
 			'publisher_commission' => 'کمیسیون ناشر',
+			'seller_commission' => 'کمیسیون فروشنده',
 			'category_id' => 'دسته',
 			'status' => 'وضعیت',
 			'change_log' => 'لیست تغییرات',
@@ -228,6 +236,7 @@ class Books extends CActiveRecord
         if (!$criteria)
             $criteria = new CDbCriteria;
         $criteria->compare('publisher_id', $this->publisher_id);
+        $criteria->compare('seller_id', $this->seller_id);
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.title', $this->title, true);
         $criteria->compare('category_id', $this->category_id);
@@ -238,6 +247,13 @@ class Books extends CActiveRecord
             $criteria->with[] = 'publisher.userDetails';
             $criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
             $criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
+        }
+
+		if ($this->sellerBooks) {
+            $criteria->with[] = 'printedPackages';
+			$criteria->together = true;
+            $criteria->addCondition('printedPackages.user_id = :sellerID', 'OR');
+            $criteria->params[':sellerID'] = Yii::app()->user->getId();
         }
 
         $criteria->addCondition('deleted=0');
@@ -264,6 +280,16 @@ class Books extends CActiveRecord
 		$criteria = new CDbCriteria;
 		if($publisher_id)
 			$criteria->compare('publisher_id', $publisher_id);
+		$criteria->addCondition('deleted=0');
+		$criteria->order = 't.id DESC';
+		return $criteria;
+	}
+
+	public function sellerBooks($seller_id=false)
+	{
+		$criteria = new CDbCriteria;
+		if($seller_id)
+			$criteria->compare('seller_id', $seller_id);
 		$criteria->addCondition('deleted=0');
 		$criteria->order = 't.id DESC';
 		return $criteria;
@@ -313,6 +339,37 @@ class Books extends CActiveRecord
 		{
 			$buy->publisher_commission = $commission;
 			$buy->publisher_commission_amount = $commission_amount;
+		}
+
+		return $commission_amount;
+	}
+
+	public function getSellerPortion($price, &$buy = false)
+	{
+		Yii::app()->getModule('setting');
+
+		// Get commission from book
+		$commission = $this->seller_commission;
+
+		// Get commission from seller
+		if(is_null($commission) or $commission == '')
+			$commission = $this->seller->userDetails->commission;
+
+		// Get commission from setting
+		if(is_null($commission) or $commission == '')
+			$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
+		if(!$this->seller->userDetails->tax_exempt){
+			$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
+            $tax = ($price * $tax) / 100;
+            $price = $price - $tax;
+		}
+		$commission_amount = ($price * $commission) / 100;
+		$commission_amount = floatval(number_format($commission_amount,1));
+		// save seller commission percent and amount in db
+		if($buy)
+		{
+			$buy->seller_commission = $commission;
+			$buy->seller_commission_amount = $commission_amount;
 		}
 
 		return $commission_amount;
@@ -455,7 +512,7 @@ class Books extends CActiveRecord
 	public function getBookFileUrl($type = 'pdf')
 	{
 		if (!empty($this->packages))
-			return Yii::app()->createUrl("/uploads/books/files/" . $this->lastPackage->{$type . '_file_name'});
+			return Yii::app()->createUrl("/uploads/books/files/" . $this->lastElectronicPackage->{$type . '_file_name'});
 		return '';
 	}
 
@@ -489,6 +546,14 @@ class Books extends CActiveRecord
 	{
 		if ($this->publisher_id)
 			return $this->publisher->userDetails->nickname ? $this->publisher->userDetails->nickname : $this->publisher->userDetails->fa_name;
+		else
+			return $this->publisher_name;
+	}
+
+	public function getSellerName()
+	{
+		if ($this->seller_id)
+			return $this->seller->userDetails->nickname ? $this->seller->userDetails->nickname : $this->seller->userDetails->fa_name;
 		else
 			return $this->publisher_name;
 	}
@@ -597,18 +662,18 @@ class Books extends CActiveRecord
 
 	public function getOffPrice()
 	{
-		if (($this->lastPrintedPackage or $this->lastElectronicPackage) && $this->discount)
-			return $this->discount->getOffPrice();
-		else
+        if ($this->discount) {
+            return $this->discount->getOffPrice();
+        }else
 			return $this->getPrice();
 	}
 
-	public function getOff_printed_price()
+	public function getPrintedOffPrice($packageID)
 	{
-		if ($this->lastPrintedPackage && $this->discount)
-			return $this->discount->getOff_printed_price();
+		if ($this->discount)
+			return $this->discount->getPrintedOffPrice($packageID);
 		else
-			return $this->getPrinted_price();
+			return null;
 	}
 
 	public function getComments()

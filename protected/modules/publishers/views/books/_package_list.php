@@ -9,11 +9,13 @@
     <td><?php echo ($data->printed_price==0)?'رایگان':(Controller::parseNumbers(number_format($data->printed_price)).' تومان');?></td>
 <!--    <td>--><?php //echo Controller::parseNumbers(number_format($data->printed_price)).' تومان'?><!--</td>-->
     <td>
-        <span style="margin-right: 6px;font-size: 17px">
-            <a class="icon-pencil text-info" href="<?php echo $this->createUrl('/publishers/books/updatePackage/'.$data->id);?>"></a>
-        </span>
-        <span style="font-size: 16px">
-            <a class="icon-trash text-danger delete-package" href="<?php echo $this->createUrl('/publishers/books/deletePackage/'.$data->id);?>"></a>
-        </span>
+        <?php if($data->user_id == Yii::app()->user->getId()):?>
+            <span style="margin-right: 6px;font-size: 17px">
+                <a class="icon-pencil text-info" href="<?php echo $this->createUrl('/publishers/books/updatePackage/'.$data->id);?>"></a>
+            </span>
+            <span style="font-size: 16px">
+                <a class="icon-trash text-danger delete-package" href="<?php echo $this->createUrl('/publishers/books/deletePackage/'.$data->id);?>"></a>
+            </span>
+        <?php endif;?>
     </td>
 </tr>

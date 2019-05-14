@@ -23,18 +23,18 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'columns'=>array(
         'book.title',
         array(
-            'name' => 'book.lastPackage.price',
+            'name' => 'book.lastPrintedPackage.printed_price',
             'header' => 'قیمت اصلی',
-            'value' => 'Controller::parseNumbers(number_format($data->book->lastPackage->price))." تومان"'
+            'value' => 'Controller::parseNumbers(number_format($data->book->lastPrintedPackage->printed_price))." تومان"'
         ),
         array(
             'header' => 'قیمت الکترونیک با تخفیف',
             'value' => 'Controller::parseNumbers(number_format($data->book->offPrice))." تومان"'
         ),
         array(
-            'name' => 'book.lastPackage.printed_price',
+            'name' => 'book.lastPrintedPackage.printed_price',
             'header' => 'قیمت آخرین نسخه چاپی',
-            'value' => 'Controller::parseNumbers(number_format($data->book->lastPackage->printed_price))." تومان"'
+            'value' => 'Controller::parseNumbers(number_format($data->book->lastPrintedPackage->printed_price))." تومان"'
         ),
         array(
             'header' => 'قیمت چاپی با تخفیف',

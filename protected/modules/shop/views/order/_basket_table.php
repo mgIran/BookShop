@@ -19,7 +19,7 @@
                         <h4><?php echo CHtml::encode($model->title);?></h4>
                         <span class="item hidden-xs">نویسنده: <span class="value"><?php echo $model->getPersonsTags("نویسنده", "fullName", true, "span");?></span></span>
                         <span class="item hidden-xs">ناشر: <span class="value"><?php echo CHtml::encode($model->getPublisherName());?></span></span>
-                        <span class="item hidden-xs">سال چاپ: <span class="value"><?php echo Controller::parseNumbers($model->lastPackage->print_year);?></span></span>
+                        <span class="item hidden-xs">سال چاپ: <span class="value"><?php echo Controller::parseNumbers($model->lastPrintedPackage->print_year);?></span></span>
                         <span class="item hidden-xs">تعداد صفحات: <span class="value"><?php echo Controller::parseNumbers($model->number_of_pages);?> صفحه</span></span>
                     </div>
                 </td>
@@ -28,7 +28,7 @@
                 </td>
                 <td class="vertical-middle text-center hidden-xs">
                     <?php $price = $model->getPrinted_price();?>
-                    <?php if($model->hasDiscount() && $model->discount->hasPrintedPriceDiscount()):?>
+                    <?php if($model->lastPrintedPackage->hasDiscount()):?>
                         <?php $price = $model->off_printed_price;?>
                         <span class="price text-danger text-line-through"><?= Controller::parseNumbers(number_format($model->printed_price, 0)); ?><small> تومان</small></span>
                         <span class="price center-block"><?= Controller::parseNumbers(number_format($model->off_printed_price, 0)); ?><small> تومان</small></span>
