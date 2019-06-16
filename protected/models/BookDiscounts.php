@@ -79,9 +79,9 @@ class BookDiscounts extends CActiveRecord
             elseif ($this->discount_type == self::DISCOUNT_TYPE_AMOUNT && (!$this->amount || empty($this->amount)))
                 $this->addError('amount', 'مبلغ تخفیف نمی تواند خالی باشد.');
 		}else{
-			if($this->discount_type == self::DISCOUNT_TYPE_PERCENT && (!$this->percent || empty($this->percent) || !$this->printed_percent || empty($this->printed_percent)))
+			if($this->discount_type == self::DISCOUNT_TYPE_PERCENT && (!$this->percent || empty($this->percent)))
 				$this->addError('printed_percent' ,'درصد تخفیف نسخه الکترونیک یا چاپی نمی تواند خالی باشد.');
-			elseif($this->discount_type == self::DISCOUNT_TYPE_AMOUNT && (!$this->amount || empty($this->amount) || !$this->printed_amount || empty($this->printed_amount)))
+			elseif($this->discount_type == self::DISCOUNT_TYPE_AMOUNT && (!$this->amount || empty($this->amount)))
 				$this->addError('amount' ,'مبلغ تخفیف نسخه الکترونیک یا چاپی نمی تواند خالی باشد.');
 		}
 	}

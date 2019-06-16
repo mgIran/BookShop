@@ -108,32 +108,23 @@ $this->menu = array(
         <?php echo $form->error($model , 'version'); ?>
     </div>
     <div class="row">
-        <?php echo $form->labelEx($model , 'isbn'); ?>
-        <?php echo $form->textField($model , 'isbn', array('class'=>'form-control' , 'size'=>60));?>
-        <?php echo $form->error($model , 'isbn'); ?>
-    </div>
-    <div class="row">
         <?php echo $form->labelEx($model , 'print_year'); ?>
         <?php echo $form->textField($model , 'print_year', array('class'=>'form-control' , 'size'=>60));?>
         <?php echo $form->error($model , 'print_year'); ?>
     </div>
     <div class="row">
-        <?php echo $form->labelEx($model , 'price', array('class'=>$model->price==0?'hidden':'')); ?>
-        <?php echo $form->textField($model , 'price', array('class'=>'form-control'.($model->price==0?' hidden':'') , 'size'=>60));?>
-        <?php echo $form->error($model , 'price'); ?>
+        <?php echo $form->labelEx($model , 'cover_price'); ?>
+        <?php echo $form->textField($model , 'cover_price', array('class'=>'form-control'.(($model->cover_price==0)?' hidden':'') , 'size'=>60));?>
+        <?php echo $form->error($model , 'cover_price'); ?>
     </div>
-    <div class="row clearfix" style="margin-top: 15px;">
-        <?php echo CHtml::checkBox('free', $model->price==0?true:false);?>
-        <?php echo CHtml::label('رایگان', 'free');?>
-    </div>
-    <div class="row clearfix" style="margin-top: 15px;">
-        <?php echo $form->checkBox($model,'sale_printed', array('data-toggle'=>'collapse', 'data-target'=>'#printed-price'));?>
-        <?php echo CHtml::label('میخواهم نسخه چاپی این کتاب را هم بفروشم.', 'sale_printed');?>
-    </div>
-    <div class="row <?= $model->sale_printed?'collapsed':'collapse' ?> clearfix" id="printed-price">
+    <div class="row">
         <?php echo $form->labelEx($model , 'printed_price'); ?>
-        <?php echo $form->textField($model , 'printed_price', array('class'=>'form-control' , 'size'=>60));?>
+        <?php echo $form->textField($model , 'printed_price', array('class'=>'form-control'.(($model->printed_price==0)?' hidden':'') , 'size'=>60));?>
         <?php echo $form->error($model , 'printed_price'); ?>
+    </div>
+    <div class="row clearfix" style="margin-top: 15px;">
+        <?php echo CHtml::checkBox('free', $model->printed_price==0?true:false);?>
+        <?php echo CHtml::label('رایگان', 'free');?>
     </div>
     <div class="row buttons">
         <?php echo $form->hiddenField($model ,'book_id');?>

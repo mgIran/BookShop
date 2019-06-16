@@ -51,10 +51,10 @@
                 <label><?php echo $model->getAttributeLabel('description');?>: </label>
                 <?php echo $model->description ?>
             </div>
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label><?php echo $model->getAttributeLabel('change_log');?>: </label>
-                <?php echo $model->change_log ?>
-            </div>
+<!--            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+<!--                <label>--><?php //echo $model->getAttributeLabel('change_log');?><!--: </label>-->
+<!--                --><?php //echo $model->change_log ?>
+<!--            </div>-->
 
         </div>
 

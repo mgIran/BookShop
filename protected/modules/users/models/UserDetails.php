@@ -87,11 +87,11 @@ class UserDetails extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('fa_name, publication_name, national_code, phone, zip_code, address, nickname', 'required', 'on' => 'update_real_profile, update_real_profile_admin, update_seller_real_profile_admin'),
+            array('fa_name, publication_name, national_code, phone, zip_code, address, nickname', 'required', 'on' => 'update_real_profile, update_real_profile_seller, update_real_profile_admin, update_seller_real_profile_admin'),
             array('publisher_id', 'required', 'on' => 'update_real_profile, update_real_profile_admin'),
-            array('national_card_image', 'required', 'on' => 'update_real_profile'),
+            array('national_card_image', 'required', 'on' => 'update_real_profile, update_real_profile_seller'),
             array('fa_name, publication_name, nickname, post, company_name, registration_number, phone, zip_code, address, publisher_id', 'required', 'on' => 'update_legal_profile, update_legal_profile_admin'),
-            array('registration_certificate_image', 'required', 'on' => 'update_legal_profile'),
+            array('registration_certificate_image', 'required', 'on' => 'update_legal_profile, update_legal_profile_seller'),
             array('publisher_id', 'required', 'on' => 'confirmDev'),
             array('publisher_id', 'unique'),
             array('credit, national_code, phone, zip_code, score', 'numerical'),

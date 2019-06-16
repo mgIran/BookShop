@@ -204,7 +204,7 @@ class SellersPanelController extends Controller
         if ($detailsModel->publisher_id == '' && is_null($devIdRequestModel))
             $devIdRequestModel = new UserDevIdRequests;
 
-        $detailsModel->scenario = 'update_' . $detailsModel->type . '_profile';
+        $detailsModel->scenario = 'update_' . $detailsModel->type . '_profile_seller';
 
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'change-publisher-id-form')
             $this->performAjaxValidation($devIdRequestModel);

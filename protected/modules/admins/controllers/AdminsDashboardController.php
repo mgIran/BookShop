@@ -32,10 +32,10 @@ class AdminsDashboardController extends Controller
         $criteria->addCondition('confirm=:confirm');
         $criteria->addCondition('deleted=:deleted');
         $criteria->addCondition('title!=""');
-        $criteria->addCondition('packages.encrypted = :encrypted');
+//        $criteria->addCondition('packages.encrypted = :encrypted');
         $criteria->with = ['packages'];
         $criteria->together = true;
-        $criteria->params = array(':confirm' => 'pending', ':deleted' => '0', ':encrypted' => 1);
+        $criteria->params = array(':confirm' => 'pending', ':deleted' => '0', /*':encrypted' => 1*/);
         $newestPrograms = new CActiveDataProvider('Books', array(
             'criteria' => $criteria,
         ));

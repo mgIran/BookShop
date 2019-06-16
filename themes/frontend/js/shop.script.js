@@ -23,12 +23,13 @@ $(function() {
     });
 
     // cart scripts
-    $body.on("change", ".quantity", function () {
+    $body.on("click", ".quantity-btn", function () {
+        var id = $(this).data("id");
         $.ajax({
             url: baseUrl + "/shop/cart/updateQty",
             type: "POST",
             dataType: "JSON",
-            data: {book_id: $(this).data("id"), qty: $(this).val()},
+            data: {book_id: id, qty: $('#quantity-' + id).val()},
             beforeSend: function () {
                 $("#basket-loading").fadeIn();
             },

@@ -1,5 +1,5 @@
 <?php
-/* @var $this PublishersPanelController */
+/* @var $this SellersPanelController */
 /* @var $model UserDetails */
 /* @var $form CActiveForm */
 /* @var $nationalCardImage array */
@@ -97,7 +97,7 @@
                     'maxFiles' => 1,
                     'maxFileSize' => 0.5, //MB
                     'data'=>array('user_id'=>$model->user_id),
-                    'url' => $this->createUrl('/publishers/panel/uploadNationalCardImage'),
+                    'url' => $this->createUrl('/sellers/panel/uploadNationalCardImage'),
                     'acceptedFiles' => 'image/jpeg , image/png',
                     'serverFiles' => $nationalCardImage,
                     'onSuccess' => '
@@ -172,7 +172,7 @@
                     'maxFiles' => 1,
                     'maxFileSize' => 0.5, //MB
                     'data'=>array('user_id'=>$model->user_id),
-                    'url' => $this->createUrl('/publishers/panel/uploadRegistrationCertificateImage'),
+                    'url' => $this->createUrl('/sellers/panel/uploadRegistrationCertificateImage'),
                     'acceptedFiles' => 'image/jpeg , image/png',
                     'serverFiles' => $registrationCertificateImage,
                     'onSuccess' => '

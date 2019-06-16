@@ -56,8 +56,9 @@ $this->breadcrumbs=array(
 		array(
 			'header' => 'قیمت چاپی با تخفیف',
 			'value' => function($data){
-				if($data->discount && $data->discount->hasPrintedPriceDiscount())
-					return Controller::parseNumbers(number_format($data->off_printed_price))." تومان";
+				/* @var Books $data */
+				if($data->lastPrintedPackage and $data->lastPrintedPackage->hasDiscount())
+					return Controller::parseNumbers(number_format($data->lastPrintedPackage->getOffPrice()))." تومان";
 				return '-';
 			}
 		),

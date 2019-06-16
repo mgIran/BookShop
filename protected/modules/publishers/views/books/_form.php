@@ -95,18 +95,18 @@
                 <?php echo $form->error($model,'description'); ?>
             </div>
 
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <?= $form->labelEx($model,'change_log');?>
-                <?php
-                $this->widget('ext.ckeditor.CKEditor',array(
-                    'model' => $model,
-                    'attribute' => 'change_log',
-                    'config' =>'basic'
-                ));
-                ?>
-                <?php echo $form->error($model,'change_log'); ?>
-                <small class="description">این فیلد برای زمانی است که کتاب در نوبت چاپ جدید تغییراتی داشته باشد، پر کردن آن الزامی نیست.</small>
-            </div>
+<!--            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+<!--                --><?//= $form->labelEx($model,'change_log');?>
+<!--                --><?php
+//                $this->widget('ext.ckeditor.CKEditor',array(
+//                    'model' => $model,
+//                    'attribute' => 'change_log',
+//                    'config' =>'basic'
+//                ));
+//                ?>
+<!--                --><?php //echo $form->error($model,'change_log'); ?>
+<!--                <small class="description">این فیلد برای زمانی است که کتاب در نوبت چاپ جدید تغییراتی داشته باشد، پر کردن آن الزامی نیست.</small>-->
+<!--            </div>-->
 
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12 large-tagit">
                 <?php echo $form->labelEx($model,'formTags'); ?>

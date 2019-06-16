@@ -2976,8 +2976,21 @@ input[type="checkbox"] + label:hover::before {
 }
 .cart .table .quantity{
     padding: 7px 10px 5px;
-    width: 90px;
+    width: 50px;
+    height:32px;
     font-size: 12px;
+    border:1px solid #ccc;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+}
+.cart .table .quantity-btn{
+    width: 50px;
+    font-size: 12px;
+    height:32px;
+    border:1px solid #ccc;
+}
+.cart .table .quantity-btn:hover{
+    background: #ddd;
 }
 .cart .table td.vertical-middle{
     vertical-align: middle;

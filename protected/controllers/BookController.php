@@ -80,7 +80,7 @@ class BookController extends Controller
         }
 
         // price with publisher discount or not
-        $basePrice = $model->lastElectronicPackage->hasDiscount()?$model->lastElectronicPackage->getOffPrice():$model->price;
+        $basePrice = $model->lastElectronicPackage->hasDiscount()?$model->lastElectronicPackage->getOffPrice():$model->lastElectronicPackage->electronic_price;
 
         $buy = BookBuys::model()->findByAttributes(array('user_id' => $userID, 'book_id' => $id));
 
@@ -510,6 +510,36 @@ class BookController extends Controller
         $this->render('books_list' ,array(
             'dataProvider' => $dataProvider ,
             'title' => $pageTitle ,
+            'pageTitle' => 'کتاب ها'
+        ));
+    }
+
+    public function actionSeller($title ,$id = null)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = 'index';
+        $criteria = Books::model()->getValidBooks();
+        if(isset($_GET['t']) and $_GET['t'] == 1){
+            $criteria->addCondition('publisher_name=:seller');
+            $seller_id = $title;
+        }else{
+            $criteria->addCondition('seller_id=:seller');
+            $seller_id = $id;
+        }
+        $criteria->params[':seller'] = $seller_id;
+        $dataProvider = new CActiveDataProvider('Books' ,array(
+            'criteria' => $criteria ,
+            'pagination' => array('pageSize' => 8)
+        ));
+
+        if($id){
+            $user = UserDetails::model()->findByAttributes(array('user_id' => $id));
+            $pageTitle = 'کتاب های ' . ($user->getPublisherName());
+        }else
+            $pageTitle = $title;
+        $this->render('books_list' ,array(
+            'dataProvider' => $dataProvider ,
+            'title' => $pageTitle,
             'pageTitle' => 'کتاب ها'
         ));
     }

@@ -170,11 +170,6 @@ $('#package-info-form #sale_printed').on('change', function(){
         'version',
         'isbn',
         array(
-            'name' => 'price',
-            'value' => '$data->price==0?"رایگان":(Controller::parseNumbers(number_format($data->price))." تومان")',
-            'filter' => false
-        ),
-        array(
             'name' => 'printed_price',
             'value' => '$data->printed_price==0?"رایگان":(Controller::parseNumbers(number_format($data->printed_price))." تومان")',
             'filter' => false

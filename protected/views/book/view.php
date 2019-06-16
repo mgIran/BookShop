@@ -85,6 +85,16 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                         <div class="pull-right"><i class="isbn-icon"></i></div>
                                         <div class="meta-body">شابک<div class="meta-heading"><?= CHtml::encode($model->isbn) ?></div></div>
                                     </div>
+                                    <?php if($model->lastElectronicPackage):?>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="pull-right"><i class="file-icon"></i></div>
+                                            <div class="meta-body">نوع فایل<div class="meta-heading"><?= $model->lastElectronicPackage->getUploadedFilesType(); ?></div></div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="pull-right"><i class="download-icon"></i></div>
+                                            <div class="meta-body">حجم فایل<div class="meta-heading file-size"><?= $this->parseNumbers($model->lastElectronicPackage->getUploadedFilesSize()); ?></div></div>
+                                        </div>
+                                    <?php endif;?>
                                 </div>
                             </div>
                             <div class="rating-container">
@@ -149,29 +159,37 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                         $bought = Library::model()->find($criteria); ?>
                                         <?php if($model->lastPrintedPackage and $model->lastElectronicPackage):?>
                                             <div class="row buttons">
-                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                                    <?php echo CHtml::tag("button", array("type"=>"button", "class"=>"btn-green", "data-toggle" => "modal", "data-target" => "#printed-packages-modal"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
-                                                    <h5 class="price text-danger">
-                                                        <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
-                                                    </h5>
-                                                    <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
-                                                    <div class="printed-packages">
-                                                        <h5>نوبت چاپ:</h5>
-                                                        <ul>
-                                                            <?php foreach($model->printedPackages as $printedPackage):?>
-                                                                <li class="overflow-hidden">
-                                                                    <span class="pull-right">- <?php echo $printedPackage->print_year?></span>
-                                                                    <span class="pull-left"><?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
-                                                                </li>
-                                                            <?php endforeach;?>
-                                                        </ul>
+                                                <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
+                                                    <?php echo CHtml::hiddenField("book_id", $model->id);?>
+                                                    <?php echo CHtml::hiddenField("qty", 1);?>
+                                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                        <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
+                                                        <?php if($model->lastPrintedPackage->cover_price != $model->lastPrintedPackage->printed_price):?>
+                                                            <h5 class="price text-danger">
+                                                                <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
+                                                            </h5>
+                                                        <?php endif;?>
+                                                        <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
+                                                        <div class="printed-packages">
+                                                            <h5>نوبت چاپ:</h5>
+                                                            <ul>
+                                                                <?php foreach($model->printedPackages as $printedPackage):?>
+                                                                    <li class="overflow-hidden">
+                                                                        <?php echo CHtml::radioButton('package', $printedPackage->id == $model->lastPrintedPackage->id, ['value' => $printedPackage->id])?>
+                                                                        <span><?php echo $printedPackage->print_year?>، <a href="<?php echo $this->createUrl('/book/seller/'.$printedPackage->user_id.'/'.urlencode($printedPackage->user->userDetails->nickname))?>"><?php echo $printedPackage->user->userDetails->fa_name?></a> | <?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
+                                                                    </li>
+                                                                <?php endforeach;?>
+                                                            </ul>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                <?php echo CHtml::endForm();?>
                                                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                                     <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>خرید نسخه الکترونیک</a>
-                                                    <h5 class="price text-danger">
-                                                        <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
-                                                    </h5>
+                                                    <?php if($model->lastElectronicPackage->cover_price != $model->lastElectronicPackage->electronic_price):?>
+                                                        <h5 class="price text-danger">
+                                                            <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
+                                                        </h5>
+                                                    <?php endif;?>
                                                     <h5 class="price"><?php echo $model->lastElectronicPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastElectronicPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastElectronicPackage->electronic_price))?> تومان</h5>
                                                     <small class="text-justify">- با خرید نسخه الکترونیک می توانید کتاب را بر روی موبایل، تبلت یا کامپیوتر خود با استفاده از نرم افزار کتابیک مطالعه فرمایید.</small>
                                                 </div>
@@ -179,29 +197,37 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                         <?php else:?>
                                             <?php if($model->lastElectronicPackage):?>
                                                 <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>خرید نسخه الکترونیک</a>
-                                                <h5 class="price text-danger">
-                                                    <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
-                                                </h5>
+                                                <?php if($model->lastElectronicPackage->cover_price != $model->lastElectronicPackage->electronic_price):?>
+                                                    <h5 class="price text-danger">
+                                                        <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
+                                                    </h5>
+                                                <?php endif;?>
                                                 <h5 class="price"><?php echo $model->lastElectronicPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastElectronicPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastElectronicPackage->electronic_price))?> تومان</h5>
                                                 <small class="text-justify">- با خرید نسخه الکترونیک می توانید کتاب را بر روی موبایل، تبلت یا کامپیوتر خود با استفاده از نرم افزار کتابیک مطالعه فرمایید.</small>
                                             <?php endif;?>
                                             <?php if($model->lastPrintedPackage):?>
-                                                <?php echo CHtml::tag("button", array("type"=>"button", "class"=>"btn-green", "data-toggle" => "modal", "data-target" => "#printed-packages-modal"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
-                                                <h5 class="price text-danger">
-                                                    <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
-                                                </h5>
-                                                <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
-                                                <div class="printed-packages">
-                                                    <h5>نوبت چاپ:</h5>
-                                                    <ul>
-                                                        <?php foreach($model->printedPackages as $printedPackage):?>
-                                                            <li class="overflow-hidden">
-                                                                <span class="pull-right">- <?php echo $printedPackage->print_year?></span>
-                                                                <span class="pull-left"><?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
-                                                            </li>
-                                                        <?php endforeach;?>
-                                                    </ul>
-                                                </div>
+                                                <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
+                                                    <?php echo CHtml::hiddenField("book_id", $model->id);?>
+                                                    <?php echo CHtml::hiddenField("qty", 1);?>
+                                                    <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
+                                                    <?php if($model->lastPrintedPackage->cover_price != $model->lastPrintedPackage->printed_price):?>
+                                                        <h5 class="price text-danger">
+                                                            <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
+                                                        </h5>
+                                                    <?php endif;?>
+                                                    <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
+                                                    <div class="printed-packages">
+                                                        <h5>نوبت چاپ:</h5>
+                                                        <ul>
+                                                            <?php foreach($model->printedPackages as $printedPackage):?>
+                                                                <li class="overflow-hidden">
+                                                                    <?php echo CHtml::radioButton('package', $printedPackage->id == $model->lastPrintedPackage->id, ['value' => $printedPackage->id])?>
+                                                                    <span><?php echo $printedPackage->print_year?>، <a href="<?php echo $this->createUrl('/book/seller/'.$printedPackage->user_id.'/'.urlencode($printedPackage->user->userDetails->nickname))?>"><?php echo $printedPackage->user->userDetails->fa_name?></a> | <?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
+                                                                </li>
+                                                            <?php endforeach;?>
+                                                        </ul>
+                                                    </div>
+                                                <?php echo CHtml::endForm();?>
                                             <?php endif;?>
                                         <?php endif;?>
 <!--                                        --><?php //if(!$bought):?>
@@ -253,28 +279,36 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                     <?php if($model->lastPrintedPackage and $model->lastElectronicPackage):?>
                                         <div class="row buttons">
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                                <?php echo CHtml::tag("button", array("type"=>"button", "class"=>"btn-green", "data-toggle" => "modal", "data-target" => "#printed-packages-modal"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
-                                                <h5 class="price text-danger">
-                                                    <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
-                                                </h5>
-                                                <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
-                                                <div class="printed-packages">
-                                                    <h5>نوبت چاپ:</h5>
-                                                    <ul>
-                                                        <?php foreach($model->printedPackages as $printedPackage):?>
-                                                            <li class="overflow-hidden">
-                                                                <span class="pull-right">- <?php echo $printedPackage->print_year?></span>
-                                                                <span class="pull-left"><?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
-                                                            </li>
-                                                        <?php endforeach;?>
-                                                    </ul>
-                                                </div>
+                                                <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
+                                                    <?php echo CHtml::hiddenField("book_id", $model->id);?>
+                                                    <?php echo CHtml::hiddenField("qty", 1);?>
+                                                    <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
+                                                    <?php if($model->lastPrintedPackage->cover_price != $model->lastPrintedPackage->printed_price):?>
+                                                        <h5 class="price text-danger">
+                                                            <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
+                                                        </h5>
+                                                    <?php endif;?>
+                                                    <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
+                                                    <div class="printed-packages">
+                                                        <h5>نوبت چاپ:</h5>
+                                                        <ul>
+                                                            <?php foreach($model->printedPackages as $printedPackage):?>
+                                                                <li class="overflow-hidden">
+                                                                    <?php echo CHtml::radioButton('package', $printedPackage->id == $model->lastPrintedPackage->id, ['value' => $printedPackage->id])?>
+                                                                    <span><?php echo $printedPackage->print_year?>، <a href="<?php echo $this->createUrl('/book/seller/'.$printedPackage->user_id.'/'.urlencode($printedPackage->user->userDetails->nickname))?>"><?php echo $printedPackage->user->userDetails->fa_name?></a> | <?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
+                                                                </li>
+                                                            <?php endforeach;?>
+                                                        </ul>
+                                                    </div>
+                                                <?php echo CHtml::endForm();?>
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                                 <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>خرید نسخه الکترونیک</a>
-                                                <h5 class="price text-danger">
-                                                    <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
-                                                </h5>
+                                                <?php if($model->lastElectronicPackage->cover_price != $model->lastElectronicPackage->electronic_price):?>
+                                                    <h5 class="price text-danger">
+                                                        <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
+                                                    </h5>
+                                                <?php endif;?>
                                                 <h5 class="price"><?php echo $model->lastElectronicPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastElectronicPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastElectronicPackage->electronic_price))?> تومان</h5>
                                                 <small class="text-justify">- با خرید نسخه الکترونیک می توانید کتاب را بر روی موبایل، تبلت یا کامپیوتر خود با استفاده از نرم افزار کتابیک مطالعه فرمایید.</small>
                                             </div>
@@ -282,29 +316,37 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                     <?php else:?>
                                         <?php if($model->lastElectronicPackage):?>
                                             <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>خرید نسخه الکترونیک</a>
-                                            <h5 class="price text-danger">
-                                                <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
-                                            </h5>
+                                            <?php if($model->lastElectronicPackage->cover_price != $model->lastElectronicPackage->electronic_price):?>
+                                                <h5 class="price text-danger">
+                                                    <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastElectronicPackage->cover_price)).' تومان') ?></span>
+                                                </h5>
+                                            <?php endif;?>
                                             <h5 class="price"><?php echo $model->lastElectronicPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastElectronicPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastElectronicPackage->electronic_price))?> تومان</h5>
                                             <small class="text-justify">- با خرید نسخه الکترونیک می توانید کتاب را بر روی موبایل، تبلت یا کامپیوتر خود با استفاده از نرم افزار کتابیک مطالعه فرمایید.</small>
                                         <?php endif;?>
                                         <?php if($model->lastPrintedPackage):?>
-                                            <?php echo CHtml::tag("button", array("type"=>"button", "class"=>"btn-green", "data-toggle" => "modal", "data-target" => "#printed-packages-modal"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
-                                            <h5 class="price text-danger">
-                                                <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
-                                            </h5>
-                                            <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
-                                            <div class="printed-packages">
-                                                <h5>نوبت چاپ:</h5>
-                                                <ul>
-                                                    <?php foreach($model->printedPackages as $printedPackage):?>
-                                                        <li class="overflow-hidden">
-                                                            <span class="pull-right">- <?php echo $printedPackage->print_year?></span>
-                                                            <span class="pull-left"><?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
-                                                        </li>
-                                                    <?php endforeach;?>
-                                                </ul>
-                                            </div>
+                                            <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
+                                                <?php echo CHtml::hiddenField("book_id", $model->id);?>
+                                                <?php echo CHtml::hiddenField("qty", 1);?>
+                                                <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');?>
+                                                <?php if($model->lastPrintedPackage->cover_price != $model->lastPrintedPackage->printed_price):?>
+                                                    <h5 class="price text-danger">
+                                                        <span class="text-line-through"><?= CHtml::encode(Controller::parseNumbers(number_format($model->lastPrintedPackage->cover_price)).' تومان') ?></span>
+                                                    </h5>
+                                                <?php endif;?>
+                                                <h5 class="price"><?php echo $model->lastPrintedPackage->hasDiscount() ? Controller::parseNumbers(number_format($model->lastPrintedPackage->getOffPrice())) : Controller::parseNumbers(number_format($model->lastPrintedPackage->printed_price))?> تومان</h5>
+                                                <div class="printed-packages">
+                                                    <h5>نوبت چاپ:</h5>
+                                                    <ul>
+                                                        <?php foreach($model->printedPackages as $printedPackage):?>
+                                                            <li class="overflow-hidden">
+                                                                <?php echo CHtml::radioButton('package', $printedPackage->id == $model->lastPrintedPackage->id, ['value' => $printedPackage->id])?>
+                                                                <span><?php echo $printedPackage->print_year?>، <a href="<?php echo $this->createUrl('/book/seller/'.$printedPackage->user_id.'/'.urlencode($printedPackage->user->userDetails->nickname))?>"><?php echo $printedPackage->user->userDetails->fa_name?></a> | <?php echo Controller::parseNumbers(number_format($printedPackage->printed_price))?> تومان</span>
+                                                            </li>
+                                                        <?php endforeach;?>
+                                                    </ul>
+                                                </div>
+                                            <?php echo CHtml::endForm();?>
                                         <?php endif;?>
                                     <?php endif;?>
                                 <?
@@ -410,27 +452,6 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                     </div>
                 </div>
                 <?php endif;?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="printed-packages-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><i class="close-icon"></i></button>
-                <h4 class="modal-title">انتخاب نوبت چاپ</small></h4>
-            </div>
-            <div class="modal-body">
-                <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
-                    <?php echo CHtml::hiddenField("book_id", $model->id);?>
-                    <?php echo CHtml::hiddenField("qty", 1);?>
-                    <div class="form-group">
-                        <?php echo CHtml::dropDownList("package", $model->lastPrintedPackage ? $model->lastPrintedPackage->id : null, CHtml::listData($model->printedPackages, 'id', 'printYearAndPrice'), ['class' => 'form-control']);?>
-                    </div>
-                    <?php echo CHtml::tag("button", array("type"=>"submit", "class"=>"btn-green"), 'انتخاب');?>
-                <?php echo CHtml::endForm();?>
             </div>
         </div>
     </div>

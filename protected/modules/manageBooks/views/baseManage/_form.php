@@ -98,6 +98,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'isbn'); ?>
+		<?php echo $form->textField($model,'isbn',array('maxlength'=>20)); ?>
+		<?php echo $form->error($model,'isbn'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'formAuthor'); ?>
 		<?php $this->widget("ext.tagIt.tagIt",array(
 			'model' => $model,
@@ -172,18 +178,18 @@
 		<?php echo $form->error($model,'description'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'change_log'); ?>
-		<span class="clearfix"></span>
-		<span class="description">این فیلد برای زمانی است که کتاب در نوبت چاپ جدید تغییراتی داشته باشد، پر کردن آن الزامی نیست.</span>
-		<?php
-		$this->widget('ext.ckeditor.CKEditor',array(
-			'model' => $model,
-			'attribute' => 'change_log'
-		));
-		?>
-		<?php echo $form->error($model,'change_log'); ?>
-	</div>
+<!--	<div class="row">-->
+<!--		--><?php //echo $form->labelEx($model,'change_log'); ?>
+<!--		<span class="clearfix"></span>-->
+<!--		<span class="description">این فیلد برای زمانی است که کتاب در نوبت چاپ جدید تغییراتی داشته باشد، پر کردن آن الزامی نیست.</span>-->
+<!--		--><?php
+//		$this->widget('ext.ckeditor.CKEditor',array(
+//			'model' => $model,
+//			'attribute' => 'change_log'
+//		));
+//		?>
+<!--		--><?php //echo $form->error($model,'change_log'); ?>
+<!--	</div>-->
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'formTags'); ?>

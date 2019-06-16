@@ -32,21 +32,33 @@ if($books):?>
                             </div>
                         </td>
                         <td class="vertical-middle text-center">
-                            <?php echo CHtml::dropDownList('qty_'.$position, $book["qty"], Shop::$qtyList, array("class"=>"quantity", "data-id"=>$position));?>
+<!--                            --><?php //echo CHtml::dropDownList('qty_'.$position, $book["qty"], Shop::$qtyList, array("class"=>"quantity", "data-id"=>$position));?>
+                            <div class="input-group">
+                                <?php echo CHtml::textField('qty_'.$position, $book["qty"], array("class"=>"quantity", "id"=>"quantity-".$position));?>
+                                <?php echo CHtml::button('ثبت', array("class"=>"btn input-group-addon quantity-btn", "data-id"=>$position));?>
+                            </div>
                             <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove hidden-lg hidden-md hidden-sm", 'data-message' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>
                         </td>
                         <td class="vertical-middle text-center hidden-xs">
                             <?php $price = ($package->type == BookPackages::TYPE_PRINTED ? $package->printed_price : $package->electronic_price);?>
-                            <?php if($model->lastPrintedPackage->hasDiscount()):?>
-                                <?php $off = $model->lastPrintedPackage->getOffPrice();?>
-                                <span class="price text-danger text-line-through"><?= Controller::parseNumbers(number_format($model->printed_price, 0)); ?><small> تومان</small></span>
-                                <span class="price center-block"><?= Controller::parseNumbers(number_format($off, 0)); ?><small> تومان</small></span>
+                            <?php if($package->hasDiscount()):?>
+                                <?php $off = $package->getOffPrice();?>
+                                <?php if($package->cover_price != $package->printed_price):?>
+                                    <div class="price">قیمت روی جلد: <span class="text-line-through"><?php echo Controller::parseNumbers(number_format($package->cover_price))?><small> تومان</small></span></div>
+                                <?php endif;?>
+                                <div class="price">قیمت فروش: <span class="text-line-through"><?= Controller::parseNumbers(number_format($model->printed_price, 0)); ?><small> تومان</small></span></div>
+                                <span class="price center-block">قیمت همراه با تخفیف: <?= Controller::parseNumbers(number_format($off, 0)); ?><small> تومان</small></span>
                             <?php else:?>
-                                <span class="price"><?php echo Controller::parseNumbers(number_format($price))?><small> تومان</small></span>
+                                <?php if($package->cover_price != $package->printed_price):?>
+                                    <div class="price">قیمت روی جلد: <span class="text-line-through"><?php echo Controller::parseNumbers(number_format($package->cover_price))?><small> تومان</small></span></div>
+                                    <span class="price">قیمت فروش: <?php echo Controller::parseNumbers(number_format($price))?><small> تومان</small></span>
+                                <?php else:?>
+                                    <span class="price"><?php echo Controller::parseNumbers(number_format($price))?><small> تومان</small></span>
+                                <?php endif;?>
                             <?php endif;?>
                         </td>
                         <td class="vertical-middle text-center hidden-xs">
-                            <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$price)))?><small> تومان</small></span>
+                            <span class="price"><?php echo Controller::parseNumbers(number_format((double)($book["qty"]*$package->getOffPrice())))?><small> تومان</small></span>
                         </td>
                         <td class="vertical-middle text-center hidden-xs">
                             <?php echo CHtml::link("حذف", array('//shop/cart/remove'), array("class"=>"remove", 'data-message' => 'آیا از حذف این کتاب مطمئن هستید؟', 'data-id' => $position));?>

@@ -30,7 +30,7 @@ $purifier=new CHtmlPurifier();
 		'title',
 		array(
 			'name'=>'publisher_id',
-			'value'=>$model->publisher->userDetails->fa_name,
+			'value'=>$model->publisher ? $model->publisher->userDetails->fa_name : '-',
 		),
 		array(
 			'name'=>'category_id',
@@ -53,11 +53,11 @@ $purifier=new CHtmlPurifier();
             'value'=>$purifier->purify($model->description),
             'type'=>'raw'
         ),
-        array(
-            'name'=>'change_log',
-            'value'=>$purifier->purify($model->change_log),
-            'type'=>'raw'
-        ),
+//        array(
+//            'name'=>'change_log',
+//            'value'=>$purifier->purify($model->change_log),
+//            'type'=>'raw'
+//        ),
         array(
             'name'=>'icon',
             'value'=>CHtml::image(Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon, '', array('style'=>'max-width:200px;')),
@@ -108,6 +108,7 @@ $purifier=new CHtmlPurifier();
         <thead>
         <tr>
             <th>نوبت چاپ</th>
+            <th>فروشنده</th>
             <th>زمان چاپ</th>
             <th>قیمت روی جلد</th>
             <th>قیمت فروش</th>
@@ -117,6 +118,7 @@ $purifier=new CHtmlPurifier();
         <?php foreach($model->printedPackages as $printedPackage):?>
             <tr>
                 <td><?php echo $printedPackage->version?></td>
+                <td><a href="<?php echo $this->createUrl('/users/'.$printedPackage->user_id)?>"><?php echo $printedPackage->user->userDetails->fa_name?></a></td>
                 <td><?php echo $printedPackage->print_year?></td>
                 <td><?php echo number_format($printedPackage->cover_price)." تومان"?></td>
                 <td><?php echo number_format($printedPackage->printed_price)." تومان"?></td>

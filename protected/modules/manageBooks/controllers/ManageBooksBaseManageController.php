@@ -43,6 +43,7 @@ class ManageBooksBaseManageController extends Controller
                 'deletePdfFile',
                 'deleteEpubFile',
                 'changePublisherCommission',
+                'getBookPackages',
             )
         );
     }
@@ -640,40 +641,31 @@ class ManageBooksBaseManageController extends Controller
                 $model->attributes = $_POST['BookPackages'];
                 $model->for = $model::FOR_OLD_BOOK;
 
-                if(!isset($_POST['BookPackages']['tempFile']))
-                {
-                    Yii::app()->user->setFlash('failed', 'لطفا فایل کتاب را آپلود کنید.');  
-                }else{
-
-                    if(
+                if($model->type == BookPackages::TYPE_ELECTRONIC) {
+                    if (
                         (!is_null($model->pdf_file_name) and $model->pdf_file_name != $_POST['BookPackages']['tempFile']) or
                         (!is_null($model->epub_file_name) and $model->epub_file_name != $_POST['BookPackages']['tempFile'])
                     )
                         $model->encrypted = 0;
 
-                    if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf'){
+                    if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'pdf') {
                         $model->pdf_file_name = $_POST['BookPackages']['tempFile'];
                         $model->epub_file_name = null;
-                    }else if(pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub'){
+                    } else if (pathinfo($_POST['BookPackages']['tempFile'], PATHINFO_EXTENSION) == 'epub') {
                         $model->epub_file_name = $_POST['BookPackages']['tempFile'];
                         $model->pdf_file_name = null;
                     }
-
-                    if((!isset($_POST['free'])) and (!isset($_POST['BookPackages']['price']) or empty($_POST['BookPackages']['price'])))
-                        $model->price = 0;
-
-                    if(!isset($_POST['BookPackages']['sale_printed']))
-                        $model->sale_printed = 0;
-                    if($model->save()){
-                        if($model->pdf_file_name && is_file($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
-                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
-                        if($model->epub_file_name && is_file($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
-                            @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
-                        Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
-                        $this->redirect('update/' . $model->book_id . '/?step=2');
-                    }else
-                        Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
                 }
+
+                if($model->save()){
+                    if($model->pdf_file_name && is_file($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->pdf_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                    if($model->epub_file_name && is_file($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name))
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $model->epub_file_name, $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                    Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                    $this->redirect('update/' . $model->book_id . '/?step=2');
+                }else
+                    Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
             }
             $this->render('update_package', array(
                 'model' => $model,
@@ -718,11 +710,11 @@ class ManageBooksBaseManageController extends Controller
                     $this->redirect(array('discount'));
                 }
             }else
-                Yii::app()->user->setFlash('discount-failed', 'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
+                Yii::app()->user->setFlash('failed', 'متاسفانه در انجام درخواست مشکلی ایجاد شده است.');
         }
         $criteria = new CDbCriteria();
         $criteria->addCondition('deleted = 0');
-        $criteria->addCondition('printedPackages.price != 0');
+        $criteria->addCondition('printedPackages.printed_price != 0');
         $criteria->addCondition('title != ""');
         $criteria->with[] = 'discount';
         $criteria->with[] = 'printedPackages';
@@ -861,5 +853,21 @@ class ManageBooksBaseManageController extends Controller
             echo CJSON::encode($response);
             Yii::app()->end();
         }
+    }
+
+    public function actionGetBookPackages()
+    {
+        $bookID = $_POST['id'];
+        /* @var BookPackages[] $packages */
+        $packages = BookPackages::model()->findAll('book_id = :id AND user_id = :user', [':id' => $bookID, ':user' => Yii::app()->user->getId()]);
+        $result = [];
+        foreach($packages as $package){
+            $result[] = [
+                'id' => $package->id,
+                'name' => $package->version,
+            ];
+        }
+
+        echo CJSON::encode($result);
     }
 }

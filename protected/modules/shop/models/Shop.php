@@ -100,7 +100,7 @@ class Shop
         foreach(Shop::getCartContent() as $book){
             //$model = Books::model()->findByPk($book['book_id']);
             $package = BookPackages::model()->findByPk($book['package']);
-            $price = (double)($package->printed_price * $book['qty']);
+            $price = (double)($package->cover_price * $book['qty']);
             $price_total += $price;
             // calculate tax
             $off = $package->getOffPrice() ?: $package->printed_price;

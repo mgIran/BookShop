@@ -112,7 +112,7 @@ class Users extends CActiveRecord
             'bookmarkedBooks' => array(self::MANY_MANY, 'Books', '{{user_book_bookmark}}(user_id, book_id)'),
             'bookRate' => array(self::BELONGS_TO, 'BookRatings', 'id'),
             'sessions' => array(self::HAS_MANY, 'Sessions', 'user_id', 'on' => 'user_type = "user"'),
-            'addresses' => array(self::HAS_MANY, 'ShopAddresses', 'user_id', 'on' => 'addresses.deleted = 0'),
+            'addresses' => array(self::HAS_MANY, 'ShopAddresses', 'user_id', 'on' => 'addresses.deleted = 0', 'order' => 'addresses.id DESC'),
         );
     }
 

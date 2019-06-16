@@ -68,6 +68,7 @@ class DiscountCodes extends CActiveRecord
 			array('title, code', 'length', 'max'=>50),
 			array('code', 'length', 'min'=>5),
 			array('start_date, expire_date', 'length', 'max'=>20),
+			array('limit_times, amount, percent', 'default', 'value' => '0'),
 			array('limit_times, amount', 'length', 'max'=>10),
 			array('off_type, shop_allow, digital_allow', 'length', 'max'=>1),
 			array('percent', 'length', 'max'=>2),

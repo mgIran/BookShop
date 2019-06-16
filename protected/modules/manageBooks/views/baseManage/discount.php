@@ -38,7 +38,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'header' => 'قیمت چاپی با تخفیف',
-            'value' => 'Controller::parseNumbers(number_format($data->book->off_printed_price))." تومان"'
+            'value' => 'Controller::parseNumbers(number_format($data->book->lastPrintedPackage->getOffPrice()))." تومان"'
         ),
         array(
             'id'=>'selectedItems',

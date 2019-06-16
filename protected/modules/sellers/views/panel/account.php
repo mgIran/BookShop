@@ -6,7 +6,7 @@
 /* @var $registrationCertificateImage array */
 ?>
 <div class="white-form">
-    <h3>پروفایل ناشر</h3>
+    <h3>پروفایل فروشنده</h3>
     <p class="description">لطفا فرم زیر را پر کنید.</p>
 
     <?php $this->renderPartial('//partial-views/_flashMessage'); ?>

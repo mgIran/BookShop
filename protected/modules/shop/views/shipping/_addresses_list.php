@@ -9,5 +9,6 @@ $this->widget("zii.widgets.CListView", array(
     )),
     "template"=>"{items}",
     "itemView"=>"shop.views.shipping._address_item",
+    "viewData"=>['lastAddressID' => isset($addresses[0]) ? $addresses[0]->id : 0],
     "emptyText"=>"آدرسی یافت نشد."
 ));
