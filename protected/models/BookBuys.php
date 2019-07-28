@@ -144,6 +144,31 @@ class BookBuys extends CActiveRecord
         ));
     }
 
+    public static function userSales()
+    {
+        $sql = "
+            SELECT
+                books.id,
+                books.title,
+                SUM(buys.price) price,
+                SUM(buys.publisher_commission_amount) publisher_commission_amount,
+                SUM(buys.site_amount) site_amount,
+                SUM(buys.tax_amount) tax_amount,
+                SUM(buys.discount_code_amount) discount_code_amount
+            FROM
+                ym_book_buys buys
+            LEFT JOIN ym_books books ON books.id = buys.book_id
+            LEFT JOIN ym_book_packages packages ON packages.book_id = books.id
+            WHERE
+                packages.user_id = :userID
+            GROUP BY books.id
+        ";
+
+        $list = Yii::app()->db->createCommand($sql)->bindValue('userID', Yii::app()->user->getId())->queryAll();
+
+        return $list;
+    }
+
     /**
      * @param $criteria
      */

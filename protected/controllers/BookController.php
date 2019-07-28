@@ -368,7 +368,7 @@ class BookController extends Controller
         if($method == 'gateway')
             $buy->rel_id = $transactionID;
         if($book->publisher){
-            $book->publisher->userDetails->earning = $book->publisher->userDetails->earning + $book->getPublisherPortion($basePrice, $buy);
+            $book->publisher->userDetails->earning += $book->getElectronicPortion($basePrice, $buy);
             $book->publisher->userDetails->save();
         }
         if($discount && $discount->digital_allow)
@@ -523,7 +523,8 @@ class BookController extends Controller
             $criteria->addCondition('publisher_name=:seller');
             $seller_id = $title;
         }else{
-            $criteria->addCondition('seller_id=:seller');
+            $criteria->join = 'LEFT JOIN ym_book_packages packages ON packages.book_id = t.id';
+            $criteria->addCondition('packages.user_id = :seller');
             $seller_id = $id;
         }
         $criteria->params[':seller'] = $seller_id;

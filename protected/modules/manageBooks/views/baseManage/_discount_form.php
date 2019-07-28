@@ -28,7 +28,6 @@ $this->menu=array(
     ?>
             <?php echo $form->labelEx($model, 'book_id'); ?>
             <?php echo $form->dropDownList($model, 'book_id', $books,array(
-                'class' => 'selectpicker',
                 'data-live-search' => true,
                 'prompt' => 'کتاب مورد نظر را انتخاب کنید'
             )); ?>
@@ -44,7 +43,7 @@ $this->menu=array(
 
     <div class="row">
         <?php echo $form->labelEx($model, 'package_id', array('class' => 'control-label')); ?>
-        <?php echo $form->dropDownList($model, 'package_id', [], array('class' => 'selectpicker', 'prompt' => 'کتاب مورد نظر را انتخاب کنید')); ?>
+        <?php echo $form->dropDownList($model, 'package_id', [], array('prompt' => 'کتاب مورد نظر را انتخاب کنید')); ?>
         <?php echo $form->error($model, 'package_id'); ?>
     </div>
 

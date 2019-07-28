@@ -168,6 +168,17 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'seller_commission'); ?>
+		<?php echo $form->textField($model,'seller_commission',array('size'=>50,'maxlength'=>3,'disabled'=>is_null($model->seller_commission)?true:false)); ?>درصد
+		<div>
+			<label></label>
+			<?php echo CHtml::checkBox('seller_default_commission', (is_null($model->seller_commission)?true:false), array('style'=>'margin-top:15px;'));?>
+			<?php echo CHtml::label('کمیسیون پیش فرض در نظر گرفته شود.', 'seller_default_commission');?>
+		</div>
+		<?php echo $form->error($model,'seller_commission'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
 		<?php
 		$this->widget('ext.ckeditor.CKEditor',array(
@@ -229,5 +240,7 @@
 <?php Yii::app()->clientScript->registerScript('inline-script', "
 $('body').on('change', '#default_commission', function(){
 	$('#Books_publisher_commission').prop('disabled', function(i, v) { return !v; }).val('');
+}).on('change', '#seller_default_commission', function(){
+	$('#Books_seller_commission').prop('disabled', function(i, v) { return !v; }).val('');
 });
 ");?>

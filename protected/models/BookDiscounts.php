@@ -63,6 +63,7 @@ class BookDiscounts extends CActiveRecord
 			array('discount_type' ,'checkDiscount') ,
 			array('percent' ,'length' ,'max' => 3) ,
 			array('amount' ,'length' ,'max' => 12) ,
+			array('amount' ,'default' ,'value' => '0') ,
 			array('start_date' ,'compare' ,'operator' => '>=' ,'compareValue' => time() - 60 * 60 ,'message' => 'تاریخ شروع کمتر از حال حاضر است.') ,
 			array('end_date' ,'compare' ,'operator' => '>' ,'compareAttribute' => 'start_date' ,'message' => 'تاریخ پایان باید از تاریخ شروع بیشتر باشد.') ,
 			// The following rule is used by search().

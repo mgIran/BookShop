@@ -11,10 +11,14 @@
  * @property double $payment
  * @property double $base_price
  * @property string $qty
+ * @property string $seller_commission
+ * @property string $seller_commission_amount
+ * @property string $site_amount
+ * @property string $tax_amount
  *
  * The followings are the available model relations:
  * @property ShopOrder $order
- * @property Books $model
+ * @property BookPackages $model
  */
 class ShopOrderItems extends CActiveRecord
 {
@@ -36,7 +40,8 @@ class ShopOrderItems extends CActiveRecord
 		return array(
 			array('order_id, model_id, payment, base_price', 'required'),
 			array('payment, base_price', 'numerical'),
-			array('order_id, model_id, qty', 'length', 'max'=>10),
+			array('order_id, model_id, qty, seller_commission_amount, site_amount, tax_amount', 'length', 'max'=>10),
+			array('seller_commission', 'length', 'max'=>3),
 			array('model_name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -53,7 +58,7 @@ class ShopOrderItems extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'order' => array(self::BELONGS_TO, 'ShopOrder', 'order_id'),
-			'model' => array(self::BELONGS_TO, 'Books', 'model_id'),
+			'model' => array(self::BELONGS_TO, 'BookPackages', 'model_id'),
 		);
 	}
 
@@ -70,6 +75,10 @@ class ShopOrderItems extends CActiveRecord
 			'base_price' => 'مبلغ پایه',
 			'payment' => 'مبلغ پرداختی',
 			'qty' => 'تعداد',
+			'seller_commission' => 'کمیسیون فروشنده',
+			'seller_commission_amount' => 'مبلغ کمیسیون فروشنده',
+			'site_amount' => 'کمیسیون سایت',
+			'tax_amount' => 'مالیات',
 		);
 	}
 

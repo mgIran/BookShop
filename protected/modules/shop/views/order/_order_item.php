@@ -18,8 +18,8 @@
             <?php foreach($model->items as $item):?>
                 <tr>
                     <td>
-                        <h5><a href="<?php echo $this->createUrl("/book/".$item->model->id."/".urlencode($item->model->title));?>"><?php echo CHtml::encode($item->model->title);?></a></h5>
-                        <span class="item hidden-xs">نویسنده: <span class="value"><?php echo $item->model->getPersonsTags("نویسنده", "fullName", true, "span");?></span></span>
+                        <h5><a href="<?php echo $this->createUrl("/book/".$item->model->book_id."/".urlencode($item->model->book->title));?>"><?php echo CHtml::encode($item->model->book->title);?></a></h5>
+                        <span class="item hidden-xs">نویسنده: <span class="value"><?php echo $item->model->book->getPersonsTags("نویسنده", "fullName", true, "span");?></span></span>
                     </td>
                     <td class="text-center">
                         <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد

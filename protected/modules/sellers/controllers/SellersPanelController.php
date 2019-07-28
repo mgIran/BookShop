@@ -25,6 +25,10 @@ class SellersPanelController extends Controller
                 'documents',
                 'signup',
                 'getBookPackages',
+                'orders',
+                'viewOrder',
+                'changeOrderStatus',
+                'exportCode',
             ),
             'backend' => array(
                 'manageSettlement',
@@ -424,15 +428,18 @@ class SellersPanelController extends Controller
         $labels = $values = array();
         if (isset($_POST['show-chart'])) {
             $criteria = new CDbCriteria();
-            $criteria->addCondition('date > :from_date');
-            $criteria->addCondition('date < :to_date');
-            $criteria->addCondition('book_id=:book_id');
+            $criteria->alias = 'orders';
+            $criteria->join = 'LEFT JOIN ym_shop_order_items items ON items.order_id = orders.id';
+            $criteria->addCondition('ordering_date > :from_date');
+            $criteria->addCondition('ordering_date < :to_date');
+            $criteria->addCondition('items.model_id=:book_id');
             $criteria->params = array(
                 ':from_date' => $_POST['from_date_altField'],
                 ':to_date' => $_POST['to_date_altField'],
                 ':book_id' => $_POST['book_id'],
             );
-            $report = BookBuys::model()->findAll($criteria);
+            /* @var $report ShopOrder[] */
+            $report = ShopOrder::model()->findAll($criteria);
             if ($_POST['to_date_altField'] - $_POST['from_date_altField'] < (60 * 60 * 24 * 30)) {
                 // show daily report
                 $datesDiff = $_POST['to_date_altField'] - $_POST['from_date_altField'];
@@ -441,7 +448,7 @@ class SellersPanelController extends Controller
                     $labels[] = JalaliDate::date('d F Y', $_POST['from_date_altField'] + (60 * 60 * (24 * $i)));
                     $count = 0;
                     foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1))))
+                        if ($model->ordering_date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->ordering_date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1))))
                             $count++;
                     }
                     $values[] = $count;
@@ -454,36 +461,50 @@ class SellersPanelController extends Controller
                     $labels[] = JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
                     $count = 0;
                     foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))))
+                        if ($model->ordering_date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->ordering_date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))))
                             $count++;
                     }
                     $values[] = $count;
                 }
             }
         } else {
-            $userBooks = Books::model()->findAllByAttributes(array('publisher_id' => Yii::app()->user->getId()));
             $criteria = new CDbCriteria();
-            $criteria->addCondition('date > :from_date');
-            $criteria->addCondition('date < :to_date');
-            $criteria->addInCondition('book_id', CHtml::listData($userBooks, 'id', 'id'));
+            $criteria->join = 'LEFT JOIN ym_book_packages packages ON packages.book_id = t.id';
+            $criteria->addCondition('packages.user_id = :sellerID');
+            $criteria->params['sellerID'] = Yii::app()->user->getId();
+            $userBooks = Books::model()->findAll($criteria);
+            $criteria = new CDbCriteria();
+            $criteria->alias = 'orders';
+            $criteria->join = 'LEFT JOIN ym_shop_order_items items ON items.order_id = orders.id';
+            $criteria->addCondition('ordering_date > :from_date');
+            $criteria->addCondition('ordering_date < :to_date');
+            $criteria->addInCondition('items.model_id', CHtml::listData($userBooks, 'id', 'id'));
             $criteria->params[':from_date'] = strtotime(date('Y/m/d 00:00:01'));
             $criteria->params[':to_date'] = strtotime(date('Y/m/d 23:59:59'));
-            $report = BookBuys::model()->findAll($criteria);
+            $report = ShopOrder::model()->findAll($criteria);
             for ($i = 0; $i < count($userBooks); $i++) {
                 $labels[] = CHtml::encode($userBooks[$i]->title);
                 $count = 0;
                 foreach ($report as $model) {
-                    if ($model->book_id == $userBooks[$i]->id)
-                        $count++;
+                    /* @var $item ShopOrderItems */
+                    foreach ($model->items as $item)
+                        if ($item->model_id == $userBooks[$i]->id)
+                            $count++;
                 }
                 $values[] = $count;
             }
         }
 
+        $order = new ShopOrder('search');
+        $order->unsetAttributes();
+        if (isset($_GET['ShopOrder']))
+            $order->attributes = $_GET['ShopOrder'];
+
         $this->render('sales', array(
             'books' => $books,
             'labels' => $labels,
             'values' => $values,
+            'order' => $order,
         ));
     }
 
@@ -742,5 +763,70 @@ class SellersPanelController extends Controller
         }
 
         echo CJSON::encode($result);
+    }
+
+    public function actionOrders()
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+
+        $ids = CHtml::listData(ShopOrder::userOrders(), 'id', 'id');
+
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('id', $ids);
+        $dataProvider = new CActiveDataProvider('ShopOrder', ['criteria' => $criteria]);
+
+        $this->render('orders', array(
+            'dataProvider' => $dataProvider,
+        ));
+    }
+
+    public function actionViewOrder($id)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+
+        Yii::app()->getModule('places');
+
+        $this->render('view_order', array(
+            'model' => ShopOrder::model()->findByPk($id),
+        ));
+    }
+
+    /**
+     * Change Status action
+     * @throws CHttpException
+     */
+    public function actionChangeOrderStatus()
+    {
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            $id = (int)$_POST['id'];
+            /** @var ShopOrder $model */
+            $model = ShopOrder::model()->findByPk($id);
+            $model->update_date = time();
+            if (in_array($_POST['value'], [ShopOrder::STATUS_STOCK_PROCESS, ShopOrder::STATUS_SENDING]) and $model->setStatus($_POST['value'])->save())
+                echo CJSON::encode(['status' => true]);
+            else
+                echo CJSON::encode(['status' => false, 'msg' => 'در تغییر وضعیت این آیتم مشکلی بوجود آمده است! لطفا مجددا بررسی کنید.']);
+        }
+    }
+
+    /**
+     * Save Export Code in model.
+     * @param $id
+     * @throws CHttpException
+     */
+    public function actionExportCode($id)
+    {
+        $model = ShopOrder::model()->findByPk($id);
+        if (isset($_POST['ShopOrder'])) {
+            $model->scenario = 'export-code';
+            $model->export_code = $_POST['ShopOrder']['export_code'];
+            if ($model->save())
+                Yii::app()->user->setFlash('success', 'کد مرسوله با موفقیت ثبت شد.');
+            else
+                Yii::app()->user->setFlash('success', 'در ثبت کد مرسوله مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
+        }
+        $this->redirect(array('viewOrder', 'id' => $model->id));
     }
 }

@@ -859,7 +859,7 @@ class ManageBooksBaseManageController extends Controller
     {
         $bookID = $_POST['id'];
         /* @var BookPackages[] $packages */
-        $packages = BookPackages::model()->findAll('book_id = :id AND user_id = :user', [':id' => $bookID, ':user' => Yii::app()->user->getId()]);
+        $packages = BookPackages::model()->findAll('book_id = :id', [':id' => $bookID]);
         $result = [];
         foreach($packages as $package){
             $result[] = [

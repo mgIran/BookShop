@@ -9,7 +9,7 @@
     <?php $this->renderPartial('//partial-views/_flashMessage', array('prefix'=>'images-'));?>
 
     <div class="buttons">
-        <a class="btn btn-success" href="<?php echo $this->createUrl('/publishers/books/create');?>">افزودن کتاب جدید</a>
+        <a class="btn btn-success" href="<?php echo $this->createUrl('/publishers/books/search');?>">افزودن کتاب جدید</a>
     </div>
 <!--    <th>قیمت</th>-->
 <!--    <th class="hidden-xs">تعداد خرید</th>-->

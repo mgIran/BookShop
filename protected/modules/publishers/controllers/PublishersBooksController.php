@@ -32,7 +32,8 @@ class PublishersBooksController extends Controller
                 'getPackages',
                 'updatePackage',
                 'uploadPreview',
-                'deleteUploadedPreview'
+                'deleteUploadedPreview',
+                'search',
             ),
         );
     }
@@ -43,7 +44,7 @@ class PublishersBooksController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadedFile, images, savePackage, getPackages, uploadPreview, deleteUploadedPreview', // perform access control for CRUD operations
+            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadedFile, images, savePackage, getPackages, uploadPreview, deleteUploadedPreview, search', // perform access control for CRUD operations
             'ajaxOnly + getPackages'
         );
     }
@@ -176,6 +177,7 @@ class PublishersBooksController extends Controller
                 $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
                 $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
                 $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+                $model->formPublisher = isset($_POST['Books']['formPublisher']) ? explode(',', $_POST['Books']['formPublisher']) : null;
                 $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
                 if ($model->save()) {
                     if ($iconFlag)
@@ -288,6 +290,8 @@ class PublishersBooksController extends Controller
             array_push($model->formSeoTags, $tag->title);
         foreach ($model->persons(array('condition' => 'role_id = 1')) as $person)
             array_push($model->formAuthor, $person->name_family);
+        foreach ($model->persons(array('condition' => 'role_id = 3')) as $person)
+            array_push($model->formPublisher, $person->name_family);
         foreach ($model->persons(array('condition' => 'role_id = 2')) as $person)
             array_push($model->formTranslator, $person->name_family);
 
@@ -316,6 +320,7 @@ class PublishersBooksController extends Controller
             $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
             $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+            $model->formPublisher = isset($_POST['Books']['formPublisher']) ? explode(',', $_POST['Books']['formPublisher']) : null;
             $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
             if ($model->save()) {
                 if ($iconFlag)
@@ -626,5 +631,34 @@ class PublishersBooksController extends Controller
             echo CJSON::encode($response);
             Yii::app()->end();
         }
+    }
+
+    public function actionSearch()
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+
+        $bookDataProvider = false;
+        if (isset($_POST['search'])) {
+            $bookCriteria = new CDbCriteria();
+
+            $bookCriteria->addCondition('t.status=:status AND t.confirm=:confirm AND t.deleted=:deleted AND (SELECT COUNT(book_packages.id) FROM ym_book_packages book_packages WHERE book_packages.book_id=t.id) != 0');
+            $bookCriteria->addCondition('(t.title regexp :term OR t.description regexp :term)');
+
+            $bookCriteria->order = 't.confirm_date DESC';
+
+            $bookCriteria->params[":term"] = $_POST['search'];
+            $bookCriteria->params[':status'] = 'enable';
+            $bookCriteria->params[':confirm'] = 'accepted';
+            $bookCriteria->params[':deleted'] = 0;
+
+            $bookDataProvider = new CActiveDataProvider('Books', array(
+                'criteria' => $bookCriteria
+            ));
+        }
+
+        $this->render('_search_book', [
+            'dataProvider' => $bookDataProvider,
+        ]);
     }
 }

@@ -85,7 +85,7 @@ if(Yii::app()->user->hasFlash('message'))
                     <?php foreach($order->items as $item):?>
                         <tr>
                             <td>
-                                <h5><a href="<?php echo $this->createUrl("/book/".$item->model->id."/".urlencode($item->model->title));?>"><?php echo CHtml::encode($item->model->title);?></a></h5>
+                                <h5><a href="<?php echo $this->createUrl("/book/".$item->model->book_id."/".urlencode($item->model->book->title));?>"><?php echo CHtml::encode($item->model->book->title);?></a></h5>
                             </td>
                             <td>
                                 <?php echo CHtml::encode(Controller::parseNumbers($item->qty));?> عدد

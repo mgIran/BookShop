@@ -85,6 +85,7 @@ class Books extends CActiveRecord
 	public $formTags = [];
 	public $formSeoTags = [];
 	public $formAuthor = [];
+	public $formPublisher = [];
 	public $formTranslator = [];
 
 	/**
@@ -99,7 +100,7 @@ class Books extends CActiveRecord
 		return array(
 			array('title, category_id, icon', 'required'),
 			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
-			array('description, change_log, formTags, formSeoTags, formAuthor, formTranslator', 'filter', 'filter' => array($this->_purifier, 'purify')),
+			array('description, change_log, formTags, formSeoTags, formAuthor, formPublisher, formTranslator', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, seller_id, category_id', 'length', 'max' => 10),
@@ -109,7 +110,7 @@ class Books extends CActiveRecord
 			array('status', 'length', 'max' => 7),
 			array('download', 'length', 'max' => 12),
 			array('preview_file', 'length', 'max' => 255),
-			array('description, change_log, publisher_name, _purifier, formAuthor, formTranslator', 'safe'),
+			array('description, change_log, publisher_name, _purifier, formAuthor, formPublisher, formTranslator', 'safe'),
 			array('isbn', 'isbnChecker'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -210,6 +211,7 @@ class Books extends CActiveRecord
 			'formTags' => 'برچسب های نمایشی',
 			'formSeoTags' => 'برچسب های سئو',
 			'formAuthor' => 'نویسندگان',
+			'formPublisher' => 'ناشر',
 			'formTranslator' => 'مترجمان',
             'isbn' => 'شابک',
 		);
@@ -313,7 +315,7 @@ class Books extends CActiveRecord
 	 * @param bool|BookBuys $buy
 	 * @return float|string
 	 */
-	public function getPublisherPortion($price, &$buy = false)
+	public function getElectronicPortion($price, &$buy = false)
 	{
 		Yii::app()->getModule('setting');
 
@@ -344,7 +346,7 @@ class Books extends CActiveRecord
 		return $commission_amount;
 	}
 
-	public function getSellerPortion($price, &$buy = false)
+	public function getPrintedPortion($price, &$buy = false)
 	{
 		Yii::app()->getModule('setting');
 
@@ -357,7 +359,8 @@ class Books extends CActiveRecord
 
 		// Get commission from setting
 		if(is_null($commission) or $commission == '')
-			$commission = SiteSetting::model()->findByAttributes(array('name' => 'commission'))->value;
+			$commission = SiteSetting::model()->findByAttributes(array('name' => 'seller_commission'))->value;
+        $tax = 0;
 		if(!$this->seller->userDetails->tax_exempt){
 			$tax = SiteSetting::model()->findByAttributes(array('name' => 'tax'))->value;
             $tax = ($price * $tax) / 100;
@@ -365,14 +368,15 @@ class Books extends CActiveRecord
 		}
 		$commission_amount = ($price * $commission) / 100;
 		$commission_amount = floatval(number_format($commission_amount,1));
-		// save seller commission percent and amount in db
-		if($buy)
-		{
-			$buy->seller_commission = $commission;
-			$buy->seller_commission_amount = $commission_amount;
-		}
 
-		return $commission_amount;
+        $site_amount = $price - $commission_amount;
+
+		return [
+			'commission' => $commission,
+			'commission_amount' => $commission_amount,
+			'tax_amount' => $tax,
+			'site_amount' => $site_amount,
+		];
 	}
 
     /**
@@ -451,6 +455,33 @@ class Books extends CActiveRecord
 			if (!$this->IsNewRecord)
 				BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id', array(':book_id' => $this->id, ':role_id' => $roleId));
 			foreach ($this->formAuthor as $person) {
+				if (!empty($person)) {
+					$personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
+					if ($personModel) {
+						$person_rel = new BookPersonRoleRel();
+						$person_rel->book_id = $this->id;
+						$person_rel->person_id = $personModel->id;
+						$person_rel->role_id = $roleId;
+						$person_rel->save();
+					} else {
+						$personModel = new BookPersons();
+						$personModel->name_family = $person;
+						if ($personModel->save()) {
+							$person_rel = new BookPersonRoleRel();
+							$person_rel->book_id = $this->id;
+							$person_rel->person_id = $personModel->id;
+							$person_rel->role_id = $roleId;
+							$person_rel->save();
+						}
+					}
+				}
+			}
+		}
+		if ($this->formPublisher && !empty($this->formPublisher)) {
+			$roleId = BookPersonRoles::model()->find('title = :title', array(':title' => 'ناشر'))->id;
+			if (!$this->IsNewRecord)
+				BookPersonRoleRel::model()->deleteAll('role_id = :role_id AND book_id= :book_id', array(':book_id' => $this->id, ':role_id' => $roleId));
+			foreach ($this->formPublisher as $person) {
 				if (!empty($person)) {
 					$personModel = BookPersons::model()->findByAttributes(array('name_family' => $person));
 					if ($personModel) {

@@ -191,8 +191,7 @@ echo CHtml::hiddenField('pageSize', (isset($_GET['pageSize']) && in_array($_GET[
 echo CHtml::dropDownList('', (isset($_GET['pageSize']) && in_array($_GET['pageSize'], $this->pageSizes)?$_GET['pageSize']:20), $this->pageSizes, array('id' => 'page-size', 'class' => 'pull-left'));
 ?>
 </div>
-<?php
-$this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'report-book-sales-list',
     'dataProvider' => $model->search(),
     'template' => '{items} {pager}',

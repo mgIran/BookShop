@@ -1,11 +1,116 @@
 <?php
-/* @var $this PanelController */
+/* @var $this SellersPanelController */
 /* @var $books CActiveDataProvider */
 /* @var $labels array */
 /* @var $values array */
 ?>
 <div class="white-form report-sale">
     <h3>گزارش فروش</h3>
+    <?php $this->widget('zii.widgets.grid.CGridView', array(
+        'id' => 'books-list',
+        'dataProvider' => $order->reportByUser(),
+        'template' => '{items} {pager}',
+        'pager' => array(
+            'header' => '',
+            'firstPageLabel' => '<<',
+            'lastPageLabel' => '>>',
+            'prevPageLabel' => '<',
+            'nextPageLabel' => '>',
+            'cssFile' => false,
+            'htmlOptions' => array(
+                'class' => 'pagination pagination-sm',
+            ),
+        ),
+        'pagerCssClass' => 'blank',
+        'itemsCssClass' => 'table',
+        'columns' => array(
+            array(
+                'name' => 'id',
+                'value' => '$data->getOrderId()',
+                'htmlOptions' => array('style' => 'width:60px')
+            ),
+            array(
+                'header' => 'کتاب ها',
+                'value' => function($data){
+                    $html = '';
+                    foreach($data->items as $item){
+                        $html.=CHtml::tag('div',array('class' => 'nested-row text-nowrap'),$item->model->title.'<small>('.Controller::parseNumbers(number_format($item->qty)).'عدد)</small>');
+                        $html.=CHtml::closeTag('div');
+                    }
+                    return $html;
+                },
+                'type' => 'raw'
+            ),
+            array(
+                'header' => 'کاربر',
+                'value' => function($data){
+                    return $data->user && $data->user->userDetails?$data->user->userDetails->getShowName():'';
+                },
+            ),
+            array(
+                'name' => 'ordering_date',
+                'value' => function($data){
+                    return JalaliDate::date('Y/m/d - H:i', $data->ordering_date);
+                },
+                'filter' => false,
+                'htmlOptions' => array('style' => 'width:80px')
+            ),
+            array(
+                'name' => 'status',
+                'value' => '$data->statusLabel',
+                'filter' => false,
+                'htmlOptions' => array('style' => 'width:80px')
+            ),
+            array(
+                'name' => 'payment_method',
+                'value' => function($data){
+                    $p = '';
+                    if($data->payment_price)
+                        $p = '<br><small>('.Controller::parseNumbers(number_format($data->payment_price)).' تومان)</small>';
+                    return $data->paymentMethod->title.$p;
+                },
+                'type' => 'raw',
+                'htmlOptions' => array('style' => 'width:80px'),
+                'filter' => CHtml::listData(ShopPaymentMethod::model()->findAll(),'id', 'title'),
+            ),
+            array(
+                'name' => 'shipping_method',
+                'value' => function($data){
+                    $p = '<br><small>(رایگان)</small>';
+                    if($data->shipping_price)
+                        $p = '<br><small>('.Controller::parseNumbers(number_format($data->shipping_price)).' تومان)</small>';
+                    return $data->shippingMethod->title.$p;
+                },
+                'filter' => CHtml::listData(ShopShippingMethod::model()->findAll(array('order'=>'t.order')),'id', 'title'),
+                'type' => 'raw'
+            ),
+            array(
+                'header' => 'مبلغ پایه',
+                'value' => function($data){
+                    $html = '';
+                    foreach($data->items as $item){
+                        $html.=CHtml::tag('div',array('class' => 'nested-row'),Controller::parseNumbers(number_format($item->base_price*$item->qty)).' تومان');
+                        $html.=CHtml::closeTag('div');
+                    }
+                    return $html;
+                },
+                'type' => 'raw',
+            ),
+            array(
+                'header' => 'تخفیف',
+                'value' => function($data){
+                    return Controller::parseNumbers(number_format($data->discount_amount)).' تومان';
+                },
+            ),
+            array(
+                'header' => 'جمع پرداختی',
+                'value' =>function($data){
+                    return Controller::parseNumbers(number_format($data->payment_amount)) . ' تومان';
+                },
+            ),
+        )
+    ));?>
+    <hr style="margin: 50px 0;">
     <p class="description">کتاب مورد نظر را انتخاب کنید:</p>
     <?php $this->renderPartial('//partial-views/_flashMessage');?>
     <?php echo CHtml::beginForm('', 'POST', array(

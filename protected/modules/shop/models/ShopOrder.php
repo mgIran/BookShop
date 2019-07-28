@@ -60,7 +60,7 @@ class ShopOrder extends CActiveRecord
         self::STATUS_ACCEPTED => 'در انتظار پرداخت',
         self::STATUS_PAID => 'پرداخت شده',
         self::STATUS_STOCK_PROCESS => 'پردازش انبار',
-        self::STATUS_SENDING => 'در حال ارسال',
+        self::STATUS_SENDING => 'ارسال شده',
         self::STATUS_DELIVERED => 'تحویل شده',
         self::STATUS_CANCELED => 'انصرافی',
     ];
@@ -68,7 +68,7 @@ class ShopOrder extends CActiveRecord
     public $statusLabelsCashMethod = [
         self::STATUS_PENDING => 'در انتظار بررسی',
         self::STATUS_STOCK_PROCESS => 'پردازش انبار',
-        self::STATUS_SENDING => 'در حال ارسال',
+        self::STATUS_SENDING => 'ارسال شده',
         self::STATUS_PAID => 'پرداخت در محل',
         self::STATUS_DELIVERED => 'تحویل شده',
         self::STATUS_CANCELED => 'انصرافی',
@@ -273,6 +273,24 @@ class ShopOrder extends CActiveRecord
 		}
 	}
 
+	public function reportByUser($pagination = true){
+		$criteria = new CDbCriteria;
+
+		$criteria->join =
+			"LEFT JOIN ym_shop_order_items items ON items.order_id = orders.id
+			 LEFT JOIN ym_books books ON items.model_id = books.id
+			 LEFT JOIN ym_book_packages packages ON packages.book_id = books.id";
+		$criteria->alias = 'orders';
+		$criteria->select = 'orders.*';
+		$criteria->addCondition('packages.user_id = :userID');
+		$criteria->params['userID'] = Yii::app()->user->getId();
+		$criteria->order='orders.id DESC';
+		return new CActiveDataProvider($this, array(
+			'criteria' => $criteria,
+			'pagination' => $pagination?array('pageSize' => isset($_GET['pageSize'])?$_GET['pageSize']:20):false
+		));
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -393,4 +411,24 @@ class ShopOrder extends CActiveRecord
         $payment = $this->totalPayment?$this->totalPayment:$this->getTotalPayment();
         return (double)($payment * $taxRate / 100);
     }
+
+	public static function userOrders()
+	{
+		$sql = "
+            SELECT
+				orders.*
+			FROM
+				ym_shop_order orders
+			LEFT JOIN ym_shop_order_items order_items ON order_items.order_id = orders.id
+			LEFT JOIN ym_books books ON books.id = order_items.model_id
+			LEFT JOIN ym_book_packages package ON package.book_id = books.id
+			WHERE
+				package.user_id = :userID
+			AND order_items.model_name = 'Books'
+        ";
+
+		$list = Yii::app()->db->createCommand($sql)->bindValue('userID', Yii::app()->user->getId())->queryAll();
+
+		return $list;
+	}
 }

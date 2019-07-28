@@ -25,6 +25,10 @@ class PublishersPanelController extends Controller
                 'documents',
                 'signup',
                 'getBookPackages',
+                'orders',
+                'viewOrder',
+                'changeOrderStatus',
+                'exportCode',
             ),
             'backend' => array(
                 'manageSettlement',
@@ -437,8 +441,8 @@ class PublishersPanelController extends Controller
                 for ($i = 0; $i < $daysCount; $i++) {
                     $labels[] = JalaliDate::date('d F Y', $_POST['from_date_altField'] + (60 * 60 * (24 * $i)));
                     $count = 0;
-                    foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1))))
+                    foreach ($report as $order) {
+                        if ($order->date >= $_POST['from_date_altField'] + (60 * 60 * (24 * $i)) and $order->date < $_POST['from_date_altField'] + (60 * 60 * (24 * ($i + 1))))
                             $count++;
                     }
                     $values[] = $count;
@@ -450,8 +454,8 @@ class PublishersPanelController extends Controller
                 for ($i = 0; $i < $monthCount; $i++) {
                     $labels[] = JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i))) . ' الی ' . JalaliDate::date('d F', $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))));
                     $count = 0;
-                    foreach ($report as $model) {
-                        if ($model->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $model->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))))
+                    foreach ($report as $order) {
+                        if ($order->date >= $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * $i)) and $order->date < $_POST['from_date_altField'] + (60 * 60 * 24 * (30 * ($i + 1))))
                             $count++;
                     }
                     $values[] = $count;
@@ -469,18 +473,24 @@ class PublishersPanelController extends Controller
             for ($i = 0; $i < count($userBooks); $i++) {
                 $labels[] = CHtml::encode($userBooks[$i]->title);
                 $count = 0;
-                foreach ($report as $model) {
-                    if ($model->book_id == $userBooks[$i]->id)
+                foreach ($report as $order) {
+                    if ($order->book_id == $userBooks[$i]->id)
                         $count++;
                 }
                 $values[] = $count;
             }
         }
 
+        $order = new ShopOrder('search');
+        $order->unsetAttributes();
+        if (isset($_GET['ShopOrder']))
+            $order->attributes = $_GET['ShopOrder'];
+
         $this->render('sales', array(
             'books' => $books,
             'labels' => $labels,
             'values' => $values,
+            'order' => $order,
         ));
     }
 
@@ -739,5 +749,70 @@ class PublishersPanelController extends Controller
         }
 
         echo CJSON::encode($result);
+    }
+
+    public function actionOrders()
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+
+        $ids = CHtml::listData(ShopOrder::userOrders(), 'id', 'id');
+
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('id', $ids);
+        $dataProvider = new CActiveDataProvider('ShopOrder', ['criteria' => $criteria]);
+
+        $this->render('orders', array(
+            'dataProvider' => $dataProvider,
+        ));
+    }
+
+    public function actionViewOrder($id)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/panel';
+
+        Yii::app()->getModule('places');
+
+        $this->render('view_order', array(
+            'model' => ShopOrder::model()->findByPk($id),
+        ));
+    }
+
+    /**
+     * Change Status action
+     * @throws CHttpException
+     */
+    public function actionChangeOrderStatus()
+    {
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            $id = (int)$_POST['id'];
+            /** @var ShopOrder $model */
+            $model = ShopOrder::model()->findByPk($id);
+            $model->update_date = time();
+            if (in_array($_POST['value'], [ShopOrder::STATUS_STOCK_PROCESS, ShopOrder::STATUS_SENDING]) and $model->setStatus($_POST['value'])->save())
+                echo CJSON::encode(['status' => true]);
+            else
+                echo CJSON::encode(['status' => false, 'msg' => 'در تغییر وضعیت این آیتم مشکلی بوجود آمده است! لطفا مجددا بررسی کنید.']);
+        }
+    }
+
+    /**
+     * Save Export Code in model.
+     * @param $id
+     * @throws CHttpException
+     */
+    public function actionExportCode($id)
+    {
+        $model = ShopOrder::model()->findByPk($id);
+        if (isset($_POST['ShopOrder'])) {
+            $model->scenario = 'export-code';
+            $model->export_code = $_POST['ShopOrder']['export_code'];
+            if ($model->save())
+                Yii::app()->user->setFlash('success', 'کد مرسوله با موفقیت ثبت شد.');
+            else
+                Yii::app()->user->setFlash('success', 'در ثبت کد مرسوله مشکلی پیش آمده است! لطفا مجددا تلاش فرمایید.');
+        }
+        $this->redirect(array('viewOrder', 'id' => $model->id));
     }
 }

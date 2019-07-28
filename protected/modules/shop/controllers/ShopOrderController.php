@@ -227,16 +227,16 @@ class ShopOrderController extends Controller
             // order items save in db
             $flag = true;
             foreach ($cart as $id => $array) {
-                $id = $array['book_id'];
+                $id = $array['package'];
                 $qty = $array['qty'];
-                $model = Books::model()->findByPk($id);
+                $model = BookPackages::model()->findByPk($id);
                 $orderItem = new ShopOrderItems();
                 $orderItem->order_id = $order->id;
                 $orderItem->model_name = get_class($model);
                 $orderItem->model_id = $id;
                 $orderItem->base_price = $model->printed_price;
                 $orderItem->qty = $qty;
-                $orderItem->payment = $model->lastPrintedPackage->getOffPrice();
+                $orderItem->payment = $model->getOffPrice();
                 $flag = @$orderItem->save();
                 if (!$flag)
                     break;
@@ -282,6 +282,8 @@ class ShopOrderController extends Controller
                         DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                     $order->setStatus(ShopOrder::STATUS_PENDING)->save();
                     Shop::SetSuccessFlash();
+
+                    $this->saveBuyInfo($order->id);
                 } else if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_CREDIT) {
                     if ($order->user->userDetails->credit < $order->payment_amount) {
                         Yii::app()->user->setFlash('failed', 'اعتبار فعلی شما برای پرداخت مبلغ فاکتور کافی نیست! لطفا برای افزایش اعتبار از پنل کاربری خود اقدام کنید.');
@@ -295,6 +297,8 @@ class ShopOrderController extends Controller
                         if ($discountObj)
                             DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                         Shop::SetSuccessFlash();
+
+                        $this->saveBuyInfo($order->id);
                     } else
                         Shop::SetFailedFlash();
                 } else if ($order->paymentMethod->name == ShopPaymentMethod::METHOD_GATEWAY) {
@@ -364,12 +368,34 @@ class ShopOrderController extends Controller
                 $discountObj = DiscountCodes::model()->findByPk($discountIdsInSession);
                 DiscountCodes::InsertCodes($order->user, $discountObj->getAmount($order->payment_amount)); // insert used discount code in db
                 $order->setStatus(ShopOrder::STATUS_PAID)->setPaid()->save();
+
+                $this->saveBuyInfo($order->id);
+
                 Shop::SetSuccessFlash();
             } else
                 Shop::SetFailedFlash($gateway->getError());
         } else
             Shop::SetFailedFlash('عملیات پرداخت ناموفق بوده یا توسط کاربر لغو شده است.');
         $this->redirect(array('details', 'id' => $order->id));
+    }
+
+    public function saveBuyInfo($orderID)
+    {
+        $order = $this->loadModel($orderID);
+
+        foreach($order->items as $item){
+            $package = $item->model;
+            $basePrice = $package->hasDiscount() ? $package->getOffPrice() : $package->printed_price;
+            $printedPortion = $package->book->getPrintedPortion($basePrice);
+            $package->user->userDetails->earning += $printedPortion['commission_amount'];
+            $package->user->userDetails->save();
+
+            $item->seller_commission = $printedPortion['commission'];
+            $item->seller_commission_amount = $printedPortion['commission_amount'];
+            $item->tax_amount = $printedPortion['tax_amount'];
+            $item->site_amount = $printedPortion['site_amount'];
+            $item->save();
+        }
     }
 
     public function actionDetails($id)

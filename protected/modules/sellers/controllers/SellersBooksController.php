@@ -32,7 +32,8 @@ class SellersBooksController extends Controller
                 'getPackages',
                 'updatePackage',
                 'uploadPreview',
-                'deleteUploadedPreview'
+                'deleteUploadedPreview',
+                'search',
             ),
         );
     }
@@ -43,7 +44,7 @@ class SellersBooksController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadedFile, images, savePackage, getPackages, uploadPreview, deleteUploadedPreview', // perform access control for CRUD operations
+            'checkAccess + create, update, delete, uploadImage, deleteImage, upload, deleteUpload, uploadFile, deleteUploadedFile, images, savePackage, getPackages, uploadPreview, deleteUploadedPreview, search', // perform access control for CRUD operations
             'ajaxOnly + getPackages'
         );
     }
@@ -168,6 +169,7 @@ class SellersBooksController extends Controller
                 $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
                 $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
                 $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+                $model->formPublisher = isset($_POST['Books']['formPublisher']) ? explode(',', $_POST['Books']['formPublisher']) : null;
                 $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
                 if ($model->save()) {
                     if ($iconFlag)
@@ -280,6 +282,8 @@ class SellersBooksController extends Controller
             array_push($model->formSeoTags, $tag->title);
         foreach ($model->persons(array('condition' => 'role_id = 1')) as $person)
             array_push($model->formAuthor, $person->name_family);
+        foreach ($model->persons(array('condition' => 'role_id = 3')) as $person)
+            array_push($model->formPublisher, $person->name_family);
         foreach ($model->persons(array('condition' => 'role_id = 2')) as $person)
             array_push($model->formTranslator, $person->name_family);
 
@@ -308,6 +312,7 @@ class SellersBooksController extends Controller
             $model->formTags = isset($_POST['Books']['formTags']) ? explode(',', $_POST['Books']['formTags']) : null;
             $model->formSeoTags = isset($_POST['Books']['formSeoTags']) ? explode(',', $_POST['Books']['formSeoTags']) : null;
             $model->formAuthor = isset($_POST['Books']['formAuthor']) ? explode(',', $_POST['Books']['formAuthor']) : null;
+            $model->formPublisher = isset($_POST['Books']['formPublisher']) ? explode(',', $_POST['Books']['formPublisher']) : null;
             $model->formTranslator = isset($_POST['Books']['formTranslator']) ? explode(',', $_POST['Books']['formTranslator']) : null;
             if ($model->save()) {
                 if ($iconFlag)

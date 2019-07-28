@@ -1409,6 +1409,9 @@ a:active{
     -o-transition: all 0.2s;
     transition: all 0.2s;
 }
+.form .form-control[disabled]{
+    background: #eee;
+}
 .form textarea.form-control{
     resize: vertical;
     height:100px;

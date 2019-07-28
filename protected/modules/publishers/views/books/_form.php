@@ -8,7 +8,7 @@
 ?>
 
 <div class="container-fluid">
-    <div class="form">
+    <div class="form col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'books-form',
@@ -20,7 +20,10 @@
         'enableClientValidation'=>true,
         'clientOptions' => array(
             'validateOnSubmit' => true
-        )
+        ),
+        'htmlOptions' => [
+            'class' => 'row'
+        ]
     ));
     ?>
         <?= $this->renderPartial('//partial-views/_flashMessage'); ?>
@@ -37,16 +40,25 @@
             </div>
 
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <?php
-                $this->widget("ext.tagIt.tagIt",array(
+                <?php $this->widget("ext.tagIt.tagIt",array(
+                    'model' => $model,
+                    'attribute' => 'formPublisher',
+                    'suggestType' => 'json',
+                    'placeholder' => 'نام ناشر را وارد کرده و Enter بزنید...',
+                    'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
+                    'data' => $model->formPublisher
+                )); ?>
+                <?php echo $form->error($model,'formPublisher'); ?>
+            </div>
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <?php $this->widget("ext.tagIt.tagIt",array(
                     'model' => $model,
                     'attribute' => 'formAuthor',
                     'suggestType' => 'json',
                     'placeholder' => 'نام نویسنده را وارد کرده و Enter بزنید...',
                     'suggestUrl' => Yii::app()->createUrl('/bookPersons/list'),
                     'data' => $model->formAuthor
-                ));
-                ?>
+                )); ?>
                 <?php echo $form->error($model,'formAuthor'); ?>
             </div>
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -83,7 +95,7 @@
                 <?php echo $form->error($model,'status'); ?>
             </div>
 
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <?= $form->labelEx($model,'description');?>
                 <?php
                 $this->widget('ext.ckeditor.CKEditor',array(
