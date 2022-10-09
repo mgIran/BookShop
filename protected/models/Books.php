@@ -620,7 +620,7 @@ class Books extends CActiveRecord
 	{
 		$criteria = new CDbCriteria;
 		$criteria->compare('book_id', $this->id);
-		$criteria->select = array('rate', 'avg(rate) as avgRate');
+		$criteria->select = array('avg(rate) as avgRate');
 		return BookRatings::model()->find($criteria)->avgRate;
 	}
 

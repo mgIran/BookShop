@@ -301,6 +301,7 @@ DROP TABLE IF EXISTS `ym_book_discounts`;
 CREATE TABLE `ym_book_discounts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `book_id` int(11) unsigned NOT NULL,
+  `package_id` int(11) unsigned NOT NULL,
   `start_date` varchar(20) CHARACTER SET latin1 DEFAULT NULL COMMENT 'تاریخ شروع',
   `printed_start_date` varchar(20) CHARACTER SET latin1 DEFAULT NULL COMMENT 'تاریخ شروع نسخه چاپی',
   `end_date` varchar(20) CHARACTER SET latin1 DEFAULT NULL COMMENT 'تاریخ پایان',
